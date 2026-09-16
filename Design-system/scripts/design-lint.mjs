@@ -4,6 +4,7 @@
  */
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
+import ts from "typescript";
 
 const ROOT = new URL("../src/", import.meta.url).pathname;
 const files = [];
@@ -78,6 +79,32 @@ for (const d of new Set(dupPreview)) warn(join(ROOT, "pages/ComponentsIndex.tsx"
 
 /* ------------------------------------------------------------ tokens bridge */
 const css = readFileSync(join(ROOT, "index.css"), "utf8");
+
+// Exercise the real merger: a regex scan cannot detect classes removed at runtime.
+try {
+  const mergerPath = join(ROOT, "utils/cn.ts");
+  const { outputText } = ts.transpileModule(readFileSync(mergerPath, "utf8"), {
+    compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.ESNext },
+  });
+  const executable = outputText.replace(/from\s+["'](clsx|tailwind-merge)["']/g, (_, name) => `from "${import.meta.resolve(name)}"`);
+  const { cn } = await import(`data:text/javascript;base64,${Buffer.from(executable).toString("base64")}`);
+  const typeTokens = [...new Set([...css.matchAll(/--text-([a-z0-9]+(?:-[a-z0-9]+)*):/g)].map((m) => m[1]))];
+  for (const token of typeTokens) {
+    const result = cn(`text-${token}`, "text-foreground").split(/\s+/);
+    if (!result.includes(`text-${token}`) || !result.includes("text-foreground")) {
+      warn(mergerPath, 0, "class-contract", `Typography token ${token} is removed by a text color`);
+    }
+  }
+  const badge = cn("h-6 px-2.5 text-label-xs", "text-muted").split(/\s+/);
+  for (const expected of ["h-6", "px-2.5", "text-label-xs", "text-muted"]) {
+    if (!badge.includes(expected)) warn(mergerPath, 0, "class-contract", `Badge lost ${expected}`);
+  }
+  const overridden = cn("text-label-md", "text-label-xs", "text-muted");
+  if (overridden.includes("text-label-md")) warn(mergerPath, 0, "class-contract", "Conflicting typography sizes are not resolved");
+} catch (error) {
+  warn(join(ROOT, "utils/cn.ts"), 0, "class-contract", `Unable to verify the merger: ${error.message}`);
+}
+
 const semantic = [...css.matchAll(/^\s+--([a-z0-9-]+):/gm)].map((m) => m[1]);
 const bridged = new Set([...css.matchAll(/--color-([a-z0-9-]+):\s*var\(--([a-z0-9-]+)\)/g)].map((m) => m[2]));
 const colorish = semantic.filter((t) => /^(background|surface|foreground|muted|subtle|disabled|link|overlay|segment|backdrop|border|separator|field|accent|default|success|warning|danger|gray|blue|orange|red|green|yellow|purple|sky|pink|teal)(-|$)/.test(t) && !/^accent-(h|c)$/.test(t) && !/^(disabled-opacity|border-width)$/.test(t));
@@ -86,7 +113,7 @@ for (const t of new Set(colorish)) if (!bridged.has(t)) warn(join(ROOT, "index.c
 /* ------------------------------------------------------------------ report */
 const byRule = {};
 for (const p of problems) (byRule[p.rule] ??= []).push(p);
-const order = ["route", "preview", "bridge", "a11y", "type-scale", "weight", "legacy-shadow", "card-border", "raw-color", "raw-hex", "icon-size", "opacity-disabled"];
+const order = ["class-contract", "route", "preview", "bridge", "a11y", "type-scale", "weight", "legacy-shadow", "card-border", "raw-color", "raw-hex", "icon-size", "opacity-disabled"];
 let total = 0;
 for (const r of order) {
   const list = byRule[r];
@@ -97,5 +124,5 @@ for (const r of order) {
   if (list.length > 12) console.log(`  … +${list.length - 12} more`);
 }
 console.log(`\n${files.length} files scanned · nav ${navHrefs.length} · routes ${routeKeys.length} · previews ${previewKeys.length} · ${total} findings`);
-const blocking = problems.filter((p) => ["route", "preview", "bridge", "a11y"].includes(p.rule)).length;
+const blocking = problems.filter((p) => ["class-contract", "route", "preview", "bridge", "a11y"].includes(p.rule)).length;
 process.exit(blocking ? 1 : 0);

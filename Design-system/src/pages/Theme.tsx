@@ -166,9 +166,9 @@ export function ThemePage() {
               {tab === "dashboard" && (
                 <div className="grid gap-4 md:grid-cols-3">
                   {[
-                    { l: "Active users", v: "14,205", d: "+3.4%", t: "success" as const },
+                    { l: "Active users", v: "13,904", d: "+8.2%", t: "success" as const },
                     { l: "Error rate", v: "0.42%", d: "-0.1%", t: "accent" as const },
-                    { l: "Spend", v: "$3,128", d: "+11%", t: "warning" as const },
+                    { l: "Spend", v: "$2,940", d: "+18%", t: "warning" as const },
                   ].map((m) => (
                     <Card key={m.l} className="p-4">
                       <p className="text-paragraph-xs text-muted">{m.l}</p>

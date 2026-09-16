@@ -51,8 +51,20 @@ export function Tabs({
               role="tab"
               id={`${id}-${it.key}`}
               aria-selected={active}
+              aria-controls={it.content ? `${id}-${it.key}-panel` : undefined}
+              tabIndex={active ? 0 : -1}
+              type="button"
               disabled={it.disabled}
               onClick={() => onChange(it.key)}
+              onKeyDown={(e) => {
+                if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
+                e.preventDefault();
+                const enabled = items.filter((item) => !item.disabled);
+                const current = enabled.findIndex((item) => item.key === it.key);
+                const index = e.key === "Home" ? 0 : e.key === "End" ? enabled.length - 1 : (current + (e.key === "ArrowRight" ? 1 : -1) + enabled.length) % enabled.length;
+                const next = enabled[index];
+                if (next) { onChange(next.key); document.getElementById(`${id}-${next.key}`)?.focus(); }
+              }}
               className={cn(base, styles)}
             >
               {it.icon && <span className="[&_svg]:h-4 [&_svg]:w-4">{it.icon}</span>}
@@ -63,7 +75,7 @@ export function Tabs({
         })}
       </div>
       {items.find((i) => i.key === value)?.content && (
-        <div role="tabpanel" className="animate-fade-in">
+        <div id={`${id}-${value}-panel`} role="tabpanel" aria-labelledby={`${id}-${value}`} className="animate-fade-in">
           {items.find((i) => i.key === value)?.content}
         </div>
       )}

@@ -36,22 +36,14 @@ import {
 import {
   AccessibilityPage,
   ColorPage,
-  ElevationPage,
   MotionPage,
-  SpacingPage,
   TokensPage,
   TypographyPage,
 } from "./Foundations";
+import { ElevationPage, SpacingPage } from "./FoundationSystem";
 import { ThemePage } from "./Theme";
 import { BlocksPage } from "./Blocks";
 import { ComponentsIndex } from "./ComponentsIndex";
-import {
-  CommerceDoc,
-  DataTableDoc,
-  FileUploadDoc,
-  OverflowDoc,
-  SystemUIDoc,
-} from "./components/ProDocs";
 import { IconsPage as RemixIconsPage } from "./Icons";
 import {
   AlertDialogDoc,
@@ -96,8 +88,9 @@ import {
   StepperDoc,
   TagDoc,
 } from "./components/ExtraDocs";
-import { ChangelogPage, InstallationPage, IntroductionPage, PrinciplesPage } from "./GettingStarted";
-import { PricingPage, RoadmapPage, TemplatesPage } from "./Marketing";
+import { ChangelogPage, IntroductionPage, PrinciplesPage } from "./GettingStarted";
+import { InstallationPage } from "./Installation";
+import { PricingPage } from "./Pricing";
 
 export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> = {
   "docs/introduction": (nav) => <IntroductionPage navigate={nav} />,
@@ -116,16 +109,8 @@ export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> 
 
   theme: () => <ThemePage />,
   pricing: (nav) => <PricingPage navigate={nav} />,
-  templates: (nav) => <TemplatesPage navigate={nav} />,
-  "docs/roadmap": () => <RoadmapPage />,
   blocks: () => <BlocksPage />,
   components: (nav) => <ComponentsIndex navigate={nav} />,
-
-  "components/data-table": (nav) => <DataTableDoc navigate={nav} />,
-  "components/file-upload": (nav) => <FileUploadDoc navigate={nav} />,
-  "components/overflow-utilities": (nav) => <OverflowDoc navigate={nav} />,
-  "components/commerce": (nav) => <CommerceDoc navigate={nav} />,
-  "components/system-ui": (nav) => <SystemUIDoc navigate={nav} />,
 
   "components/toggle-group": () => <ToggleGroupDoc />,
   "components/button-tile": () => <ButtonTileDoc />,
@@ -148,17 +133,6 @@ export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> 
   "components/tab-menu-vertical": () => <VerticalTabDoc />,
   "components/dropdown": () => <DropdownDoc />,
   "components/empty-state": () => <EmptyStateDoc />,
-  "components/pricing-card": (nav) => <CommerceDoc navigate={nav} />,
-  "components/order-summary": (nav) => <CommerceDoc navigate={nav} />,
-  "components/team-member-card": (nav) => <CommerceDoc navigate={nav} />,
-  "components/stat-card": (nav) => <CommerceDoc navigate={nav} />,
-  "components/chat-bubble": (nav) => <CommerceDoc navigate={nav} />,
-  "components/carousel": (nav) => <OverflowDoc navigate={nav} />,
-  "components/tree-view": (nav) => <OverflowDoc navigate={nav} />,
-  "components/metre": (nav) => <SystemUIDoc navigate={nav} />,
-  "components/scroll-area": (nav) => <SystemUIDoc navigate={nav} />,
-  "components/error-page": (nav) => <SystemUIDoc navigate={nav} />,
-  "components/cookie-consent": (nav) => <SystemUIDoc navigate={nav} />,
 
   "components/fancy-button": () => <FancyButtonDoc />,
   "components/compact-button": () => <CompactButtonDoc />,

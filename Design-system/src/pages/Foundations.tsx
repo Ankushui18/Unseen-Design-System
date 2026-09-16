@@ -75,7 +75,7 @@ export function ColorPage() {
         eyebrow="Foundations"
         title="Color"
         description="Aperture's color system is built around semantic intent, not visual abundance. A small set of meaningful roles covers the majority of interface needs, and every value is generated in OKLCH so lightness stays perceptually even across hues."
-        tags={["OKLCH", "Semantic", "Auto dark mode", "WCAG AA"]}
+        tags={["OKLCH", "Semantic", "Light & dark"]}
       />
 
       <Section title="The generator" description="The entire accent ramp derives from two numbers: a hue angle and a chroma ceiling. Change them and 11 steps, 4 semantic aliases and both color modes update at once.">
@@ -177,10 +177,10 @@ export function ColorPage() {
             </ul>
           </Card>
         </div>
-        <Callout title="Contrast is a constraint, not a checkbox">
-          Every semantic pairing in Aperture ships at 4.5:1 or better for body text and 3:1 for large text and UI
-          boundaries — in both color modes. The ramp generator clamps lightness so custom brand hues inherit the same
-          guarantees.
+        <Callout title="Check contrast in context">
+          An OKLCH ramp is not an accessibility guarantee. Check each foreground and background pairing in both modes,
+          especially after changing the brand hue. Body text should reach 4.5:1; large text and meaningful UI boundaries
+          should reach 3:1.
         </Callout>
       </Section>
     </>
@@ -385,20 +385,30 @@ export function ElevationPage() {
       />
 
       <Section title="Radius" description="Every rounded utility multiplies its base value by --radius-scale. Drag the slider to see it propagate.">
-        <Showcase align="stretch" controls={<div className="w-full max-w-xs"><Slider label="--radius-scale" value={radiusScale} onChange={(v) => set({ radiusScale: v })} min={0} max={2.5} step={0.25} formatValue={(v) => `${v}×`} /></div>}>
-          <div className="grid w-full grid-cols-3 gap-4 sm:grid-cols-6">
-            {[["xs", "rounded-xs"], ["sm", "rounded-sm"], ["md", "rounded-md"], ["lg", "rounded-lg"], ["xl", "rounded-xl"], ["2xl", "rounded-2xl"]].map(([n, c]) => (
-              <div key={n} className="space-y-2 text-center">
-                <div className={cn("h-16 w-full border border-accent/40 bg-accent-soft", c)} />
-                <p className="font-mono text-[11px] text-subtle">{n}</p>
+        <Showcase align="stretch" controls={<div className="w-full max-w-sm"><Slider label="--radius-scale" value={radiusScale} onChange={(v) => set({ radiusScale: v })} min={0} max={2.5} step={0.25} formatValue={(v) => `${v}×`} /></div>}>
+          <div className="grid w-full grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-6">
+            {([
+              ["xs", "rounded-xs", 2],
+              ["sm", "rounded-sm", 4],
+              ["md", "rounded-md", 6],
+              ["lg", "rounded-lg", 8],
+              ["xl", "rounded-xl", 12],
+              ["2xl", "rounded-2xl", 16],
+            ] as const).map(([n, c, base]) => (
+              <div key={n} className="flex flex-col items-center gap-2.5">
+                <div className={cn("aspect-square w-full max-h-28 border-2 border-accent/35 bg-accent-soft shadow-xs", c)} />
+                <div className="text-center">
+                  <p className="font-mono text-label-xs text-foreground">{n}</p>
+                  <p className="font-mono text-[10px] text-subtle">{Math.round(base * radiusScale)}px</p>
+                </div>
               </div>
             ))}
           </div>
-          <div className="flex w-full flex-wrap items-center gap-3 border-t border-separator pt-5">
+          <div className="flex w-full flex-wrap items-center gap-3 border-t border-separator pt-6">
             <Button size="sm">Button</Button>
             <Input size="sm" placeholder="Input" wrapperClassName="w-40" />
-            <Chip tone="accent">Chip</Chip>
-            <Card className="px-4 py-2 text-paragraph-sm">Card</Card>
+            <Chip tone="accent" size="md">Chip</Chip>
+            <Card className="px-4 py-2.5 text-paragraph-sm">Card</Card>
           </div>
         </Showcase>
       </Section>
@@ -599,24 +609,22 @@ export function AccessibilityPage() {
       <PageHeader
         eyebrow="Foundations"
         title="Accessibility"
-        description="Accessibility is a build-time constraint in Aperture, not a retrofit. Every interactive component is keyboard operable, screen-reader labelled and contrast verified in both color modes."
+        description="Accessibility is a design and engineering responsibility. Use these contrast targets and interaction checks to evaluate the beta in the context of your product. This page is guidance, not a certification."
         tags={["WCAG 2.2 AA", "WAI-ARIA", "Keyboard first"]}
       />
 
-      <Section title="Contrast" description="Measured against the surface each token is designed to sit on.">
+      <Section title="Contrast targets" description="WCAG targets for evaluating your interface. These are requirements, not measured scores for this preview.">
         <Table
           columns={[
-            { key: "pair", header: "Pairing" },
-            { key: "ratio", header: "Ratio", align: "right", render: (r) => <span className="font-mono text-paragraph-xs tabular-nums">{r.ratio}</span> },
+            { key: "pair", header: "Content type" },
+            { key: "ratio", header: "Minimum", align: "right", render: (r) => <span className="font-mono text-paragraph-xs tabular-nums">{r.ratio}</span> },
             { key: "level", header: "Level", align: "right", render: (r) => <Chip size="sm" tone={r.level === "AAA" ? "success" : "accent"}>{r.level}</Chip> },
           ]}
           rows={[
-            { pair: "foreground on background", ratio: "16.1:1", level: "AAA" },
-            { pair: "muted on background", ratio: "5.9:1", level: "AA" },
-            { pair: "accent-foreground on accent", ratio: "7.4:1", level: "AAA" },
-            { pair: "accent on surface", ratio: "4.8:1", level: "AA" },
-            { pair: "danger-foreground on danger", ratio: "6.2:1", level: "AA" },
-            { pair: "border on surface", ratio: "3.1:1", level: "AA" },
+            { pair: "Body text", ratio: "4.5:1", level: "AA" },
+            { pair: "Large text", ratio: "3:1", level: "AA" },
+            { pair: "Meaningful UI boundaries and graphics", ratio: "3:1", level: "AA" },
+            { pair: "Enhanced body text contrast", ratio: "7:1", level: "AAA" },
           ]}
         />
       </Section>

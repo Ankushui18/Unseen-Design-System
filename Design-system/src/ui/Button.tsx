@@ -30,11 +30,11 @@ const iconOnlySizes: Record<Size, string> = {
 
 /* filled */
 const solid: Record<Tone, string> = {
-  accent: "bg-accent text-white hover:bg-accent-hover focus-visible:shadow-ring-accent",
+  accent: "bg-accent text-accent-foreground hover:bg-accent-hover focus-visible:shadow-ring-accent",
   default: "bg-neutral-950 text-white hover:bg-neutral-800 focus-visible:shadow-ring-neutral dark:bg-neutral-100 dark:text-neutral-950 dark:hover:bg-white",
-  success: "bg-green-base text-white hover:bg-green-dark focus-visible:shadow-ring-accent",
-  warning: "bg-orange-base text-white hover:bg-orange-dark focus-visible:shadow-ring-neutral",
-  danger: "bg-red-base text-white hover:bg-red-dark focus-visible:shadow-ring-danger",
+  success: "bg-success text-success-foreground hover:bg-success-hover focus-visible:shadow-ring-accent",
+  warning: "bg-warning text-warning-foreground hover:bg-warning-hover focus-visible:shadow-ring-neutral",
+  danger: "bg-danger text-danger-foreground hover:bg-danger-hover focus-visible:shadow-ring-danger",
 };
 
 /* stroke */
@@ -97,18 +97,19 @@ const Icon = ({ children }: { children: ReactNode }) => (
 );
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { className, variant = "solid", tone = "accent", size = "md", loading = false, iconOnly = false, fullWidth = false, startContent, endContent, children, disabled, ...props },
+  { className, variant = "solid", tone = "accent", size = "md", loading = false, iconOnly = false, fullWidth = false, startContent, endContent, children, disabled, type = "button", ...props },
   ref,
 ) {
   const isLink = variant === "link";
   return (
     <button
       ref={ref}
+      type={type}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       className={cn(
         "group relative inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap outline-none",
-        "transition duration-200 ease-out",
+        "transition duration-200 ease-out active:translate-y-px",
         !isLink && "disabled:pointer-events-none disabled:bg-surface-secondary disabled:text-disabled disabled:shadow-none disabled:ring-transparent",
         isLink && "disabled:pointer-events-none disabled:text-disabled",
         isLink ? "h-auto gap-1 p-0 text-label-sm" : iconOnly ? iconOnlySizes[size] : sizes[size],
@@ -119,9 +120,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       {...props}
     >
       {loading && <Icon><Spinner /></Icon>}
-      {!loading && startContent && <Icon>{startContent}</Icon>}
-      {iconOnly ? !loading && <Icon>{children}</Icon> : children}
-      {!loading && endContent && <Icon>{endContent}</Icon>}
+      {!iconOnly && !loading && startContent && <Icon>{startContent}</Icon>}
+      {iconOnly ? !loading && <Icon>{children ?? startContent ?? endContent}</Icon> : children}
+      {!iconOnly && !loading && endContent && <Icon>{endContent}</Icon>}
     </button>
   );
 });
@@ -140,13 +141,15 @@ export interface FancyButtonProps extends Omit<ButtonProps, "variant" | "tone"> 
 }
 
 export const FancyButton = forwardRef<HTMLButtonElement, FancyButtonProps>(function FancyButton(
-  { className, tone = "accent", size = "md", loading, iconOnly, fullWidth, startContent, endContent, children, disabled, ...props },
+  { className, tone = "accent", size = "md", loading, iconOnly, fullWidth, startContent, endContent, children, disabled, type = "button", ...props },
   ref,
 ) {
   return (
     <button
       ref={ref}
+      type={type}
       disabled={disabled || loading}
+      aria-busy={loading || undefined}
       className={cn(
         "relative inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap outline-none transition duration-200 ease-out active:translate-y-px",
         "disabled:pointer-events-none disabled:bg-surface-secondary disabled:text-disabled disabled:shadow-none disabled:before:hidden",
@@ -158,9 +161,9 @@ export const FancyButton = forwardRef<HTMLButtonElement, FancyButtonProps>(funct
       {...props}
     >
       {loading && <Icon><Spinner /></Icon>}
-      {!loading && startContent && <Icon>{startContent}</Icon>}
-      {iconOnly ? !loading && <Icon>{children}</Icon> : children}
-      {!loading && endContent && <Icon>{endContent}</Icon>}
+      {!iconOnly && !loading && startContent && <Icon>{startContent}</Icon>}
+      {iconOnly ? !loading && <Icon>{children ?? startContent ?? endContent}</Icon> : children}
+      {!iconOnly && !loading && endContent && <Icon>{endContent}</Icon>}
     </button>
   );
 });

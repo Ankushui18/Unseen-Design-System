@@ -3,6 +3,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -11,38 +12,8 @@ import {
 import { createPortal } from "react-dom";
 import { AlertTriangle, CheckCircle2, Info, X, XCircle } from "lucide-react";
 import { cn } from "../utils/cn";
-import { useLockBody, useOnClickOutside } from "../lib/hooks";
+import { useDialogFocus, useLockBody, useOnClickOutside } from "../lib/hooks";
 import type { Tone } from "./Button";
-
-/** Traps Tab focus inside `ref` while `active`, restores focus to the trigger on close. */
-function useFocusTrap(ref: React.RefObject<HTMLElement | null>, active: boolean, onClose: () => void) {
-  const restoreRef = useRef<HTMLElement | null>(null);
-  useEffect(() => {
-    if (!active) return;
-    restoreRef.current = document.activeElement as HTMLElement | null;
-    const node = ref.current;
-    const focusables = () =>
-      Array.from(
-        node?.querySelectorAll<HTMLElement>('a[href],button:not([disabled]),textarea,input,select,[tabindex]:not([tabindex="-1"])') ?? [],
-      ).filter((el) => el.offsetParent !== null);
-    focusables()[0]?.focus();
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { e.stopPropagation(); onClose(); return; }
-      if (e.key !== "Tab") return;
-      const list = focusables();
-      if (!list.length) return;
-      const first = list[0];
-      const last = list[list.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-    };
-    document.addEventListener("keydown", onKey, true);
-    return () => {
-      document.removeEventListener("keydown", onKey, true);
-      restoreRef.current?.focus?.();
-    };
-  }, [active, onClose, ref]);
-}
 
 /* --------------------------------- Modal ---------------------------------- */
 
@@ -69,9 +40,10 @@ export function Modal({
   icon?: ReactNode;
   iconTone?: Tone;
 }) {
+  const dialog = useRef<HTMLDivElement>(null);
+  const titleId = useId();
   useLockBody(open);
-  const panelRef = useRef<HTMLDivElement>(null);
-  useFocusTrap(panelRef, open, onClose);
+  useDialogFocus(open, dialog, onClose);
 
   if (!open) return null;
   const w = { sm: "max-w-sm", md: "max-w-md", lg: "max-w-lg", xl: "max-w-2xl", full: "max-w-[calc(100vw-2rem)]" }[size];
@@ -80,11 +52,13 @@ export function Modal({
     <div className={cn("fixed inset-0 z-[100] flex justify-center overflow-y-auto p-4", placement === "center" ? "items-center" : "items-start pt-[10vh]")}>
       <div className="animate-fade-in fixed inset-0 bg-backdrop backdrop-blur-[3px]" onClick={onClose} />
       <div
-        ref={panelRef}
         role="dialog"
         aria-modal="true"
-        aria-label={typeof title === "string" ? title : undefined}
-        className={cn("animate-pop-in relative z-10 w-full rounded-20 bg-overlay shadow-xl ring-1 ring-border", w)}
+        aria-labelledby={title ? titleId : undefined}
+        aria-label={title ? undefined : "Dialog"}
+        ref={dialog}
+        tabIndex={-1}
+        className={cn("animate-pop-in relative z-10 flex max-h-[90dvh] w-full min-w-0 flex-col rounded-2xl bg-overlay shadow-xl ring-1 ring-border", w)}
       >
         {(title || description || icon) && (
           <div className={cn("flex items-start gap-3.5 p-5", (children || footer) && "border-b border-separator")}>
@@ -105,7 +79,7 @@ export function Modal({
               </span>
             )}
             <div className="min-w-0 flex-1 space-y-0.5">
-              {title && <h2 className="text-label-md text-foreground">{title}</h2>}
+              {title && <h2 id={titleId} className="text-label-md text-foreground">{title}</h2>}
               {description && <p className="text-paragraph-sm text-muted">{description}</p>}
             </div>
             <button onClick={onClose} className="-mt-1 -mr-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Close">
@@ -113,8 +87,8 @@ export function Modal({
             </button>
           </div>
         )}
-        {children && <div className="p-5 text-paragraph-sm text-muted">{children}</div>}
-        {footer && <div className="grid grid-cols-2 gap-3 border-t border-separator p-5 [&>button]:w-full">{footer}</div>}
+        {children && <div className="ds-scroll min-h-0 overflow-y-auto p-5 text-paragraph-sm text-muted">{children}</div>}
+        {footer && <div className="flex flex-wrap justify-end gap-3 border-t border-separator p-5">{footer}</div>}
       </div>
     </div>,
     document.body,
@@ -140,9 +114,10 @@ export function Drawer({
   side?: "left" | "right" | "bottom";
   width?: number;
 }) {
+  const dialog = useRef<HTMLDivElement>(null);
+  const titleId = useId();
   useLockBody(open);
-  const panelRef = useRef<HTMLDivElement>(null);
-  useFocusTrap(panelRef, open, onClose);
+  useDialogFocus(open, dialog, onClose);
   if (!open) return null;
 
   const posCls =
@@ -156,10 +131,11 @@ export function Drawer({
     <div className="fixed inset-0 z-[100]">
       <div className="animate-fade-in absolute inset-0 bg-backdrop backdrop-blur-[3px]" onClick={onClose} />
       <div
-        ref={panelRef}
+        ref={dialog}
         role="dialog"
         aria-modal="true"
-        aria-label={typeof title === "string" ? title : undefined}
+        aria-labelledby={titleId}
+        tabIndex={-1}
         className={cn("absolute flex flex-col border-border bg-overlay shadow-xl", posCls)}
         style={{
           width: side === "bottom" ? undefined : Math.min(width, typeof window !== "undefined" ? window.innerWidth - 32 : width),
@@ -172,7 +148,7 @@ export function Drawer({
         }}
       >
         <div className="flex items-center justify-between gap-4 border-b border-separator p-4">
-          <h2 className="text-paragraph-sm font-medium tracking-tight">{title}</h2>
+          <h2 id={titleId} className="text-paragraph-sm font-medium tracking-tight">{title ?? "Details"}</h2>
           <button onClick={onClose} className="rounded-lg p-1.5 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Close">
             <X className="h-4 w-4" />
           </button>
@@ -337,13 +313,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       {typeof document !== "undefined" &&
         createPortal(
-          <div
-            className="pointer-events-none fixed right-4 bottom-4 z-[200] flex w-[min(360px,calc(100vw-2rem))] flex-col gap-2"
-            role="region"
-            aria-label="Notifications"
-            aria-live="polite"
-            aria-atomic="false"
-          >
+          <div className="pointer-events-none fixed right-4 bottom-4 z-[200] flex w-[min(360px,calc(100vw-2rem))] flex-col gap-2">
             {items.map((t) => {
               const Icon = toastIcon[t.tone];
               const accentColor = {

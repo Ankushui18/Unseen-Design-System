@@ -33,7 +33,7 @@ export function IconsPage() {
       <PageHeader
         eyebrow="Foundations"
         title="Iconography"
-        description="Aperture ships with Remix Icon — 3,000+ neutral-style glyphs in matching Line and Fill pairs, drawn on a 24px grid. Every icon below is live; click one to copy its import name."
+        description="A curated Remix Icon collection with line and fill styles on a shared 24px grid. Filter the examples below and copy an import to use the same icon in your project."
         tags={["Remix Icon 4", `${ICONS.length} curated`, "Line + Fill pairs", "24px grid"]}
       />
 
@@ -50,7 +50,7 @@ export function IconsPage() {
       </Section>
 
       <Section title="Browse" description="Filter by category or name. Sizes 16, 20 and 24 are the only three used in the system.">
-        <div className="sticky top-14 z-20 -mx-2 space-y-3 rounded-2xl bg-background/90 p-2 backdrop-blur-xl">
+        <div className="sticky top-[var(--header-height)] z-20 -mx-2 space-y-3 rounded-xl bg-background/95 p-2 backdrop-blur-xl">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <Input placeholder="Search icons…" startContent={<RiSearchLine />} value={q} onChange={(e) => setQ(e.target.value)} wrapperClassName="sm:max-w-xs" />
             <SegmentedControl size="sm" value={style} onChange={setStyle} items={[{ value: "all", label: "All" }, { value: "line", label: "Line" }, { value: "fill", label: "Fill" }]} />
@@ -69,7 +69,7 @@ export function IconsPage() {
             <button
               key={name}
               title={name}
-              onClick={() => { copy(`import { ${name} } from "@remixicon/react";`); setLast(name); }}
+              onClick={async () => { if (await copy(`import { ${name} } from "@remixicon/react";`)) setLast(name); }}
               className={cn(
                 "group relative flex aspect-square flex-col items-center justify-center gap-1 rounded-xl bg-surface text-foreground ring-1 ring-border transition-all hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong",
                 last === name && copied && "ring-2 ring-accent",

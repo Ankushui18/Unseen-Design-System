@@ -12,7 +12,7 @@ export function IntroductionPage({ navigate }: { navigate: (t: string) => void }
       <PageHeader
         eyebrow="Getting Started"
         title="Introduction"
-        description="Aperture is a token-driven design system and React component library. It gives product teams a shared visual contract — 312 semantic tokens and 48 accessible components — that stays consistent as the product, the brand and the team all change."
+        description="Aperture is a source-first React design-system preview. Explore the components, inspect their code, and tune the shared tokens to suit your product. Everything in the beta is free to evaluate."
         tags={["React 19", "Tailwind CSS v4", "TypeScript", "MIT"]}
       />
 
@@ -20,9 +20,9 @@ export function IntroductionPage({ navigate }: { navigate: (t: string) => void }
         <Grid cols={2}>
           {[
             { i: Layers, t: "A token graph, not a stylesheet", d: "Primitive → semantic → component. Components only read semantics, so rebranding never means touching component code." },
-            { i: Blocks, t: "48 production components", d: "From Button to Command Palette, each one built on the same tokens and the same interaction contracts." },
-            { i: ShieldCheck, t: "Accessibility guarantees", d: "WCAG 2.2 AA contrast, WAI-ARIA roles, full keyboard support and reduced-motion handling verified per component." },
-            { i: Feather, t: "No runtime cost", d: "Everything compiles to Tailwind utilities and CSS variables. Zero styled-components, zero hydration surprises." },
+            { i: Blocks, t: "Reusable interface components", d: "Buttons, form fields, navigation, overlays, and composed patterns, with documented APIs." },
+            { i: ShieldCheck, t: "Interaction patterns", d: "Native controls, keyboard navigation, focus management, and reduced-motion preferences. Evaluate each example in your own application before production use." },
+            { i: Feather, t: "CSS-driven styling", d: "Tailwind utilities and CSS variables provide the visual layer. React manages interactive state." },
           ].map((f) => (
             <Card key={f.t} className="p-5">
               <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-surface-secondary text-foreground ring-1 ring-border">

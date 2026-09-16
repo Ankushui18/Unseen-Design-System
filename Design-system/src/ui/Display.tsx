@@ -10,17 +10,17 @@ export function Card({
   className,
   children,
   interactive,
-  elevation = 2,
+  elevation = 1,
   ...props
 }: HTMLAttributes<HTMLDivElement> & { interactive?: boolean; elevation?: 0 | 1 | 2 | 3 | 4 }) {
   const shadow = ["", "shadow-xs", "shadow-sm", "shadow-md", "shadow-lg"][elevation];
   return (
     <div
       className={cn(
-        "rounded-20 bg-surface text-foreground ring-1 ring-border",
+        "min-w-0 rounded-xl bg-surface text-foreground ring-1 ring-border",
         shadow,
         interactive &&
-          "cursor-pointer transition-all duration-200 ease-out-quint hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong",
+          "cursor-pointer transition-[box-shadow,transform] duration-200 ease-out-quint hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong",
         className,
       )}
       {...props}
@@ -37,7 +37,7 @@ export const CardBody = ({ className, ...p }: HTMLAttributes<HTMLDivElement>) =>
   <div className={cn("p-5 pt-0 text-paragraph-sm text-muted", className)} {...p} />
 );
 export const CardFooter = ({ className, ...p }: HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex items-center gap-2 border-t border-separator px-5 py-4", className)} {...p} />
+  <div className={cn("flex flex-wrap items-center gap-3 border-t border-separator px-5 py-4", className)} {...p} />
 );
 
 /* ------------------------------- Chip / Badge ------------------------------ */
@@ -62,18 +62,18 @@ const badgeColor: Record<BadgeColor, Record<BadgeVariant, string>> = {
 
 /* kept for internal consumers (Alert, Avatar, Badge counter) */
 const chipTones: Record<Tone, { solid: string; soft: string; outline: string; dot: string }> = {
-  accent:  { solid: badgeColor.blue.filled,   soft: badgeColor.blue.lighter,   outline: badgeColor.blue.stroke,   dot: "bg-blue-base" },
-  default: { solid: badgeColor.gray.filled,   soft: badgeColor.gray.lighter,   outline: badgeColor.gray.stroke,   dot: "bg-gray-base" },
-  success: { solid: badgeColor.green.filled,  soft: badgeColor.green.lighter,  outline: badgeColor.green.stroke,  dot: "bg-green-base" },
-  warning: { solid: badgeColor.orange.filled, soft: badgeColor.orange.lighter, outline: badgeColor.orange.stroke, dot: "bg-orange-base" },
-  danger:  { solid: badgeColor.red.filled,    soft: badgeColor.red.lighter,    outline: badgeColor.red.stroke,    dot: "bg-red-base" },
+  accent:  { solid: "bg-accent text-accent-foreground", soft: "bg-accent-soft text-accent-soft-foreground", outline: "bg-surface text-accent ring-1 ring-inset ring-accent/30", dot: "bg-accent" },
+  default: { solid: "bg-default text-default-foreground", soft: "bg-surface-secondary text-muted", outline: "bg-surface text-muted ring-1 ring-inset ring-border", dot: "bg-subtle" },
+  success: { solid: "bg-success text-success-foreground", soft: "bg-success-soft text-success-soft-foreground", outline: "bg-surface text-success-soft-foreground ring-1 ring-inset ring-success/30", dot: "bg-success" },
+  warning: { solid: "bg-warning text-warning-foreground", soft: "bg-warning-soft text-warning-soft-foreground", outline: "bg-surface text-warning-soft-foreground ring-1 ring-inset ring-warning/30", dot: "bg-warning" },
+  danger:  { solid: "bg-danger text-danger-foreground", soft: "bg-danger-soft text-danger-soft-foreground", outline: "bg-surface text-danger-soft-foreground ring-1 ring-inset ring-danger/30", dot: "bg-danger" },
 };
 
 export function Chip({
   children,
   tone,
   color,
-  variant = "light",
+  variant = "lighter",
   size = "md",
   dot,
   square,
@@ -97,25 +97,28 @@ export function Chip({
 }) {
   const c: BadgeColor = color ?? (tone ? toneToColor[tone] : "gray");
   const v: BadgeVariant = variant === "solid" ? "filled" : variant === "soft" ? "lighter" : variant === "outline" ? "stroke" : variant;
+  const semantic = chipTones[tone ?? "default"];
+  const treatment = color ? badgeColor[c][v] : v === "filled" ? semantic.solid : v === "stroke" ? semantic.outline : semantic.soft;
   const sz = {
-    sm: cn("h-4 gap-1.5 px-2 text-subheading-2xs uppercase", square && "min-w-4 px-1"),
-    md: cn("h-5 gap-1.5 px-2 text-label-xs", square && "min-w-5 px-1"),
-    lg: cn("h-6 gap-1.5 px-2.5 text-label-xs", square && "min-w-6 px-1"),
+    sm: "min-h-5 gap-1 px-2 py-0.5 text-[11px] leading-4",
+    md: "min-h-6 gap-1.5 px-2.5 py-0.5 text-label-xs",
+    lg: "min-h-7 gap-1.5 px-3 py-1 text-label-xs",
   }[size];
   return (
     <span
       className={cn(
-        "inline-flex items-center justify-center rounded-full leading-none whitespace-nowrap transition duration-200 ease-out",
+        "inline-flex shrink-0 items-center justify-center rounded-md font-medium normal-case tracking-normal whitespace-nowrap transition-colors duration-150",
         sz,
-        disabled ? "bg-transparent text-disabled ring-1 ring-inset ring-border" : badgeColor[c][v],
+        square && "aspect-square px-1",
+        disabled ? "bg-transparent text-disabled ring-1 ring-inset ring-border" : treatment,
         className,
       )}
     >
-      {dot && <span className={cn("flex items-center justify-center", size === "sm" ? "-mx-2 h-4 w-4" : "-mx-1.5 h-4 w-4")}><span className="h-1 w-1 rounded-full bg-current" /></span>}
-      {startContent && <span className={cn("-mx-1 flex shrink-0 items-center justify-center", size === "sm" ? "[&_svg]:h-3 [&_svg]:w-3" : "[&_svg]:h-4 [&_svg]:w-4")}>{startContent}</span>}
+      {dot && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-current" aria-hidden />}
+      {startContent && <span className="flex shrink-0 items-center justify-center [&_svg]:h-3.5 [&_svg]:w-3.5" aria-hidden>{startContent}</span>}
       {children}
       {onClose && (
-        <button onClick={onClose} className="-mr-1.5 ml-0.5 flex h-4 w-4 items-center justify-center rounded-full opacity-70 transition hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/15" aria-label="Remove">
+        <button type="button" disabled={disabled} onClick={onClose} className="-mr-1 ml-0.5 flex h-4 w-4 items-center justify-center rounded-sm opacity-70 transition hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/15" aria-label={typeof children === "string" ? `Remove ${children}` : "Remove label"}>
           <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
         </button>
       )}

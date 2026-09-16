@@ -115,9 +115,9 @@ export function LinkButtonDoc() {
       <Section title="In context">
         <Showcase align="stretch">
           <div className="w-full max-w-sm space-y-1.5">
-            <div className="flex items-center justify-between">
+            <div className="flex w-full items-center justify-between gap-4">
               <Label htmlFor="pw">Password</Label>
-              <LinkButton variant="gray" size="sm">Forgot?</LinkButton>
+              <LinkButton variant="gray" size="sm" className="ml-4 shrink-0">Forgot?</LinkButton>
             </div>
             <Input id="pw" type="password" placeholder="••••••••••" />
             <Hint>Must be at least 8 characters.</Hint>

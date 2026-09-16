@@ -91,7 +91,7 @@ export function CardDoc() {
 
       <Section title="API">
         <PropsTable rows={[
-          { name: "elevation", type: "0 | 1 | 2 | 3 | 4", default: "2", description: "Shadow step from the elevation ladder." },
+          { name: "elevation", type: "0 | 1 | 2 | 3 | 4", default: "1", description: "Shadow step from the elevation ladder. Keep resting content quiet; increase elevation for floating surfaces." },
           { name: "interactive", type: "boolean", default: "false", description: "Adds hover lift, accent border and pointer cursor." },
           { name: "children", type: "ReactNode", description: "Usually CardHeader / CardBody / CardFooter." },
         ]} />

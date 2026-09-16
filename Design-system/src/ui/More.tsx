@@ -1,4 +1,4 @@
-import { useId, useRef, useState, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from "react";
+import { useId, useState, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from "react";
 import {
   RiAddLine,
   RiArrowDownSLine,
@@ -34,27 +34,10 @@ export function Dropdown({
   placement?: "bottom" | "bottom-start" | "bottom-end" | "top";
   className?: string;
 }) {
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  // Arrow-key roving focus across menu items.
-  const onMenuKey = (e: React.KeyboardEvent) => {
-    if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) return;
-    const items = Array.from(menuRef.current?.querySelectorAll<HTMLButtonElement>('button:not([disabled])') ?? []);
-    if (!items.length) return;
-    const idx = items.indexOf(document.activeElement as HTMLButtonElement);
-    e.preventDefault();
-    const next =
-      e.key === "ArrowDown" ? (idx + 1 + items.length) % items.length
-      : e.key === "ArrowUp" ? (idx - 1 + items.length) % items.length
-      : e.key === "Home" ? 0
-      : items.length - 1;
-    items[next].focus();
-  };
-
   return (
     <Popover placement={placement} trigger={trigger} className={cn("w-60 p-0", className)}>
       {(close) => (
-        <div className="py-1.5" ref={menuRef} role="menu" onKeyDown={onMenuKey}>
+        <div className="py-1.5">
           {entries.map((e, i) => {
             if (e.type === "divider") return <div key={i} className="my-1.5 h-px bg-separator" />;
             if (e.type === "label") return <div key={i} className="px-3 pt-2 pb-1 text-subheading-2xs uppercase text-subtle">{e.label}</div>;

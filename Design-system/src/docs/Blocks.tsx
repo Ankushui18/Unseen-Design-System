@@ -1,10 +1,9 @@
-import { useState, type ReactNode } from "react";
-import { Code2, Eye, Link2 } from "lucide-react";
+import { Fragment, useId, useState, type ReactNode } from "react";
+import { Check, Code2, Copy, Eye, Link2, RotateCcw } from "lucide-react";
 import { cn } from "../utils/cn";
 import { CodeBlock } from "./CodeBlock";
 import { Chip } from "../ui/Display";
 import { useCopy } from "../lib/hooks";
-import { RiArrowRightSLine, RiCheckLine, RiFileCopyLine } from "@remixicon/react";
 
 export function slugify(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -22,14 +21,14 @@ export function PageHeader({
   tags?: string[];
 }) {
   return (
-    <header className="mb-10 border-b border-separator pb-8">
-      {eyebrow && <p className="mb-3 text-subheading-xs text-accent uppercase">{eyebrow}</p>}
-      <h1 className="text-title-h5 text-foreground sm:text-title-h4">{title}</h1>
-      {description && <p className="mt-3 max-w-2xl text-paragraph-md text-muted">{description}</p>}
+    <header className="docs-page-heading">
+      {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+      <h1>{title}</h1>
+      {description && <p>{description}</p>}
       {tags && tags.length > 0 && (
-        <div className="mt-5 flex flex-wrap gap-2">
+        <div className="docs-heading-tags">
           {tags.map((t) => (
-            <Chip key={t} size="sm" variant="outline">
+            <Chip key={t} size="sm" variant="soft">
               {t}
             </Chip>
           ))}
@@ -42,19 +41,19 @@ export function PageHeader({
 export function Section({ title, description, children, id }: { title: string; description?: ReactNode; children: ReactNode; id?: string }) {
   const anchor = id ?? slugify(title);
   return (
-    <section id={anchor} className="scroll-mt-28 py-8 first:pt-0">
-      <div className="group mb-4 flex items-baseline gap-2">
-        <h2 className="text-title-h6 text-foreground">{title}</h2>
+    <section id={anchor} className="docs-section">
+      <div className="docs-section-heading">
+        <h2>{title}</h2>
         <button
           onClick={() => document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth", block: "start" })}
-          className="opacity-0 transition-opacity group-hover:opacity-100"
+          className="section-anchor"
           aria-label={`Jump to ${title}`}
         >
           <Link2 className="h-3.5 w-3.5 text-subtle hover:text-accent" />
         </button>
       </div>
-      {description && <p className="mb-5 max-w-2xl text-paragraph-sm text-muted">{description}</p>}
-      <div className="space-y-5">{children}</div>
+      {description && <p className="docs-section-description">{description}</p>}
+      <div className="docs-section-body">{children}</div>
     </section>
   );
 }
@@ -75,11 +74,14 @@ export function Showcase({
   padded?: boolean;
 }) {
   const [tab, setTab] = useState<"preview" | "code">("preview");
-  const { copied, copy } = useCopy();
+  const [revision, setRevision] = useState(0);
+  const { copy, copied } = useCopy();
+  const id = useId();
   return (
-    <div className="group/sh relative overflow-hidden rounded-2xl bg-surface ring-1 ring-border shadow-xs">
+    <div className="showcase" data-has-code={code ? "true" : undefined}>
       {code && (
-        <div className="flex items-center gap-1 border-b border-separator bg-surface-secondary px-2 py-1.5">
+        <div className="showcase-toolbar">
+          <div className="preview-tabs" role="tablist" aria-label="Example view">
           {(
             [
               ["preview", Eye, "Preview"],
@@ -88,49 +90,43 @@ export function Showcase({
           ).map(([k, Icon, label]) => (
             <button
               key={k}
+              type="button"
+              role="tab"
+              id={`${id}-${k}`}
+              aria-selected={tab === k}
+              aria-controls={`${id}-panel`}
+              tabIndex={tab === k ? 0 : -1}
               onClick={() => setTab(k)}
-              className={cn(
-                "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-paragraph-xs font-medium transition-colors",
-                tab === k ? "bg-surface text-foreground shadow-toggle ring-1 ring-border/60" : "text-muted hover:text-foreground",
-              )}
+              onKeyDown={(e) => { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); const next = k === "preview" ? "code" : "preview"; setTab(next); document.getElementById(`${id}-${next}`)?.focus(); } }}
             >
               <Icon className="h-3.5 w-3.5" />
               {label}
             </button>
           ))}
+          </div>
+          <div className="showcase-tools">
+            <button type="button" className="studio-icon-button" title="Reset preview" aria-label="Reset preview" onClick={() => setRevision((r) => r + 1)}><RotateCcw size={14} /></button>
+            <button type="button" className="studio-icon-button" title={copied ? "Copied" : "Copy example"} aria-label={copied ? "Copied" : "Copy example"} onClick={() => copy(code)}>{copied ? <Check size={14} /> : <Copy size={14} />}</button>
+          </div>
         </div>
       )}
+      <div role={code ? "tabpanel" : undefined} id={`${id}-panel`} aria-labelledby={code ? `${id}-${tab}` : undefined}>
       {tab === "preview" ? (
-        <>
           <div
             className={cn(
-              "dot-grid relative flex min-h-[148px] min-w-0 flex-wrap gap-4 overflow-x-auto bg-background-secondary/40",
-              padded && "p-4 sm:p-8",
-              align === "center" && "items-center justify-center",
-              align === "start" && "items-start justify-start",
-              align === "stretch" && "flex-col items-stretch",
+              "showcase-preview",
+              align,
+              !padded && "no-padding",
               className,
             )}
           >
-            {children}
+            <Fragment key={revision}>{children}</Fragment>
           </div>
-          {code && (
-            <button
-              onClick={() => copy(code!)}
-              className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1.5 rounded-lg bg-surface/90 px-2 py-1.5 text-paragraph-xs font-medium text-muted opacity-0 shadow-sm ring-1 ring-border backdrop-blur transition-all hover:text-foreground focus-visible:opacity-100 group-hover/sh:opacity-100"
-              aria-label="Copy JSX"
-            >
-              {copied ? <RiCheckLine size={13} className="text-success" /> : <RiFileCopyLine size={13} />}
-              {copied ? "Copied" : "Copy JSX"}
-            </button>
-          )}
-          {controls && (
-            <div className="flex flex-wrap items-end gap-3 border-t border-separator bg-surface-secondary px-4 py-3 sm:gap-4 sm:px-5">{controls}</div>
-          )}
-        </>
       ) : (
-        <CodeBlock code={code!} className="rounded-none border-0" maxHeight={460} />
+        <CodeBlock code={code!} filename="Example.tsx" maxHeight={460} />
       )}
+      </div>
+      {controls && <div className="showcase-controls">{controls}</div>}
     </div>
   );
 }
@@ -138,23 +134,13 @@ export function Showcase({
 export type PropRow = { name: string; type: string; default?: string; description: string; required?: boolean };
 
 export function PropsTable({ rows, title = "Props" }: { rows: PropRow[]; title?: string }) {
-  const [q, setQ] = useState("");
-  const filtered = rows.filter((r) => (r.name + r.type + r.description).toLowerCase().includes(q.toLowerCase()));
   return (
     <div className="overflow-hidden rounded-2xl bg-surface ring-1 ring-border shadow-xs">
-      <div className="flex flex-wrap items-center gap-3 border-b border-separator bg-surface-secondary px-4 py-2.5">
-        <span className="text-subheading-xs text-subtle uppercase">{title}</span>
-        <span className="text-paragraph-xs text-subtle">{filtered.length}</span>
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Filter props…"
-          aria-label="Filter props"
-          className="ml-auto h-7 w-full max-w-[180px] rounded-lg bg-surface px-2.5 text-paragraph-xs text-foreground ring-1 ring-inset ring-border outline-none placeholder:text-field-placeholder focus:ring-foreground"
-        />
+      <div className="border-b border-separator bg-surface-secondary px-4 py-2.5 text-subheading-xs text-subtle uppercase">
+        {title}
       </div>
       <div className="divide-y divide-separator-secondary">
-        {filtered.map((r) => (
+        {rows.map((r) => (
           <div key={r.name} className="grid gap-2 px-4 py-3.5 md:grid-cols-[minmax(0,180px)_1fr]">
             <div className="flex flex-col gap-1.5">
               <code className="w-fit rounded-md bg-accent-soft px-1.5 py-0.5 font-mono text-paragraph-xs font-medium text-accent-soft-foreground">
@@ -173,31 +159,8 @@ export function PropsTable({ rows, title = "Props" }: { rows: PropRow[]; title?:
             </div>
           </div>
         ))}
-        {filtered.length === 0 && <p className="px-4 py-8 text-center text-paragraph-sm text-muted">No props match “{q}”.</p>}
       </div>
     </div>
-  );
-}
-
-/** Cross-links surfaced at the bottom of every component page, like AlignUI. */
-export function RelatedComponents({ items, navigate }: { items: { title: string; href: string }[]; navigate: (t: string) => void }) {
-  if (!items.length) return null;
-  return (
-    <section className="mt-14 border-t border-separator pt-8">
-      <p className="mb-4 text-subheading-xs uppercase text-subtle">Related components</p>
-      <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((it) => (
-          <button
-            key={it.href}
-            onClick={() => navigate(it.href)}
-            className="group flex items-center justify-between gap-2 rounded-xl bg-surface px-4 py-3 text-left ring-1 ring-border shadow-xs transition-all hover:-translate-y-0.5 hover:shadow-sm hover:ring-border-strong"
-          >
-            <span className="text-label-sm text-foreground">{it.title}</span>
-            <RiArrowRightSLine size={16} className="text-subtle transition-transform group-hover:translate-x-0.5 group-hover:text-foreground" />
-          </button>
-        ))}
-      </div>
-    </section>
   );
 }
 

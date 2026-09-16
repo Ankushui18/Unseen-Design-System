@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./styles/studio.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -18,6 +19,10 @@
   --radius-scale: 1;
   --disabled-opacity: 0.5;
   --border-width: 1px;
+  --spacing: 0.25rem;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --header-height: 96px;
 
   /* Easing curves (emitted because component CSS references them at runtime) */
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
@@ -279,7 +284,7 @@
   --text-paragraph-xl: 1.5rem;   --text-paragraph-xl--line-height: 2rem;    --text-paragraph-xl--letter-spacing: -0.015em; --text-paragraph-xl--font-weight: 400;
   --text-paragraph-lg: 1.125rem; --text-paragraph-lg--line-height: 1.75rem; --text-paragraph-lg--letter-spacing: -0.015em; --text-paragraph-lg--font-weight: 400;
   --text-paragraph-md: 1rem;     --text-paragraph-md--line-height: 1.625rem; --text-paragraph-md--letter-spacing: -0.011em; --text-paragraph-md--font-weight: 400;
-  --text-paragraph-sm: 0.875rem; --text-paragraph-sm--line-height: 1.45rem;  --text-paragraph-sm--letter-spacing: -0.006em; --text-paragraph-sm--font-weight: 400;
+  --text-paragraph-sm: 0.875rem; --text-paragraph-sm--line-height: 1.375rem; --text-paragraph-sm--letter-spacing: -0.006em; --text-paragraph-sm--font-weight: 400;
   --text-paragraph-xs: 0.75rem;  --text-paragraph-xs--line-height: 1rem;    --text-paragraph-xs--letter-spacing: 0em;      --text-paragraph-xs--font-weight: 400;
 
   --text-subheading-md: 1rem;       --text-subheading-md--line-height: 1.5rem;   --text-subheading-md--letter-spacing: 0.06em;  --text-subheading-md--font-weight: 500;
@@ -443,11 +448,12 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
 }
 
 @layer base {
   * { border-color: var(--border); }
-  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 6rem; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: calc(var(--header-height) + 24px); }
   body {
     background-color: var(--background);
     color: var(--foreground);
@@ -458,7 +464,11 @@
     text-rendering: optimizeLegibility;
   }
   ::selection { background: var(--accent-soft); color: var(--accent-soft-foreground); }
-  :focus-visible { outline: none; box-shadow: var(--ring-accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  button:not(:disabled), a { -webkit-tap-highlight-color: transparent; }
+  button:not(:disabled) { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+  svg { flex-shrink: 0; }
   input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.5; }
 }
 
@@ -505,6 +515,17 @@
     color: transparent;
   }
   .ring-hairline { box-shadow: inset 0 0 0 1px var(--border); }
+
+  /* Scroll reveal */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.65s var(--ease-out-quint),
+      transform 0.65s var(--ease-out-quint);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  [data-reveal].in { opacity: 1; transform: none; }
 
   .ds-range::-webkit-slider-thumb {
     -webkit-appearance: none; appearance: none;

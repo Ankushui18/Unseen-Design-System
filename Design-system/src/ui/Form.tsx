@@ -35,10 +35,10 @@ function Label({ htmlFor, children, required }: { htmlFor?: string; children: Re
   );
 }
 
-function Helper({ error, description }: { error?: string; description?: ReactNode }) {
+function Helper({ error, description, id }: { error?: string; description?: ReactNode; id?: string }) {
   if (!error && !description) return null;
   return (
-    <p className={cn("flex items-center gap-1 text-paragraph-xs", error ? "text-danger" : "text-subtle")}>
+    <p id={id} className={cn("flex items-start gap-1.5 text-paragraph-xs", error ? "text-danger" : "text-muted")}>
       {error && (
         <svg viewBox="0 0 20 20" className="h-3.5 w-3.5 shrink-0" fill="currentColor" aria-hidden>
           <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm0-11a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0V8a1 1 0 0 1 1-1Zm0 7.25a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z" clipRule="evenodd" />
@@ -66,45 +66,49 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { label, description, error, size = "md", startContent, endContent, prefixAffix, suffixAffix, className, wrapperClassName, required, ...props },
+  { label, description, error, size = "md", startContent, endContent, prefixAffix, suffixAffix, className, wrapperClassName, required, id: providedId, ...props },
   ref,
 ) {
-  const id = useId();
+  const generatedId = useId();
+  const id = providedId ?? generatedId;
+  const helperId = `${id}-description`;
   const affixPad = size === "md" || size === "lg" ? "px-3" : "px-2.5";
   const inner = fieldSizes[size];
   const heightOnly = inner.split(" ").filter((c) => c.startsWith("h-") || c.startsWith("rounded") || c.startsWith("text-")).join(" ");
   const padGap = inner.split(" ").filter((c) => c.startsWith("px-") || c.startsWith("gap-")).join(" ");
   return (
-    <div className={cn("flex w-full flex-col gap-1.5", wrapperClassName)}>
+    <div className={cn("flex w-full min-w-0 flex-col gap-1.5", wrapperClassName)}>
       {label && <Label htmlFor={id} required={required}>{label}</Label>}
       <div
         className={cn(
-          "group flex w-full overflow-hidden divide-x divide-border",
+          "group flex w-full min-w-0 divide-x divide-border",
           fieldShell,
           error && "ring-red-base hover:ring-red-base focus-within:ring-red-base focus-within:shadow-ring-danger",
           heightOnly,
         )}
       >
         {prefixAffix && <span className={cn("flex shrink-0 items-center bg-surface text-paragraph-sm text-subtle group-focus-within:text-muted", affixPad)}>{prefixAffix}</span>}
-        <label htmlFor={id} className={cn("flex h-full w-full cursor-text items-center bg-transparent", padGap)}>
+        <div className={cn("flex h-full min-w-0 flex-1 items-center bg-transparent", padGap)}>
           {startContent && <span className="flex h-5 w-5 shrink-0 items-center justify-center text-subtle transition-colors group-hover:text-muted group-focus-within:text-muted [&_svg]:h-5 [&_svg]:w-5">{startContent}</span>}
           <input
             id={id}
             ref={ref}
             required={required}
+            aria-invalid={!!error || undefined}
+            aria-describedby={error || description ? helperId : undefined}
             className={cn(
-              "h-full w-full min-w-0 bg-transparent text-field-foreground outline-none",
+              "h-full w-full min-w-0 flex-1 bg-transparent text-paragraph-sm text-field-foreground outline-none focus-visible:shadow-none",
               "placeholder:select-none placeholder:text-field-placeholder placeholder:transition-colors group-hover:placeholder:text-muted group-focus-within:placeholder:text-muted",
               "disabled:text-disabled disabled:placeholder:text-disabled",
               className,
             )}
             {...props}
           />
-          {endContent && <span className="flex h-5 w-5 shrink-0 items-center justify-center text-subtle [&_svg]:h-5 [&_svg]:w-5">{endContent}</span>}
-        </label>
+          {endContent && <span className="flex shrink-0 items-center justify-center text-subtle [&_svg]:h-5 [&_svg]:w-5">{endContent}</span>}
+        </div>
         {suffixAffix && <span className={cn("flex shrink-0 items-center bg-surface text-paragraph-sm text-subtle group-focus-within:text-muted", affixPad)}>{suffixAffix}</span>}
       </div>
-      <Helper error={error} description={description} />
+      <Helper id={helperId} error={error} description={description} />
     </div>
   );
 });
@@ -118,10 +122,11 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
 }
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
-  { label, description, error, className, required, ...props },
+  { label, description, error, className, required, id: providedId, ...props },
   ref,
 ) {
-  const id = useId();
+  const generatedId = useId();
+  const id = providedId ?? generatedId;
   return (
     <div className="flex w-full flex-col gap-1.5">
       {label && <Label htmlFor={id} required={required}>{label}</Label>}
@@ -156,10 +161,11 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
-  { label, description, error, size = "md", items, children, className, required, ...props },
+  { label, description, error, size = "md", items, children, className, required, id: providedId, ...props },
   ref,
 ) {
-  const id = useId();
+  const generatedId = useId();
+  const id = providedId ?? generatedId;
   return (
     <div className="flex w-full flex-col gap-1.5">
       {label && <Label htmlFor={id} required={required}>{label}</Label>}
@@ -428,9 +434,14 @@ export function Slider({
   return (
     <div className={cn("flex w-full flex-col gap-2", disabled && "opacity-[var(--disabled-opacity)]", className)}>
       {(label || formatValue) && (
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           {label && <span className="text-label-sm text-foreground">{label}</span>}
-          {formatValue && <span className="rounded-md bg-surface-secondary px-1.5 py-0.5 font-mono text-[11px] tabular-nums text-muted">{formatValue(value)}</span>}
+          {formatValue && (
+            <span className="rounded-md bg-surface-secondary px-1.5 py-0.5 font-mono text-[11px] tabular-nums text-muted">
+              {" "}
+              {formatValue(value)}
+            </span>
+          )}
         </div>
       )}
       <input

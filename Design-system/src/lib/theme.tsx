@@ -2,7 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -60,12 +60,23 @@ type Ctx = ThemeState & {
 
 const ThemeCtx = createContext<Ctx | null>(null);
 
+function normalize(state: Partial<ThemeState>): ThemeState {
+  const clamp = (value: unknown, fallback: number, min: number, max: number) => typeof value === "number" && Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : fallback;
+  return {
+    mode: state.mode === "dark" ? "dark" : "light",
+    accentH: clamp(state.accentH, DEFAULTS.accentH, 0, 360),
+    accentC: clamp(state.accentC, DEFAULTS.accentC, 0.02, 0.3),
+    radiusScale: clamp(state.radiusScale, DEFAULTS.radiusScale, 0, 2.5),
+    disabledOpacity: clamp(state.disabledOpacity, DEFAULTS.disabledOpacity, 0.2, 0.9),
+  };
+}
+
 function read(): ThemeState {
   if (typeof window === "undefined") return DEFAULTS;
   try {
     const raw = window.localStorage.getItem(KEY);
     if (!raw) return DEFAULTS;
-    return { ...DEFAULTS, ...(JSON.parse(raw) as Partial<ThemeState>) };
+    return normalize({ ...DEFAULTS, ...(JSON.parse(raw) as Partial<ThemeState>) });
   } catch {
     return DEFAULTS;
   }
@@ -74,7 +85,7 @@ function read(): ThemeState {
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<ThemeState>(read);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = document.documentElement;
     root.classList.toggle("dark", state.mode === "dark");
     root.style.setProperty("--accent-h", String(state.accentH));
@@ -89,7 +100,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [state]);
 
   const set = useCallback((patch: Partial<ThemeState>) => {
-    setState((s) => ({ ...s, ...patch }));
+    setState((s) => normalize({ ...s, ...patch }));
   }, []);
 
   const toggleMode = useCallback(() => {
@@ -100,23 +111,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const cssExport = useMemo(
     () =>
-      `:root {
+      `/* Add after Aperture's token stylesheet. */
+:root {
   --accent-h: ${state.accentH};
   --accent-c: ${state.accentC};
   --radius-scale: ${state.radiusScale};
   --disabled-opacity: ${state.disabledOpacity};
 
-  --accent: oklch(0.567 calc(var(--accent-c) * 1.02) var(--accent-h));
-  --accent-hover: oklch(0.49 calc(var(--accent-c) * 0.92) var(--accent-h));
-  --accent-foreground: oklch(0.99 0 0);
-  --accent-soft: oklch(0.955 calc(var(--accent-c) * 0.26) var(--accent-h));
-}
-
-.dark {
-  --accent: oklch(0.646 var(--accent-c) var(--accent-h));
-  --accent-hover: oklch(0.73 calc(var(--accent-c) * 0.9) var(--accent-h));
-  --accent-foreground: oklch(0.145 0.01 265);
-  --accent-soft: oklch(0.29 calc(var(--accent-c) * 0.44) var(--accent-h));
+  /* Semantic colors derive from these values in both modes. */
 }`,
     [state],
   );

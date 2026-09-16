@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { ThemeProvider } from "./lib/theme";
 import { ToastProvider } from "./ui/Overlay";
 import { useHashRoute, useScrollSpy } from "./lib/hooks";
-import { CommandPalette, DocsLayout, Navbar } from "./docs/Shell";
-import { PreviewBanner } from "./docs/Preview";
+import { CommandPalette, DocsLayout, MobileNavigation, Navbar } from "./docs/Shell";
 import { ROUTES } from "./pages/registry";
 import Home from "./pages/Home";
 import { BlocksPage } from "./pages/Blocks";
+import { PricingPage } from "./pages/Pricing";
 import { Button } from "./ui/Button";
 import { PageHeader } from "./docs/Blocks";
 
@@ -14,11 +14,14 @@ function Shell() {
   const { route, navigate } = useHashRoute();
   const [headings, setHeadings] = useState<{ id: string; title: string }[]>([]);
   const [search, setSearch] = useState(false);
+  const [mobile, setMobile] = useState(false);
   const activeHeading = useScrollSpy(headings.map((h) => h.id));
 
   const isHome = route === "" || route === "/";
+  const isPublicPage = isHome || route === "blocks" || route === "pricing";
 
   useEffect(() => {
+    if (!isPublicPage) return;
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
@@ -27,10 +30,12 @@ function Shell() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [isPublicPage]);
+
+  useEffect(() => { setMobile(false); setSearch(false); }, [route]);
 
   useEffect(() => {
-    if (isHome) {
+    if (isPublicPage) {
       setHeadings([]);
       return;
     }
@@ -42,15 +47,16 @@ function Shell() {
       setHeadings(found);
     }, 60);
     return () => window.clearTimeout(id);
-  }, [route, isHome]);
+  }, [route, isPublicPage]);
 
-  if (isHome || route === "blocks") {
+  if (isPublicPage) {
     return (
       <div className="min-h-screen bg-background">
-        <PreviewBanner onNavigate={navigate} />
-        <Navbar route={route} navigate={navigate} onOpenSearch={() => setSearch(true)} onOpenMobile={() => setSearch(true)} />
+        <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById("main")?.focus(); }}>Skip to content</a>
+        <Navbar route={route} navigate={navigate} onOpenSearch={() => setSearch(true)} onOpenMobile={() => setMobile(true)} />
         <CommandPalette open={search} onClose={() => setSearch(false)} navigate={navigate} />
-        {isHome ? <Home navigate={navigate} /> : <BlocksPage />}
+        <MobileNavigation open={mobile} onClose={() => setMobile(false)} route={route} navigate={navigate} />
+        {isHome ? <Home navigate={navigate} /> : route === "pricing" ? <PricingPage navigate={navigate} /> : <BlocksPage />}
       </div>
     );
   }

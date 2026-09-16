@@ -262,19 +262,19 @@ function StepIcon({ i, state }: { i: number; state: "done" | "active" | "todo" }
 
 export function HorizontalStepper({ steps, current, className }: { steps: Step[]; current: number; className?: string }) {
   return (
-    <ol className={cn("flex w-full items-start", className)}>
+    <ol className={cn("horizontal-stepper", className)}>
       {steps.map((s, i) => {
         const state = i < current ? "done" : i === current ? "active" : "todo";
         return (
-          <li key={s.title} className="flex min-w-0 flex-1 items-start gap-3 last:flex-none">
-            <div className="flex items-center gap-3">
+          <li key={s.title} aria-current={state === "active" ? "step" : undefined}>
+            <div className="stepper-label">
               <StepIcon i={i} state={state} />
               <div className="min-w-0">
-                <p className={cn("text-label-sm whitespace-nowrap", state === "todo" ? "text-subtle" : "text-foreground", state !== "active" && "hidden sm:block")}>{s.title}</p>
-                {s.description && <p className={cn("text-paragraph-xs text-subtle", state !== "active" && "hidden sm:block")}>{s.description}</p>}
+                <p className={cn("text-label-xs", state === "todo" ? "text-muted" : "text-foreground")}>{s.title}</p>
+                {s.description && <p className="text-paragraph-xs text-muted">{s.description}</p>}
               </div>
             </div>
-            {i < steps.length - 1 && <span className={cn("mx-2 mt-3 h-px flex-1 sm:mx-4", i < current ? "bg-success" : "bg-border")} />}
+            {i < steps.length - 1 && <span className={cn("stepper-connector", i < current ? "bg-success" : "bg-border")} />}
           </li>
         );
       })}
@@ -332,7 +332,7 @@ export function DigitInput({ length = 4, value, onChange, error, className }: { 
     onChange(next.join(""));
   };
   return (
-    <div className={cn("flex items-center gap-2.5", className)}>
+    <div className={cn("digit-input-group", className)}>
       {digits.map((d, i) => (
         <input
           key={i}
@@ -356,7 +356,7 @@ export function DigitInput({ length = 4, value, onChange, error, className }: { 
             if (text) { e.preventDefault(); onChange(text); refs.current[Math.min(text.length, length) - 1]?.focus(); }
           }}
           className={cn(
-            "h-14 w-14 rounded-10 bg-field text-center text-title-h5 text-foreground shadow-xs ring-1 ring-inset ring-border outline-none transition-all sm:h-16 sm:w-16",
+            "min-w-0 flex-1 h-12 w-10 max-w-14 rounded-10 bg-field text-center text-title-h5 text-foreground shadow-xs ring-1 ring-inset ring-border outline-none transition-all",
             "hover:bg-field-hover hover:ring-border-strong focus:bg-field-focus focus:ring-foreground focus:shadow-ring-neutral",
             d && "ring-border-strong",
             error && "ring-danger focus:ring-danger focus:shadow-ring-danger",
@@ -386,7 +386,7 @@ export function Datepicker({ value, onChange, className }: { value: Date | null;
   const same = (a: Date | null, y: number, m: number, d: number) => !!a && a.getFullYear() === y && a.getMonth() === m && a.getDate() === d;
 
   return (
-    <div className={cn("w-[300px] rounded-20 bg-surface p-4 ring-1 ring-border shadow-lg", className)}>
+    <div className={cn("w-full max-w-[320px] rounded-xl bg-surface p-4 ring-1 ring-border shadow-sm", className)}>
       <div className="flex items-center justify-between">
         <CompactButton variant="stroke" onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))} aria-label="Previous month"><ChevronLeft /></CompactButton>
         <p className="text-label-sm text-foreground">{MONTHS[view.getMonth()]} {view.getFullYear()}</p>
@@ -404,7 +404,7 @@ export function Datepicker({ value, onChange, className }: { value: Date | null;
               key={i}
               onClick={() => onChange(date)}
               className={cn(
-                "mx-auto flex h-9 w-9 items-center justify-center rounded-lg text-paragraph-sm transition-colors",
+                "mx-auto flex h-9 w-full max-w-9 items-center justify-center rounded-lg text-paragraph-sm transition-colors",
                 c.m !== 0 ? "text-disabled" : "text-foreground hover:bg-surface-hover",
                 isToday && !selected && "ring-1 ring-inset ring-border text-label-sm",
                 selected && "bevel bg-neutral-950 text-white shadow-fancy-neutral hover:bg-neutral-900 dark:bg-neutral-200 dark:text-neutral-950",

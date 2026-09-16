@@ -95,7 +95,7 @@ export function ButtonSpecDoc() {
 export function BadgeSpecDoc() {
   return (
     <>
-      <PageHeader eyebrow="Components · Data Display" title="Badge" description="Ten colours × four variants × two sizes. Small is 16px uppercase; medium is 20px label. Dot and icon slots pull in so the pill stays visually balanced." tags={["10 colours", "4 variants", "Dot", "Square"]} />
+      <PageHeader eyebrow="Components · Data Display" title="Badge" description="Compact labels with readable sentence case, balanced padding, and optional status indicators. Semantic tones follow your theme; explicit colors are available for categorical data." tags={["10 colors", "4 variants", "3 sizes"]} />
       <Import names="Chip as Badge" />
       <Section title="Matrix">
         <Showcase align="stretch">
@@ -154,7 +154,7 @@ export function InfoLabelDoc() {
       <Section title="Info Label">
         <Showcase align="stretch">
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
-            <InfoLabel label="MRR" value="$28,914" hint="+6.2% vs last month" tone="success" />
+            <InfoLabel label="MRR" value="$12,480" hint="+8.2% vs last month" tone="success" />
             <InfoLabel label="Churn" value="1.4%" tone="danger" />
             <InfoLabel label="Seats" value="42 / 50" />
             <InfoLabel label="Renews" value="Mar 12" tone="accent" />
@@ -242,7 +242,7 @@ export function HoverCardDoc() {
           <p className="text-paragraph-sm text-muted">
             Reviewed by{" "}
             <HoverCard trigger={<LinkButton variant="black" underline>@sophia</LinkButton>}>
-              <ProfileHoverCard name="Sophia Williams" handle="@sophia · Product Designer" bio="Designing systems that scale. Previously at Linear and Vercel." stats={[["4,812", "followers"], ["312", "following"]]} action={<Button size="xs" tone="default">Follow</Button>} />
+              <ProfileHoverCard name="Sophia Williams" handle="@sophia · Product Designer" bio="Designing systems that scale. Previously at Linear and Vercel." stats={[["8.9k", "followers"], ["517", "following"]]} action={<Button size="xs" tone="default">Follow</Button>} />
             </HoverCard>{" "}
             and{" "}
             <HoverCard trigger={<LinkButton variant="black" underline>@james</LinkButton>}>

@@ -1,117 +1,29 @@
 import { useMemo, useState } from "react";
-import { Code2, Eye, Layers, Search } from "lucide-react";
+import { ArrowRight, Search, X } from "lucide-react";
 import { BLOCKS } from "../blocks";
-import { Chip } from "../ui/Display";
-import { Input } from "../ui/Form";
-import { CodeBlock } from "../docs/CodeBlock";
-import { ScaledFrame } from "../docs/ScaledFrame";
-import { cn } from "../utils/cn";
+import { BlockExample } from "../docs/BlockExample";
+import { SiteFooter } from "./Home";
 
-const CATEGORIES = ["All", ...Array.from(new Set(BLOCKS.map((b) => b.category)))];
-
-function usageSnippet(key: string) {
-  const name = key.charAt(0).toUpperCase() + key.slice(1) + "Block";
-  return `import { ${name} } from "@aperture/blocks";
-
-export default function Page() {
-  return <${name} />;
-}`;
-}
+const CATEGORIES = ["All", ...new Set(BLOCKS.map((b) => b.category))];
 
 export function BlocksPage() {
-  const [cat, setCat] = useState("All");
-  const [q, setQ] = useState("");
-  const [view, setView] = useState<Record<string, "preview" | "code">>({});
+  const [category, setCategory] = useState("All");
+  const [query, setQuery] = useState("");
+  const filtered = useMemo(() => BLOCKS.filter((b) => (category === "All" || b.category === category) && `${b.title} ${b.description}`.toLowerCase().includes(query.trim().toLowerCase())), [category, query]);
 
-  const items = useMemo(
-    () =>
-      BLOCKS.filter((b) => (cat === "All" || b.category === cat) && (b.title + b.description + b.category).toLowerCase().includes(q.toLowerCase())),
-    [cat, q],
-  );
-
-  return (
-    <div className="mx-auto max-w-[1280px] px-4 py-10 sm:px-5 sm:py-12 lg:px-8">
-      <div className="mx-auto max-w-2xl text-center">
-        <Chip tone="accent" variant="soft" size="md" startContent={<Layers className="h-3.5 w-3.5" />}>Components & Blocks</Chip>
-        <h1 className="mt-5 text-title-h5 text-foreground text-balance sm:text-title-h4 lg:text-title-h3">
-          Elevate your product with <span className="text-gradient">premium blocks</span>
-        </h1>
-        <p className="mt-4 text-paragraph-md text-muted sm:text-paragraph-lg">
-          Ready-made compositions built entirely from Aperture primitives. Copy them into your project and retheme them with a single variable.
-        </p>
+  return <main id="main" className="blocks-page" tabIndex={-1}>
+    <div className="home-container">
+      <header className="collection-heading page-enter"><div><p>Composition, considered.</p><h1>Start with a pattern.<br />Make it your own.</h1></div><div><p>{BLOCKS.length} working compositions, made from the same components. Inspect the source, interact with the preview, and adapt the details.</p><a className="text-action" href="#/components">Browse individual components <ArrowRight size={15} /></a></div></header>
+      <div className="collection-filter">
+        <div className="collection-categories" role="group" aria-label="Filter by category">{CATEGORIES.map((c) => <button key={c} aria-pressed={category === c} onClick={() => setCategory(c)}>{c}<span>{c === "All" ? BLOCKS.length : BLOCKS.filter((b) => b.category === c).length}</span></button>)}</div>
+        <label className="collection-search"><Search size={16} /><input type="search" value={query} onChange={(e) => setQuery(e.target.value)} aria-label="Search blocks" placeholder="Search blocks..." />{query && <button aria-label="Clear search" onClick={() => setQuery("")}><X size={14} /></button>}</label>
       </div>
-
-      <div className="sticky top-14 z-30 -mx-4 mt-10 border-y border-separator bg-background/85 px-4 py-3 backdrop-blur-xl sm:-mx-5 sm:px-5 lg:-mx-8 lg:px-8">
-        <div className="mx-auto flex max-w-[1280px] flex-wrap items-center gap-3">
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar sm:flex-wrap">
-            {CATEGORIES.map((c) => (
-              <button
-                key={c}
-                onClick={() => setCat(c)}
-                className={cn(
-                  "h-8 rounded-full px-3.5 text-label-sm transition-all",
-                  cat === c ? "bevel bg-neutral-950 text-white shadow-fancy-neutral dark:bg-neutral-200 dark:text-neutral-950" : "text-muted ring-1 ring-inset ring-border hover:bg-surface-hover hover:text-foreground",
-                )}
-              >
-                {c}
-                <span className={cn("ml-1.5 text-[11px]", cat === c ? "opacity-60" : "text-subtle")}>{c === "All" ? BLOCKS.length : BLOCKS.filter((b) => b.category === c).length}</span>
-              </button>
-            ))}
-          </div>
-          <div className="ml-auto w-full sm:w-64">
-            <Input size="sm" placeholder="Search blocks…" startContent={<Search />} value={q} onChange={(e) => setQ(e.target.value)} />
-          </div>
-        </div>
+      <div className="collection-results-label" role="status"><span>{filtered.length} {filtered.length === 1 ? "example" : "examples"}</span><span>All unlocked during public beta</span></div>
+      <div className="block-collection-grid">
+        {filtered.map((block) => <div key={block.key} className={`block-collection-cell ${block.span && block.span > 1 ? "is-wide" : ""}`}><BlockExample block={block} /></div>)}
       </div>
-
-      <div className="mt-8 grid gap-6 lg:grid-cols-3">
-        {items.map((b) => {
-          const mode = view[b.key] ?? "preview";
-          return (
-            <section
-              key={b.key}
-              className={cn("flex flex-col overflow-hidden rounded-20 bg-surface ring-1 ring-border shadow-xs", b.span === 2 && "lg:col-span-2", b.span === 3 && "lg:col-span-3")}
-            >
-              <div className="flex items-center justify-between gap-3 px-5 py-3.5">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-label-md text-foreground">{b.title}</h2>
-                    <Chip size="sm" variant="outline">{b.category}</Chip>
-                  </div>
-                  <p className="mt-0.5 truncate text-paragraph-xs text-subtle">{b.description}</p>
-                </div>
-                <div className="inline-flex shrink-0 items-center rounded-10 bg-surface-secondary p-1 ring-1 ring-inset ring-border">
-                  {(
-                    [
-                      ["preview", Eye],
-                      ["code", Code2],
-                    ] as const
-                  ).map(([k, Icon]) => (
-                    <button
-                      key={k}
-                      onClick={() => setView((v) => ({ ...v, [b.key]: k }))}
-                      className={cn("flex h-7 w-8 items-center justify-center rounded-lg transition-all", mode === k ? "bg-surface text-foreground shadow-toggle" : "text-subtle hover:text-foreground")}
-                      aria-label={k}
-                    >
-                      <Icon className="h-4 w-4" />
-                    </button>
-                  ))}
-                </div>
-              </div>
-              {mode === "preview" ? (
-                <div className="dot-grid flex min-w-0 flex-1 items-start justify-center overflow-hidden border-t border-separator bg-background-secondary/50">
-                  <ScaledFrame designWidth={b.width ?? 440} innerClassName="pointer-events-none" className="w-full px-4 py-8 sm:px-6">{b.render()}</ScaledFrame>
-                </div>
-              ) : (
-                <CodeBlock code={usageSnippet(b.key)} filename={`${b.key}.tsx`} className="rounded-none ring-0" />
-              )}
-            </section>
-          );
-        })}
-        {items.length === 0 && (
-          <div className="col-span-full rounded-20 bg-surface-secondary py-20 text-center text-paragraph-sm text-muted ring-1 ring-border">No blocks match “{q}”.</div>
-        )}
-      </div>
+      {!filtered.length && <div className="search-empty collection-empty"><Search size={28} /><h2>No matching blocks</h2><p>Try another category or search term.</p><button className="text-action" onClick={() => { setCategory("All"); setQuery(""); }}>Clear filters <ArrowRight size={14} /></button></div>}
     </div>
-  );
+    <SiteFooter navigate={(route) => { window.location.hash = `/${route}`; }} />
+  </main>;
 }

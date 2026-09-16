@@ -4,7 +4,6 @@ import { Callout, PageHeader, PropsTable, Section, Showcase, OptionPicker } from
 import { Button, ButtonGroup, type Size, type Tone, type Variant } from "../../ui/Button";
 import { Checkbox, Input, RadioGroup, Select, Slider, Switch, Textarea } from "../../ui/Form";
 import { Chip, Code, Snippet } from "../../ui/Display";
-import { LiveEditor } from "../../docs/LiveEditor";
 
 const VARIANTS: Variant[] = ["solid", "soft", "outline", "ghost", "link"];
 const TONES: Tone[] = ["accent", "default", "success", "warning", "danger"];
@@ -57,20 +56,6 @@ export function ButtonDoc() {
             <Button key={v} variant={v} className="capitalize">{v}</Button>
           ))}
         </Showcase>
-      </Section>
-
-      <Section title="Try it live" description="Edit the JSX and the result renders immediately. Only Aperture components are available in the sandbox.">
-        <LiveEditor
-          height={230}
-          scope={{ Button, Chip }}
-          code={`<div className="flex flex-wrap items-center gap-3">
-  <Button variant="solid">Solid</Button>
-  <Button variant="soft">Soft</Button>
-  <Button variant="outline" tone="default">Stroke</Button>
-  <Button variant="ghost" tone="default">Ghost</Button>
-  <Button tone="danger">Delete</Button>
-</div>`}
-        />
       </Section>
 
       <Section title="Tones" description="Tone communicates consequence, never decoration.">
