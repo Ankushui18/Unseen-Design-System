@@ -1,20 +1,5 @@
 import type { ReactNode } from "react";
-import { ArrowRight, Bell, Grid2x2, List, MoreHorizontal, Search, Settings } from "lucide-react";
-import {
-  RiAlignCenter,
-  RiAlignLeft,
-  RiAlignRight,
-  RiBankCardLine,
-  RiBold,
-  RiGlobalLine,
-  RiInboxLine,
-  RiItalic,
-  RiLink,
-  RiRocketLine,
-  RiSettings3Line,
-  RiTeamLine,
-  RiUser3Line,
-} from "@remixicon/react";
+import { RiAlignCenter, RiAlignLeft, RiAlignRight, RiArrowRightLine, RiBankCardLine, RiBold, RiGlobalLine, RiInboxLine, RiItalic, RiLayoutGridLine, RiLink, RiListUnordered, RiMoreLine, RiNotification3Line, RiRocketLine, RiSearchLine, RiSettings3Line, RiTeamLine, RiUser3Line } from "@remixicon/react";
 import { Button, FancyButton, Spinner } from "../ui/Button";
 import { Alert, Avatar, AvatarGroup, Card, Chip, CircularProgress, Kbd, Progress, Skeleton, Snippet } from "../ui/Display";
 import { Checkbox, Input, RadioGroup, Select, Slider, Switch, Textarea } from "../ui/Form";
@@ -55,11 +40,11 @@ export const PREVIEWS: Record<string, () => ReactNode> = {
   "components/dropdown": () => <div className="w-48 rounded-xl bg-surface py-1.5 ring-1 ring-border shadow-lg text-paragraph-xs"><div className="flex items-center gap-2 px-3 py-1.5"><Avatar name="Sophia W" size="xs" tone="accent" /><div><p className="text-label-xs">Sophia</p><p className="text-[10px] text-subtle">sophia@ap.io</p></div></div><div className="my-1 h-px bg-separator" />{[[RiUser3Line, "Profile"], [RiTeamLine, "Team"]].map(([I, l]) => { const Ic = I as typeof RiUser3Line; return <div key={l as string} className="flex items-center gap-2 px-3 py-1.5"><Ic size={14} className="text-subtle" />{l as string}</div>; })}</div>,
   "components/empty-state": () => <div className="scale-75"><EmptyState icon={<RiInboxLine />} title="No projects yet" description="Create your first project." /></div>,
   "components/button": () => <div className="flex gap-2"><Button size="sm">Primary</Button><Button size="sm" tone="default">Neutral</Button><Button size="sm" variant="outline" tone="default">Stroke</Button></div>,
-  "components/compact-button": () => <div className="flex gap-2"><CompactButton aria-label="More"><MoreHorizontal /></CompactButton><CompactButton variant="ghost" aria-label="Settings"><Settings /></CompactButton><CompactButton fullRadius aria-label="Notifications"><Bell /></CompactButton></div>,
-  "components/link-button": () => <div className="flex gap-4"><LinkButton variant="primary" endContent={<ArrowRight />}>Learn more</LinkButton><LinkButton variant="gray" underline>Forgot?</LinkButton></div>,
+  "components/compact-button": () => <div className="flex gap-2"><CompactButton aria-label="More"><RiMoreLine /></CompactButton><CompactButton variant="ghost" aria-label="Settings"><RiSettings3Line /></CompactButton><CompactButton fullRadius aria-label="Notifications"><RiNotification3Line /></CompactButton></div>,
+  "components/link-button": () => <div className="flex gap-4"><LinkButton variant="primary" endContent={<RiArrowRightLine />}>Learn more</LinkButton><LinkButton variant="gray" underline>Forgot?</LinkButton></div>,
   "components/social-button": () => <div className="flex gap-2"><SocialButton brand="google" size="sm">Google</SocialButton><SocialButton brand="apple" size="sm" iconOnly aria-label="Apple" /><SocialButton brand="github" size="sm" iconOnly aria-label="GitHub" /></div>,
   "components/button-group": () => <div className="inline-flex rounded-10 shadow-fancy-stroke [&>*]:rounded-none [&>*]:shadow-none [&>*:first-child]:rounded-l-10 [&>*:last-child]:rounded-r-10 [&>*+*]:border-l [&>*+*]:border-border">{["Day", "Week", "Month"].map((l) => <Button key={l} size="sm" variant="outline" tone="default">{l}</Button>)}</div>,
-  "components/input": () => <Input size="sm" placeholder="Search…" startContent={<Search />} wrapperClassName="w-52" />,
+  "components/input": () => <Input size="sm" placeholder="Search…" startContent={<RiSearchLine />} wrapperClassName="w-52" />,
   "components/textarea": () => <Textarea placeholder="Write a message…" rows={2} className="min-h-0 w-52 text-paragraph-xs" />,
   "components/select": () => <div className="w-48"><Select size="sm" items={[{ label: "eu-west-2 · London", value: "a" }, { label: "us-east-1", value: "b" }]} /></div>,
   "components/checkbox": () => <div className="flex gap-4"><Checkbox checked label="Checked" onChange={noop} /><Checkbox indeterminate label="Mixed" onChange={noop} /></div>,
@@ -82,7 +67,7 @@ export const PREVIEWS: Record<string, () => ReactNode> = {
   "components/kbd": () => <div className="flex gap-1"><Kbd>⌘</Kbd><Kbd>K</Kbd></div>,
   "components/file-format-icon": () => <div className="flex gap-3"><FileFormatIcon format="pdf" size={32} /><FileFormatIcon format="png" size={32} /><FileFormatIcon format="xlsx" size={32} /></div>,
   "components/tabs": () => <Tabs size="sm" variant="segment" value="a" onChange={noop} items={[{ key: "a", label: "Overview" }, { key: "b", label: "Activity" }]} />,
-  "components/segmented-control": () => <SegmentedControl size="sm" value="list" onChange={noop} items={[{ value: "list", icon: <List /> }, { value: "grid", icon: <Grid2x2 /> }]} />,
+  "components/segmented-control": () => <SegmentedControl size="sm" value="list" onChange={noop} items={[{ value: "list", icon: <RiListUnordered /> }, { value: "grid", icon: <RiLayoutGridLine /> }]} />,
   "components/stepper": () => <div className="flex flex-col items-center gap-3"><div className="w-56 scale-90"><HorizontalStepper steps={[{ title: "Account" }, { title: "Team" }, { title: "Done" }]} current={1} /></div><DotStepper count={4} current={1} /></div>,
   "components/accordion": () => <div className="w-56 text-paragraph-xs"><Accordion items={[{ key: "a", title: "What is a token?", content: "A named design decision." }]} defaultOpen={["a"]} /></div>,
   "components/breadcrumbs": () => <Breadcrumbs items={[{ label: "Home", href: "#" }, { label: "Projects", href: "#" }, { label: "Aurora" }]} />,
@@ -93,7 +78,7 @@ export const PREVIEWS: Record<string, () => ReactNode> = {
   "components/toast": () => <div className="flex w-56 items-center gap-2 rounded-xl bg-surface p-3 ring-1 ring-border shadow-lg text-paragraph-xs"><span className="h-2 w-2 rounded-full bg-success" />Saved successfully</div>,
   "components/modal": () => <div className="w-52 rounded-xl bg-surface p-3 ring-1 ring-border shadow-xl"><p className="text-label-xs">Delete workspace?</p><p className="text-paragraph-xs text-subtle">This can't be undone.</p><div className="mt-2 flex justify-end gap-1.5"><Button size="xs" variant="outline" tone="default">Cancel</Button><Button size="xs" tone="danger">Delete</Button></div></div>,
   "components/drawer": () => <div className="relative h-24 w-48 overflow-hidden rounded-lg bg-background-secondary ring-1 ring-border"><div className="absolute inset-y-0 right-0 w-24 rounded-l-lg bg-surface p-2 shadow-lg ring-1 ring-border"><div className="h-2 w-12 rounded bg-neutral-200 dark:bg-neutral-700" /><div className="mt-2 h-2 w-16 rounded bg-neutral-100 dark:bg-neutral-800" /></div></div>,
-  "components/tooltip": () => <div className="flex flex-col items-center gap-1.5"><span className="rounded-lg bg-neutral-950 px-2.5 py-1.5 text-label-xs text-white shadow-tooltip dark:bg-white dark:text-neutral-950">Copy to clipboard</span><CompactButton aria-label="Settings"><Settings /></CompactButton></div>,
+  "components/tooltip": () => <div className="flex flex-col items-center gap-1.5"><span className="rounded-lg bg-neutral-950 px-2.5 py-1.5 text-label-xs text-white shadow-tooltip dark:bg-white dark:text-neutral-950">Copy to clipboard</span><CompactButton aria-label="Settings"><RiSettings3Line /></CompactButton></div>,
   "components/menu": () => <div className="w-44 rounded-xl bg-surface p-1 ring-1 ring-border shadow-lg text-paragraph-xs">{["Edit", "Duplicate", "Archive"].map((i) => <div key={i} className={cn("rounded-lg px-2 py-1.5", i === "Edit" && "bg-surface-hover")}>{i}</div>)}<div className="my-1 h-px bg-separator" /><div className="rounded-lg px-2 py-1.5 text-danger">Delete</div></div>,
   "components/spinner": () => <div className="flex gap-3"><Spinner className="text-muted" /><Spinner className="h-6 w-6 text-accent" /></div>,
 };

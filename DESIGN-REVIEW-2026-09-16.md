@@ -144,6 +144,18 @@ crash, empty route, missing h1, unlabeled buttons, or img-without-alt.
 - [x] The landing hero demonstrates a **working editor + preview** inside one viewport.
 - [x] A factual coverage strip (64 docs pages · 16 blocks · 7 foundations · light/dark · Theme Studio · keyboard-first) communicates scale without invented numbers.
 
-Note on residual items: the duplicate `Design-system/` tree and the
-`npm audit` (jsdom chain) findings are tracked but not yet resolved in this
-pass; they are the highest-value follow-ups.
+## 7. Follow-up pass (2026-09-16, phase 2)
+
+The three queued P2 items from §5 were evaluated head-to-head; the icon-system
+and dependency items were resolved, and the jsdom framing was corrected:
+
+| Item | Decision | Result |
+|---|---|---|
+| Icon system | **Pick one. Adopt `@remixicon/react`** — the system's stated library (AlignUI's choice), a single consistent stroke style, already used by every `ui/` pattern, and it removes `lucide-react@1.46.0` from the bundle. | All 27 importing files migrated via AST (exact spans; whitespace-preserving), `lucide-react` removed from dependencies. Build lighter: gzip 422→412 KB. |
+| `npm audit` | The "high" was **Vite 7.3.2** (GHSA-v6wh — `server.fs.deny` bypass via Windows alternate paths), not jsdom. | `vite@7.3.6` + `esbuild@0.28.2` (via `npm audit fix`). **0 vulnerabilities.** |
+| `Design-system/` duplicate tree | Still diverged and unbuilt; safe deletion candidate, but needs a second pair of eyes before a large `git rm`. | Left tracked; flagged for a dedicated cleanup PR. |
+
+### Outcome
+- [x] `npm audit` → **0 vulnerabilities** (was 2: 1 high, 1 low).
+- [x] Single icon library (`@remixicon/react`) across all 83 routes; 81/81 render with 0 findings.
+- [x] `npm run test` (types → build → design-lint → smoke) green on the upgraded toolchain.

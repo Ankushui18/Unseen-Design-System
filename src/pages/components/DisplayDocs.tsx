@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Archive, Bell, Copy, ExternalLink, Folder, Pencil, Share2, Trash2, Users } from "lucide-react";
 import { Callout, PageHeader, PropsTable, Section, Showcase } from "../../docs/Blocks";
 import { Button } from "../../ui/Button";
 import {
@@ -23,6 +22,7 @@ import {
 } from "../../ui/Display";
 import { Spinner } from "../../ui/Button";
 import { Table } from "../../ui/Navigation";
+import { RiArchiveLine, RiDeleteBinLine, RiExternalLinkLine, RiFileCopyLine, RiFolderLine, RiNotification3Line, RiPencilLine, RiShareLine, RiTeamLine } from "@remixicon/react";
 
 const Import = ({ names }: { names: string }) => <Snippet symbol="">{`import { ${names} } from "@aperture/react";`}</Snippet>;
 const TONES = ["accent", "default", "success", "warning", "danger"] as const;
@@ -76,9 +76,9 @@ export function CardDoc() {
       <Section title="Interactive" description="Adds a lift transition, accent border on hover and a pointer cursor.">
         <Showcase>
           {[
-            { i: Folder, t: "Projects", d: "18 active" },
-            { i: Users, t: "Members", d: "42 seats" },
-            { i: Archive, t: "Archive", d: "310 items" },
+            { i: RiFolderLine, t: "Projects", d: "18 active" },
+            { i: RiTeamLine, t: "Members", d: "42 seats" },
+            { i: RiArchiveLine, t: "Archive", d: "310 items" },
           ].map((c) => (
             <Card key={c.t} interactive className="w-44 p-4">
               <c.i className="mb-2.5 h-4.5 w-4.5 text-accent" />
@@ -264,8 +264,8 @@ export function BadgeDoc() {
         <Showcase code={`<Badge content="8" tone="danger">
   <Button iconOnly aria-label="Action" variant="outline" tone="default"><Bell /></Button>
 </Badge>`}>
-          <Badge content="8" tone="danger"><Button iconOnly variant="outline" tone="default" aria-label="Notifications"><Bell /></Button></Badge>
-          <Badge content="99+" tone="accent"><Button iconOnly variant="outline" tone="default" aria-label="Messages"><Share2 className="h-4 w-4" /></Button></Badge>
+          <Badge content="8" tone="danger"><Button iconOnly variant="outline" tone="default" aria-label="Notifications"><RiNotification3Line /></Button></Badge>
+          <Badge content="99+" tone="accent"><Button iconOnly variant="outline" tone="default" aria-label="Messages"><RiShareLine className="h-4 w-4" /></Button></Badge>
           <Badge dot tone="success"><Avatar name="Ada L" tone="default" /></Badge>
           <Badge dot tone="warning" placement="bottom-right"><Avatar name="Grace H" tone="default" square /></Badge>
         </Showcase>
@@ -429,7 +429,7 @@ export function KbdDoc() {
       <Section title="In context">
         <Showcase align="stretch">
           <div className="w-full max-w-sm divide-y divide-separator-secondary overflow-hidden rounded-2xl bg-surface ring-1 ring-border shadow-xs">
-            {[[<Copy key="c" />, "Copy", "⌘C"], [<Pencil key="p" />, "Rename", "F2"], [<Trash2 key="t" />, "Delete", "⌫"]].map(([icon, label, k], i) => (
+            {[[<RiFileCopyLine key="c" />, "Copy", "⌘C"], [<RiPencilLine key="p" />, "Rename", "F2"], [<RiDeleteBinLine key="t" />, "Delete", "⌫"]].map(([icon, label, k], i) => (
               <div key={i} className="flex items-center gap-3 px-3.5 py-2.5 text-paragraph-sm">
                 <span className="text-subtle [&_svg]:h-4 [&_svg]:w-4">{icon as React.ReactNode}</span>
                 <span className="flex-1">{label as string}</span>
@@ -522,7 +522,7 @@ export function AlertDoc() {
         <Showcase align="stretch">
           <div className="w-full space-y-3">
             {open && (
-              <Alert tone="warning" title="Payment method expires soon" onClose={() => setOpen(false)} action={<Button size="sm" variant="soft" tone="warning" startContent={<ExternalLink className="h-3.5 w-3.5" />}>Update card</Button>}>
+              <Alert tone="warning" title="Payment method expires soon" onClose={() => setOpen(false)} action={<Button size="sm" variant="soft" tone="warning" startContent={<RiExternalLinkLine className="h-3.5 w-3.5" />}>Update card</Button>}>
                 Visa ending 4242 expires next month.
               </Alert>
             )}

@@ -1,26 +1,11 @@
 import { useState } from "react";
-import {
-  Activity,
-  BarChart3,
-  Bell,
-  ChevronRight,
-  Copy,
-  CreditCard,
-  ExternalLink,
-  LogOut,
-  Pencil,
-  Settings,
-  Share2,
-  Trash2,
-  Users,
-} from "lucide-react";
 import { Callout, PageHeader, PropsTable, Section, Showcase, OptionPicker } from "../../docs/Blocks";
 import { Button } from "../../ui/Button";
 import { Avatar, Card, Chip, Code, Divider, Kbd, Snippet } from "../../ui/Display";
 import { Input, Switch } from "../../ui/Form";
 import { Accordion, Breadcrumbs, Pagination, Tabs } from "../../ui/Navigation";
 import { Drawer, MenuItem, MenuLabel, MenuSeparator, Modal, Popover, Tooltip, useToast } from "../../ui/Overlay";
-import { RiDeleteBinLine, RiFolderAddLine, RiUserAddLine } from "@remixicon/react";
+import { RiArrowRightSLine, RiBankCardLine, RiBarChartLine, RiDeleteBinLine, RiExternalLinkLine, RiFileCopyLine, RiFolderAddLine, RiLogoutBoxLine, RiNotification3Line, RiPencilLine, RiPulseLine, RiSettings3Line, RiShareLine, RiTeamLine, RiUserAddLine } from "@remixicon/react";
 
 const Import = ({ names }: { names: string }) => <Snippet symbol="">{`import { ${names} } from "@aperture/react";`}</Snippet>;
 
@@ -55,9 +40,9 @@ export function TabsDoc() {
             value={v}
             onChange={setV}
             items={[
-              { key: "overview", label: "Overview", icon: <Activity />, content: <Card className="p-5 text-paragraph-sm text-muted">Traffic is up 18% week over week across all regions.</Card> },
-              { key: "analytics", label: "Analytics", icon: <BarChart3 />, content: <Card className="p-5 text-paragraph-sm text-muted">42,108 sessions · 3m 12s average duration.</Card> },
-              { key: "members", label: "Members", icon: <Users />, badge: <Chip size="sm" tone="accent">4</Chip>, content: <Card className="p-5 text-paragraph-sm text-muted">4 members, 1 pending invitation.</Card> },
+              { key: "overview", label: "Overview", icon: <RiPulseLine />, content: <Card className="p-5 text-paragraph-sm text-muted">Traffic is up 18% week over week across all regions.</Card> },
+              { key: "analytics", label: "Analytics", icon: <RiBarChartLine />, content: <Card className="p-5 text-paragraph-sm text-muted">42,108 sessions · 3m 12s average duration.</Card> },
+              { key: "members", label: "Members", icon: <RiTeamLine />, badge: <Chip size="sm" tone="accent">4</Chip>, content: <Card className="p-5 text-paragraph-sm text-muted">4 members, 1 pending invitation.</Card> },
               { key: "archived", label: "Archived", disabled: true },
             ]}
           />
@@ -126,9 +111,9 @@ export function AccordionDoc() {
             variant="split"
             defaultOpen={["1", "2"]}
             items={[
-              { key: "1", title: "Shipping", icon: <Activity />, content: "Dispatched within two business days." },
-              { key: "2", title: "Returns", icon: <Share2 />, content: "Thirty-day window, no questions asked." },
-              { key: "3", title: "Warranty", icon: <Settings />, content: "Two years against manufacturing defects." },
+              { key: "1", title: "Shipping", icon: <RiPulseLine />, content: "Dispatched within two business days." },
+              { key: "2", title: "Returns", icon: <RiShareLine />, content: "Thirty-day window, no questions asked." },
+              { key: "3", title: "Warranty", icon: <RiSettings3Line />, content: "Two years against manufacturing defects." },
             ]}
           />
         </Showcase>
@@ -236,7 +221,7 @@ export function ModalDoc() {
           <Modal open={form} onClose={() => setForm(false)} size="lg" icon={<RiFolderAddLine />} title="Create project" description="Projects group deployments, environments and members." footer={<><Button variant="ghost" tone="default" onClick={() => setForm(false)}>Cancel</Button><Button onClick={() => setForm(false)}>Create project</Button></>}>
             <div className="space-y-4">
               <Input label="Project name" placeholder="acme-web" />
-              <Input label="Repository" placeholder="github.com/acme/web" startContent={<ExternalLink />} />
+              <Input label="Repository" placeholder="github.com/acme/web" startContent={<RiExternalLinkLine />} />
               <Switch checked onChange={() => {}} label="Enable preview deployments" description="Build every pull request automatically." />
             </div>
           </Modal>
@@ -333,7 +318,7 @@ export function TooltipDoc() {
       </Section>
       <Section title="On icon buttons" description="The most common use. Pair it with an aria-label — the tooltip alone is not an accessible name.">
         <Showcase>
-          {([[Copy, "Copy"], [Pencil, "Rename"], [Share2, "Share"], [Trash2, "Delete"]] as const).map(([Icon, label], i) => (
+          {([[RiFileCopyLine, "Copy"], [RiPencilLine, "Rename"], [RiShareLine, "Share"], [RiDeleteBinLine, "Delete"]] as const).map(([Icon, label], i) => (
             <Tooltip key={i} content={label}>
               <Button iconOnly variant="ghost" tone={label === "Delete" ? "danger" : "default"} aria-label={label}>
                 <Icon className="h-4 w-4" />
@@ -377,7 +362,7 @@ export function MenuDoc() {
           <Popover
             placement="bottom-start"
             trigger={({ toggle, open }) => (
-              <Button variant="outline" tone="default" onClick={toggle} endContent={<ChevronRight className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-90" : ""}`} />}>
+              <Button variant="outline" tone="default" onClick={toggle} endContent={<RiArrowRightSLine className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-90" : ""}`} />}>
                 Account
               </Button>
             )}
@@ -385,26 +370,26 @@ export function MenuDoc() {
             {(close) => (
               <>
                 <MenuLabel>Signed in as ada@acme.io</MenuLabel>
-                <MenuItem icon={<Settings />} shortcut="⌘," onClick={close}>Settings</MenuItem>
-                <MenuItem icon={<CreditCard />} shortcut="⌘B" onClick={close}>Billing</MenuItem>
-                <MenuItem icon={<Bell />} onClick={close}>Notifications</MenuItem>
+                <MenuItem icon={<RiSettings3Line />} shortcut="⌘," onClick={close}>Settings</MenuItem>
+                <MenuItem icon={<RiBankCardLine />} shortcut="⌘B" onClick={close}>Billing</MenuItem>
+                <MenuItem icon={<RiNotification3Line />} onClick={close}>Notifications</MenuItem>
                 <MenuSeparator />
-                <MenuItem icon={<LogOut />} tone="danger" onClick={close}>Sign out</MenuItem>
+                <MenuItem icon={<RiLogoutBoxLine />} tone="danger" onClick={close}>Sign out</MenuItem>
               </>
             )}
           </Popover>
 
           <Popover
             placement="bottom"
-            trigger={({ toggle }) => <Button iconOnly variant="ghost" tone="default" aria-label="Row actions" onClick={toggle}><Settings className="h-4 w-4" /></Button>}
+            trigger={({ toggle }) => <Button iconOnly variant="ghost" tone="default" aria-label="Row actions" onClick={toggle}><RiSettings3Line className="h-4 w-4" /></Button>}
           >
             {(close) => (
               <>
-                <MenuItem icon={<Copy />} onClick={close}>Duplicate</MenuItem>
-                <MenuItem icon={<Pencil />} onClick={close}>Rename</MenuItem>
-                <MenuItem icon={<Share2 />} onClick={close}>Share</MenuItem>
+                <MenuItem icon={<RiFileCopyLine />} onClick={close}>Duplicate</MenuItem>
+                <MenuItem icon={<RiPencilLine />} onClick={close}>Rename</MenuItem>
+                <MenuItem icon={<RiShareLine />} onClick={close}>Share</MenuItem>
                 <MenuSeparator />
-                <MenuItem icon={<Trash2 />} tone="danger" onClick={close}>Delete</MenuItem>
+                <MenuItem icon={<RiDeleteBinLine />} tone="danger" onClick={close}>Delete</MenuItem>
               </>
             )}
           </Popover>

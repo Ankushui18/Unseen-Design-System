@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Check, Download, Moon, RotateCcw, Sparkles, Sun, Wand2 } from "lucide-react";
 import { PageHeader, Section } from "../docs/Blocks";
 import { CodeBlock } from "../docs/CodeBlock";
 import { Button } from "../ui/Button";
@@ -10,6 +9,7 @@ import { useToast } from "../ui/Overlay";
 import { ACCENT_PRESETS, RADIUS_PRESETS, useTheme } from "../lib/theme";
 import { useCopy } from "../lib/hooks";
 import { cn } from "../utils/cn";
+import { RiCheckLine, RiDownloadLine, RiMagicLine, RiMoonLine, RiRestartLine, RiSparkling2Line, RiSunLine } from "@remixicon/react";
 
 export function ThemePage() {
   const { mode, accentH, accentC, radiusScale, disabledOpacity, set, toggleMode, reset, cssExport } = useTheme();
@@ -43,7 +43,7 @@ export function ThemePage() {
                       mode === m ? "bg-surface text-foreground shadow-toggle ring-1 ring-border/60" : "text-muted hover:text-foreground",
                     )}
                   >
-                    {m === "light" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+                    {m === "light" ? <RiSunLine className="h-3.5 w-3.5" /> : <RiMoonLine className="h-3.5 w-3.5" />}
                     {m}
                   </button>
                 ))}
@@ -68,7 +68,7 @@ export function ThemePage() {
                       )}
                       style={{ background: `oklch(0.62 ${p.c} ${p.h})` }}
                     >
-                      {active && <Check className="h-4 w-4 text-white" strokeWidth={3} />}
+                      {active && <RiCheckLine className="h-4 w-4 text-white" strokeWidth={3} />}
                     </button>
                   );
                 })}
@@ -104,12 +104,12 @@ export function ThemePage() {
             <Slider label="Disabled opacity" value={disabledOpacity} onChange={(v) => set({ disabledOpacity: v })} min={0.2} max={0.9} step={0.05} formatValue={(v) => v.toFixed(2)} />
 
             <div className="flex flex-wrap items-center gap-2 pt-1">
-              <Button size="sm" variant="outline" tone="default" startContent={<RotateCcw className="h-3.5 w-3.5" />} onClick={reset}>
+              <Button size="sm" variant="outline" tone="default" startContent={<RiRestartLine className="h-3.5 w-3.5" />} onClick={reset}>
                 Reset
               </Button>
               <Button
                 size="sm"
-                startContent={copied ? <Check className="h-3.5 w-3.5" /> : <Download className="h-3.5 w-3.5" />}
+                startContent={copied ? <RiCheckLine className="h-3.5 w-3.5" /> : <RiDownloadLine className="h-3.5 w-3.5" />}
                 onClick={() => {
                   copy(cssExport);
                   push({ title: "Theme copied", description: "Paste it into your global stylesheet.", tone: "success" });
@@ -121,7 +121,7 @@ export function ThemePage() {
                 size="sm"
                 variant="ghost"
                 tone="default"
-                startContent={<Wand2 className="h-3.5 w-3.5" />}
+                startContent={<RiMagicLine className="h-3.5 w-3.5" />}
                 onClick={() => {
                   const p = ACCENT_PRESETS[Math.floor(Math.random() * ACCENT_PRESETS.length)];
                   const r = RADIUS_PRESETS[Math.floor(Math.random() * RADIUS_PRESETS.length)];
@@ -195,7 +195,7 @@ export function ThemePage() {
                 <div className="grid gap-5 md:grid-cols-2">
                   <div className="space-y-4">
                     <Input label="Workspace name" defaultValue="Acme Analytics" />
-                    <Input label="Primary domain" defaultValue="acme.io" startContent={<Sparkles />} description="Used for SSO and invite matching." />
+                    <Input label="Primary domain" defaultValue="acme.io" startContent={<RiSparkling2Line />} description="Used for SSO and invite matching." />
                     <Switch checked={notify} onChange={setNotify} label="Weekly digest" description="Every Monday at 09:00 local time." />
                   </div>
                   <div className="space-y-4">

@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
-import { ArrowRight, Search } from "lucide-react";
 import { COMPONENT_GROUPS } from "../docs/nav";
 import { PageHeader } from "../docs/Blocks";
 import { Input } from "../ui/Form";
 import { PREVIEWS } from "../docs/previews";
+import { RiArrowRightLine, RiSearchLine } from "@remixicon/react";
 
 export function ComponentsIndex({ navigate }: { navigate: (t: string) => void }) {
   const [q, setQ] = useState("");
@@ -20,7 +20,7 @@ export function ComponentsIndex({ navigate }: { navigate: (t: string) => void })
         tags={[`${total} documentation pages`, "Free during beta"]}
       />
       <div className="component-index-filter">
-        <Input aria-label="Filter components" placeholder="Find a component..." startContent={<Search />} value={q} onChange={(e) => setQ(e.target.value)} />
+        <Input aria-label="Filter components" placeholder="Find a component..." startContent={<RiSearchLine />} value={q} onChange={(e) => setQ(e.target.value)} />
         <span role="status">{groups.reduce((n, g) => n + g.items.length, 0)} results</span>
       </div>
       {groups.map((g) => (
@@ -37,7 +37,7 @@ export function ComponentsIndex({ navigate }: { navigate: (t: string) => void })
                 </div>
                 <a href={`#/${it.href}`} className="component-index-link" onClick={(e) => { e.preventDefault(); navigate(it.href); }}>
                   <span>{it.title}</span>
-                  <ArrowRight size={15} />
+                  <RiArrowRightLine size={15} />
                 </a>
               </article>
             ))}
@@ -46,7 +46,7 @@ export function ComponentsIndex({ navigate }: { navigate: (t: string) => void })
       ))}
       {!groups.length && (
         <div className="search-empty">
-          <Search size={24} />
+          <RiSearchLine size={24} />
           <h2>No components found</h2>
           <p>Try another component name or clear the filter.</p>
           <button className="text-action" onClick={() => setQ("")}>Clear search</button>

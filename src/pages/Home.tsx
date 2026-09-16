@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ArrowRight, Bell, Blocks, Check, Code2, Copy, Eye, Layers, Mail, Palette, Plus, RotateCcw, Ruler, Settings2, ShieldCheck, Sun, Sparkles } from "lucide-react";
 import { Button, FancyButton } from "../ui/Button";
 import { Avatar, Chip, Progress, Snippet } from "../ui/Display";
 import { Input, Switch } from "../ui/Form";
@@ -14,6 +13,7 @@ import { PREVIEWS } from "../docs/previews";
 import { ACCENT_PRESETS, useTheme } from "../lib/theme";
 import { useCopy } from "../lib/hooks";
 import { getBlockSource } from "../docs/block-source";
+import { RiAddLine, RiArrowRightLine, RiCheckLine, RiCodeSSlashLine, RiEqualizerLine, RiEyeLine, RiFileCopyLine, RiLayoutGridLine, RiMailLine, RiNotification3Line, RiPaletteLine, RiRestartLine, RiRulerLine, RiShieldCheckLine, RiSparkling2Line, RiStackLine, RiSunLine } from "@remixicon/react";
 
 const COMPONENT_COUNT = COMPONENT_GROUPS.reduce((count, group) => count + group.items.length, 0);
 const noop = () => {};
@@ -23,12 +23,12 @@ function PreferenceDemo() {
   const [push, setPush] = useState(false);
   const [digest, setDigest] = useState(true);
   return <div className="mini-demo">
-    <div className="mini-demo-title"><Bell size={17} /><h3>Your notifications</h3></div>
+    <div className="mini-demo-title"><RiNotification3Line size={17} /><h3>Your notifications</h3></div>
     <p>Choose what makes it to your inbox.</p>
     <div className="preference-item"><div><strong>Product updates</strong><span>A little news, occasionally.</span></div><Switch checked={email} onChange={setEmail} size="sm" label={<span className="sr-only">Product updates</span>} /></div>
     <div className="preference-item"><div><strong>Push notifications</strong><span>Stay in the loop, in real time.</span></div><Switch checked={push} onChange={setPush} size="sm" label={<span className="sr-only">Push notifications</span>} /></div>
     <div className="preference-item"><div><strong>Weekly digest</strong><span>The highlights, every Monday.</span></div><Switch checked={digest} onChange={setDigest} size="sm" label={<span className="sr-only">Weekly digest</span>} /></div>
-    <div className="mini-demo-footer"><Check size={13} /> Preferences updated locally</div>
+    <div className="mini-demo-footer"><RiCheckLine size={13} /> Preferences updated locally</div>
   </div>;
 }
 
@@ -49,9 +49,9 @@ function TeamDemo() {
       <div><strong>{m.name}</strong><span>{m.email}</span></div>
       {i === 0 ? <span className="team-owner">Owner</span> : <select aria-label={`Role for ${m.name}`} value={m.role} onChange={(e) => setMembers((items) => items.map((item, j) => j === i ? { ...item, role: e.target.value } : item))}><option>Editor</option><option>Viewer</option></select>}
     </div>)}</div>
-    <Button fullWidth variant="outline" tone="default" size="sm" startContent={<Plus />} onClick={() => setInviteOpen(true)}>Invite a teammate</Button>
+    <Button fullWidth variant="outline" tone="default" size="sm" startContent={<RiAddLine />} onClick={() => setInviteOpen(true)}>Invite a teammate</Button>
     <Modal open={inviteOpen} onClose={() => setInviteOpen(false)} title="Invite a teammate" description="This adds a teammate to the local preview. No email is sent." footer={<><Button variant="outline" tone="default" onClick={() => setInviteOpen(false)}>Cancel</Button><Button disabled={!valid || members.some((m) => m.email === email)} onClick={() => { setMembers((m) => [...m, { name: email.split("@")[0], email, role: "Viewer" }]); setEmail(""); setInviteOpen(false); }}>Add teammate</Button></>}>
-      <Input label="Email address" type="email" placeholder="teammate@company.com" startContent={<Mail />} value={email} onChange={(e) => setEmail(e.target.value)} />
+      <Input label="Email address" type="email" placeholder="teammate@company.com" startContent={<RiMailLine />} value={email} onChange={(e) => setEmail(e.target.value)} />
     </Modal>
   </div>;
 }
@@ -62,7 +62,7 @@ function ActionsDemo() {
   const { push } = useToast();
   return <div className="mini-demo action-demo">
     <div className="mini-demo-title"><h3>The right amount of emphasis.</h3></div><p>Clear choices, from primary to quiet.</p>
-    <div className="action-demo-buttons"><Button size="sm" loading={saving} onClick={() => { setSaving(true); window.setTimeout(() => { setSaving(false); setSaved(true); }, 700); }}>{saved ? "Saved" : "Save changes"}</Button><Button size="sm" variant="outline" tone="default" onClick={() => { setSaved(false); push({ title: "Changes discarded", tone: "default" }); }}>Cancel</Button><Button size="sm" variant="ghost" tone="default" iconOnly aria-label="More settings" onClick={() => push({ title: "Settings preview", description: "Explore the complete menu component in the library.", tone: "accent" })}><Settings2 /></Button></div>
+    <div className="action-demo-buttons"><Button size="sm" loading={saving} onClick={() => { setSaving(true); window.setTimeout(() => { setSaving(false); setSaved(true); }, 700); }}>{saved ? "Saved" : "Save changes"}</Button><Button size="sm" variant="outline" tone="default" onClick={() => { setSaved(false); push({ title: "Changes discarded", tone: "default" }); }}>Cancel</Button><Button size="sm" variant="ghost" tone="default" iconOnly aria-label="More settings" onClick={() => push({ title: "Settings preview", description: "Explore the complete menu component in the library.", tone: "accent" })}><RiEqualizerLine /></Button></div>
     <div className="action-demo-statuses"><Chip tone="success" variant="soft" dot>Published</Chip><Chip tone="warning" variant="soft" dot>In review</Chip><Chip variant="outline" dot>Draft</Chip></div>
   </div>;
 }
@@ -71,8 +71,8 @@ function ThemeDemo() {
   const { accentH, accentC, set } = useTheme();
   const swatches = [ACCENT_PRESETS[0], ACCENT_PRESETS[1], ACCENT_PRESETS[4], ACCENT_PRESETS[9], ACCENT_PRESETS[7]];
   return <div className="mini-demo palette-demo">
-    <div className="mini-demo-title"><Palette size={17} /><h3>Make it yours.</h3></div><p>One accent. An entirely different feel.</p>
-    <div className="palette-demo-swatches">{swatches.map((p) => <button key={p.name} aria-label={`Use ${p.name} theme`} aria-pressed={accentH === p.h && accentC === p.c} style={{ background: `oklch(.58 ${p.c} ${p.h})` }} onClick={() => set({ accentH: p.h, accentC: p.c })}>{accentH === p.h && <Check size={16} />}</button>)}</div>
+    <div className="mini-demo-title"><RiPaletteLine size={17} /><h3>Make it yours.</h3></div><p>One accent. An entirely different feel.</p>
+    <div className="palette-demo-swatches">{swatches.map((p) => <button key={p.name} aria-label={`Use ${p.name} theme`} aria-pressed={accentH === p.h && accentC === p.c} style={{ background: `oklch(.58 ${p.c} ${p.h})` }} onClick={() => set({ accentH: p.h, accentC: p.c })}>{accentH === p.h && <RiCheckLine size={16} />}</button>)}</div>
     <div className="palette-demo-bottom"><code>--accent</code><span>Applied across the entire system</span></div>
   </div>;
 }
@@ -147,14 +147,14 @@ function HeroEditor() {
   return (
     <div className="hero-editor" aria-label="Interactive hero editor">
       <div className="hero-editor-toolbar">
-        <span className="hero-editor-filename"><Layers size={13} /> workspace-card.tsx</span>
+        <span className="hero-editor-filename"><RiStackLine size={13} /> workspace-card.tsx</span>
         <div className="hero-editor-actions">
           <span className="hero-editor-tabs" role="tablist" aria-label="Hero editor view">
-            <button role="tab" aria-selected={view === "preview"} onClick={() => setView("preview")}><Eye size={13} /> Preview</button>
-            <button role="tab" aria-selected={view === "code"} onClick={() => setView("code")}><Code2 size={13} /> Code</button>
+            <button role="tab" aria-selected={view === "preview"} onClick={() => setView("preview")}><RiEyeLine size={13} /> Preview</button>
+            <button role="tab" aria-selected={view === "code"} onClick={() => setView("code")}><RiCodeSSlashLine size={13} /> Code</button>
           </span>
-          <button className="hero-editor-iconbtn" title="Reset example" aria-label="Reset example" onClick={() => setResetKey((n) => n + 1)}><RotateCcw size={13} /></button>
-          <button className="hero-editor-iconbtn" title={copied ? "Copied" : "Copy source"} aria-label={copied ? "Copied" : "Copy source"} onClick={() => copy(copySource)}>{copied ? <Check size={13} /> : <Copy size={13} />}</button>
+          <button className="hero-editor-iconbtn" title="Reset example" aria-label="Reset example" onClick={() => setResetKey((n) => n + 1)}><RiRestartLine size={13} /></button>
+          <button className="hero-editor-iconbtn" title={copied ? "Copied" : "Copy source"} aria-label={copied ? "Copied" : "Copy source"} onClick={() => copy(copySource)}>{copied ? <RiCheckLine size={13} /> : <RiFileCopyLine size={13} />}</button>
         </div>
       </div>
       <LiveProvider code={HERO_CODE} scope={HERO_SCOPE} language="jsx" noInline={false}>
@@ -178,12 +178,12 @@ function HeroEditor() {
 /* ------------------------------ Coverage strip ----------------------------- */
 
 const COVERAGE = [
-  { icon: Layers, label: `${COMPONENT_COUNT} docs pages`, note: "Components" },
-  { icon: Blocks, label: `${BLOCKS.length} blocks`, note: "Composed examples" },
-  { icon: Ruler, label: "7 foundations", note: "Color to motion" },
-  { icon: Sun, label: "Light & dark", note: "One token graph" },
-  { icon: Sparkles, label: "Theme Studio", note: "Brand your own" },
-  { icon: ShieldCheck, label: "Keyboard first", note: "ARIA + focus" },
+  { icon: RiStackLine, label: `${COMPONENT_COUNT} docs pages`, note: "Components" },
+  { icon: RiLayoutGridLine, label: `${BLOCKS.length} blocks`, note: "Composed examples" },
+  { icon: RiRulerLine, label: "7 foundations", note: "Color to motion" },
+  { icon: RiSunLine, label: "Light & dark", note: "One token graph" },
+  { icon: RiSparkling2Line, label: "Theme Studio", note: "Brand your own" },
+  { icon: RiShieldCheckLine, label: "Keyboard first", note: "ARIA + focus" },
 ];
 
 function CoverageStrip() {
@@ -217,7 +217,7 @@ function HomeDirectory({ navigate }: { navigate: (to: string) => void }) {
         </div>
         <div>
           <p>No scaled-down screenshots. Each tile renders the actual component at native size — filter by category, then open a page for the API and editable examples.</p>
-          <a href="#/components" className="text-action">Browse the full library <ArrowRight size={16} /></a>
+          <a href="#/components" className="text-action">Browse the full library <RiArrowRightLine size={16} /></a>
         </div>
       </div>
       <div className="directory-tabs" role="tablist" aria-label="Component categories">
@@ -232,12 +232,12 @@ function HomeDirectory({ navigate }: { navigate: (to: string) => void }) {
         {items.map((it) => (
           <a key={it.href} href={`#/${it.href}`} onClick={(e) => { e.preventDefault(); navigate(it.href); }} className="directory-tile">
             <span className="directory-tile-stage" inert aria-hidden="true">{PREVIEWS[it.href]?.() ?? <span className="text-paragraph-xs text-subtle">Open the interactive example</span>}</span>
-            <span className="directory-tile-label">{it.title}<ArrowRight size={14} /></span>
+            <span className="directory-tile-label">{it.title}<RiArrowRightLine size={14} /></span>
           </a>
         ))}
       </div>
       <div className="directory-more">
-        <Button size="sm" variant="outline" tone="default" endContent={<ArrowRight />} onClick={() => navigate("components")}>See all {COMPONENT_COUNT} components</Button>
+        <Button size="sm" variant="outline" tone="default" endContent={<RiArrowRightLine />} onClick={() => navigate("components")}>See all {COMPONENT_COUNT} components</Button>
       </div>
     </section>
   );
@@ -248,7 +248,7 @@ function WorkspaceShowcase() {
   const [revision, setRevision] = useState(0);
   const { copied, copy } = useCopy();
   return <section className="workspace-showcase" aria-label="Interactive component collection">
-    <div className="workspace-toolbar"><div className="preview-tabs" role="tablist" aria-label="Workspace preview"><button role="tab" aria-selected={view === "preview"} onClick={() => setView("preview")}><Eye size={14} /> Components in use</button><button role="tab" aria-selected={view === "code"} onClick={() => setView("code")}><Code2 size={14} /> Auth source</button></div><div className="workspace-toolbar-actions"><span>Try the controls</span><button className="studio-icon-button" aria-label="Reset component examples" title="Reset examples" onClick={() => setRevision((r) => r + 1)}><RotateCcw size={14} /></button><button className="studio-icon-button" aria-label={copied ? "Source copied" : "Copy authentication source"} onClick={() => copy(getBlockSource("auth"))}>{copied ? <Check size={14} /> : <Copy size={14} />}</button></div></div>
+    <div className="workspace-toolbar"><div className="preview-tabs" role="tablist" aria-label="Workspace preview"><button role="tab" aria-selected={view === "preview"} onClick={() => setView("preview")}><RiEyeLine size={14} /> Components in use</button><button role="tab" aria-selected={view === "code"} onClick={() => setView("code")}><RiCodeSSlashLine size={14} /> Auth source</button></div><div className="workspace-toolbar-actions"><span>Try the controls</span><button className="studio-icon-button" aria-label="Reset component examples" title="Reset examples" onClick={() => setRevision((r) => r + 1)}><RiRestartLine size={14} /></button><button className="studio-icon-button" aria-label={copied ? "Source copied" : "Copy authentication source"} onClick={() => copy(getBlockSource("auth"))}>{copied ? <RiCheckLine size={14} /> : <RiFileCopyLine size={14} />}</button></div></div>
     {view === "code" ? <CodeBlock code={getBlockSource("auth")} filename="blocks/AuthCardBlock.tsx" maxHeight={580} /> : <div key={revision} className="workspace-grid page-enter">
       <div className="workspace-column"><AuthCardBlock /></div>
       <div className="workspace-column"><ActionsDemo /><PreferenceDemo /></div>
@@ -264,7 +264,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
       <p className="home-eyebrow">The design system for considered interfaces</p>
       <h1>Every detail.<br />One system<span>.</span></h1>
       <p className="home-intro">Thoughtful React components, useful patterns, and the foundations that bring them together — with a live editor, not screenshots. All free during public beta.</p>
-      <div className="home-hero-actions"><Button size="lg" tone="default" endContent={<ArrowRight />} onClick={() => navigate("components")}>Explore components</Button><Button size="lg" variant="outline" tone="default" onClick={() => navigate("theme")}>Open Theme Studio</Button></div>
+      <div className="home-hero-actions"><Button size="lg" tone="default" endContent={<RiArrowRightLine />} onClick={() => navigate("components")}>Explore components</Button><Button size="lg" variant="outline" tone="default" onClick={() => navigate("theme")}>Open Theme Studio</Button></div>
     </section>
 
     <div className="home-container"><div className="hero-showcase page-enter"><HeroEditor /></div><CoverageStrip /></div>
@@ -274,10 +274,10 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
     <div className="home-container"><WorkspaceShowcase /></div>
 
     <section className="home-section home-container">
-      <div className="home-section-heading"><div><span className="section-number">01 / Blocks</span><h2>Less assembling.<br />More creating.</h2></div><div><p>{COMPONENT_COUNT} documented component pages and {BLOCKS.length} composed examples. Consistent sizing, shared states, and source you can inspect.</p><a href="#/blocks" className="text-action">Explore the blocks <ArrowRight size={16} /></a></div></div>
+      <div className="home-section-heading"><div><span className="section-number">01 / Blocks</span><h2>Less assembling.<br />More creating.</h2></div><div><p>{COMPONENT_COUNT} documented component pages and {BLOCKS.length} composed examples. Consistent sizing, shared states, and source you can inspect.</p><a href="#/blocks" className="text-action">Explore the blocks <RiArrowRightLine size={16} /></a></div></div>
       <div className="library-category-grid">
         {COMPONENT_GROUPS.slice(0, 6).map((group, i) => <a href={`#/${group.items[0].href}`} key={group.title} className="library-category">
-          <span className="category-index">{String(i + 1).padStart(2, "0")}</span><h3>{group.title}</h3><p>{group.items.slice(0, 3).map((it) => it.title).join(", ")}</p><div><span>{group.items.length} component pages</span><ArrowRight size={15} /></div>
+          <span className="category-index">{String(i + 1).padStart(2, "0")}</span><h3>{group.title}</h3><p>{group.items.slice(0, 3).map((it) => it.title).join(", ")}</p><div><span>{group.items.length} component pages</span><RiArrowRightLine size={15} /></div>
         </a>)}
       </div>
     </section>
@@ -285,9 +285,9 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
     <section className="home-section home-container">
       <div className="home-section-heading"><div><span className="section-number">02 / Foundations</span><h2>Consistency starts<br />below the surface.</h2></div><p>Intentional spacing. A useful radius scale. Color that follows your brand. The small decisions, made once.</p></div>
       <div className="foundation-link-grid">
-        <a href="#/foundations/spacing" className="foundation-link"><div className="foundation-link-art spacing-art" aria-hidden>{[8,16,24,32,48,64].map((n) => <span key={n} style={{ height: n }} />)}</div><h3>Spacing & layout <ArrowRight size={16} /></h3><p>A rhythm for your entire interface.</p></a>
-        <a href="#/foundations/elevation" className="foundation-link"><div className="foundation-link-art radius-art" aria-hidden>{[4,12,24].map((n) => <span key={n} style={{ borderRadius: n }} />)}</div><h3>Radius & elevation <ArrowRight size={16} /></h3><p>Character without the visual noise.</p></a>
-        <a href="#/foundations/color" className="foundation-link"><div className="foundation-link-art color-art" aria-hidden>{[100,200,400,600,800].map((n) => <span key={n} style={{ background: `var(--accent-${n})` }} />)}</div><h3>Color system <ArrowRight size={16} /></h3><p>Semantic by default. Yours by design.</p></a>
+        <a href="#/foundations/spacing" className="foundation-link"><div className="foundation-link-art spacing-art" aria-hidden>{[8,16,24,32,48,64].map((n) => <span key={n} style={{ height: n }} />)}</div><h3>Spacing & layout <RiArrowRightLine size={16} /></h3><p>A rhythm for your entire interface.</p></a>
+        <a href="#/foundations/elevation" className="foundation-link"><div className="foundation-link-art radius-art" aria-hidden>{[4,12,24].map((n) => <span key={n} style={{ borderRadius: n }} />)}</div><h3>Radius & elevation <RiArrowRightLine size={16} /></h3><p>Character without the visual noise.</p></a>
+        <a href="#/foundations/color" className="foundation-link"><div className="foundation-link-art color-art" aria-hidden>{[100,200,400,600,800].map((n) => <span key={n} style={{ background: `var(--accent-${n})` }} />)}</div><h3>Color system <RiArrowRightLine size={16} /></h3><p>Semantic by default. Yours by design.</p></a>
       </div>
     </section>
 
@@ -344,7 +344,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
       </div>
       <div className="visual-language-footer">
         <p>{COMPONENT_COUNT} components, {BLOCKS.length} blocks, and product patterns — all sharing the same tokens.</p>
-        <div className="flex gap-2"><Button size="sm" variant="outline" tone="default" onClick={() => navigate("patterns")} endContent={<ArrowRight />}>Product patterns</Button><Button size="sm" variant="ghost" tone="default" onClick={() => navigate("components")}>All components</Button></div>
+        <div className="flex gap-2"><Button size="sm" variant="outline" tone="default" onClick={() => navigate("patterns")} endContent={<RiArrowRightLine />}>Product patterns</Button><Button size="sm" variant="ghost" tone="default" onClick={() => navigate("components")}>All components</Button></div>
       </div>
     </section>
 
@@ -374,7 +374,7 @@ export function SiteFooter({ navigate }: { navigate: (to: string) => void }) {
     </div>
     <Modal open={feedbackOpen} onClose={() => setFeedbackOpen(false)} title="Help refine the details" description="Describe a layout or interaction issue. Save a report locally to share with your team; no data is sent to a server." footer={<><Button variant="outline" tone="default" onClick={() => setFeedbackOpen(false)}>Close</Button><Button disabled={!note.trim()} onClick={saveFeedback}>{saved ? "Save again" : "Save feedback report"}</Button></>}>
       <label className="feedback-label" htmlFor="beta-feedback">Your feedback</label><textarea id="beta-feedback" className="feedback-textarea" rows={5} placeholder="What happened, and what did you expect?" value={note} onChange={(e) => { setNote(e.target.value); setSaved(false); }} />
-      {saved && <p role="status" className="feedback-confirmation"><ShieldCheck size={16} /> Report downloaded. Thank you for testing.</p>}
+      {saved && <p role="status" className="feedback-confirmation"><RiShieldCheckLine size={16} /> Report downloaded. Thank you for testing.</p>}
     </Modal>
   </footer>;
 }

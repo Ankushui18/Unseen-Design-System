@@ -6,9 +6,9 @@ import {
   type SelectHTMLAttributes,
   type TextareaHTMLAttributes,
 } from "react";
-import { Check, ChevronDown, Minus } from "lucide-react";
 import { cn } from "../utils/cn";
 import type { Tone } from "./Button";
+import { RiArrowDownSLine, RiCheckLine, RiSubtractLine } from "@remixicon/react";
 
 /* ------------------------------- Field shell ------------------------------ */
 
@@ -191,7 +191,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
           ))}
           {children}
         </select>
-        <ChevronDown className="pointer-events-none absolute right-2.5 h-5 w-5 text-subtle" />
+        <RiArrowDownSLine className="pointer-events-none absolute right-2.5 h-5 w-5 text-subtle" />
       </div>
       <Helper error={error} description={description} />
     </div>
@@ -249,9 +249,9 @@ export function Checkbox({
           )}
         >
           {indeterminate ? (
-            <Minus className="h-3 w-3" strokeWidth={3.5} />
+            <RiSubtractLine className="h-3 w-3" strokeWidth={3.5} />
           ) : (
-            <Check
+            <RiCheckLine
               className={cn("h-3 w-3 transition-transform duration-150", checked ? "scale-100" : "scale-0")}
               strokeWidth={3.5}
             />

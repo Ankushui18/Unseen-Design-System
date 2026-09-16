@@ -1,7 +1,7 @@
-import { ArrowRight, Blocks, Check, Compass, Feather, Layers, Package, Ruler, ShieldCheck } from "lucide-react";
 import { Callout, Grid, PageHeader, Section } from "../docs/Blocks";
 import { CodeBlock } from "../docs/CodeBlock";
 import { Card, Chip, Code } from "../ui/Display";
+import { RiArrowRightLine, RiBox3Line, RiCheckLine, RiCompass3Line, RiLayoutGridLine, RiQuillPenLine, RiRulerLine, RiShieldCheckLine, RiStackLine } from "@remixicon/react";
 
 export function IntroductionPage({ navigate }: { navigate: (t: string) => void }) {
   return (
@@ -16,10 +16,10 @@ export function IntroductionPage({ navigate }: { navigate: (t: string) => void }
       <Section title="What you get">
         <Grid cols={2}>
           {[
-            { i: Layers, t: "A token graph, not a stylesheet", d: "Primitive → semantic → component. Components only read semantics, so rebranding never means touching component code." },
-            { i: Blocks, t: "Reusable interface components", d: "Buttons, form fields, navigation, overlays, and composed patterns, with documented APIs." },
-            { i: ShieldCheck, t: "Interaction patterns", d: "Native controls, keyboard navigation, focus management, and reduced-motion preferences. Evaluate each example in your own application before production use." },
-            { i: Feather, t: "CSS-driven styling", d: "Tailwind utilities and CSS variables provide the visual layer. React manages interactive state." },
+            { i: RiStackLine, t: "A token graph, not a stylesheet", d: "Primitive → semantic → component. Components only read semantics, so rebranding never means touching component code." },
+            { i: RiLayoutGridLine, t: "Reusable interface components", d: "Buttons, form fields, navigation, overlays, and composed patterns, with documented APIs." },
+            { i: RiShieldCheckLine, t: "Interaction patterns", d: "Native controls, keyboard navigation, focus management, and reduced-motion preferences. Evaluate each example in your own application before production use." },
+            { i: RiQuillPenLine, t: "CSS-driven styling", d: "Tailwind utilities and CSS variables provide the visual layer. React manages interactive state." },
           ].map((f) => (
             <Card key={f.t} className="p-5">
               <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-surface-secondary text-foreground ring-1 ring-border">
@@ -61,15 +61,15 @@ export function IntroductionPage({ navigate }: { navigate: (t: string) => void }
       <Section title="Where to go next">
         <Grid cols={3}>
           {[
-            { i: Package, t: "Installation", d: "Get running in two minutes.", to: "docs/installation" },
-            { i: Compass, t: "Design Principles", d: "The rules behind the decisions.", to: "docs/principles" },
-            { i: Ruler, t: "Color", d: "The semantic palette in depth.", to: "foundations/color" },
+            { i: RiBox3Line, t: "Installation", d: "Get running in two minutes.", to: "docs/installation" },
+            { i: RiCompass3Line, t: "Design Principles", d: "The rules behind the decisions.", to: "docs/principles" },
+            { i: RiRulerLine, t: "Color", d: "The semantic palette in depth.", to: "foundations/color" },
           ].map((c) => (
             <button key={c.t} onClick={() => navigate(c.to)} className="group rounded-2xl bg-surface ring-1 ring-border shadow-xs p-5 text-left transition-all hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong">
               <c.i className="mb-3 h-4.5 w-4.5 text-accent" />
               <p className="flex items-center gap-1.5 text-label-md">
                 {c.t}
-                <ArrowRight className="h-3.5 w-3.5 text-subtle transition-transform group-hover:translate-x-0.5" />
+                <RiArrowRightLine className="h-3.5 w-3.5 text-subtle transition-transform group-hover:translate-x-0.5" />
               </p>
               <p className="mt-1 text-paragraph-sm text-muted">{c.d}</p>
             </button>
@@ -123,7 +123,7 @@ export function PrinciplesPage() {
             "Could composition replace this new prop?",
           ].map((q) => (
             <div key={q} className="flex items-start gap-2.5 rounded-xl bg-surface p-3.5 ring-1 ring-border">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+              <RiCheckLine className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
               <span className="text-paragraph-sm text-muted">{q}</span>
             </div>
           ))}

@@ -1,13 +1,4 @@
 import { useState } from "react";
-import {
-  Eye,
-  Filter,
-  Inbox,
-  MoreHorizontal,
-  Plus,
-  Send,
-  Sparkles,
-} from "lucide-react";
 import { PageHeader } from "../docs/Blocks";
 import { Button } from "../ui/Button";
 import { Card, Chip, Progress } from "../ui/Display";
@@ -33,6 +24,7 @@ import {
   type DataTableColumn,
 } from "../ui/ProductPatterns";
 import { cn } from "../utils/cn";
+import { RiAddLine, RiEyeLine, RiFilterLine, RiInboxLine, RiMoreLine, RiSendPlaneLine, RiSparkling2Line } from "@remixicon/react";
 
 interface UserRow {
   id: string;
@@ -150,8 +142,8 @@ export function PatternsPage() {
             eyebrow="Workspace"
             title="Members"
             description="Everyone who has access to Studio workspace, including pending invitations."
-            secondary={<Button variant="outline" tone="default" startContent={<Filter size={14} />}>Filters</Button>}
-            primary={<Button startContent={<Plus size={14} />}>Invite member</Button>}
+            secondary={<Button variant="outline" tone="default" startContent={<RiFilterLine size={14} />}>Filters</Button>}
+            primary={<Button startContent={<RiAddLine size={14} />}>Invite member</Button>}
           />
         </DemoSection>
       </DemoSection>
@@ -192,11 +184,11 @@ export function PatternsPage() {
             rowKey={(u) => u.id}
             selectable
             bulkActions={[
-            { id: "resend", label: "Resend invite", icon: <Send size={14} />, onSelect: () => push({ title: "Invite resent", description: "Resent the selected invitation(s).", tone: "accent" }) },
-            { id: "remove", label: "Remove", icon: <Sparkles size={14} />, tone: "danger", onSelect: () => push({ title: "Members removed", description: "In this preview, the action only confirms via toast.", tone: "danger" }) },
+            { id: "resend", label: "Resend invite", icon: <RiSendPlaneLine size={14} />, onSelect: () => push({ title: "Invite resent", description: "Resent the selected invitation(s).", tone: "accent" }) },
+            { id: "remove", label: "Remove", icon: <RiSparkling2Line size={14} />, tone: "danger", onSelect: () => push({ title: "Members removed", description: "In this preview, the action only confirms via toast.", tone: "danger" }) },
             ]}
             pagination={{ page: 1, totalPages: 3, onPageChange: noop }}
-            emptyState={<EmptyState icon={<Inbox size={20} />} title="No members match" description="Try a different search term or clear the active filters." actions={<Button variant="outline" tone="default" onClick={() => { setQ(""); setStatusFilter("all"); }}>Clear filters</Button>} />}
+            emptyState={<EmptyState icon={<RiInboxLine size={20} />} title="No members match" description="Try a different search term or clear the active filters." actions={<Button variant="outline" tone="default" onClick={() => { setQ(""); setStatusFilter("all"); }}>Clear filters</Button>} />}
           />
         </DemoSection>
       </DemoSection>
@@ -208,7 +200,7 @@ export function PatternsPage() {
               label="Monthly revenue"
               value="$128,430"
               trend={{ value: 12.8, direction: "up", period: "vs last month" }}
-              primary={<CompactButton variant="ghost" aria-label="View report"><Eye size={14} /></CompactButton>}
+              primary={<CompactButton variant="ghost" aria-label="View report"><RiEyeLine size={14} /></CompactButton>}
             />
             <DataCard
               label="Active users"
@@ -255,7 +247,7 @@ export function PatternsPage() {
       <DemoSection title="06 · EmptyState, LoadingState, ErrorState" description="Three different states, same shape. Customers experience whatever state they're in more often than the happy path.">
         <div className="space-y-5">
           <DemoSection title="Empty" description="The first time a user reaches this screen.">
-            <EmptyState icon={<Inbox size={20} />} title="No projects yet" description="Create your first project to start organizing your workspace." actions={<Button startContent={<Plus size={14} />}>New project</Button>} />
+            <EmptyState icon={<RiInboxLine size={20} />} title="No projects yet" description="Create your first project to start organizing your workspace." actions={<Button startContent={<RiAddLine size={14} />}>New project</Button>} />
           </DemoSection>
           <DemoSection title="Loading" description="A clean skeleton. The shape matches the eventual content.">
             <LoadingState rows={3} />
@@ -282,7 +274,7 @@ export function PatternsPage() {
         <DemoSection title="Delete workspace" description="A real destructive flow, not just a yes/no modal.">
           <Button tone="danger" onClick={() => setConfirmOpen(true)}>Delete workspace</Button>
         </DemoSection>
-        <Modal open={confirmOpen} onClose={() => setConfirmOpen(false)} title="Delete this workspace?" description="This permanently removes the workspace, all 18 projects, 42 members, and the audit log for the last 90 days. This action cannot be undone." icon={<Inbox size={20} />} iconTone="danger" footer={<><Button variant="outline" tone="default" onClick={() => setConfirmOpen(false)}>Cancel</Button><Button tone="danger" onClick={() => { setConfirmOpen(false); push({ title: "Workspace deleted", description: "In this preview, the action only confirms via toast.", tone: "danger" }); }}>Delete workspace</Button></>}>
+        <Modal open={confirmOpen} onClose={() => setConfirmOpen(false)} title="Delete this workspace?" description="This permanently removes the workspace, all 18 projects, 42 members, and the audit log for the last 90 days. This action cannot be undone." icon={<RiInboxLine size={20} />} iconTone="danger" footer={<><Button variant="outline" tone="default" onClick={() => setConfirmOpen(false)}>Cancel</Button><Button tone="danger" onClick={() => { setConfirmOpen(false); push({ title: "Workspace deleted", description: "In this preview, the action only confirms via toast.", tone: "danger" }); }}>Delete workspace</Button></>}>
           <TextField label="Workspace name" placeholder="Type the workspace name to confirm" />
         </Modal>
       </DemoSection>
@@ -298,7 +290,7 @@ export function PatternsPage() {
               <Card key={key.id} className="p-5">
                 <div className="flex items-center justify-between gap-2">
                   <Chip tone={key.tone} variant="soft" dot size="sm">{key.label}</Chip>
-                  <CompactButton variant="ghost" aria-label="Options"><MoreHorizontal size={14} /></CompactButton>
+                  <CompactButton variant="ghost" aria-label="Options"><RiMoreLine size={14} /></CompactButton>
                 </div>
                 <p className="mt-3 truncate font-mono text-paragraph-sm text-foreground">{key.value}</p>
                 <p className="mt-1 text-paragraph-xs text-subtle">{key.time}</p>

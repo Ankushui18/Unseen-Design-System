@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Check, Code2, Copy, RotateCcw } from "lucide-react";
 import { LiveEditor, LiveError, LivePreview, LiveProvider } from "react-live";
 import { Button, FancyButton } from "../ui/Button";
 import { Chip } from "../ui/Display";
 import { Input, Switch } from "../ui/Form";
 import { useCopy } from "../lib/hooks";
+import { RiCheckLine, RiCodeSSlashLine, RiFileCopyLine, RiRestartLine } from "@remixicon/react";
 
 const EXAMPLES = {
   button: {
@@ -104,7 +104,7 @@ export function LivePlayground() {
           <p>Change a prop in the editor. The preview updates as you type.</p>
         </div>
         <div className="live-editor-side">
-          <div className="code-panel-header"><span><Code2 size={14} /> Example.jsx</span><div className="live-editor-actions"><button className="code-copy" onClick={reset} aria-label="Reset code"><RotateCcw size={12} /> Reset</button><button className="code-copy" onClick={() => copy(copySource)}>{copied ? <Check size={12} /> : <Copy size={12} />}{copied ? "Copied" : "Copy code"}</button></div></div>
+          <div className="code-panel-header"><span><RiCodeSSlashLine size={14} /> Example.jsx</span><div className="live-editor-actions"><button className="code-copy" onClick={reset} aria-label="Reset code"><RiRestartLine size={12} /> Reset</button><button className="code-copy" onClick={() => copy(copySource)}>{copied ? <RiCheckLine size={12} /> : <RiFileCopyLine size={12} />}{copied ? "Copied" : "Copy code"}</button></div></div>
           <LiveEditor key={`${example}-${resetKey}`} onChange={setCode} className="live-code-editor" aria-label="Edit the React example" tabMode="focus" />
           <div aria-live="polite"><LiveError className="live-code-error" /></div>
         </div>

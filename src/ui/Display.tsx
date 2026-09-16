@@ -1,8 +1,8 @@
 import { useState, type HTMLAttributes, type ReactNode } from "react";
-import { AlertTriangle, Check, CheckCircle2, Copy, Info, XCircle } from "lucide-react";
 import { cn } from "../utils/cn";
 import type { Tone } from "./Button";
 import { useCopy } from "../lib/hooks";
+import { RiCheckLine, RiCheckboxCircleLine, RiCloseCircleLine, RiErrorWarningLine, RiFileCopyLine, RiInformationLine } from "@remixicon/react";
 
 /* ---------------------------------- Card ---------------------------------- */
 
@@ -263,7 +263,7 @@ export function Snippet({ children, className, symbol = "$" }: { children: strin
         className="shrink-0 rounded-md p-1.5 text-subtle transition hover:bg-surface-hover hover:text-foreground"
         aria-label="Copy"
       >
-        {copied ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
+        {copied ? <RiCheckLine className="h-3.5 w-3.5 text-success" /> : <RiFileCopyLine className="h-3.5 w-3.5" />}
       </button>
     </div>
   );
@@ -368,11 +368,11 @@ export function CircularProgress({ value = 0, size = 56, stroke = 5, tone = "acc
 /* ---------------------------------- Alert --------------------------------- */
 
 const alertIcons = {
-  accent: Info,
-  default: Info,
-  success: CheckCircle2,
-  warning: AlertTriangle,
-  danger: XCircle,
+  accent: RiInformationLine,
+  default: RiInformationLine,
+  success: RiCheckboxCircleLine,
+  warning: RiErrorWarningLine,
+  danger: RiCloseCircleLine,
 };
 
 export function Alert({

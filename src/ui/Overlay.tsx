@@ -10,10 +10,10 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
-import { AlertTriangle, CheckCircle2, Info, X, XCircle } from "lucide-react";
 import { cn } from "../utils/cn";
 import { useDialogFocus, useLockBody, useOnClickOutside } from "../lib/hooks";
 import type { Tone } from "./Button";
+import { RiCheckboxCircleLine, RiCloseCircleLine, RiCloseLine, RiErrorWarningLine, RiInformationLine } from "@remixicon/react";
 
 /* --------------------------------- Modal ---------------------------------- */
 
@@ -83,7 +83,7 @@ export function Modal({
               {description && <p className="text-paragraph-sm text-muted">{description}</p>}
             </div>
             <button onClick={onClose} className="-mt-1 -mr-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Close">
-              <X className="h-4 w-4" />
+              <RiCloseLine className="h-4 w-4" />
             </button>
           </div>
         )}
@@ -150,7 +150,7 @@ export function Drawer({
         <div className="flex items-center justify-between gap-4 border-b border-separator p-4">
           <h2 id={titleId} className="text-paragraph-sm font-medium tracking-tight">{title ?? "Details"}</h2>
           <button onClick={onClose} className="rounded-lg p-1.5 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Close">
-            <X className="h-4 w-4" />
+            <RiCloseLine className="h-4 w-4" />
           </button>
         </div>
         <div className="ds-scroll flex-1 overflow-y-auto p-4 text-paragraph-sm text-muted">{children}</div>
@@ -294,7 +294,7 @@ type ToastCtx = { push: (t: Omit<ToastItem, "id" | "tone" | "duration"> & { tone
 
 const ToastContext = createContext<ToastCtx | null>(null);
 
-const toastIcon = { accent: Info, default: Info, success: CheckCircle2, warning: AlertTriangle, danger: XCircle };
+const toastIcon = { accent: RiInformationLine, default: RiInformationLine, success: RiCheckboxCircleLine, warning: RiErrorWarningLine, danger: RiCloseCircleLine };
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<ToastItem[]>([]);
@@ -331,7 +331,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                     {t.description && <p className="text-paragraph-xs text-muted">{t.description}</p>}
                   </div>
                   <button onClick={() => setItems((s) => s.filter((i) => i.id !== t.id))} className="rounded-md p-1 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Dismiss">
-                    <X className="h-3.5 w-3.5" />
+                    <RiCloseLine className="h-3.5 w-3.5" />
                   </button>
                 </div>
               );

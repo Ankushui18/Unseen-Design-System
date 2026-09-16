@@ -1,6 +1,6 @@
 import { useId, useState, type ReactNode } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal } from "lucide-react";
 import { cn } from "../utils/cn";
+import { RiArrowDownSLine, RiArrowLeftDoubleLine, RiArrowLeftSLine, RiArrowRightDoubleLine, RiArrowRightSLine, RiMoreLine } from "@remixicon/react";
 
 /* ---------------------------------- Tabs ---------------------------------- */
 
@@ -123,7 +123,7 @@ export function Accordion({
                 <span className="block text-paragraph-sm font-medium text-foreground">{it.title}</span>
                 {it.subtitle && <span className="block text-paragraph-xs text-muted">{it.subtitle}</span>}
               </span>
-              <ChevronDown className={cn("h-4 w-4 shrink-0 text-subtle transition-transform duration-300 ease-out-quint", isOpen && "rotate-180")} />
+              <RiArrowDownSLine className={cn("h-4 w-4 shrink-0 text-subtle transition-transform duration-300 ease-out-quint", isOpen && "rotate-180")} />
             </button>
             <div className="grid transition-[grid-template-rows] duration-300 ease-out-quint" style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}>
               <div className="overflow-hidden">
@@ -144,7 +144,7 @@ export function Breadcrumbs({ items, className }: { items: { label: ReactNode; h
     <nav aria-label="Breadcrumb" className={cn("flex items-center gap-1 text-paragraph-sm", className)}>
       {items.map((it, i) => (
         <span key={i} className="flex items-center gap-1">
-          {i > 0 && <ChevronRight className="h-3.5 w-3.5 text-subtle" />}
+          {i > 0 && <RiArrowRightSLine className="h-3.5 w-3.5 text-subtle" />}
           {it.href && i < items.length - 1 ? (
             <a href={it.href} className="rounded px-1 py-0.5 text-muted transition-colors hover:text-foreground">
               {it.label}
@@ -189,16 +189,16 @@ export function Pagination({
     <nav className="flex items-center gap-1" aria-label="Pagination">
       {!compact && (
         <button className={cn(btn, "text-muted hover:bg-surface-hover hover:text-foreground")} disabled={page === 1} onClick={() => onChange(1)} aria-label="First page">
-          <ChevronsLeft className="h-4 w-4" />
+          <RiArrowLeftDoubleLine className="h-4 w-4" />
         </button>
       )}
       <button className={cn(btn, "text-muted hover:bg-surface-hover hover:text-foreground")} disabled={page === 1} onClick={() => onChange(page - 1)} aria-label="Previous page">
-        <ChevronLeft className="h-4 w-4" />
+        <RiArrowLeftSLine className="h-4 w-4" />
       </button>
       {pages.map((p, i) =>
         p === "…" ? (
           <span key={`e${i}`} className="inline-flex h-9 w-9 items-center justify-center text-subtle">
-            <MoreHorizontal className="h-4 w-4" />
+            <RiMoreLine className="h-4 w-4" />
           </span>
         ) : (
           <button
@@ -212,11 +212,11 @@ export function Pagination({
         ),
       )}
       <button className={cn(btn, "text-muted hover:bg-surface-hover hover:text-foreground")} disabled={page === total} onClick={() => onChange(page + 1)} aria-label="Next page">
-        <ChevronRight className="h-4 w-4" />
+        <RiArrowRightSLine className="h-4 w-4" />
       </button>
       {!compact && (
         <button className={cn(btn, "text-muted hover:bg-surface-hover hover:text-foreground")} disabled={page === total} onClick={() => onChange(total)} aria-label="Last page">
-          <ChevronsRight className="h-4 w-4" />
+          <RiArrowRightDoubleLine className="h-4 w-4" />
         </button>
       )}
     </nav>

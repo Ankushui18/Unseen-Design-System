@@ -1,9 +1,9 @@
 import { Fragment, useId, useState, type ReactNode } from "react";
-import { Check, Code2, Copy, Eye, Link2, RotateCcw } from "lucide-react";
 import { cn } from "../utils/cn";
 import { CodeBlock } from "./CodeBlock";
 import { Chip } from "../ui/Display";
 import { useCopy } from "../lib/hooks";
+import { RiCheckLine, RiCodeSSlashLine, RiEyeLine, RiFileCopyLine, RiLink, RiRestartLine } from "@remixicon/react";
 
 export function slugify(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -49,7 +49,7 @@ export function Section({ title, description, children, id }: { title: string; d
           className="section-anchor"
           aria-label={`Jump to ${title}`}
         >
-          <Link2 className="h-3.5 w-3.5 text-subtle hover:text-accent" />
+          <RiLink className="h-3.5 w-3.5 text-subtle hover:text-accent" />
         </button>
       </div>
       {description && <p className="docs-section-description">{description}</p>}
@@ -84,8 +84,8 @@ export function Showcase({
           <div className="preview-tabs" role="tablist" aria-label="Example view">
           {(
             [
-              ["preview", Eye, "Preview"],
-              ["code", Code2, "Code"],
+              ["preview", RiEyeLine, "Preview"],
+              ["code", RiCodeSSlashLine, "Code"],
             ] as const
           ).map(([k, Icon, label]) => (
             <button
@@ -105,8 +105,8 @@ export function Showcase({
           ))}
           </div>
           <div className="showcase-tools">
-            <button type="button" className="studio-icon-button" title="Reset preview" aria-label="Reset preview" onClick={() => setRevision((r) => r + 1)}><RotateCcw size={14} /></button>
-            <button type="button" className="studio-icon-button" title={copied ? "Copied" : "Copy example"} aria-label={copied ? "Copied" : "Copy example"} onClick={() => copy(code)}>{copied ? <Check size={14} /> : <Copy size={14} />}</button>
+            <button type="button" className="studio-icon-button" title="Reset preview" aria-label="Reset preview" onClick={() => setRevision((r) => r + 1)}><RiRestartLine size={14} /></button>
+            <button type="button" className="studio-icon-button" title={copied ? "Copied" : "Copy example"} aria-label={copied ? "Copied" : "Copy example"} onClick={() => copy(code)}>{copied ? <RiCheckLine size={14} /> : <RiFileCopyLine size={14} />}</button>
           </div>
         </div>
       )}

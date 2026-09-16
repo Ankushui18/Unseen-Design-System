@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ArrowRight, Bell, Calendar, Copy, ExternalLink, Grid2x2, List, MoreHorizontal, Pencil, Plus, Rows3, Star, X } from "lucide-react";
 import { Callout, OptionPicker, PageHeader, PropsTable, Section, Showcase } from "../../docs/Blocks";
 import { Button } from "../../ui/Button";
 import { Card, Snippet } from "../../ui/Display";
@@ -22,6 +21,7 @@ import {
   Tag,
   VerticalStepper,
 } from "../../ui/Extra";
+import { RiAddLine, RiArrowRightLine, RiCalendarLine, RiCloseLine, RiExternalLinkLine, RiFileCopyLine, RiLayoutGridLine, RiListUnordered, RiMoreLine, RiNotification3Line, RiPencilLine, RiStarLine, RiTableLine } from "@remixicon/react";
 
 const Import = ({ names, from = "@aperture/react" }: { names: string; from?: string }) => <Snippet symbol="">{`import { ${names} } from "${from}";`}</Snippet>;
 
@@ -46,8 +46,8 @@ export function FancyButtonDoc() {
       <Section title="Stroke" description="The white counterpart uses a hairline ring and a faint drop so it reads as a button on any surface.">
         <Showcase>
           <Button variant="outline" tone="default">Stroke</Button>
-          <Button variant="outline" tone="default" startContent={<Plus />}>Add member</Button>
-          <Button variant="outline" tone="default" iconOnly aria-label="More"><MoreHorizontal /></Button>
+          <Button variant="outline" tone="default" startContent={<RiAddLine />}>Add member</Button>
+          <Button variant="outline" tone="default" iconOnly aria-label="More"><RiMoreLine /></Button>
           <Button variant="outline" tone="accent">Accent stroke</Button>
           <Button variant="outline" tone="danger">Danger stroke</Button>
         </Showcase>
@@ -77,10 +77,10 @@ export function CompactButtonDoc() {
           {(["stroke", "ghost", "white"] as const).map((v) => (
             <div key={v} className="flex items-center gap-3">
               <span className="w-12 font-mono text-[11px] text-subtle">{v}</span>
-              <CompactButton variant={v} size="sm" aria-label="Close"><X /></CompactButton>
-              <CompactButton variant={v} aria-label="Edit"><Pencil /></CompactButton>
-              <CompactButton variant={v} size="lg" aria-label="More"><MoreHorizontal /></CompactButton>
-              <CompactButton variant={v} fullRadius aria-label="Add"><Plus /></CompactButton>
+              <CompactButton variant={v} size="sm" aria-label="Close"><RiCloseLine /></CompactButton>
+              <CompactButton variant={v} aria-label="Edit"><RiPencilLine /></CompactButton>
+              <CompactButton variant={v} size="lg" aria-label="More"><RiMoreLine /></CompactButton>
+              <CompactButton variant={v} fullRadius aria-label="Add"><RiAddLine /></CompactButton>
             </div>
           ))}
         </Showcase>
@@ -108,8 +108,8 @@ export function LinkButtonDoc() {
           <LinkButton variant="primary">Primary</LinkButton>
           <LinkButton variant="error">Error</LinkButton>
           <LinkButton variant="primary" underline>Underlined</LinkButton>
-          <LinkButton variant="black" endContent={<ArrowRight />}>Learn more</LinkButton>
-          <LinkButton variant="gray" size="sm" startContent={<ExternalLink />}>Open docs</LinkButton>
+          <LinkButton variant="black" endContent={<RiArrowRightLine />}>Learn more</LinkButton>
+          <LinkButton variant="gray" size="sm" startContent={<RiExternalLinkLine />}>Open docs</LinkButton>
         </Showcase>
       </Section>
       <Section title="In context">
@@ -195,8 +195,8 @@ export function TagDoc() {
       </Section>
       <Section title="With icon">
         <Showcase>
-          <Tag startContent={<Star />}>Starred</Tag>
-          <Tag startContent={<Bell />} variant="gray">Subscribed</Tag>
+          <Tag startContent={<RiStarLine />}>Starred</Tag>
+          <Tag startContent={<RiNotification3Line />} variant="gray">Subscribed</Tag>
         </Showcase>
       </Section>
     </>
@@ -222,8 +222,8 @@ export function SegmentedDoc() {
     { value: "grid", label: "Grid", icon: <Grid2x2 /> },
   ]}
 />`}>
-          <SegmentedControl value={v} onChange={setV} items={[{ value: "list", label: "List", icon: <List /> }, { value: "grid", label: "Grid", icon: <Grid2x2 /> }, { value: "table", label: "Table", icon: <Rows3 /> }]} />
-          <SegmentedControl value={v} onChange={setV} items={[{ value: "list", icon: <List /> }, { value: "grid", icon: <Grid2x2 /> }, { value: "table", icon: <Rows3 /> }]} />
+          <SegmentedControl value={v} onChange={setV} items={[{ value: "list", label: "List", icon: <RiListUnordered /> }, { value: "grid", label: "Grid", icon: <RiLayoutGridLine /> }, { value: "table", label: "Table", icon: <RiTableLine /> }]} />
+          <SegmentedControl value={v} onChange={setV} items={[{ value: "list", icon: <RiListUnordered /> }, { value: "grid", icon: <RiLayoutGridLine /> }, { value: "table", icon: <RiTableLine /> }]} />
         </Showcase>
       </Section>
       <Section title="Sizes & full width">
@@ -311,7 +311,7 @@ export function DatepickerDoc() {
       </Section>
       <Section title="With input">
         <Showcase>
-          <Input label="Start date" readOnly value={d ? d.toLocaleDateString() : ""} startContent={<Calendar />} wrapperClassName="w-60" />
+          <Input label="Start date" readOnly value={d ? d.toLocaleDateString() : ""} startContent={<RiCalendarLine />} wrapperClassName="w-60" />
         </Showcase>
       </Section>
     </>
@@ -385,7 +385,7 @@ export function BannerDoc() {
             {open && <Banner tone="accent" onClose={() => setOpen(false)} action={<LinkButton variant="gray" size="sm" className="text-current underline">See what's new</LinkButton>}>Aperture 3.2 is out — Theme Studio, 11 premium blocks and 14 new components.</Banner>}
             <Banner tone="warning" variant="light" action={<Button size="xs" tone="warning">Upgrade</Button>}>Your trial ends in 3 days.</Banner>
             <Banner tone="danger" variant="light">Scheduled maintenance on Saturday 02:00–04:00 UTC.</Banner>
-            <Banner tone="default" variant="stroke" action={<LinkButton variant="primary" size="sm" startContent={<Copy />}>Copy link</LinkButton>}>Share this page with your team.</Banner>
+            <Banner tone="default" variant="stroke" action={<LinkButton variant="primary" size="sm" startContent={<RiFileCopyLine />}>Copy link</LinkButton>}>Share this page with your team.</Banner>
           </div>
         </Showcase>
       </Section>

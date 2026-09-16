@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from "react";
-import { AlertTriangle, Check, CheckCircle2, ChevronLeft, ChevronRight, Info, X, XCircle } from "lucide-react";
 import { cn } from "../utils/cn";
 import type { Tone } from "./Button";
+import { RiArrowLeftSLine, RiArrowRightSLine, RiCheckLine, RiCheckboxCircleLine, RiCloseCircleLine, RiCloseLine, RiErrorWarningLine, RiInformationLine } from "@remixicon/react";
 
 /* ------------------------------ Compact Button ----------------------------- */
 
@@ -176,7 +176,7 @@ export function Tag({
       {children}
       {onRemove && (
         <button onClick={onRemove} className="rounded p-0.5 opacity-60 hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/15" aria-label="Remove">
-          <X className="h-3 w-3" strokeWidth={2.5} />
+          <RiCloseLine className="h-3 w-3" strokeWidth={2.5} />
         </button>
       )}
     </span>
@@ -255,7 +255,7 @@ function StepIcon({ i, state }: { i: number; state: "done" | "active" | "todo" }
         state === "todo" && "bg-surface text-subtle ring-1 ring-inset ring-border",
       )}
     >
-      {state === "done" ? <Check className="h-3.5 w-3.5" strokeWidth={3} /> : i + 1}
+      {state === "done" ? <RiCheckLine className="h-3.5 w-3.5" strokeWidth={3} /> : i + 1}
     </span>
   );
 }
@@ -388,9 +388,9 @@ export function Datepicker({ value, onChange, className }: { value: Date | null;
   return (
     <div className={cn("w-full max-w-[320px] rounded-xl bg-surface p-4 ring-1 ring-border shadow-sm", className)}>
       <div className="flex items-center justify-between">
-        <CompactButton variant="stroke" onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))} aria-label="Previous month"><ChevronLeft /></CompactButton>
+        <CompactButton variant="stroke" onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))} aria-label="Previous month"><RiArrowLeftSLine /></CompactButton>
         <p className="text-label-sm text-foreground">{MONTHS[view.getMonth()]} {view.getFullYear()}</p>
-        <CompactButton variant="stroke" onClick={() => setView(new Date(view.getFullYear(), view.getMonth() + 1, 1))} aria-label="Next month"><ChevronRight /></CompactButton>
+        <CompactButton variant="stroke" onClick={() => setView(new Date(view.getFullYear(), view.getMonth() + 1, 1))} aria-label="Next month"><RiArrowRightSLine /></CompactButton>
       </div>
       <div className="mt-4 grid grid-cols-7 gap-y-1">
         {DAYS.map((d) => <span key={d} className="py-1 text-center text-subheading-2xs uppercase text-subtle">{d}</span>)}
@@ -451,7 +451,7 @@ export function FileFormatIcon({ format, size = 40, className }: { format: strin
 
 /* ------------------------------- Notification ------------------------------ */
 
-const notifIcon = { accent: Info, default: Info, success: CheckCircle2, warning: AlertTriangle, danger: XCircle };
+const notifIcon = { accent: RiInformationLine, default: RiInformationLine, success: RiCheckboxCircleLine, warning: RiErrorWarningLine, danger: RiCloseCircleLine };
 
 export function Notification({
   title,
@@ -484,7 +484,7 @@ export function Notification({
       </div>
       {onClose && (
         <button onClick={onClose} className="-mt-1 -mr-1 rounded-md p-1 opacity-60 transition hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/10" aria-label="Dismiss">
-          <X className="h-4 w-4" />
+          <RiCloseLine className="h-4 w-4" />
         </button>
       )}
     </div>
@@ -502,7 +502,7 @@ export function Banner({ children, tone = "accent", variant = "filled", action, 
       <Icon className="h-5 w-5 shrink-0" />
       <div className="flex-1">{children}</div>
       {action}
-      {onClose && <button onClick={onClose} className="rounded-md p-1 opacity-70 hover:opacity-100" aria-label="Dismiss"><X className="h-4 w-4" /></button>}
+      {onClose && <button onClick={onClose} className="rounded-md p-1 opacity-70 hover:opacity-100" aria-label="Dismiss"><RiCloseLine className="h-4 w-4" /></button>}
     </div>
   );
 }
@@ -521,7 +521,7 @@ export function Label({ children, required, optional, sub, htmlFor, className }:
 }
 
 export function Hint({ children, tone = "default", className }: { children: ReactNode; tone?: "default" | "error" | "success"; className?: string }) {
-  const Icon = tone === "error" ? XCircle : tone === "success" ? CheckCircle2 : Info;
+  const Icon = tone === "error" ? RiCloseCircleLine : tone === "success" ? RiCheckboxCircleLine : RiInformationLine;
   return (
     <p className={cn("flex items-center gap-1 text-paragraph-xs", tone === "error" ? "text-danger" : tone === "success" ? "text-success-soft-foreground" : "text-subtle", className)}>
       <Icon className="h-4 w-4" />
