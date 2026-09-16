@@ -362,7 +362,7 @@ export function FileUploadBlock() {
   };
   return (
     <Card className="w-full max-w-[420px] p-5">
-      <input type="file" ref={input} accept=".jpg,.jpeg,.png,.pdf,.mp4" multiple hidden onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
+      <input type="file" ref={input} accept=".jpg,.jpeg,.png,.pdf,.mp4" multiple hidden aria-label="Choose files" onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
       <div onDragOver={(e) => { e.preventDefault(); setOver(true); }} onDragLeave={() => setOver(false)} onDrop={(e) => { e.preventDefault(); setOver(false); addFiles(e.dataTransfer.files); }} className={cn("flex flex-col items-center justify-center rounded-xl border border-dashed border-border-strong bg-surface-secondary/60 px-6 py-8 text-center transition-colors hover:border-accent hover:bg-accent-soft/30", over && "border-accent bg-accent-soft")}>
         <span className="flex h-12 w-12 items-center justify-center rounded-full bg-surface ring-1 ring-border shadow-xs">
           <CloudUpload className="h-6 w-6 text-muted" />

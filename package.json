@@ -8,8 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint:design": "node scripts/design-lint.mjs",
+    "test:types": "tsc --noEmit",
     "test:smoke": "node scripts/smoke.mjs",
-    "test": "npm run build && npm run lint:design && npm run test:smoke"
+    "test": "npm run test:types && npm run build && npm run lint:design && npm run test:smoke"
   },
   "dependencies": {
     "@remixicon/react": "^4.9.0",

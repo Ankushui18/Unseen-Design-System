@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Check, Code2, Copy, RotateCcw } from "lucide-react";
 import { LiveEditor, LiveError, LivePreview, LiveProvider } from "react-live";
-import { Button } from "../ui/Button";
+import { Button, FancyButton } from "../ui/Button";
 import { Chip } from "../ui/Display";
 import { Input, Switch } from "../ui/Form";
 import { useCopy } from "../lib/hooks";
@@ -9,19 +9,18 @@ import { useCopy } from "../lib/hooks";
 const EXAMPLES = {
   button: {
     label: "Button",
-    imports: 'import { Button } from "./ui/Button";',
+    imports: 'import { Button, FancyButton } from "./ui/Button";',
     code: `function Example() {
   const [saved, setSaved] = React.useState(false);
 
   return (
-    <Button
+    <FancyButton
       tone="accent"
-      variant="solid"
       size="md"
       onClick={() => setSaved(!saved)}
     >
       {saved ? "Changes saved" : "Save changes"}
-    </Button>
+    </FancyButton>
   );
 }`,
   },
@@ -69,7 +68,7 @@ const EXAMPLES = {
   },
 };
 
-const SCOPE = { Button, Chip, Input, Switch };
+const SCOPE = { Button, FancyButton, Chip, Input, Switch };
 const EDITOR_THEME = {
   plain: { color: "#d8e2f0", backgroundColor: "#141922" },
   styles: [

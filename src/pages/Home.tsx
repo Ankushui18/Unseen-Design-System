@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { ArrowRight, Bell, Check, Code2, Copy, Eye, Mail, Palette, Plus, RotateCcw, Settings2, ShieldCheck } from "lucide-react";
-import { Button } from "../ui/Button";
+import { ArrowRight, Bell, Blocks, Check, Code2, Copy, Eye, Layers, Mail, Palette, Plus, RotateCcw, Ruler, Settings2, ShieldCheck, Sun, Sparkles } from "lucide-react";
+import { Button, FancyButton } from "../ui/Button";
 import { Avatar, Chip, Progress, Snippet } from "../ui/Display";
 import { Input, Switch } from "../ui/Form";
 import { Accordion, Breadcrumbs, Tabs } from "../ui/Navigation";
+import { LiveEditor, LiveError, LivePreview, LiveProvider } from "react-live";
 import { Modal, useToast } from "../ui/Overlay";
 import { AuthCardBlock, BLOCKS } from "../blocks";
 import { Logo } from "../docs/Shell";
 import { CodeBlock } from "../docs/CodeBlock";
-import { LivePlayground } from "../docs/LivePlayground";
 import { COMPONENT_GROUPS } from "../docs/nav";
+import { PREVIEWS } from "../docs/previews";
 import { ACCENT_PRESETS, useTheme } from "../lib/theme";
 import { useCopy } from "../lib/hooks";
 import { getBlockSource } from "../docs/block-source";
@@ -76,6 +77,172 @@ function ThemeDemo() {
   </div>;
 }
 
+/* ------------------------------- Hero editor ------------------------------- */
+
+const HERO_IMPORTS = `import { FancyButton } from "./ui/Button";
+import { Input } from "./ui/Form";
+import { Switch } from "./ui/Form";
+import { Chip } from "./ui/Display";`;
+
+const HERO_CODE = `function Example() {
+  const [plan, setPlan] = React.useState(false);
+
+  return (
+    <div style={{ width: "100%", maxWidth: 340, textAlign: "left" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 14,
+          padding: 22,
+          border: "1px solid var(--border)",
+          borderRadius: "calc(14px * var(--radius-scale))",
+          background: "var(--surface)",
+          boxShadow: "var(--shadow-sm)",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Chip tone="accent" variant="soft" dot size="sm">Public beta</Chip>
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <h3 style={{ fontSize: 20, fontWeight: 600, letterSpacing: -0.5 }}>Your workspace</h3>
+          <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>
+            Create a workspace and start building.
+          </p>
+        </div>
+        <Input
+          size="md"
+          label="Workspace name"
+          placeholder="Acme, Inc."
+          defaultValue="Acme"
+        />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 8,
+          }}
+        >
+          <span style={{ fontSize: 13, color: "var(--muted)" }}>
+            Annual billing
+          </span>
+          <Switch size="sm" checked={plan} onChange={setPlan} />
+        </div>
+        <FancyButton tone="accent" size="lg" fullWidth>
+          Create workspace
+        </FancyButton>
+      </div>
+    </div>
+  );
+}`;
+
+const HERO_SCOPE = { Button, FancyButton, Input, Switch, Chip };
+
+function HeroEditor() {
+  const [view, setView] = useState<"preview" | "code">("preview");
+  const [resetKey, setResetKey] = useState(0);
+  const { copy, copied } = useCopy();
+  const copySource = `import React from "react";\n${HERO_IMPORTS}\n\nexport default ${HERO_CODE}`;
+  return (
+    <div className="hero-editor" aria-label="Interactive hero editor">
+      <div className="hero-editor-toolbar">
+        <span className="hero-editor-filename"><Layers size={13} /> workspace-card.tsx</span>
+        <div className="hero-editor-actions">
+          <span className="hero-editor-tabs" role="tablist" aria-label="Hero editor view">
+            <button role="tab" aria-selected={view === "preview"} onClick={() => setView("preview")}><Eye size={13} /> Preview</button>
+            <button role="tab" aria-selected={view === "code"} onClick={() => setView("code")}><Code2 size={13} /> Code</button>
+          </span>
+          <button className="hero-editor-iconbtn" title="Reset example" aria-label="Reset example" onClick={() => setResetKey((n) => n + 1)}><RotateCcw size={13} /></button>
+          <button className="hero-editor-iconbtn" title={copied ? "Copied" : "Copy source"} aria-label={copied ? "Copied" : "Copy source"} onClick={() => copy(copySource)}>{copied ? <Check size={13} /> : <Copy size={13} />}</button>
+        </div>
+      </div>
+      <LiveProvider code={HERO_CODE} scope={HERO_SCOPE} language="jsx" noInline={false}>
+        <div className="hero-editor-body">
+          {view === "preview" ? (
+            <div className="hero-editor-preview"><LivePreview key={resetKey} /></div>
+          ) : (
+            <LiveEditor key={`code-${resetKey}`} className="hero-editor-source" aria-label="Edit the workspace card example" />
+          )}
+        </div>
+        <div aria-live="polite"><LiveError className="hero-editor-error" /></div>
+      </LiveProvider>
+      <div className="hero-editor-footer">
+        <span><span className="beta-status-dot" /> Live React — edit the code and watch it render</span>
+        <span>React 19 · Tailwind CSS v4 · TypeScript</span>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------ Coverage strip ----------------------------- */
+
+const COVERAGE = [
+  { icon: Layers, label: `${COMPONENT_COUNT} docs pages`, note: "Components" },
+  { icon: Blocks, label: `${BLOCKS.length} blocks`, note: "Composed examples" },
+  { icon: Ruler, label: "7 foundations", note: "Color to motion" },
+  { icon: Sun, label: "Light & dark", note: "One token graph" },
+  { icon: Sparkles, label: "Theme Studio", note: "Brand your own" },
+  { icon: ShieldCheck, label: "Keyboard first", note: "ARIA + focus" },
+];
+
+function CoverageStrip() {
+  return (
+    <div className="coverage-strip" role="list" aria-label="What the system covers">
+      {COVERAGE.map((c) => (
+        <div className="coverage-cell" role="listitem" key={c.label}>
+          <c.icon size={18} aria-hidden />
+          <span>
+            <strong>{c.label}</strong>
+            <em>{c.note}</em>
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ----------------------------- Component directory -------------------------- */
+
+function HomeDirectory({ navigate }: { navigate: (to: string) => void }) {
+  const [group, setGroup] = useState(COMPONENT_GROUPS[0].title);
+  const active = COMPONENT_GROUPS.find((g) => g.title === group) ?? COMPONENT_GROUPS[0];
+  const items = active.items.slice(0, 8);
+  return (
+    <section className="home-section home-container" aria-label="Component directory">
+      <div className="home-section-heading">
+        <div>
+          <span className="section-number">Library, at real size</span>
+          <h2>Every component.<br />A working preview.</h2>
+        </div>
+        <div>
+          <p>No scaled-down screenshots. Each tile renders the actual component at native size — filter by category, then open a page for the API and editable examples.</p>
+          <a href="#/components" className="text-action">Browse the full library <ArrowRight size={16} /></a>
+        </div>
+      </div>
+      <div className="directory-tabs" role="tablist" aria-label="Component categories">
+        {COMPONENT_GROUPS.map((g) => (
+          <button key={g.title} role="tab" aria-selected={group === g.title} onClick={() => setGroup(g.title)}>
+            {g.title}
+            <span>{g.items.length}</span>
+          </button>
+        ))}
+      </div>
+      <div className="directory-grid" role="tabpanel" aria-label={`${active.title} components`}>
+        {items.map((it) => (
+          <a key={it.href} href={`#/${it.href}`} onClick={(e) => { e.preventDefault(); navigate(it.href); }} className="directory-tile">
+            <span className="directory-tile-stage" inert aria-hidden="true">{PREVIEWS[it.href]?.() ?? <span className="text-paragraph-xs text-subtle">Open the interactive example</span>}</span>
+            <span className="directory-tile-label">{it.title}<ArrowRight size={14} /></span>
+          </a>
+        ))}
+      </div>
+      <div className="directory-more">
+        <Button size="sm" variant="outline" tone="default" endContent={<ArrowRight />} onClick={() => navigate("components")}>See all {COMPONENT_COUNT} components</Button>
+      </div>
+    </section>
+  );
+}
+
 function WorkspaceShowcase() {
   const [view, setView] = useState("preview");
   const [revision, setRevision] = useState(0);
@@ -95,16 +262,19 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
   return <main id="main" tabIndex={-1} className="home-page">
     <section className="home-hero page-enter">
       <p className="home-eyebrow">The design system for considered interfaces</p>
-      <h1>Aperture<span>.</span></h1>
-      <p className="home-tagline">Every detail. One system.</p>
-      <p className="home-intro">Thoughtful React components, useful patterns, and the foundations that bring them together. All free during public beta.</p>
+      <h1>Every detail.<br />One system<span>.</span></h1>
+      <p className="home-intro">Thoughtful React components, useful patterns, and the foundations that bring them together — with a live editor, not screenshots. All free during public beta.</p>
       <div className="home-hero-actions"><Button size="lg" tone="default" endContent={<ArrowRight />} onClick={() => navigate("components")}>Explore components</Button><Button size="lg" variant="outline" tone="default" onClick={() => navigate("theme")}>Open Theme Studio</Button></div>
     </section>
+
+    <div className="home-container"><div className="hero-showcase page-enter"><HeroEditor /></div><CoverageStrip /></div>
+
+    <HomeDirectory navigate={navigate} />
 
     <div className="home-container"><WorkspaceShowcase /></div>
 
     <section className="home-section home-container">
-      <div className="home-section-heading"><div><span className="section-number">01 / Library</span><h2>Less assembling.<br />More creating.</h2></div><div><p>{COMPONENT_COUNT} documented component pages and {BLOCKS.length} composed examples. Consistent sizing, shared states, and source you can inspect.</p><a href="#/components" className="text-action">Explore the library <ArrowRight size={16} /></a></div></div>
+      <div className="home-section-heading"><div><span className="section-number">01 / Blocks</span><h2>Less assembling.<br />More creating.</h2></div><div><p>{COMPONENT_COUNT} documented component pages and {BLOCKS.length} composed examples. Consistent sizing, shared states, and source you can inspect.</p><a href="#/blocks" className="text-action">Explore the blocks <ArrowRight size={16} /></a></div></div>
       <div className="library-category-grid">
         {COMPONENT_GROUPS.slice(0, 6).map((group, i) => <a href={`#/${group.items[0].href}`} key={group.title} className="library-category">
           <span className="category-index">{String(i + 1).padStart(2, "0")}</span><h3>{group.title}</h3><p>{group.items.slice(0, 3).map((it) => it.title).join(", ")}</p><div><span>{group.items.length} component pages</span><ArrowRight size={15} /></div>
@@ -112,15 +282,8 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
       </div>
     </section>
 
-    <section className="home-section home-editor-section">
-      <div className="home-container">
-        <div className="home-section-heading"><div><span className="section-number">02 / Playground</span><h2>Change the code.<br />See the difference.</h2></div><p>Not a picture of a component. Edit the JSX, try its states, and copy the example into your project.</p></div>
-        <LivePlayground />
-      </div>
-    </section>
-
     <section className="home-section home-container">
-      <div className="home-section-heading"><div><span className="section-number">03 / Foundations</span><h2>Consistency starts<br />below the surface.</h2></div><p>Intentional spacing. A useful radius scale. Color that follows your brand. The small decisions, made once.</p></div>
+      <div className="home-section-heading"><div><span className="section-number">02 / Foundations</span><h2>Consistency starts<br />below the surface.</h2></div><p>Intentional spacing. A useful radius scale. Color that follows your brand. The small decisions, made once.</p></div>
       <div className="foundation-link-grid">
         <a href="#/foundations/spacing" className="foundation-link"><div className="foundation-link-art spacing-art" aria-hidden>{[8,16,24,32,48,64].map((n) => <span key={n} style={{ height: n }} />)}</div><h3>Spacing & layout <ArrowRight size={16} /></h3><p>A rhythm for your entire interface.</p></a>
         <a href="#/foundations/elevation" className="foundation-link"><div className="foundation-link-art radius-art" aria-hidden>{[4,12,24].map((n) => <span key={n} style={{ borderRadius: n }} />)}</div><h3>Radius & elevation <ArrowRight size={16} /></h3><p>Character without the visual noise.</p></a>
@@ -129,7 +292,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
     </section>
 
     <section className="home-section home-container">
-      <div className="home-section-heading"><div><span className="section-number">04 / Visual language</span><h2>The primitives.<br />All in one place.</h2></div><p>Buttons, chips, badges, inputs, and the interactions that bind them. One visual vocabulary across every surface.</p></div>
+      <div className="home-section-heading"><div><span className="section-number">03 / Visual language</span><h2>The primitives.<br />All in one place.</h2></div><p>Buttons, chips, badges, inputs, and the interactions that bind them. One visual vocabulary across every surface.</p></div>
       <div className="visual-language-grid">
         <div className="visual-language-panel">
           <p className="visual-language-label">Actions</p>

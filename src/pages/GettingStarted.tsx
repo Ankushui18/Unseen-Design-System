@@ -1,10 +1,7 @@
-import { ArrowRight, Blocks, Check, Compass, Feather, Layers, Package, Ruler, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, Blocks, Check, Compass, Feather, Layers, Package, Ruler, ShieldCheck } from "lucide-react";
 import { Callout, Grid, PageHeader, Section } from "../docs/Blocks";
 import { CodeBlock } from "../docs/CodeBlock";
-import { Button } from "../ui/Button";
-import { Card, Chip, Code, Snippet } from "../ui/Display";
-import { Accordion, Tabs } from "../ui/Navigation";
-import { useState } from "react";
+import { Card, Chip, Code } from "../ui/Display";
 
 export function IntroductionPage({ navigate }: { navigate: (t: string) => void }) {
   return (
@@ -44,7 +41,7 @@ export function IntroductionPage({ navigate }: { navigate: (t: string) => void }
 └───────────────┬───────────────────────────────────────────┘
                 │ reads
 ┌───────────────▼───────────────────────────────────────────┐
-│  Components  ·  48 React primitives, ARIA + keyboard       │
+│  Components  ·  64 documented components, ARIA + keyboard       │
 └───────────────┬───────────────────────────────────────────┘
                 │ reads only
 ┌───────────────▼───────────────────────────────────────────┐
@@ -78,112 +75,6 @@ export function IntroductionPage({ navigate }: { navigate: (t: string) => void }
             </button>
           ))}
         </Grid>
-      </Section>
-    </>
-  );
-}
-
-export function InstallationPage({ navigate }: { navigate: (t: string) => void }) {
-  const [pm, setPm] = useState("npm");
-  const cmd = { npm: "npm install @aperture/react", pnpm: "pnpm add @aperture/react", yarn: "yarn add @aperture/react", bun: "bun add @aperture/react" }[pm]!;
-
-  return (
-    <>
-      <PageHeader
-        eyebrow="Getting Started"
-        title="Installation"
-        description="Aperture ships as a single ESM package plus one stylesheet. There is no Tailwind plugin, no PostCSS config and no build step to wire up."
-        tags={["2 minutes", "No config"]}
-      />
-
-      <Section title="1 · Install the package">
-        <Tabs
-          variant="segment"
-          size="sm"
-          value={pm}
-          onChange={setPm}
-          items={[{ key: "npm", label: "npm" }, { key: "pnpm", label: "pnpm" }, { key: "yarn", label: "yarn" }, { key: "bun", label: "bun" }]}
-        />
-        <Snippet>{cmd}</Snippet>
-        <p className="text-paragraph-sm text-muted">
-          Peer dependencies: <Code>react@≥18</Code>, <Code>react-dom@≥18</Code> and <Code>tailwindcss@≥4</Code>.
-        </p>
-      </Section>
-
-      <Section title="2 · Import the stylesheet" description="One import brings in the token layer and the Tailwind bridge. Order matters — Aperture must come after the Tailwind import.">
-        <CodeBlock
-          filename="src/index.css"
-          code={`@import "tailwindcss";
-@import "@aperture/react/styles.css";
-
-/* optional: your brand overrides */
-:root {
-  --accent-h: 262;
-  --accent-c: 0.19;
-  --radius-scale: 1;
-}`}
-        />
-      </Section>
-
-      <Section title="3 · Wrap your app" description="The provider handles color-mode persistence, toast portals and the reduced-motion listener.">
-        <CodeBlock
-          filename="src/main.tsx"
-          code={`import { ApertureProvider } from "@aperture/react";
-import "./index.css";
-
-createRoot(document.getElementById("root")!).render(
-  <ApertureProvider defaultMode="system">
-    <App />
-  </ApertureProvider>,
-);`}
-        />
-      </Section>
-
-      <Section title="4 · Use a component">
-        <CodeBlock
-          filename="src/App.tsx"
-          code={`import { Button, Card, CardHeader, CardBody, Chip } from "@aperture/react";
-
-export default function App() {
-  return (
-    <Card elevation={2}>
-      <CardHeader>
-        <h2 className="text-paragraph-md font-medium">Deploy preview</h2>
-        <Chip tone="success" dot>Ready</Chip>
-      </CardHeader>
-      <CardBody>Built in 42s · 1.2 MB transferred</CardBody>
-      <CardFooter>
-        <Button tone="accent">Promote to production</Button>
-      </CardFooter>
-    </Card>
-  );
-}`}
-        />
-        <Callout tone="success" title="That's the whole setup">
-          No <Code>tailwind.config.js</Code> edits, no content globbing, no plugin array. Aperture's utilities are
-          emitted from the package's own CSS layer.
-        </Callout>
-      </Section>
-
-      <Section title="Framework notes">
-        <Accordion
-          variant="split"
-          multiple
-          defaultOpen={["next"]}
-          items={[
-            { key: "next", title: "Next.js (App Router)", subtitle: "RSC compatible", content: <>Import the stylesheet in <Code>app/globals.css</Code> and place <Code>&lt;ApertureProvider&gt;</Code> in your root layout. Interactive components are marked <Code>"use client"</Code> at the package level, so server components can import them directly without a wrapper.</> },
-            { key: "vite", title: "Vite", subtitle: "Recommended", content: <>Add <Code>@tailwindcss/vite</Code> to your plugins and import the stylesheet from <Code>src/index.css</Code>. Hot module replacement picks up token changes without a full reload.</> },
-            { key: "remix", title: "Remix / React Router", content: <>Export the stylesheet from your root <Code>links()</Code> function. Use the <Code>cookie</Code> mode strategy so the server renders the correct color mode and avoids a flash.</> },
-            { key: "astro", title: "Astro", content: <>Install the React integration, then hydrate interactive islands with <Code>client:idle</Code>. Static components such as Card and Chip need no hydration at all.</> },
-          ]}
-        />
-      </Section>
-
-      <Section title="Next steps">
-        <div className="flex flex-wrap gap-2">
-          <Button onClick={() => navigate("components/button")} endContent={<ArrowRight className="h-4 w-4" />}>Explore components</Button>
-          <Button variant="outline" tone="default" onClick={() => navigate("theme")} startContent={<Sparkles className="h-4 w-4" />}>Open Theme Studio</Button>
-        </div>
       </Section>
     </>
   );
