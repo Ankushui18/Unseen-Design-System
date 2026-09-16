@@ -47,6 +47,9 @@ const MODULE_OF: Record<string, string> = {
   ToolbarSeparator: "ui/Patterns", HoverCard: "ui/Patterns", ProfileHoverCard: "ui/Patterns",
   ChatInput: "ui/Patterns", AlertDialog: "ui/Patterns", Combobox: "ui/Patterns",
   PaymentCard: "ui/Patterns", Well: "ui/Patterns",
+  // ui/Pro
+  ActivityFeed: "ui/Pro", CommandMenu: "ui/Pro", NotificationFeed: "ui/Pro",
+  FileUploader: "ui/Pro", Filters: "ui/Pro", TimePicker: "ui/Pro", Calendar: "ui/Pro",
 };
 
 export function Import({ names }: { names: string }) {

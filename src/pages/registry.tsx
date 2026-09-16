@@ -61,6 +61,15 @@ import {
   WellDoc,
 } from "./components/PatternDocs";
 import {
+  ActivityFeedDoc,
+  CalendarDoc,
+  CommandMenuDoc,
+  FileUploadDoc,
+  FiltersDoc,
+  NotificationFeedDoc,
+  TimePickerDoc,
+} from "./components/ProDocs";
+import {
   ColorPickerDoc,
   ContentDividerDoc,
   DropdownDoc,
@@ -113,6 +122,14 @@ export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> 
   pricing: (nav) => <PricingPage navigate={nav} />,
   blocks: () => <BlocksPage />,
   components: (nav) => <ComponentsIndex navigate={nav} />,
+
+  "components/activity-feed": () => <ActivityFeedDoc />,
+  "components/command-menu": () => <CommandMenuDoc />,
+  "components/notification-feed": () => <NotificationFeedDoc />,
+  "components/file-uploader": () => <FileUploadDoc />,
+  "components/filters": () => <FiltersDoc />,
+  "components/time-picker": () => <TimePickerDoc />,
+  "components/calendar": () => <CalendarDoc />,
 
   "components/toggle-group": () => <ToggleGroupDoc />,
   "components/button-tile": () => <ButtonTileDoc />,

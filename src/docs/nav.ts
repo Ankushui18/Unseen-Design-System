@@ -3,6 +3,18 @@ export type NavGroup = { title: string; items: NavItem[] };
 
 export const COMPONENT_GROUPS: NavGroup[] = [
   {
+    title: "PRO",
+    items: [
+      { title: "Activity Feed", href: "components/activity-feed", badge: "New", keywords: "timeline events feed updates" },
+      { title: "Command Menu", href: "components/command-menu", badge: "New", keywords: "quick actions palette fuzzy search" },
+      { title: "Notification Feed", href: "components/notification-feed", badge: "New", keywords: "inbox unread events list" },
+      { title: "File Uploader", href: "components/file-uploader", badge: "New", keywords: "dropzone drag drop attach" },
+      { title: "Filters", href: "components/filters", badge: "New", keywords: "faceted filter sidebar facet" },
+      { title: "Time Picker", href: "components/time-picker", badge: "New", keywords: "hours minutes picker" },
+      { title: "Calendar", href: "components/calendar", badge: "New", keywords: "date month grid" },
+    ],
+  },
+  {
     title: "Actions",
     items: [
       { title: "Button", href: "components/button", badge: "Updated", keywords: "cta action click submit filled stroke lighter ghost" },
