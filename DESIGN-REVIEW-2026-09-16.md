@@ -159,3 +159,33 @@ and dependency items were resolved, and the jsdom framing was corrected:
 - [x] `npm audit` → **0 vulnerabilities** (was 2: 1 high, 1 low).
 - [x] Single icon library (`@remixicon/react`) across all 83 routes; 81/81 render with 0 findings.
 - [x] `npm run test` (types → build → design-lint → smoke) green on the upgraded toolchain.
+
+## 8. AlignUI PRO parity pass (2026-09-17)
+
+Pulled the authoritative AlignUI catalogue (`figma.alignui.com/components` +
+`pro.alignui.com`) and diffed it against Aperture's coverage.
+
+**Added — 7 PRO components** (`src/ui/Pro.tsx`, docs in
+`src/pages/components/ProDocs.tsx`, a "PRO" nav group, 7 registry routes,
+7 native-size gallery previews):
+
+| Component | Closes AlignUI gap |
+|---|---|
+| Activity Feed | Activity Feed (16 var) |
+| Command Menu | Command Menu / Quick Actions (28 var) |
+| Notification Feed | Notification Feed (44 var) |
+| File Uploader | File Upload (31 var) |
+| Filters | Filter (7 var) |
+| Time Picker | Time Picker (28 var) |
+| Calendar | Datepicker calendar sheet |
+
+**Added — 7 landing-section blocks** (`src/blocks/landing.tsx`, registered in
+`src/blocks/index.tsx`, source extraction extended in `src/docs/block-source.ts`):
+
+Hero · Brands & Social Proof · Features · Stats & Metrics · Testimonials ·
+CTA · FAQ — closing AlignUI's "Landing Page Sections" tier.
+
+### Outcome
+- [x] 71 components across 6 groups (was 64 / 5), 20 blocks (was 13), 88 routes (was 81).
+- [x] `npm run test` → 88 routes · 0 findings · 0 runtime errors, exit 0.
+- [x] `lint:design` → 46 files · 0 findings.

@@ -6,6 +6,7 @@ import { Tabs } from "../ui/Navigation";
 import { useToast } from "../ui/Overlay";
 import { CompactButton, DigitInput, FileFormatIcon, Hint, HorizontalStepper, LinkButton, SegmentedControl, SocialButton, StatusBadge, Tag } from "../ui/Extra";
 import { Logo } from "../ui/Brand";
+import { CtaBlock, FaqBlock, FeaturesBlock, HeroBlock, LogosBlock, StatsBandBlock, TestimonialsBlock } from "./landing";
 import { cn } from "../utils/cn";
 import { RiArrowRightDownLine, RiArrowRightLine, RiArrowRightUpLine, RiBankCardLine, RiCheckLine, RiCloseLine, RiEyeLine, RiEyeOffLine, RiFileTextLine, RiFilterLine, RiFlashlightLine, RiGitBranchLine, RiGlobalLine, RiMailLine, RiMoreLine, RiNotification3Line, RiSearchLine, RiStarLine, RiTeamLine, RiUploadCloudLine } from "@remixicon/react";
 
@@ -550,4 +551,11 @@ export const BLOCKS: BlockDef[] = [
   { key: "settings", title: "Settings Form", category: "Forms", description: "Tabbed settings with radios, switches and a sticky action bar.", render: () => <SettingsBlock />, span: 2, width: 640, pro: true },
   { key: "rating", title: "Rating", category: "Feedback", description: "Five-star rating with hover preview.", render: () => <RatingBlock />, width: 380 },
   { key: "pricing", title: "Pricing", category: "Marketing", description: "Three tiers with annual toggle and highlighted plan.", render: () => <PricingBlock />, span: 3, width: 900, pro: true },
+  { key: "hero", title: "Hero Section", category: "Marketing", description: "Announcement pill, gradient headline, dual CTAs and social proof.", render: () => <HeroBlock />, span: 3, width: 980, pro: true },
+  { key: "logos", title: "Brands & Social Proof", category: "Marketing", description: "A quiet wordmark strip under a single caption.", render: () => <LogosBlock />, span: 3, width: 980, pro: true },
+  { key: "features", title: "Features Grid", category: "Marketing", description: "Icon-led value props in a responsive card grid.", render: () => <FeaturesBlock />, span: 3, width: 980, pro: true },
+  { key: "metrics", title: "Stats Band", category: "Marketing", description: "A four-up band of headline metrics on a soft well.", render: () => <StatsBandBlock />, span: 3, width: 980, pro: true },
+  { key: "testimonials", title: "Testimonials", category: "Marketing", description: "Three quote cards with ratings and verified avatars.", render: () => <TestimonialsBlock />, span: 3, width: 980, pro: true },
+  { key: "cta", title: "Call to Action", category: "Marketing", description: "Inverse band with dot grid, CTAs and trust points.", render: () => <CtaBlock />, span: 2, width: 760, pro: true },
+  { key: "faq", title: "FAQ", category: "Marketing", description: "Flush accordion of the five questions that matter.", render: () => <FaqBlock />, span: 2, width: 680, pro: true },
 ];
