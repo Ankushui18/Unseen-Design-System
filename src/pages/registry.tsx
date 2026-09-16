@@ -45,7 +45,6 @@ import {
   TypographyPage,
 } from "./Foundations";
 import { ElevationPage, SpacingPage } from "./FoundationSystem";
-import { ThemePage } from "./Theme";
 import { BlocksPage } from "./Blocks";
 import { ComponentsIndex } from "./ComponentsIndex";
 import { IconsPage as RemixIconsPage } from "./Icons";
@@ -57,6 +56,7 @@ import {
   ButtonTileDoc,
   ChatInputDoc,
   ComboboxDoc,
+  FeaturedIconDoc,
   HoverCardDoc,
   InfoLabelDoc,
   ListItemDoc,
@@ -121,7 +121,6 @@ export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> 
   "foundations/accessibility": () => <AccessibilityPage />,
   "foundations/tokens": () => <TokensPage />,
 
-  theme: () => <ThemePage />,
   patterns: () => <PatternsPage />,
   pricing: (nav) => <PricingPage navigate={nav} />,
   blocks: () => <BlocksPage />,
@@ -138,6 +137,7 @@ export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> 
   "components/toggle-group": () => <ToggleGroupDoc />,
   "components/button-tile": () => <ButtonTileDoc />,
   "components/toolbar": () => <ToolbarDoc />,
+  "components/featured-icon": () => <FeaturedIconDoc />,
   "components/combobox": () => <ComboboxDoc />,
   "components/chat-input": () => <ChatInputDoc />,
   "components/info-label": () => <InfoLabelDoc />,

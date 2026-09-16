@@ -33,28 +33,25 @@ export function InstallationPage({ navigate }: { navigate: (to: string) => void 
 }`} />
       <p className="text-paragraph-sm text-muted">The class-merging helper in <code className="font-mono">src/utils/cn.ts</code> is part of the system. It registers the custom font-size names so color utilities do not replace them.</p>
     </Section>
-    <Section title="3. Add the providers" description="ThemeProvider applies saved theme preferences. ToastProvider hosts notification previews.">
-      <CodeBlock filename="src/App.tsx" code={`import { ThemeProvider } from "./lib/theme";
-import { ToastProvider } from "./ui/Overlay";
+    <Section title="3. Add the providers" description="ToastProvider hosts notification previews. Add the `dark` class to a root element to switch themes — every token derives from CSS variables.">
+      <CodeBlock filename="src/App.tsx" code={`import { ToastProvider } from "./ui/Overlay";
 import { Button } from "./ui/Button";
 import "./index.css";
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <ToastProvider>
-        <main className="p-8">
-          <Button onClick={() => console.log("Hello")}>Start a project</Button>
-        </main>
-      </ToastProvider>
-    </ThemeProvider>
+    <ToastProvider>
+      <main className="p-8">
+        <Button onClick={() => console.log("Hello")}>Start a project</Button>
+      </main>
+    </ToastProvider>
   );
 }`} />
     </Section>
     <Section title="Check the contract" description="The helper must preserve a typography token and a text color together. This preview displays the merged class string from the actual implementation.">
       <CodeBlock filename="cn.ts / example" code={`cn("text-label-sm", "text-foreground")
 // Result: ${cn("text-label-sm", "text-foreground")}`} />
-      <div className="flex flex-wrap gap-3"><Button onClick={() => navigate("components/button")} endContent={<RiArrowRightLine />}>Try a component</Button><Button variant="outline" tone="default" onClick={() => navigate("theme")}>Customize the theme</Button></div>
+      <div className="flex flex-wrap gap-3"><Button onClick={() => navigate("components/button")} endContent={<RiArrowRightLine />}>Try a component</Button><Button variant="outline" tone="default" onClick={() => navigate("foundations/tokens")}>Read the token reference</Button></div>
     </Section>
   </>;
 }

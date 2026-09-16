@@ -53,6 +53,7 @@ export const COMPONENT_GROUPS: NavGroup[] = [
     title: "Data Display",
     items: [
       { title: "Card", href: "components/card", keywords: "surface panel container" },
+      { title: "Featured Icon", href: "components/featured-icon", badge: "New", keywords: "contained icon tinted gradient flourish" },
       { title: "Table", href: "components/table", badge: "Updated", keywords: "grid rows data" },
       { title: "Data Table", href: "components/data-table", badge: "New", keywords: "sortable selectable rows bulk actions pagination" },
       { title: "Avatar", href: "components/avatar", keywords: "profile user image group" },
@@ -129,12 +130,6 @@ export const NAV: NavGroup[] = [
       { title: "Motion", href: "foundations/motion", keywords: "animation easing duration" },
       { title: "Iconography", href: "foundations/icons", keywords: "icon svg symbol" },
       { title: "Accessibility", href: "foundations/accessibility", keywords: "a11y contrast wcag" },
-    ],
-  },
-  {
-    title: "Theming",
-    items: [
-      { title: "Theme Studio", href: "theme", badge: "New", keywords: "customize builder brand accent" },
       { title: "Token Reference", href: "foundations/tokens", keywords: "variables css api" },
     ],
   },

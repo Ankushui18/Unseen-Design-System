@@ -8,6 +8,16 @@ import {
   type ReactNode,
 } from "react";
 
+/**
+ * Light/dark theme provider.
+ *
+ * The accent and radius are authored in CSS (`--accent-h`, `--accent-c`,
+ * `--radius-scale`, `--disabled-opacity` on `:root`), so runtime knobs are
+ * intentionally kept minimal: this provider persists the mode preference and
+ * reflects it onto the document root. `useTheme` exposes the small surface
+ * the show-around site needs (toggle + accent/radius scale) without any UI
+ * builder; the design system itself is pure CSS variables.
+ */
 export type Mode = "light" | "dark";
 
 export type ThemeState = {

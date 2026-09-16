@@ -30,8 +30,8 @@ const iconOnlySizes: Record<Size, string> = {
 
 /* filled */
 const solid: Record<Tone, string> = {
-  accent: "bg-accent text-accent-foreground hover:bg-accent-hover focus-visible:shadow-ring-accent",
-  default: "bg-neutral-950 text-white hover:bg-neutral-800 focus-visible:shadow-ring-neutral dark:bg-neutral-100 dark:text-neutral-950 dark:hover:bg-white",
+  accent: "btn-accent-fill hover:text-accent-foreground focus-visible:shadow-ring-accent",
+  default: "btn-neutral-fill text-white hover:text-white focus-visible:shadow-ring-neutral dark:text-neutral-950 dark:hover:text-neutral-950",
   success: "bg-success text-success-foreground hover:bg-success-hover focus-visible:shadow-ring-accent",
   warning: "bg-warning text-warning-foreground hover:bg-warning-hover focus-visible:shadow-ring-neutral",
   danger: "bg-danger text-danger-foreground hover:bg-danger-hover focus-visible:shadow-ring-danger",
@@ -130,9 +130,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
 /* ------------------------------ Fancy Button ------------------------------- */
 
 const fancy: Record<Exclude<Tone, "success" | "warning"> | "stroke", string> = {
-  accent: "bevel bg-accent text-white shadow-fancy-accent hover:bg-accent-hover focus-visible:shadow-ring-accent",
-  default: "bevel bg-neutral-950 text-white shadow-fancy-neutral hover:bg-neutral-800 focus-visible:shadow-ring-neutral dark:bg-neutral-100 dark:text-neutral-950 dark:hover:bg-white",
-  danger: "bevel bg-red-base text-white shadow-fancy-danger hover:bg-red-dark focus-visible:shadow-ring-danger",
+  accent: "btn-accent-fill hover:text-white focus-visible:shadow-ring-accent focus-visible:filter-none",
+  default: "btn-neutral-fill text-white hover:text-white focus-visible:shadow-ring-neutral dark:text-neutral-950 dark:hover:text-neutral-950",
+  danger: "bg-red-base text-white shadow-fancy-danger hover:bg-red-dark focus-visible:shadow-ring-danger",
   stroke: "bg-surface text-foreground shadow-fancy-stroke hover:bg-surface-secondary focus-visible:shadow-ring-neutral",
 };
 

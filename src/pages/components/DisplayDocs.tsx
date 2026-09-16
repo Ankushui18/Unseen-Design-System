@@ -681,7 +681,7 @@ export function AlertDoc() {
   Version 3.2.0 is live in production.
 </Alert>`}>
           <div className="w-full space-y-3">
-            <Alert tone="accent" title="New version available">Aperture 3.2 adds the Theme Studio and nine components.</Alert>
+            <Alert tone="accent" title="New version available">Aperture 3.2 adds featured icons, richer surfaces and nine new components.</Alert>
             <Alert tone="success" title="Deployment complete">Version 3.2.0 is live in production.</Alert>
             <Alert tone="warning" title="Approaching seat limit">You are using 9 of 10 seats.</Alert>
             <Alert tone="danger" title="Build failed">Module not found: <Code>./ui/Alert</Code>.</Alert>

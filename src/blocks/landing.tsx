@@ -19,7 +19,7 @@ export function HeroBlock() {
       <p className="mt-5 max-w-xl text-paragraph-lg text-muted">Aperture gives your team thoughtful React components, patterns and foundations that agree with each other — so every surface ships with one voice.</p>
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <FancyButton size="lg" onClick={() => push({ title: "Explore components", description: "Opening the component library.", tone: "accent" })}>Explore components <RiArrowRightLine size={18} /></FancyButton>
-        <Button size="lg" variant="outline" tone="default" onClick={() => push({ title: "Theme Studio", description: "Opening the brand customiser.", tone: "default" })}>Open Theme Studio</Button>
+        <Button size="lg" variant="outline" tone="default" onClick={() => push({ title: "Foundations", description: "Opening the token reference.", tone: "default" })}>Browse foundations</Button>
       </div>
       <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:gap-5">
         <AvatarGroup items={[{ name: "Sophia W" }, { name: "James B" }, { name: "Lena M" }, { name: "Arthur T" }, { name: "Emma W" }]} size="sm" max={4} />
@@ -118,7 +118,7 @@ export function StatsBandBlock() {
 const QUOTES = [
   { name: "Sophia Williams", role: "Product Designer · Halcyon", quote: "The first system where the components actually agree with the tokens. We rebuilt our dashboard in a weekend." },
   { name: "James Brown", role: "Frontend Lead · Northwind", quote: "Live, editable examples changed how our team onboards. You read the source, you edit it, you see it render." },
-  { name: "Lena Müller", role: "Design Ops · Ridgeline", quote: "The Theme Studio is what sold us. One hue later our whole product felt like ours again." },
+  { name: "Lena Müller", role: "Design Ops · Ridgeline", quote: "The token graph is what sold us. One accent later our whole product felt like ours again." },
 ];
 
 export function TestimonialsBlock() {

@@ -172,7 +172,7 @@ export function PricingBlock() {
   const { push } = useToast();
   const plans = [
     { name: "Starter", price: annual ? 0 : 0, desc: "For individuals exploring the system.", features: ["3 projects", "Community support", "Light & dark themes"], cta: "Get started", tone: "outline" as const },
-    { name: "Pro", price: annual ? 19 : 24, desc: "For product teams shipping to production.", features: ["Unlimited projects", "Figma library sync", "Theme Studio export", "Priority support"], cta: "Start 14-day trial", tone: "solid" as const, popular: true },
+    { name: "Pro", price: annual ? 19 : 24, desc: "For product teams shipping to production.", features: ["Unlimited projects", "Figma library sync", "Token export & source access", "Priority support"], cta: "Start 14-day trial", tone: "solid" as const, popular: true },
     { name: "Enterprise", price: annual ? 49 : 59, desc: "For organisations with compliance needs.", features: ["SSO & audit logs", "Dedicated designer", "Custom token pipeline", "SLA & onboarding"], cta: "Talk to sales", tone: "outline" as const },
   ];
   return (

@@ -25,7 +25,6 @@ const MAIN_NAV = [
   { title: "Blocks", href: "blocks" },
   { title: "Foundations", href: "foundations/spacing" },
   { title: "Icons", href: "foundations/icons" },
-  { title: "Theme Studio", href: "theme" },
 ];
 
 export function CommandPalette({ open, onClose, navigate }: { open: boolean; onClose: () => void; navigate: (to: string) => void }) {

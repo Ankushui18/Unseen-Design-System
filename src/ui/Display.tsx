@@ -4,6 +4,51 @@ import type { Tone } from "./Button";
 import { useCopy } from "../lib/hooks";
 import { RiCheckLine, RiCheckboxCircleLine, RiCloseCircleLine, RiErrorWarningLine, RiFileCopyLine, RiInformationLine } from "@remixicon/react";
 
+/* ------------------------------ Featured Icon ------------------------------ */
+
+const featuredSoft: Record<Tone, string> = {
+  accent: "bg-accent-soft text-accent ring-accent/25 ring-inset shadow-xs",
+  default: "bg-surface-secondary text-muted ring-border ring-inset shadow-xs",
+  success: "bg-success-soft text-success-soft-foreground ring-success/25 ring-inset shadow-xs",
+  warning: "bg-warning-soft text-warning-soft-foreground ring-warning/25 ring-inset shadow-xs",
+  danger: "bg-danger-soft text-danger-soft-foreground ring-danger/25 ring-inset shadow-xs",
+};
+
+const featuredSolid: Record<Tone, string> = {
+  accent: "btn-accent-fill text-white",
+  default: "btn-neutral-fill text-white dark:text-neutral-950",
+  success: "bg-success text-success-foreground shadow-sm",
+  warning: "bg-warning text-warning-foreground shadow-sm",
+  danger: "bg-danger text-danger-foreground shadow-sm",
+};
+
+export function FeaturedIcon({
+  icon,
+  tone = "accent",
+  size = "md",
+  variant = "soft",
+  className,
+}: {
+  icon: ReactNode;
+  tone?: Tone;
+  size?: "xs" | "sm" | "md" | "lg";
+  variant?: "soft" | "solid" | "gradient";
+  className?: string;
+}) {
+  const dims = {
+    xs: "h-8 w-8 rounded-lg [&_svg]:h-[18px] [&_svg]:w-[18px]",
+    sm: "h-10 w-10 rounded-10 [&_svg]:h-[18px] [&_svg]:w-[18px]",
+    md: "h-12 w-12 rounded-xl [&_svg]:h-5 [&_svg]:w-5",
+    lg: "h-14 w-14 rounded-2xl [&_svg]:h-[22px] [&_svg]:w-[22px]",
+  }[size];
+  const treatment = variant === "solid" ? featuredSolid[tone] : variant === "gradient" ? `${tone === "accent" ? "btn-accent-fill" : "btn-neutral-fill"} text-white dark:text-neutral-950` : featuredSoft[tone];
+  return (
+    <span className={cn("inline-flex shrink-0 items-center justify-center ring-1 transition-transform duration-200 ease-out-quint", dims, treatment, variant === "soft" && "active:scale-95", className)}>
+      {icon}
+    </span>
+  );
+}
+
 /* ---------------------------------- Card ---------------------------------- */
 
 export function Card({

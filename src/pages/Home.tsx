@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, FancyButton } from "../ui/Button";
-import { Avatar, Chip, Progress, Snippet } from "../ui/Display";
+import { Avatar, Chip, FeaturedIcon, Progress, Snippet } from "../ui/Display";
 import { Input, Switch } from "../ui/Form";
 import { Accordion, Breadcrumbs, Tabs } from "../ui/Navigation";
 import { LiveEditor, LiveError, LivePreview, LiveProvider } from "react-live";
@@ -10,10 +10,9 @@ import { Logo } from "../docs/Shell";
 import { CodeBlock } from "../docs/CodeBlock";
 import { COMPONENT_GROUPS } from "../docs/nav";
 import { PREVIEWS } from "../docs/previews";
-import { ACCENT_PRESETS, useTheme } from "../lib/theme";
 import { useCopy } from "../lib/hooks";
 import { getBlockSource } from "../docs/block-source";
-import { RiAddLine, RiArrowRightLine, RiCheckLine, RiCodeSSlashLine, RiEqualizerLine, RiEyeLine, RiFileCopyLine, RiLayoutGridLine, RiMailLine, RiNotification3Line, RiPaletteLine, RiRestartLine, RiRulerLine, RiShieldCheckLine, RiSparkling2Line, RiStackLine, RiSunLine } from "@remixicon/react";
+import { RiAddLine, RiArrowRightLine, RiCheckLine, RiCodeSSlashLine, RiEqualizerLine, RiEyeLine, RiFileCopyLine, RiLayoutGridLine, RiMailLine, RiNotification3Line, RiPlugLine, RiRestartLine, RiRocketLine, RiRulerLine, RiShieldCheckLine, RiStackLine, RiSunLine } from "@remixicon/react";
 
 const COMPONENT_COUNT = COMPONENT_GROUPS.reduce((count, group) => count + group.items.length, 0);
 const noop = () => {};
@@ -67,13 +66,15 @@ function ActionsDemo() {
   </div>;
 }
 
-function ThemeDemo() {
-  const { accentH, accentC, set } = useTheme();
-  const swatches = [ACCENT_PRESETS[0], ACCENT_PRESETS[1], ACCENT_PRESETS[4], ACCENT_PRESETS[9], ACCENT_PRESETS[7]];
+function CraftDemo() {
   return <div className="mini-demo palette-demo">
-    <div className="mini-demo-title"><RiPaletteLine size={17} /><h3>Make it yours.</h3></div><p>One accent. An entirely different feel.</p>
-    <div className="palette-demo-swatches">{swatches.map((p) => <button key={p.name} aria-label={`Use ${p.name} theme`} aria-pressed={accentH === p.h && accentC === p.c} style={{ background: `oklch(.58 ${p.c} ${p.h})` }} onClick={() => set({ accentH: p.h, accentC: p.c })}>{accentH === p.h && <RiCheckLine size={16} />}</button>)}</div>
-    <div className="palette-demo-bottom"><code>--accent</code><span>Applied across the entire system</span></div>
+    <div className="mini-demo-title"><RiShieldCheckLine size={17} /><h3>Designed, not assembled.</h3></div><p>Token-driven surfaces with real depth.</p>
+    <div className="craft-demo-grid">
+      <FeaturedIcon size="sm" icon={<RiRocketLine />} tone="accent" />
+      <FeaturedIcon size="sm" variant="solid" icon={<RiPlugLine />} tone="default" />
+      <FeaturedIcon size="md" icon={<RiShieldCheckLine />} tone="success" />
+    </div>
+    <div className="palette-demo-bottom"><code>--shadow · --accent</code><span>One token graph, every surface</span></div>
   </div>;
 }
 
@@ -182,8 +183,8 @@ const COVERAGE = [
   { icon: RiLayoutGridLine, label: `${BLOCKS.length} blocks`, note: "Composed examples" },
   { icon: RiRulerLine, label: "7 foundations", note: "Color to motion" },
   { icon: RiSunLine, label: "Light & dark", note: "One token graph" },
-  { icon: RiSparkling2Line, label: "Theme Studio", note: "Brand your own" },
   { icon: RiShieldCheckLine, label: "Keyboard first", note: "ARIA + focus" },
+  { icon: RiPlugLine, label: "Zero deps", note: "No runtime to pin" },
 ];
 
 function CoverageStrip() {
@@ -252,7 +253,7 @@ function WorkspaceShowcase() {
     {view === "code" ? <CodeBlock code={getBlockSource("auth")} filename="blocks/AuthCardBlock.tsx" maxHeight={580} /> : <div key={revision} className="workspace-grid page-enter">
       <div className="workspace-column"><AuthCardBlock /></div>
       <div className="workspace-column"><ActionsDemo /><PreferenceDemo /></div>
-      <div className="workspace-column"><TeamDemo /><ThemeDemo /></div>
+      <div className="workspace-column"><TeamDemo /><CraftDemo /></div>
     </div>}
     <div className="workspace-caption"><span className="beta-status-dot" /><span>Real components, shared tokens. No scaled screenshots.</span><span>React + TypeScript + Tailwind CSS</span></div>
   </section>;
@@ -264,7 +265,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
       <p className="home-eyebrow">The design system for considered interfaces</p>
       <h1>Every detail.<br />One system<span>.</span></h1>
       <p className="home-intro">Thoughtful React components, useful patterns, and the foundations that bring them together — with a live editor, not screenshots. All free during public beta.</p>
-      <div className="home-hero-actions"><Button size="lg" tone="default" endContent={<RiArrowRightLine />} onClick={() => navigate("components")}>Explore components</Button><Button size="lg" variant="outline" tone="default" onClick={() => navigate("theme")}>Open Theme Studio</Button></div>
+      <div className="home-hero-actions"><Button size="lg" tone="default" endContent={<RiArrowRightLine />} onClick={() => navigate("components")}>Explore components</Button><Button size="lg" variant="outline" tone="default" onClick={() => navigate("foundations/color")}>Browse foundations</Button></div>
     </section>
 
     <div className="home-container"><div className="hero-showcase page-enter"><HeroEditor /></div><CoverageStrip /></div>

@@ -103,6 +103,7 @@
 .showcase-tools { display: flex; gap: 5px; align-items: center; }
 .showcase-tools .studio-icon-button { width: 28px; height: 28px; }
 .showcase-preview { padding: 36px; min-height: 188px; display: flex; gap: 16px; flex-wrap: wrap; background: var(--background-secondary); border-radius: inherit; position: relative; min-width: 0; }
+.showcase-preview::before { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: radial-gradient(80% 55% at 50% 0%, color-mix(in oklab, var(--accent) 5%, transparent), transparent 70%); }
 .showcase[data-has-code] .showcase-preview { border-radius: 0 0 12px 12px; }
 .showcase-preview.center { align-items: center; justify-content: center; }
 .showcase-preview.start { align-items: flex-start; }
@@ -423,12 +424,10 @@
 .team-owner { font-size: 10px; padding-inline: 6px; color: var(--muted); }
 .team-demo > button { font-size: 12px; }
 .palette-demo-swatches { display: flex; gap: 12px; margin-top: 20px; }
-.palette-demo-swatches button { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; color: white; transition: transform .18s; }
-.palette-demo-swatches button:hover { transform: translateY(-2px); }
-.palette-demo-swatches button[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 3px; }
 .palette-demo-bottom { margin-top: 19px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-top: 15px; border-top: 1px solid var(--separator-secondary); font-size: 10px; }
 .palette-demo-bottom code { font-family: var(--font-mono); color: var(--foreground); }
 .palette-demo-bottom > span { color: var(--muted); }
+.craft-demo-grid { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
 .home-section { padding-block: 88px; }
 .home-section-heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; margin-bottom: 34px; }
 .section-number { display: block; font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; color: var(--accent); margin-bottom: 16px; }

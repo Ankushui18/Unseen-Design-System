@@ -17,6 +17,7 @@ const MODULE_OF: Record<string, string> = {
   // ui/Display
   Card: "ui/Display", CardHeader: "ui/Display", CardBody: "ui/Display", CardFooter: "ui/Display",
   Chip: "ui/Display", Badge: "ui/Display", Avatar: "ui/Display", AvatarGroup: "ui/Display",
+  AvatarGroupCompact: "ui/Display", FeaturedIcon: "ui/Display",
   Kbd: "ui/Display", Snippet: "ui/Display", Divider: "ui/Display", Skeleton: "ui/Display",
   Progress: "ui/Display", CircularProgress: "ui/Display", Alert: "ui/Display", Code: "ui/Display",
   ScrollShadow: "ui/Display",

@@ -137,7 +137,7 @@ const RELEASES = [
   {
     v: "3.2.0", d: "Feb 2026", tag: "Latest" as const,
     items: [
-      ["added", "Theme Studio with live token editing and CSS export"],
+      ["added", "Token reference with live CSS variable export"],
       ["added", "Toast, Drawer, Command Palette and Scroll Shadow components"],
       ["added", "OKLCH ramp generator — accent palettes derive from hue + chroma"],
       ["added", "Popover, Tab Menu Horizontal, Avatar Group (compact) and Data Table docs"],
