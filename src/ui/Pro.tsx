@@ -275,11 +275,11 @@ export function NotificationFeed({
               <span className="min-w-0 flex-1">
                 <span className="flex items-baseline justify-between gap-3">
                   <span className={cn("truncate text-paragraph-sm", !n.read ? "font-medium text-foreground" : "text-foreground")}>{n.title}</span>
-                  <span className="shrink-0 text-paragraph-xs text-subtle">{n.time}</span>
+                  <span className="shrink-0 text-paragraph-xs text-subtle">{n.time}{!n.read && <span className="sr-only"> · unread</span>}</span>
                 </span>
                 {n.body && <span className="mt-0.5 block truncate text-paragraph-xs text-muted">{n.body}</span>}
               </span>
-              {!n.read && <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent" aria-label="Unread" />}
+              {!n.read && <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent" aria-hidden />}
             </button>
           </li>
         ))}
@@ -423,6 +423,7 @@ export function Filters({
         ref={buttonRef}
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
+        aria-haspopup="true"
         className={cn(
           "inline-flex h-10 items-center gap-2 rounded-10 px-3 text-label-sm shadow-xs ring-1 ring-inset transition-colors",
           total > 0 ? "bg-accent-soft text-accent ring-accent/20" : "bg-surface text-muted ring-border hover:bg-surface-secondary hover:text-foreground",
@@ -558,8 +559,11 @@ export function TimePicker({
   if (!open) return null;
 
   const hours: string[] = [];
-  const len = is12 ? 12 : 24;
-  for (let i = 1; i <= len; i++) hours.push(String(i).padStart(2, "0"));
+  if (is12) {
+    for (let i = 1; i <= 12; i++) hours.push(String(i).padStart(2, "0"));
+  } else {
+    for (let i = 0; i <= 23; i++) hours.push(String(i).padStart(2, "0"));
+  }
   const minutes = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, "0"));
   const meridians = ["AM", "PM"];
 

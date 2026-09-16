@@ -161,23 +161,20 @@ export function FileUploadDoc() {
     { id: 2, name: "batch-upload.png", size: "12.6 MB", progress: 62, status: "uploading" },
   ]);
 
+  const hasUploading = files.some((f) => f.status === "uploading");
   useEffect(() => {
-    const timers = files
-      .filter((f) => f.status === "uploading")
-      .map((f) =>
-        window.setInterval(() => {
-          setFiles((s) =>
-            s.map((x) => (x.id === f.id ? { ...x, progress: Math.min(100, x.progress + 13) } : x))
-          );
-        }, 400),
+    if (!hasUploading) return;
+    const timer = window.setInterval(() => {
+      setFiles((s) =>
+        s.map((f) => {
+          if (f.status !== "uploading") return f;
+          const progress = Math.min(100, f.progress + 13);
+          return progress >= 100 ? { ...f, progress: 100, status: "done" } : { ...f, progress };
+        }),
       );
-    return () => timers.forEach((t) => window.clearInterval(t));
-  }, [files.some((f) => f.status === "uploading")]);
-
-  useEffect(() => {
-    const finished = files.some((f) => f.status === "uploading" && f.progress >= 100);
-    if (finished) setFiles((s) => s.map((f) => (f.status === "uploading" && f.progress >= 100 ? { ...f, status: "done" } : f)));
-  }, [files]);
+    }, 400);
+    return () => window.clearInterval(timer);
+  }, [hasUploading]);
 
   return (
     <>
@@ -320,14 +317,14 @@ export function CalendarDoc() {
             <div className="flex min-w-44 flex-col gap-2 text-paragraph-sm">
               <p className="text-subheading-xs uppercase text-subtle">Selected</p>
               <p className="text-label-md text-foreground">{date ? date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" }) : "None"}</p>
-              <p className="text-paragraph-xs text-muted">Keyboard: ← → arrows shift months within the grid.</p>
+              <p className="text-paragraph-xs text-muted">Move between months with the arrows, then click a day.</p>
             </div>
           </div>
         </Showcase>
       </Section>
-      <Section title="With a controlled month" description="Pass month and onMonthChange to drive the grid from an external source, such as a date picker.">
+      <Section title="Controlled month" description="Drive the visible month from outside the grid — here the scripted docs queue walks a few months automatically.">
         <Showcase align="stretch">
-          <Calendar value={null} onChange={() => {}} month={{ year: 2026, month: 8 }} onMonthChange={() => {}} />
+          <DocsMonthCycle />
         </Showcase>
       </Section>
       <Section title="API">
@@ -339,5 +336,28 @@ export function CalendarDoc() {
         ]} />
       </Section>
     </>
+  );
+}
+
+/* Controlled-month demo: the parent owns `month` and advances it on an interval,
+   proving the grid stays in sync through the controlled API. */
+function DocsMonthCycle() {
+  const [month, setMonth] = useState({ year: 2026, month: 0 });
+  const [running, setRunning] = useState(true);
+  useEffect(() => {
+    if (!running) return;
+    const timer = window.setInterval(() => setMonth((m) => (m.month === 11 ? { year: m.year + 1, month: 0 } : { ...m, month: m.month + 1 })), 1100);
+    return () => window.clearInterval(timer);
+  }, [running]);
+  return (
+    <div className="flex flex-wrap items-start justify-center gap-6">
+      <Calendar value={null} onChange={() => {}} month={month} onMonthChange={(d) => setMonth({ year: d.getFullYear(), month: d.getMonth() })} />
+      <div className="flex min-w-44 flex-col gap-3 text-paragraph-sm">
+        <p className="text-subheading-xs uppercase text-subtle">Parent-owned month</p>
+        <p className="text-label-md text-foreground">{new Date(month.year, month.month, 1).toLocaleString("en-US", { month: "long", year: "numeric" })}</p>
+        <div className="text-paragraph-xs text-muted">Clicking the grid arrows fires <code className="font-mono">onMonthChange</code> back to the parent.</div>
+        <Button size="sm" variant="outline" tone="default" onClick={() => setRunning((r) => !r)}>{running ? "Pause cycle" : "Resume cycle"}</Button>
+      </div>
+    </div>
   );
 }
