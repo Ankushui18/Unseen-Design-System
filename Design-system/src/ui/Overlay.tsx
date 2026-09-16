@@ -1,0 +1,380 @@
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import { createPortal } from "react-dom";
+import { AlertTriangle, CheckCircle2, Info, X, XCircle } from "lucide-react";
+import { cn } from "../utils/cn";
+import { useLockBody, useOnClickOutside } from "../lib/hooks";
+import type { Tone } from "./Button";
+
+/** Traps Tab focus inside `ref` while `active`, restores focus to the trigger on close. */
+function useFocusTrap(ref: React.RefObject<HTMLElement | null>, active: boolean, onClose: () => void) {
+  const restoreRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (!active) return;
+    restoreRef.current = document.activeElement as HTMLElement | null;
+    const node = ref.current;
+    const focusables = () =>
+      Array.from(
+        node?.querySelectorAll<HTMLElement>('a[href],button:not([disabled]),textarea,input,select,[tabindex]:not([tabindex="-1"])') ?? [],
+      ).filter((el) => el.offsetParent !== null);
+    focusables()[0]?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { e.stopPropagation(); onClose(); return; }
+      if (e.key !== "Tab") return;
+      const list = focusables();
+      if (!list.length) return;
+      const first = list[0];
+      const last = list[list.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    document.addEventListener("keydown", onKey, true);
+    return () => {
+      document.removeEventListener("keydown", onKey, true);
+      restoreRef.current?.focus?.();
+    };
+  }, [active, onClose, ref]);
+}
+
+/* --------------------------------- Modal ---------------------------------- */
+
+export function Modal({
+  open,
+  onClose,
+  title,
+  description,
+  children,
+  footer,
+  size = "md",
+  placement = "center",
+  icon,
+  iconTone = "default",
+}: {
+  open: boolean;
+  onClose: () => void;
+  title?: ReactNode;
+  description?: ReactNode;
+  children?: ReactNode;
+  footer?: ReactNode;
+  size?: "sm" | "md" | "lg" | "xl" | "full";
+  placement?: "center" | "top";
+  icon?: ReactNode;
+  iconTone?: Tone;
+}) {
+  useLockBody(open);
+  const panelRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(panelRef, open, onClose);
+
+  if (!open) return null;
+  const w = { sm: "max-w-sm", md: "max-w-md", lg: "max-w-lg", xl: "max-w-2xl", full: "max-w-[calc(100vw-2rem)]" }[size];
+
+  return createPortal(
+    <div className={cn("fixed inset-0 z-[100] flex justify-center overflow-y-auto p-4", placement === "center" ? "items-center" : "items-start pt-[10vh]")}>
+      <div className="animate-fade-in fixed inset-0 bg-backdrop backdrop-blur-[3px]" onClick={onClose} />
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={typeof title === "string" ? title : undefined}
+        className={cn("animate-pop-in relative z-10 w-full rounded-20 bg-overlay shadow-xl ring-1 ring-border", w)}
+      >
+        {(title || description || icon) && (
+          <div className={cn("flex items-start gap-3.5 p-5", (children || footer) && "border-b border-separator")}>
+            {icon && (
+              <span
+                className={cn(
+                  "flex h-10 w-10 shrink-0 items-center justify-center rounded-full ring-1 ring-inset [&_svg]:h-5 [&_svg]:w-5",
+                  {
+                    default: "bg-surface-secondary text-foreground ring-border",
+                    accent: "bg-accent-soft text-accent ring-accent/20",
+                    success: "bg-success-soft text-success ring-success/20",
+                    warning: "bg-warning-soft text-warning-soft-foreground ring-warning/30",
+                    danger: "bg-danger-soft text-danger ring-danger/20",
+                  }[iconTone],
+                )}
+              >
+                {icon}
+              </span>
+            )}
+            <div className="min-w-0 flex-1 space-y-0.5">
+              {title && <h2 className="text-label-md text-foreground">{title}</h2>}
+              {description && <p className="text-paragraph-sm text-muted">{description}</p>}
+            </div>
+            <button onClick={onClose} className="-mt-1 -mr-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Close">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        )}
+        {children && <div className="p-5 text-paragraph-sm text-muted">{children}</div>}
+        {footer && <div className="grid grid-cols-2 gap-3 border-t border-separator p-5 [&>button]:w-full">{footer}</div>}
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+/* --------------------------------- Drawer --------------------------------- */
+
+export function Drawer({
+  open,
+  onClose,
+  title,
+  children,
+  footer,
+  side = "right",
+  width = 400,
+}: {
+  open: boolean;
+  onClose: () => void;
+  title?: ReactNode;
+  children?: ReactNode;
+  footer?: ReactNode;
+  side?: "left" | "right" | "bottom";
+  width?: number;
+}) {
+  useLockBody(open);
+  const panelRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(panelRef, open, onClose);
+  if (!open) return null;
+
+  const posCls =
+    side === "bottom"
+      ? "inset-x-0 bottom-0 rounded-t-2xl border-t max-h-[80vh]"
+      : side === "left"
+        ? "inset-y-0 left-0 rounded-r-2xl border-r"
+        : "inset-y-0 right-0 rounded-l-2xl border-l";
+
+  return createPortal(
+    <div className="fixed inset-0 z-[100]">
+      <div className="animate-fade-in absolute inset-0 bg-backdrop backdrop-blur-[3px]" onClick={onClose} />
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={typeof title === "string" ? title : undefined}
+        className={cn("absolute flex flex-col border-border bg-overlay shadow-xl", posCls)}
+        style={{
+          width: side === "bottom" ? undefined : Math.min(width, typeof window !== "undefined" ? window.innerWidth - 32 : width),
+          animation:
+            side === "bottom"
+              ? "slide-up .3s var(--ease-out-quint) both"
+              : side === "left"
+                ? "slide-in-left .3s var(--ease-out-quint) both"
+                : "slide-in-right .3s var(--ease-out-quint) both",
+        }}
+      >
+        <div className="flex items-center justify-between gap-4 border-b border-separator p-4">
+          <h2 className="text-paragraph-sm font-medium tracking-tight">{title}</h2>
+          <button onClick={onClose} className="rounded-lg p-1.5 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Close">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="ds-scroll flex-1 overflow-y-auto p-4 text-paragraph-sm text-muted">{children}</div>
+        {footer && <div className="flex items-center justify-end gap-2 border-t border-separator p-4">{footer}</div>}
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+/* -------------------------------- Tooltip --------------------------------- */
+
+export function Tooltip({
+  content,
+  children,
+  placement = "top",
+  delay = 120,
+}: {
+  content: ReactNode;
+  children: ReactNode;
+  placement?: "top" | "bottom" | "left" | "right";
+  delay?: number;
+}) {
+  const [open, setOpen] = useState(false);
+  const timer = useRef<number | null>(null);
+  const show = () => {
+    if (timer.current) window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setOpen(true), delay);
+  };
+  const hide = () => {
+    if (timer.current) window.clearTimeout(timer.current);
+    setOpen(false);
+  };
+  const pos = {
+    top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
+    bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
+    left: "right-full top-1/2 -translate-y-1/2 mr-2",
+    right: "left-full top-1/2 -translate-y-1/2 ml-2",
+  }[placement];
+  return (
+    <span className="relative inline-flex" onMouseEnter={show} onMouseLeave={hide} onFocus={show} onBlur={hide}>
+      {children}
+      {open && (
+        <span
+          role="tooltip"
+          className={cn(
+            "animate-pop-in pointer-events-none absolute z-50 rounded-lg bg-neutral-950 px-2.5 py-1.5 text-label-xs whitespace-nowrap text-white shadow-tooltip dark:bg-white dark:text-neutral-950",
+            pos,
+          )}
+        >
+          {content}
+        </span>
+      )}
+    </span>
+  );
+}
+
+/* -------------------------------- Popover --------------------------------- */
+
+export function Popover({
+  trigger,
+  children,
+  placement = "bottom",
+  className,
+}: {
+  trigger: (props: { open: boolean; toggle: () => void }) => ReactNode;
+  children: ReactNode | ((close: () => void) => ReactNode);
+  placement?: "bottom" | "top" | "bottom-end" | "bottom-start";
+  className?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const close = useCallback(() => setOpen(false), []);
+  useOnClickOutside(ref, close, open);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, close]);
+
+  const pos = {
+    bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
+    "bottom-start": "top-full left-0 mt-2",
+    "bottom-end": "top-full right-0 mt-2",
+    top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
+  }[placement];
+
+  return (
+    <div className="relative inline-flex" ref={ref}>
+      {trigger({ open, toggle: () => setOpen((o) => !o) })}
+      {open && (
+        <div className={cn("animate-pop-in absolute z-50 min-w-48 rounded-2xl bg-overlay p-1.5 shadow-lg ring-1 ring-border", pos, className)}>
+          {typeof children === "function" ? children(close) : children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function MenuItem({
+  children,
+  onClick,
+  icon,
+  shortcut,
+  tone = "default",
+  active,
+}: {
+  children: ReactNode;
+  onClick?: () => void;
+  icon?: ReactNode;
+  shortcut?: string;
+  tone?: "default" | "danger";
+  active?: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-paragraph-sm transition-colors",
+        tone === "danger" ? "text-danger hover:bg-danger-soft" : "text-foreground hover:bg-surface-hover",
+        active && "bg-accent-soft text-accent-soft-foreground",
+      )}
+    >
+      {icon && <span className="shrink-0 text-subtle [&_svg]:h-4 [&_svg]:w-4">{icon}</span>}
+      <span className="flex-1 truncate">{children}</span>
+      {shortcut && <span className="font-mono text-[10px] text-subtle">{shortcut}</span>}
+    </button>
+  );
+}
+
+export const MenuSeparator = () => <div className="my-1 h-px bg-separator" />;
+export const MenuLabel = ({ children }: { children: ReactNode }) => (
+  <div className="px-2.5 pt-2 pb-1 text-[10px] font-medium tracking-wider text-subtle uppercase">{children}</div>
+);
+
+/* --------------------------------- Toast ---------------------------------- */
+
+type ToastItem = { id: number; title: string; description?: string; tone: Tone; duration: number };
+type ToastCtx = { push: (t: Omit<ToastItem, "id" | "tone" | "duration"> & { tone?: Tone; duration?: number }) => void };
+
+const ToastContext = createContext<ToastCtx | null>(null);
+
+const toastIcon = { accent: Info, default: Info, success: CheckCircle2, warning: AlertTriangle, danger: XCircle };
+
+export function ToastProvider({ children }: { children: ReactNode }) {
+  const [items, setItems] = useState<ToastItem[]>([]);
+
+  const push = useCallback<ToastCtx["push"]>((t) => {
+    const id = Date.now() + Math.random();
+    const item: ToastItem = { id, title: t.title, description: t.description, tone: t.tone ?? "default", duration: t.duration ?? 3800 };
+    setItems((s) => [...s.slice(-3), item]);
+    window.setTimeout(() => setItems((s) => s.filter((i) => i.id !== id)), item.duration);
+  }, []);
+
+  const value = useMemo(() => ({ push }), [push]);
+
+  return (
+    <ToastContext.Provider value={value}>
+      {children}
+      {typeof document !== "undefined" &&
+        createPortal(
+          <div
+            className="pointer-events-none fixed right-4 bottom-4 z-[200] flex w-[min(360px,calc(100vw-2rem))] flex-col gap-2"
+            role="region"
+            aria-label="Notifications"
+            aria-live="polite"
+            aria-atomic="false"
+          >
+            {items.map((t) => {
+              const Icon = toastIcon[t.tone];
+              const accentColor = {
+                accent: "text-accent",
+                default: "text-muted",
+                success: "text-success",
+                warning: "text-warning",
+                danger: "text-danger",
+              }[t.tone];
+              return (
+                <div key={t.id} className="animate-slide-up pointer-events-auto flex items-start gap-3 rounded-2xl bg-overlay p-3.5 shadow-lg ring-1 ring-border">
+                  <Icon className={cn("mt-0.5 h-4.5 w-4.5 shrink-0", accentColor)} />
+                  <div className="flex-1 space-y-0.5">
+                    <p className="text-paragraph-sm leading-tight font-medium text-foreground">{t.title}</p>
+                    {t.description && <p className="text-paragraph-xs text-muted">{t.description}</p>}
+                  </div>
+                  <button onClick={() => setItems((s) => s.filter((i) => i.id !== t.id))} className="rounded-md p-1 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Dismiss">
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              );
+            })}
+          </div>,
+          document.body,
+        )}
+    </ToastContext.Provider>
+  );
+}
+
+export function useToast() {
+  const ctx = useContext(ToastContext);
+  if (!ctx) throw new Error("useToast must be used inside ToastProvider");
+  return ctx;
+}
