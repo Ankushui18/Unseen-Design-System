@@ -5,6 +5,7 @@ import {
   Alert,
   Avatar,
   AvatarGroup,
+  AvatarGroupCompact,
   Badge,
   Card,
   CardBody,
@@ -22,7 +23,9 @@ import {
 } from "../../ui/Display";
 import { Spinner } from "../../ui/Button";
 import { Table } from "../../ui/Navigation";
-import { RiArchiveLine, RiDeleteBinLine, RiExternalLinkLine, RiFileCopyLine, RiFolderLine, RiNotification3Line, RiPencilLine, RiShareLine, RiTeamLine } from "@remixicon/react";
+import { StatusBadge } from "../../ui/Extra";
+import { DataTable, type DataTableColumn } from "../../ui/ProductPatterns";
+import { RiArchiveLine, RiDeleteBinLine, RiExternalLinkLine, RiFileCopyLine, RiFolderLine, RiNotification3Line, RiPencilLine, RiRocketLine, RiShareLine, RiTeamLine } from "@remixicon/react";
 
 const TONES = ["accent", "default", "success", "warning", "danger"] as const;
 
@@ -160,6 +163,123 @@ export function TableDoc() {
   );
 }
 
+/* -------------------------------- DATA TABLE ------------------------------ */
+
+type MemberRow = { id: string; name: string; email: string; role: "Owner" | "Admin" | "Member"; status: "active" | "pending" | "offline"; usage: number };
+
+const MEMBER_ROWS: MemberRow[] = [
+  { id: "m1", name: "Ada Lovelace", email: "ada@aperture.io", role: "Owner", status: "active", usage: 92 },
+  { id: "m2", name: "Grace Hopper", email: "grace@aperture.io", role: "Admin", status: "active", usage: 64 },
+  { id: "m3", name: "Alan Turing", email: "alan@aperture.io", role: "Member", status: "pending", usage: 0 },
+  { id: "m4", name: "Kat Johnson", email: "kat@aperture.io", role: "Member", status: "offline", usage: 38 },
+];
+
+export function DataTableDoc() {
+  const [loading, setLoading] = useState(false);
+  const memberColumns: DataTableColumn<MemberRow>[] = [
+    {
+      key: "name",
+      header: "Name",
+      sortable: true,
+      sortKey: (m) => m.name,
+      render: (m) => (
+        <div className="flex items-center gap-3">
+          <Avatar name={m.name} size="sm" tone={m.role === "Owner" ? "accent" : "default"} />
+          <div className="min-w-0">
+            <p className="truncate text-label-sm">{m.name}</p>
+            <p className="truncate text-paragraph-xs text-subtle">{m.email}</p>
+          </div>
+        </div>
+      ),
+    },
+    { key: "role", header: "Role", render: (m) => <span className="text-paragraph-sm text-muted">{m.role}</span> },
+    {
+      key: "status",
+      header: "Status",
+      render: (m) => (
+        <StatusBadge status={m.status === "active" ? "completed" : m.status === "pending" ? "pending" : "disabled"} size="sm" className="capitalize">
+          {m.status}
+        </StatusBadge>
+      ),
+    },
+    {
+      key: "usage",
+      header: "Usage",
+      align: "right",
+      alignNumeric: true,
+      sortable: true,
+      sortKey: (m) => m.usage,
+      render: (m) => <span className="font-mono text-paragraph-xs tabular-nums">{m.usage}%</span>,
+    },
+  ];
+  return (
+    <>
+      <PageHeader eyebrow="Components · Data Display" title="Data Table" description="The full-stack table: sorting, selection with a bulk-action bar, loading, empty state and a paginated footer. Show at most three actions per row and keep numeric columns right-aligned." tags={["Sorting", "Selection", "Bulk actions"]} />
+      <Import names="DataTable" />
+      <Section title="Usage">
+        <Showcase
+          align="stretch"
+          controls={<Button size="sm" variant="soft" onClick={() => setLoading((l) => !l)}>{loading ? "Show rows" : "Simulate loading"}</Button>}
+          code={`<DataTable\n  columns={columns}\n  rows={members}\n  rowKey={(m) => m.id}\n  selectable\n  initialSort={{ key: "name", direction: "asc" }}\n  bulkActions={[\n    { id: "invite", label: "Invite", icon: <RiRocketLine />, onSelect(rows) {} },\n    { id: "remove", label: "Remove", tone: "danger", onSelect(rows) {} },\n  ]}\n  pagination={{ page: 1, totalPages: 4, onPageChange() {} }}\n  loading={${loading}}\n/>`}
+        >
+          <div className="w-full">
+            <DataTable
+              columns={memberColumns}
+              rows={MEMBER_ROWS}
+              rowKey={(m) => m.id}
+              selectable
+              initialSort={{ key: "name", direction: "asc" }}
+              loading={loading}
+              bulkActions={[
+                { id: "invite", label: "Invite", icon: <RiRocketLine />, onSelect: () => {} },
+                { id: "remove", label: "Remove", tone: "danger", onSelect: () => {} },
+              ]}
+              pagination={{ page: 1, totalPages: 4, onPageChange: () => {} }}
+            />
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="Compact density" description="Tighter padding for admin and reporting views.">
+        <Showcase align="stretch">
+          <div className="w-full">
+            <DataTable
+              density="compact"
+              columns={memberColumns}
+              rows={MEMBER_ROWS.slice(0, 3)}
+              rowKey={(m) => m.id}
+            />
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="Empty state">
+        <Showcase align="stretch">
+          <div className="w-full">
+            <DataTable
+              columns={memberColumns}
+              rows={[]}
+              rowKey={(m) => m.id}
+              emptyState={<p className="data-table-empty">No members match this filter.</p>}
+            />
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "columns", type: "DataTableColumn<T>[]", required: true, description: "Keys, headers, alignment, width, render, and optional sortKey/sortable." },
+          { name: "rows", type: "T[]", required: true, description: "Row data. Renders emptyState (or a fallback) when empty." },
+          { name: "rowKey", type: "(row: T) => string", required: true, description: "Stable identity used for selection and React keys." },
+          { name: "selectable", type: "boolean", default: "false", description: "Adds checkbox columns and the bulk-action bar." },
+          { name: "loading", type: "boolean", default: "false", description: "Shows skeleton rows while data fetches." },
+          { name: "initialSort", type: "{ key, direction }", description: "Sort applied on first render." },
+          { name: "bulkActions", type: "DataTableBulkAction[]", description: "Actions exposed in the selection bar." },
+          { name: "pagination", type: "{ page, totalPages, onPageChange }", description: "Renders the paginated footer." },
+          { name: "density", type: '"comfortable" | "compact"', default: '"comfortable"', description: "Row padding scale." },
+        ]} />
+      </Section>
+    </>
+  );
+}
+
 /* --------------------------------- AVATAR --------------------------------- */
 
 export function AvatarDoc() {
@@ -199,6 +319,66 @@ export function AvatarDoc() {
           { name: "square", type: "boolean", default: "false", description: "Uses a rounded square instead of a circle." },
           { name: "status", type: '"online" | "offline" | "busy"', description: "Presence indicator in the lower-right corner." },
         ]} />
+      </Section>
+    </>
+  );
+}
+
+/* ------------------------------- AVATAR GROUP ----------------------------- */
+
+const GROUP_MEMBERS = [
+  { name: "Ada Lovelace" },
+  { name: "Grace Hopper" },
+  { name: "Alan Turing" },
+  { name: "Kat Johnson" },
+  { name: "Lin Chen" },
+  { name: "Ray Banks" },
+];
+
+export function AvatarGroupDoc() {
+  return (
+    <>
+      <PageHeader eyebrow="Components · Data Display" title="Avatar Group" description="Two or more avatars in an inline stack. Members overlap with a background ring; overflow collapses into a counter. A compact capsule variant holds tighter stacks for tables, feeds and comments." tags={["Stack", "Overflow", "Compact"]} />
+      <Import names="AvatarGroup, AvatarGroupCompact" />
+      <Section title="Stack">
+        <Showcase code={`<AvatarGroup\n  max={4}\n  items={[\n    { name: "Ada Lovelace" },\n    { name: "Grace Hopper" },\n    { name: "Alan Turing" },\n    { name: "Kat Johnson" },\n    { name: "Lin Chen" },\n    { name: "Ray Banks" },\n  ]}\n/>`}>
+          <AvatarGroup items={GROUP_MEMBERS} max={5} />
+          <AvatarGroup items={GROUP_MEMBERS} max={3} size="lg" />
+          <AvatarGroup items={GROUP_MEMBERS} max={4} size="sm" />
+        </Showcase>
+      </Section>
+      <Section title="Compact capsule" description="A tighter, softer alternative for cramped layouts. `stroke` adds a hairline around the whole capsule.">
+        <Showcase code={`<AvatarGroupCompact max={3} items={members} />\n<AvatarGroupCompact max={3} size="sm" variant="stroke" items={members} />`}>
+          <AvatarGroupCompact items={GROUP_MEMBERS} max={3} />
+          <AvatarGroupCompact items={GROUP_MEMBERS} max={3} size="sm" variant="stroke" />
+          <AvatarGroupCompact items={GROUP_MEMBERS} max={4} size="lg" variant="stroke" />
+        </Showcase>
+      </Section>
+      <Section title="Single tone">
+        <Showcase>
+          <AvatarGroupCompact items={GROUP_MEMBERS} max={4} tone="accent" />
+          <AvatarGroupCompact items={GROUP_MEMBERS} max={4} tone="success" variant="stroke" />
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable
+          title="AvatarGroup props"
+          rows={[
+            { name: "items", type: "{ name, src? }[]", required: true, description: "Members to render. The last slot becomes a counter beyond max." },
+            { name: "max", type: "number", default: "4", description: "Avatars shown before collapsing into a +n counter." },
+            { name: "size", type: '"xs" | "sm" | "md" | "lg"', default: '"md"', description: "Avatar dimensions." },
+          ]}
+        />
+        <PropsTable
+          title="AvatarGroupCompact props"
+          rows={[
+            { name: "items", type: "{ name, src? }[]", required: true, description: "Members to render." },
+            { name: "max", type: "number", default: "3", description: "Avatars shown before the +n label." },
+            { name: "size", type: '"xs" | "sm" | "md" | "lg"', default: '"md"', description: "Avatar and overflow label size." },
+            { name: "tone", type: "Tone", default: '"default"', description: "Cycles palette tones by default; pass a tone for a uniform set." },
+            { name: "variant", type: '"default" | "stroke"', default: '"default"', description: "Adds a hairline ring around the capsule." },
+          ]}
+        />
       </Section>
     </>
   );

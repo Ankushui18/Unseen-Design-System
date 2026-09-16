@@ -69,6 +69,61 @@ export function TabsDoc() {
   );
 }
 
+/* ---------------------------- TAB MENU HORIZONTAL ------------------------- */
+
+export function HorizontalTabMenuDoc() {
+  const [v, setV] = useState("overview");
+  return (
+    <>
+      <PageHeader eyebrow="Components · Navigation" title="Tab Menu Horizontal" description="A linear row for switching between sibling sections or categories — the central navigation pattern for settings, dashboards and profile pages. Underline is the default; count badges and icons can ride along." tags={["Underline", "Full width", "Counts"]} />
+      <Import names="Tabs" />
+      <Section title="Menu style">
+        <Showcase
+          align="stretch"
+          code={`<Tabs\n  variant="underline"\n  fullWidth\n  value={tab}\n  onChange={setTab}\n  items={[\n    { key: "overview", label: "Overview" },\n    { key: "analytics", label: "Analytics" },\n    { key: "members", label: "Members", badge: <Chip size="sm">4</Chip> },\n    { key: "settings", label: "Settings" },\n  ]}\n/>`}
+        >
+          <div className="w-full space-y-5">
+            <Tabs
+              variant="underline"
+              fullWidth
+              value={v}
+              onChange={setV}
+              items={[
+                { key: "overview", label: "Overview", icon: <RiPulseLine /> },
+                { key: "analytics", label: "Analytics", icon: <RiBarChartLine /> },
+                { key: "members", label: "Members", icon: <RiTeamLine />, badge: <Chip size="sm" tone="accent">4</Chip> },
+                { key: "settings", label: "Settings", icon: <RiSettings3Line /> },
+              ]}
+            />
+            <div className="rounded-2xl bg-surface p-5 ring-1 ring-border">
+              <p className="text-label-md capitalize">{v}</p>
+              <p className="mt-1 text-paragraph-sm text-muted">{v === "overview" ? "Traffic is up 18% week over week across all regions." : `Panel content for the ${v} section.`}</p>
+            </div>
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="Menu variants" description="The same Tabs primitive renders pill, segment and filled menus — keep one component, switch the surface.">
+        <Showcase align="stretch">
+          <div className="w-full space-y-5">
+            {([("underline" as const), ("pill" as const), ("segment" as const), ("solid" as const)]).map((variant) => (
+              <Tabs key={variant} variant={variant} value={"a"} onChange={() => {}} items={[{ key: "a", label: "Monthly" }, { key: "b", label: "Annual" }, { key: "c", label: "Custom" }]} />
+            ))}
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "items", type: "{ key, label, icon?, badge?, disabled? }[]", required: true, description: "Menu entries. Prefer short, scannable labels." },
+          { name: "value", type: "string", required: true, description: "Key of the active entry." },
+          { name: "onChange", type: "(key: string) => void", required: true, description: "Fires when an entry is selected." },
+          { name: "variant", type: '"solid" | "segment" | "underline" | "pill"', default: '"solid"', description: "Use underline or pill for menu-style navigation." },
+          { name: "fullWidth", type: "boolean", default: "false", description: "Stretches entries evenly across the row." },
+        ]} />
+      </Section>
+    </>
+  );
+}
+
 /* -------------------------------- ACCORDION ------------------------------- */
 
 export function AccordionDoc() {
@@ -428,6 +483,84 @@ export function MenuDoc() {
             { name: "active", type: "boolean", default: "false", description: "Marks the item as currently selected." },
           ]}
         />
+      </Section>
+    </>
+  );
+}
+
+/* --------------------------------- POPOVER -------------------------------- */
+
+export function PopoverDoc() {
+  return (
+    <>
+      <PageHeader eyebrow="Components · Overlays" title="Popover" description="A floating layer anchored to a trigger — click to open, outside-click or Escape to close. The foundation for dropdowns, menus, custom select and helper content. Never use it to hide a critical path." tags={["Anchored", "Outside click", "Arrow keys"]} />
+      <Import names="Popover" />
+      <Section title="Usage">
+        <Showcase
+          code={`<Popover\n  placement="bottom"\n  trigger={({ toggle }) => <Button onClick={toggle}>Open popover</Button>}\n>\n  {(close) => (\n    <div className="p-3">\n      <p className="text-label-sm">Ready to launch</p>\n      <p className="text-paragraph-xs text-muted">Deploy main to production?</p>\n      <Button size="sm" onClick={close}>Launch</Button>\n    </div>\n  )}\n</Popover>`}
+        >
+          <Popover
+            placement="bottom"
+            trigger={({ toggle }) => <Button onClick={toggle}>Open popover</Button>}
+          >
+            {(close) => (
+              <div className="w-56 p-3">
+                <p className="text-label-sm">Ready to launch</p>
+                <p className="text-paragraph-xs text-muted">Deploy main@4f21ac to production?</p>
+                <Button size="sm" fullWidth className="mt-2.5" onClick={close}>Launch</Button>
+              </div>
+            )}
+          </Popover>
+
+          <Popover
+            placement="bottom-end"
+            trigger={({ toggle }) => <Button variant="outline" tone="default" onClick={toggle} endContent={<RiArrowRightSLine className="h-3.5 w-3.5" />}>Raise a flag</Button>}
+            className="w-64 p-0"
+          >
+            {(close) => (
+              <div>
+                <MenuLabel>Flag reason</MenuLabel>
+                <MenuItem icon={<RiNotification3Line />} onClick={close}>Needs design review</MenuItem>
+                <MenuItem icon={<RiFileCopyLine />} onClick={close}>Duplicate of another issue</MenuItem>
+                <MenuSeparator />
+                <MenuItem icon={<RiDeleteBinLine />} tone="danger" onClick={close}>Report abuse</MenuItem>
+              </div>
+            )}
+          </Popover>
+        </Showcase>
+      </Section>
+      <Section title="With a hint" description="Popovers can carry non-essential helper content — but copy that users need later belongs in a Tooltip's sibling, not behind a click.">
+        <Showcase>
+          <Popover
+            placement="bottom-start"
+            trigger={({ toggle }) => <Button variant="ghost" tone="default" onClick={toggle} endContent={<RiArrowRightSLine className="h-3.5 w-3.5" />}>How is usage metered?</Button>}
+          >
+            <div className="max-w-64 p-3">
+              <p className="text-label-sm">Usage metering</p>
+              <p className="mt-1 text-paragraph-xs text-muted">Bandwidth is billed in gigabyte-hours and reset at the start of each UTC month.</p>
+            </div>
+          </Popover>
+        </Showcase>
+      </Section>
+      <Section title="Keyboard">
+        <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-surface p-4 ring-1 ring-border shadow-xs text-paragraph-sm text-muted">
+          <span className="flex items-center gap-1.5"><Kbd>Tab</Kbd> focus the content</span>
+          <Divider orientation="vertical" className="h-4" />
+          <span className="flex items-center gap-1.5"><Kbd>Esc</Kbd> close</span>
+          <Divider orientation="vertical" className="h-4" />
+          <span>click outside to dismiss</span>
+        </div>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "trigger", type: "({ open, toggle }) => ReactNode", required: true, description: "Render prop for the anchor element." },
+          { name: "children", type: "ReactNode | ((close: () => void) => ReactNode)", required: true, description: "Popover content. The function form receives a close callback." },
+          { name: "placement", type: '"bottom" | "top" | "bottom-start" | "bottom-end"', default: '"bottom"', description: "Anchor alignment relative to the trigger." },
+          { name: "className", type: "string", description: "Overrides the floating panel's default width and padding." },
+        ]} />
+        <Callout>
+          Compose richer overlays on top of Popover — Dropdown, Menu and the custom select picker are all built from it.
+        </Callout>
       </Section>
     </>
   );

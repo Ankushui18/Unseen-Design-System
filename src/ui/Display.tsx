@@ -222,11 +222,12 @@ export function Avatar({
 export function AvatarGroup({ items, max = 4, size = "md" }: { items: { name: string; src?: string }[]; max?: number; size?: "xs" | "sm" | "md" | "lg" }) {
   const shown = items.slice(0, max);
   const rest = items.length - shown.length;
+  const tones: Tone[] = ["accent", "success", "warning", "danger", "default"];
   return (
     <div className="flex items-center -space-x-2">
       {shown.map((it, i) => (
         <span key={i} className="rounded-full ring-2 ring-background">
-          <Avatar {...it} size={size} tone={(["accent", "success", "warning", "danger", "default"] as Tone[])[i % 5]} />
+          <Avatar {...it} size={size} tone={tones[i % tones.length]} />
         </span>
       ))}
       {rest > 0 && (
@@ -234,6 +235,45 @@ export function AvatarGroup({ items, max = 4, size = "md" }: { items: { name: st
           <Avatar name={`+${rest}`} size={size} />
         </span>
       )}
+    </div>
+  );
+}
+
+/** AlignUI-style compact grouping: a tighter stack inside a soft capsule. */
+export function AvatarGroupCompact({
+  items,
+  max = 3,
+  size = "md",
+  tone = "default",
+  variant = "default",
+  className,
+}: {
+  items: { name: string; src?: string }[];
+  max?: number;
+  size?: "xs" | "sm" | "md" | "lg";
+  tone?: Tone;
+  variant?: "default" | "stroke";
+  className?: string;
+}) {
+  const shown = items.slice(0, max);
+  const rest = items.length - shown.length;
+  const pad = { xs: "px-1 text-paragraph-xs", sm: "px-1.5 text-paragraph-xs", md: "px-2 text-paragraph-sm", lg: "px-2.5 text-paragraph-sm" }[size];
+  return (
+    <div
+      className={cn(
+        "flex w-max items-center rounded-full bg-surface p-0.5 shadow-xs",
+        variant === "stroke" && "ring-1 ring-border",
+        className,
+      )}
+    >
+      <div className="flex items-center -space-x-1">
+        {shown.map((it, i) => (
+          <span key={i} className="rounded-full ring-2 ring-surface">
+            <Avatar {...it} size={size} tone={tone === "default" ? (["accent", "success", "warning", "danger", "default", "accent"] as Tone[])[i % 6] : tone} />
+          </span>
+        ))}
+      </div>
+      {rest > 0 && <span className={cn("font-medium text-muted tabular-nums", pad)}>+{rest}</span>}
     </div>
   );
 }

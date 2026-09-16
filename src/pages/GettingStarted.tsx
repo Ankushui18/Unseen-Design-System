@@ -41,7 +41,7 @@ export function IntroductionPage({ navigate }: { navigate: (t: string) => void }
 └───────────────┬───────────────────────────────────────────┘
                 │ reads
 ┌───────────────▼───────────────────────────────────────────┐
-│  Components  ·  64 documented components, ARIA + keyboard       │
+│  Components  ·  75 documented components, ARIA + keyboard  │
 └───────────────┬───────────────────────────────────────────┘
                 │ reads only
 ┌───────────────▼───────────────────────────────────────────┐
@@ -140,6 +140,7 @@ const RELEASES = [
       ["added", "Theme Studio with live token editing and CSS export"],
       ["added", "Toast, Drawer, Command Palette and Scroll Shadow components"],
       ["added", "OKLCH ramp generator — accent palettes derive from hue + chroma"],
+      ["added", "Popover, Tab Menu Horizontal, Avatar Group (compact) and Data Table docs"],
       ["changed", "Table gains sticky headers, striped rows and empty states"],
       ["fixed", "Focus ring clipping inside overflow-hidden containers"],
     ],
