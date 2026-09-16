@@ -706,7 +706,7 @@ export function TokensPage() {
       <Section title="Overriding" description="Scope overrides to :root and .dark — never to a component class.">
         <CodeBlock
           filename="app.css"
-          code={`@import "@aperture/react/styles.css";
+          code={`@import "tailwindcss";
 
 :root {
   --accent-h: 208;        /* rebrand in one line  */

@@ -1,13 +1,11 @@
 import { useState } from "react";
-import { Callout, PageHeader, PropsTable, Section, Showcase, OptionPicker } from "../../docs/Blocks";
+import { Callout, Import, PageHeader, PropsTable, Section, Showcase, OptionPicker } from "../../docs/Blocks";
 import { Button } from "../../ui/Button";
 import { Avatar, Card, Chip, Code, Divider, Kbd, Snippet } from "../../ui/Display";
 import { Input, Switch } from "../../ui/Form";
 import { Accordion, Breadcrumbs, Pagination, Tabs } from "../../ui/Navigation";
 import { Drawer, MenuItem, MenuLabel, MenuSeparator, Modal, Popover, Tooltip, useToast } from "../../ui/Overlay";
 import { RiArrowRightSLine, RiBankCardLine, RiBarChartLine, RiDeleteBinLine, RiExternalLinkLine, RiFileCopyLine, RiFolderAddLine, RiLogoutBoxLine, RiNotification3Line, RiPencilLine, RiPulseLine, RiSettings3Line, RiShareLine, RiTeamLine, RiUserAddLine } from "@remixicon/react";
-
-const Import = ({ names }: { names: string }) => <Snippet symbol="">{`import { ${names} } from "@aperture/react";`}</Snippet>;
 
 /* ---------------------------------- TABS ---------------------------------- */
 
@@ -454,7 +452,7 @@ push({
           <Button onClick={() => push({ title: "Deployment queued", description: "Your build will start in a moment.", tone: "accent" })}>Default</Button>
           <Button tone="success" onClick={() => push({ title: "Saved", description: "All changes were written.", tone: "success" })}>Success</Button>
           <Button tone="warning" onClick={() => push({ title: "Approaching limit", description: "9 of 10 seats used.", tone: "warning" })}>Warning</Button>
-          <Button tone="danger" onClick={() => push({ title: "Build failed", description: "Module not found: @aperture/icons", tone: "danger" })}>Danger</Button>
+          <Button tone="danger" onClick={() => push({ title: "Build failed", description: "Module not found: ./ui/Overlay", tone: "danger" })}>Danger</Button>
           <Button variant="outline" tone="default" onClick={() => { ["One", "Two", "Three"].forEach((n, i) => setTimeout(() => push({ title: `Event ${n}`, tone: "default" }), i * 260)); }}>Stack three</Button>
         </Showcase>
       </Section>

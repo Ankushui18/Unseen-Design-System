@@ -338,7 +338,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
           <p className="visual-language-label">Feedback</p>
           <div className="visual-language-items">
             <Progress value={64} size="sm" />
-            <Snippet className="w-full py-1.5 text-paragraph-xs">npm install @aperture/react</Snippet>
+            <Snippet className="w-full py-1.5 text-paragraph-xs">npm install @remixicon/react clsx tailwind-merge</Snippet>
           </div>
         </div>
       </div>

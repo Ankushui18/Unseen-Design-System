@@ -63,7 +63,7 @@ export const PREVIEWS: Record<string, () => ReactNode> = {
   "components/tag": () => <div className="flex gap-1.5"><Tag onRemove={noop}>React</Tag><Tag onRemove={noop}>OKLCH</Tag><Tag active>Figma</Tag></div>,
   "components/progress": () => <div className="flex items-center gap-4"><div className="w-32"><Progress value={64} size="sm" /></div><CircularProgress value={64} size={40} stroke={4} /></div>,
   "components/skeleton": () => <div className="flex w-48 items-center gap-3"><Skeleton className="h-9 w-9 rounded-full" /><div className="flex-1 space-y-2"><Skeleton className="h-3 w-3/4" /><Skeleton className="h-3 w-1/2" /></div></div>,
-  "components/snippet": () => <Snippet className="w-56 py-1.5 text-paragraph-xs">npm i @aperture/react</Snippet>,
+  "components/snippet": () => <Snippet className="w-56 py-1.5 text-paragraph-xs">npm i @remixicon/react clsx tailwind-merge</Snippet>,
   "components/kbd": () => <div className="flex gap-1"><Kbd>⌘</Kbd><Kbd>K</Kbd></div>,
   "components/file-format-icon": () => <div className="flex gap-3"><FileFormatIcon format="pdf" size={32} /><FileFormatIcon format="png" size={32} /><FileFormatIcon format="xlsx" size={32} /></div>,
   "components/tabs": () => <Tabs size="sm" variant="segment" value="a" onChange={noop} items={[{ key: "a", label: "Overview" }, { key: "b", label: "Activity" }]} />,

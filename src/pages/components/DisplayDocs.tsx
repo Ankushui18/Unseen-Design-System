@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Callout, PageHeader, PropsTable, Section, Showcase } from "../../docs/Blocks";
+import { Callout, Import, PageHeader, PropsTable, Section, Showcase } from "../../docs/Blocks";
 import { Button } from "../../ui/Button";
 import {
   Alert,
@@ -24,7 +24,6 @@ import { Spinner } from "../../ui/Button";
 import { Table } from "../../ui/Navigation";
 import { RiArchiveLine, RiDeleteBinLine, RiExternalLinkLine, RiFileCopyLine, RiFolderLine, RiNotification3Line, RiPencilLine, RiShareLine, RiTeamLine } from "@remixicon/react";
 
-const Import = ({ names }: { names: string }) => <Snippet symbol="">{`import { ${names} } from "@aperture/react";`}</Snippet>;
 const TONES = ["accent", "default", "success", "warning", "danger"] as const;
 
 /* ---------------------------------- CARD ---------------------------------- */
@@ -385,11 +384,11 @@ export function SnippetDoc() {
       <PageHeader eyebrow="Components · Data Display" title="Snippet" description="A one-line code block with a copy affordance. Used for install commands, IDs and tokens." tags={["Clipboard", "Monospace"]} />
       <Import names="Snippet, Code" />
       <Section title="Usage">
-        <Showcase align="stretch" code={`<Snippet>npm install @aperture/react</Snippet>
-<Snippet symbol="">npx aperture init</Snippet>`}>
+        <Showcase align="stretch" code={`<Snippet>npm install @remixicon/react clsx tailwind-merge</Snippet>
+<Snippet symbol="$">npx remixicon init</Snippet>`}>
           <div className="w-full space-y-3">
-            <Snippet>npm install @aperture/react</Snippet>
-            <Snippet symbol="">wk_live_51H8xQ2eZvKYlo2C</Snippet>
+            <Snippet>npm install @remixicon/react clsx tailwind-merge</Snippet>
+            <Snippet symbol="$">wk_live_51H8xQ2eZvKYlo2C</Snippet>
             <Snippet symbol="›">git commit -m "feat: token pipeline"</Snippet>
           </div>
         </Showcase>
@@ -505,7 +504,7 @@ export function AlertDoc() {
             <Alert tone="accent" title="New version available">Aperture 3.2 adds the Theme Studio and nine components.</Alert>
             <Alert tone="success" title="Deployment complete">Version 3.2.0 is live in production.</Alert>
             <Alert tone="warning" title="Approaching seat limit">You are using 9 of 10 seats.</Alert>
-            <Alert tone="danger" title="Build failed">Module not found: <Code>@aperture/icons</Code>.</Alert>
+            <Alert tone="danger" title="Build failed">Module not found: <Code>./ui/Alert</Code>.</Alert>
           </div>
         </Showcase>
       </Section>

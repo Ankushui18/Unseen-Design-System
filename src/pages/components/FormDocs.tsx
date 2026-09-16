@@ -1,17 +1,13 @@
 import { useState } from "react";
-import { Callout, PageHeader, PropsTable, Section, Showcase, OptionPicker } from "../../docs/Blocks";
+import { Callout, Import, PageHeader, PropsTable, Section, Showcase, OptionPicker } from "../../docs/Blocks";
 import { Button, ButtonGroup, type Size, type Tone, type Variant } from "../../ui/Button";
 import { Checkbox, Input, RadioGroup, Select, Slider, Switch, Textarea } from "../../ui/Form";
-import { Chip, Code, Snippet } from "../../ui/Display";
+import { Chip, Code } from "../../ui/Display";
 import { RiAtLine, RiDeleteBinLine, RiDownloadLine, RiEyeLine, RiEyeOffLine, RiHeartLine, RiLockLine, RiSearchLine, RiSettings3Line, RiVolumeMuteLine, RiVolumeUpLine } from "@remixicon/react";
 
 const VARIANTS: Variant[] = ["solid", "soft", "outline", "ghost", "link"];
 const TONES: Tone[] = ["accent", "default", "success", "warning", "danger"];
 const SIZES: Size[] = ["xs", "sm", "md", "lg"];
-
-const Import = ({ names }: { names: string }) => (
-  <Snippet symbol="">{`import { ${names} } from "@aperture/react";`}</Snippet>
-);
 
 /* --------------------------------- BUTTON --------------------------------- */
 

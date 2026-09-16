@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Callout, OptionPicker, PageHeader, PropsTable, Section, Showcase } from "../../docs/Blocks";
+import { Callout, OptionPicker, Import, PageHeader, PropsTable, Section, Showcase } from "../../docs/Blocks";
 import { Button } from "../../ui/Button";
-import { Card, Snippet } from "../../ui/Display";
+import { Card } from "../../ui/Display";
 import { Input } from "../../ui/Form";
 import {
   Banner,
@@ -22,8 +22,6 @@ import {
   VerticalStepper,
 } from "../../ui/Extra";
 import { RiAddLine, RiArrowRightLine, RiCalendarLine, RiCloseLine, RiExternalLinkLine, RiFileCopyLine, RiLayoutGridLine, RiListUnordered, RiMoreLine, RiNotification3Line, RiPencilLine, RiStarLine, RiTableLine } from "@remixicon/react";
-
-const Import = ({ names, from = "@aperture/react" }: { names: string; from?: string }) => <Snippet symbol="">{`import { ${names} } from "${from}";`}</Snippet>;
 
 /* --------------------------- Fancy / Compact / Link -------------------------- */
 

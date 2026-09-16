@@ -21,14 +21,12 @@ import {
   RiUnderline,
   RiWalletLine,
 } from "@remixicon/react";
-import { OptionPicker, PageHeader, PropsTable, Section, Showcase } from "../../docs/Blocks";
+import { OptionPicker, PageHeader, Import, PropsTable, Section, Showcase } from "../../docs/Blocks";
 import { Button, FancyButton } from "../../ui/Button";
-import { Avatar, Chip, Snippet, type BadgeColor, type BadgeVariant } from "../../ui/Display";
+import { Avatar, Chip, type BadgeColor, type BadgeVariant } from "../../ui/Display";
 import { Input } from "../../ui/Form";
 import { LinkButton, StatusBadge } from "../../ui/Extra";
 import { AlertDialog, ButtonTile, ChatInput, Combobox, HoverCard, InfoLabel, InlineMessage, ListItem, PaymentCard, ProfileHoverCard, Toolbar, ToolbarButton, ToolbarSeparator, Well } from "../../ui/Patterns";
-
-const Import = ({ names }: { names: string }) => <Snippet symbol="">{`import { ${names} } from "@aperture/react";`}</Snippet>;
 
 const COLORS: BadgeColor[] = ["gray", "blue", "orange", "red", "green", "yellow", "purple", "sky", "pink", "teal"];
 const VARIANTS: BadgeVariant[] = ["filled", "light", "lighter", "stroke"];

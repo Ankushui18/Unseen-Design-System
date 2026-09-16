@@ -115,6 +115,10 @@
 .code-panel-header > span { display: flex; align-items: center; gap: 8px; min-width: 0; overflow-wrap: anywhere; }
 .code-copy { display: flex; align-items: center; gap: 6px; padding: 5px 8px; border: 1px solid #394253; border-radius: 5px; color: #d9e1ed; font-family: var(--font-sans); font-size: 11px; flex-shrink: 0; transition: background .15s; }
 .code-copy:hover { background: #303a49; }
+.import-panel { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 6px 6px 16px; border-radius: 10px; background: var(--surface-secondary); border: 1px solid var(--border); margin-bottom: 22px; }
+.import-panel pre { margin: 0; font-family: var(--font-mono); font-size: 12px; line-height: 20px; color: var(--foreground); overflow-x: auto; white-space: pre; min-width: 0; }
+.import-panel button { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; padding: 6px 10px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--muted); font-size: 11px; transition: background .15s, color .15s; }
+.import-panel button:hover { background: var(--surface-hover); color: var(--foreground); }
 .code-body { overflow: auto; padding: 17px 0; }
 .code-body pre { min-width: max-content; padding: 0 18px; margin: 0; font-family: var(--font-mono); font-size: 12px; line-height: 23px; tab-size: 2; }
 .code-line { display: flex; min-height: 23px; }
@@ -431,21 +435,6 @@
 .library-category > div { display: flex; align-items: center; justify-content: space-between; margin-top: 26px; font-size: 11px; color: var(--muted); }
 .library-category:hover h3, .library-category:hover svg { color: var(--accent); }
 .home-editor-section { background: var(--background-secondary); border-block: 1px solid var(--border); }
-.live-playground { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface); }
-.live-playground-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 8px 14px; border-bottom: 1px solid var(--border); }
-.live-example-tabs { display: flex; align-items: center; gap: 4px; }
-.live-example-tabs button { font-size: 12px; color: var(--muted); padding: 7px 12px; border-radius: 6px; }
-.live-example-tabs button[aria-selected="true"] { background: var(--surface-secondary); color: var(--foreground); font-weight: 500; }
-.live-playground-note { display: flex; align-items: center; gap: 7px; font-size: 11px; color: var(--muted); }
-.live-playground-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
-.live-preview-side { display: flex; flex-direction: column; justify-content: space-between; padding: 23px; min-height: 360px; }
-.live-pane-label { color: var(--muted); font-size: 11px; }
-.live-preview-content { display: flex; align-items: center; justify-content: center; padding: 30px 10px; min-width: 0; }
-.live-preview-side > p { color: var(--muted); font-size: 11px; line-height: 19px; text-align: center; }
-.live-editor-side { background: #141922; min-width: 0; color: #d8e2f0; }
-.live-editor-actions { display: flex; gap: 7px; }
-.live-code-editor { font-family: var(--font-mono) !important; font-size: 12px !important; line-height: 22px !important; min-height: 335px; padding: 20px !important; overflow: auto !important; max-height: 460px; }
-.live-code-error { background: #371c29; color: #ffb6c9; white-space: pre-wrap; overflow-wrap: anywhere; padding: 12px 20px; font: 11px/18px var(--font-mono); }
 .foundation-link-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 28px; }
 .foundation-link { min-width: 0; }
 .foundation-link-art { height: 170px; background: var(--background-secondary); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 15px; overflow: hidden; }
@@ -788,12 +777,6 @@
   .library-category:nth-child(even) { padding-left: 16px; border-left: 1px solid var(--separator-secondary); }
   .library-category h3 { font-size: 14px; }
   .library-category > div { font-size: 10px; }
-  .live-playground-grid { grid-template-columns: 1fr; }
-  .live-playground-note { display: none; }
-  .live-playground-toolbar { padding: 8px; }
-  .live-example-tabs button { padding: 6px 10px; }
-  .live-preview-side { min-height: 240px; }
-  .live-code-editor { font-size: 11px !important; min-height: 310px; }
   .foundation-link-grid { grid-template-columns: 1fr; gap: 30px; }
   .foundation-link-art { height: 180px; }
   .home-faq-grid { grid-template-columns: 1fr; gap: 24px; }

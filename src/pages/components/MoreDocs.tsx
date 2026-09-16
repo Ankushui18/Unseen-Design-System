@@ -29,9 +29,9 @@ import {
   RiUserLine,
   RiWalletLine,
 } from "@remixicon/react";
-import { PageHeader, PropsTable, Section, Showcase } from "../../docs/Blocks";
+import { PageHeader, Import, PropsTable, Section, Showcase } from "../../docs/Blocks";
 import { Button } from "../../ui/Button";
-import { Avatar, Chip, Progress, Snippet } from "../../ui/Display";
+import { Avatar, Chip, Progress } from "../../ui/Display";
 import { LinkButton, StatusBadge } from "../../ui/Extra";
 import {
   ColorPicker,
@@ -49,8 +49,6 @@ import {
   VerticalTabMenu,
   WidgetBox,
 } from "../../ui/More";
-
-const Import = ({ names }: { names: string }) => <Snippet symbol="">{`import { ${names} } from "@aperture/react";`}</Snippet>;
 
 export function DropdownDoc() {
   const [dark, setDark] = useState(false);
@@ -338,7 +336,7 @@ export function TimelineDoc() {
           <Timeline items={[
             { time: "Today · 09:42", title: "Deployment succeeded", description: "v3.2.0 promoted to production by Sophia.", tone: "success" },
             { time: "Today · 09:38", title: "Build started", description: "main@4f21ac · 1,904 modules", tone: "accent" },
-            { time: "Yesterday · 17:05", title: "Preview failed", description: "Module not found: @aperture/icons", tone: "danger" },
+            { time: "Yesterday · 17:05", title: "Preview failed", description: "Module not found: ./ui/Timeline", tone: "danger" },
             { time: "Yesterday · 16:20", title: "Pull request opened", description: "feat: OKLCH ramp generator" },
           ]} />
         </Showcase>
