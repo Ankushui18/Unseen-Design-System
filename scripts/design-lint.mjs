@@ -67,15 +67,15 @@ for (const f of files) {
 /* ---------------------------------------------- routes ↔ nav ↔ previews */
 const nav = readFileSync(join(ROOT, "docs/nav.ts"), "utf8");
 const registry = readFileSync(join(ROOT, "pages/registry.tsx"), "utf8");
-const index = readFileSync(join(ROOT, "pages/ComponentsIndex.tsx"), "utf8");
+const index = readFileSync(join(ROOT, "docs/previews.tsx"), "utf8");
 const navHrefs = [...nav.matchAll(/href:\s*"([^"]+)"/g)].map((m) => m[1]);
 const routeKeys = [...registry.matchAll(/^\s+"?([a-z0-9/-]+)"?:\s*\(/gm)].map((m) => m[1]);
 const previewKeys = [...index.matchAll(/^\s+"(components\/[a-z0-9-]+)":/gm)].map((m) => m[1]);
 
 for (const h of navHrefs) if (!routeKeys.includes(h)) warn(join(ROOT, "docs/nav.ts"), 0, "route", `nav item "${h}" has no page in registry`);
-for (const h of navHrefs.filter((x) => x.startsWith("components/"))) if (!previewKeys.includes(h)) warn(join(ROOT, "pages/ComponentsIndex.tsx"), 0, "preview", `component "${h}" has no gallery preview`);
+for (const h of navHrefs.filter((x) => x.startsWith("components/"))) if (!previewKeys.includes(h)) warn(join(ROOT, "docs/previews.tsx"), 0, "preview", `component "${h}" has no gallery preview`);
 const dupPreview = previewKeys.filter((k, i) => previewKeys.indexOf(k) !== i);
-for (const d of new Set(dupPreview)) warn(join(ROOT, "pages/ComponentsIndex.tsx"), 0, "preview", `duplicate preview key "${d}" (later one wins)`);
+for (const d of new Set(dupPreview)) warn(join(ROOT, "docs/previews.tsx"), 0, "preview", `duplicate preview key "${d}" (later one wins)`);
 
 /* ------------------------------------------------------------ tokens bridge */
 const css = readFileSync(join(ROOT, "index.css"), "utf8");

@@ -21,17 +21,73 @@ import {
   RiUnderline,
   RiWalletLine,
 } from "@remixicon/react";
-import { OptionPicker, PageHeader, PropsTable, Section, Showcase } from "../../docs/Blocks";
+import { OptionPicker, PageHeader, Import, PropsTable, Section, Showcase } from "../../docs/Blocks";
 import { Button, FancyButton } from "../../ui/Button";
-import { Avatar, Chip, Snippet, type BadgeColor, type BadgeVariant } from "../../ui/Display";
+import { Avatar, Chip, FeaturedIcon, type BadgeColor, type BadgeVariant } from "../../ui/Display";
 import { Input } from "../../ui/Form";
 import { LinkButton, StatusBadge } from "../../ui/Extra";
 import { AlertDialog, ButtonTile, ChatInput, Combobox, HoverCard, InfoLabel, InlineMessage, ListItem, PaymentCard, ProfileHoverCard, Toolbar, ToolbarButton, ToolbarSeparator, Well } from "../../ui/Patterns";
 
-const Import = ({ names }: { names: string }) => <Snippet symbol="">{`import { ${names} } from "@aperture/react";`}</Snippet>;
-
 const COLORS: BadgeColor[] = ["gray", "blue", "orange", "red", "green", "yellow", "purple", "sky", "pink", "teal"];
 const VARIANTS: BadgeVariant[] = ["filled", "light", "lighter", "stroke"];
+
+/* ------------------------------ Featured Icon ------------------------------ */
+
+export function FeaturedIconDoc() {
+  return (
+    <>
+      <PageHeader eyebrow="Components · Data Display" title="Featured Icon" description="A contained icon in a tinted or gradient square — the small, high-credibility flourish that carries landing pages, empty states, and section headers. Never more than one per surface." tags={["5 tones", "9 sizes", "3 fills"]} />
+      <Import names="FeaturedIcon" />
+      <Section title="Soft">
+        <Showcase align="stretch" code={`<FeaturedIcon icon={<RiRocketLine />} tone="accent" />`}>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-3">
+              {(["accent", "default", "success", "warning", "danger"] as const).map((t) => (
+                <div key={t} className="flex items-center gap-3">
+                  <FeaturedIcon icon={<RiRocketLine />} tone={t} />
+                  <span className="font-mono text-paragraph-xs text-muted">{t}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col items-center justify-center gap-3 rounded-2xl bg-surface-secondary p-6 ring-1 ring-border">
+              <FeaturedIcon size="lg" icon={<RiShieldCheckLine />} tone="accent" />
+              <p className="text-label-sm">Bank-level security</p>
+              <p className="text-center text-paragraph-xs text-muted">SOC 2 Type II, SSO and per-seat audit trails out of the box.</p>
+            </div>
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="Solid & gradient">
+        <Showcase code={`<FeaturedIcon icon={<RiBankCardLine />} variant="solid" tone="accent" />`}>
+          <FeaturedIcon icon={<RiBankCardLine />} variant="solid" tone="accent" />
+          <FeaturedIcon icon={<RiFolderLine />} variant="solid" tone="default" />
+          <FeaturedIcon icon={<RiGlobalLine />} variant="gradient" tone="default" />
+          <FeaturedIcon icon={<RiTeamLine />} variant="solid" tone="success" />
+        </Showcase>
+      </Section>
+      <Section title="Sizes">
+        <Showcase align="stretch">
+          <div className="flex flex-wrap items-center gap-4">
+            {(["xs", "sm", "md", "lg"] as const).map((s) => (
+              <div key={s} className="flex flex-col items-center gap-2">
+                <FeaturedIcon size={s} icon={<RiImageLine />} tone="accent" />
+                <span className="font-mono text-paragraph-xs text-muted">{s}</span>
+              </div>
+            ))}
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "icon", type: "ReactNode", required: true, description: "16–24px glyph rendered inside the container." },
+          { name: "tone", type: "Tone", default: '"accent"', description: "Semantic tint or fill color." },
+          { name: "size", type: '"xs" | "sm" | "md" | "lg"', default: '"md"', description: "Container dimensions — 32, 40, 48 or 56px." },
+          { name: "variant", type: '"soft" | "solid" | "gradient"', default: '"soft"', description: "Tinted surface, flat fill, or the premium gradient fill you use on CTAs." },
+        ]} />
+      </Section>
+    </>
+  );
+}
 
 /* --------------------------- Button (AlignUI spec) -------------------------- */
 

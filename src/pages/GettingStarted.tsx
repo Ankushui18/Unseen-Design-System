@@ -1,10 +1,7 @@
-import { ArrowRight, Blocks, Check, Compass, Feather, Layers, Package, Ruler, ShieldCheck, Sparkles } from "lucide-react";
 import { Callout, Grid, PageHeader, Section } from "../docs/Blocks";
 import { CodeBlock } from "../docs/CodeBlock";
-import { Button } from "../ui/Button";
-import { Card, Chip, Code, Snippet } from "../ui/Display";
-import { Accordion, Tabs } from "../ui/Navigation";
-import { useState } from "react";
+import { Card, Chip, Code } from "../ui/Display";
+import { RiArrowRightLine, RiBox3Line, RiCheckLine, RiCompass3Line, RiLayoutGridLine, RiQuillPenLine, RiRulerLine, RiShieldCheckLine, RiStackLine } from "@remixicon/react";
 
 export function IntroductionPage({ navigate }: { navigate: (t: string) => void }) {
   return (
@@ -19,10 +16,10 @@ export function IntroductionPage({ navigate }: { navigate: (t: string) => void }
       <Section title="What you get">
         <Grid cols={2}>
           {[
-            { i: Layers, t: "A token graph, not a stylesheet", d: "Primitive → semantic → component. Components only read semantics, so rebranding never means touching component code." },
-            { i: Blocks, t: "Reusable interface components", d: "Buttons, form fields, navigation, overlays, and composed patterns, with documented APIs." },
-            { i: ShieldCheck, t: "Interaction patterns", d: "Native controls, keyboard navigation, focus management, and reduced-motion preferences. Evaluate each example in your own application before production use." },
-            { i: Feather, t: "CSS-driven styling", d: "Tailwind utilities and CSS variables provide the visual layer. React manages interactive state." },
+            { i: RiStackLine, t: "A token graph, not a stylesheet", d: "Primitive → semantic → component. Components only read semantics, so rebranding never means touching component code." },
+            { i: RiLayoutGridLine, t: "Reusable interface components", d: "Buttons, form fields, navigation, overlays, and composed patterns, with documented APIs." },
+            { i: RiShieldCheckLine, t: "Interaction patterns", d: "Native controls, keyboard navigation, focus management, and reduced-motion preferences. Evaluate each example in your own application before production use." },
+            { i: RiQuillPenLine, t: "CSS-driven styling", d: "Tailwind utilities and CSS variables provide the visual layer. React manages interactive state." },
           ].map((f) => (
             <Card key={f.t} className="p-5">
               <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-surface-secondary text-foreground ring-1 ring-border">
@@ -44,7 +41,7 @@ export function IntroductionPage({ navigate }: { navigate: (t: string) => void }
 └───────────────┬───────────────────────────────────────────┘
                 │ reads
 ┌───────────────▼───────────────────────────────────────────┐
-│  Components  ·  48 React primitives, ARIA + keyboard       │
+│  Components  ·  75 documented components, ARIA + keyboard  │
 └───────────────┬───────────────────────────────────────────┘
                 │ reads only
 ┌───────────────▼───────────────────────────────────────────┐
@@ -64,126 +61,20 @@ export function IntroductionPage({ navigate }: { navigate: (t: string) => void }
       <Section title="Where to go next">
         <Grid cols={3}>
           {[
-            { i: Package, t: "Installation", d: "Get running in two minutes.", to: "docs/installation" },
-            { i: Compass, t: "Design Principles", d: "The rules behind the decisions.", to: "docs/principles" },
-            { i: Ruler, t: "Color", d: "The semantic palette in depth.", to: "foundations/color" },
+            { i: RiBox3Line, t: "Installation", d: "Get running in two minutes.", to: "docs/installation" },
+            { i: RiCompass3Line, t: "Design Principles", d: "The rules behind the decisions.", to: "docs/principles" },
+            { i: RiRulerLine, t: "Color", d: "The semantic palette in depth.", to: "foundations/color" },
           ].map((c) => (
             <button key={c.t} onClick={() => navigate(c.to)} className="group rounded-2xl bg-surface ring-1 ring-border shadow-xs p-5 text-left transition-all hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong">
               <c.i className="mb-3 h-4.5 w-4.5 text-accent" />
               <p className="flex items-center gap-1.5 text-label-md">
                 {c.t}
-                <ArrowRight className="h-3.5 w-3.5 text-subtle transition-transform group-hover:translate-x-0.5" />
+                <RiArrowRightLine className="h-3.5 w-3.5 text-subtle transition-transform group-hover:translate-x-0.5" />
               </p>
               <p className="mt-1 text-paragraph-sm text-muted">{c.d}</p>
             </button>
           ))}
         </Grid>
-      </Section>
-    </>
-  );
-}
-
-export function InstallationPage({ navigate }: { navigate: (t: string) => void }) {
-  const [pm, setPm] = useState("npm");
-  const cmd = { npm: "npm install @aperture/react", pnpm: "pnpm add @aperture/react", yarn: "yarn add @aperture/react", bun: "bun add @aperture/react" }[pm]!;
-
-  return (
-    <>
-      <PageHeader
-        eyebrow="Getting Started"
-        title="Installation"
-        description="Aperture ships as a single ESM package plus one stylesheet. There is no Tailwind plugin, no PostCSS config and no build step to wire up."
-        tags={["2 minutes", "No config"]}
-      />
-
-      <Section title="1 · Install the package">
-        <Tabs
-          variant="segment"
-          size="sm"
-          value={pm}
-          onChange={setPm}
-          items={[{ key: "npm", label: "npm" }, { key: "pnpm", label: "pnpm" }, { key: "yarn", label: "yarn" }, { key: "bun", label: "bun" }]}
-        />
-        <Snippet>{cmd}</Snippet>
-        <p className="text-paragraph-sm text-muted">
-          Peer dependencies: <Code>react@≥18</Code>, <Code>react-dom@≥18</Code> and <Code>tailwindcss@≥4</Code>.
-        </p>
-      </Section>
-
-      <Section title="2 · Import the stylesheet" description="One import brings in the token layer and the Tailwind bridge. Order matters — Aperture must come after the Tailwind import.">
-        <CodeBlock
-          filename="src/index.css"
-          code={`@import "tailwindcss";
-@import "@aperture/react/styles.css";
-
-/* optional: your brand overrides */
-:root {
-  --accent-h: 262;
-  --accent-c: 0.19;
-  --radius-scale: 1;
-}`}
-        />
-      </Section>
-
-      <Section title="3 · Wrap your app" description="The provider handles color-mode persistence, toast portals and the reduced-motion listener.">
-        <CodeBlock
-          filename="src/main.tsx"
-          code={`import { ApertureProvider } from "@aperture/react";
-import "./index.css";
-
-createRoot(document.getElementById("root")!).render(
-  <ApertureProvider defaultMode="system">
-    <App />
-  </ApertureProvider>,
-);`}
-        />
-      </Section>
-
-      <Section title="4 · Use a component">
-        <CodeBlock
-          filename="src/App.tsx"
-          code={`import { Button, Card, CardHeader, CardBody, Chip } from "@aperture/react";
-
-export default function App() {
-  return (
-    <Card elevation={2}>
-      <CardHeader>
-        <h2 className="text-paragraph-md font-medium">Deploy preview</h2>
-        <Chip tone="success" dot>Ready</Chip>
-      </CardHeader>
-      <CardBody>Built in 42s · 1.2 MB transferred</CardBody>
-      <CardFooter>
-        <Button tone="accent">Promote to production</Button>
-      </CardFooter>
-    </Card>
-  );
-}`}
-        />
-        <Callout tone="success" title="That's the whole setup">
-          No <Code>tailwind.config.js</Code> edits, no content globbing, no plugin array. Aperture's utilities are
-          emitted from the package's own CSS layer.
-        </Callout>
-      </Section>
-
-      <Section title="Framework notes">
-        <Accordion
-          variant="split"
-          multiple
-          defaultOpen={["next"]}
-          items={[
-            { key: "next", title: "Next.js (App Router)", subtitle: "RSC compatible", content: <>Import the stylesheet in <Code>app/globals.css</Code> and place <Code>&lt;ApertureProvider&gt;</Code> in your root layout. Interactive components are marked <Code>"use client"</Code> at the package level, so server components can import them directly without a wrapper.</> },
-            { key: "vite", title: "Vite", subtitle: "Recommended", content: <>Add <Code>@tailwindcss/vite</Code> to your plugins and import the stylesheet from <Code>src/index.css</Code>. Hot module replacement picks up token changes without a full reload.</> },
-            { key: "remix", title: "Remix / React Router", content: <>Export the stylesheet from your root <Code>links()</Code> function. Use the <Code>cookie</Code> mode strategy so the server renders the correct color mode and avoids a flash.</> },
-            { key: "astro", title: "Astro", content: <>Install the React integration, then hydrate interactive islands with <Code>client:idle</Code>. Static components such as Card and Chip need no hydration at all.</> },
-          ]}
-        />
-      </Section>
-
-      <Section title="Next steps">
-        <div className="flex flex-wrap gap-2">
-          <Button onClick={() => navigate("components/button")} endContent={<ArrowRight className="h-4 w-4" />}>Explore components</Button>
-          <Button variant="outline" tone="default" onClick={() => navigate("theme")} startContent={<Sparkles className="h-4 w-4" />}>Open Theme Studio</Button>
-        </div>
       </Section>
     </>
   );
@@ -232,7 +123,7 @@ export function PrinciplesPage() {
             "Could composition replace this new prop?",
           ].map((q) => (
             <div key={q} className="flex items-start gap-2.5 rounded-xl bg-surface p-3.5 ring-1 ring-border">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+              <RiCheckLine className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
               <span className="text-paragraph-sm text-muted">{q}</span>
             </div>
           ))}
@@ -246,9 +137,10 @@ const RELEASES = [
   {
     v: "3.2.0", d: "Feb 2026", tag: "Latest" as const,
     items: [
-      ["added", "Theme Studio with live token editing and CSS export"],
+      ["added", "Token reference with live CSS variable export"],
       ["added", "Toast, Drawer, Command Palette and Scroll Shadow components"],
       ["added", "OKLCH ramp generator — accent palettes derive from hue + chroma"],
+      ["added", "Popover, Tab Menu Horizontal, Avatar Group (compact) and Data Table docs"],
       ["changed", "Table gains sticky headers, striped rows and empty states"],
       ["fixed", "Focus ring clipping inside overflow-hidden containers"],
     ],

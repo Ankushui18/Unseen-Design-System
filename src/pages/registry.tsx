@@ -12,9 +12,11 @@ import {
 import {
   AlertDoc,
   AvatarDoc,
+  AvatarGroupDoc,
   BadgeDoc,
   CardDoc,
   ChipDoc,
+  DataTableDoc,
   KbdDoc,
   ProgressDoc,
   SkeletonDoc,
@@ -26,9 +28,11 @@ import {
   AccordionDoc,
   BreadcrumbsDoc,
   DrawerDoc,
+  HorizontalTabMenuDoc,
   MenuDoc,
   ModalDoc,
   PaginationDoc,
+  PopoverDoc,
   TabsDoc,
   ToastDoc,
   TooltipDoc,
@@ -41,7 +45,6 @@ import {
   TypographyPage,
 } from "./Foundations";
 import { ElevationPage, SpacingPage } from "./FoundationSystem";
-import { ThemePage } from "./Theme";
 import { BlocksPage } from "./Blocks";
 import { ComponentsIndex } from "./ComponentsIndex";
 import { IconsPage as RemixIconsPage } from "./Icons";
@@ -53,6 +56,7 @@ import {
   ButtonTileDoc,
   ChatInputDoc,
   ComboboxDoc,
+  FeaturedIconDoc,
   HoverCardDoc,
   InfoLabelDoc,
   ListItemDoc,
@@ -60,6 +64,15 @@ import {
   ToolbarDoc,
   WellDoc,
 } from "./components/PatternDocs";
+import {
+  ActivityFeedDoc,
+  CalendarDoc,
+  CommandMenuDoc,
+  FileUploadDoc,
+  FiltersDoc,
+  NotificationFeedDoc,
+  TimePickerDoc,
+} from "./components/ProDocs";
 import {
   ColorPickerDoc,
   ContentDividerDoc,
@@ -108,15 +121,23 @@ export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> 
   "foundations/accessibility": () => <AccessibilityPage />,
   "foundations/tokens": () => <TokensPage />,
 
-  theme: () => <ThemePage />,
   patterns: () => <PatternsPage />,
   pricing: (nav) => <PricingPage navigate={nav} />,
   blocks: () => <BlocksPage />,
   components: (nav) => <ComponentsIndex navigate={nav} />,
 
+  "components/activity-feed": () => <ActivityFeedDoc />,
+  "components/command-menu": () => <CommandMenuDoc />,
+  "components/notification-feed": () => <NotificationFeedDoc />,
+  "components/file-uploader": () => <FileUploadDoc />,
+  "components/filters": () => <FiltersDoc />,
+  "components/time-picker": () => <TimePickerDoc />,
+  "components/calendar": () => <CalendarDoc />,
+
   "components/toggle-group": () => <ToggleGroupDoc />,
   "components/button-tile": () => <ButtonTileDoc />,
   "components/toolbar": () => <ToolbarDoc />,
+  "components/featured-icon": () => <FeaturedIconDoc />,
   "components/combobox": () => <ComboboxDoc />,
   "components/chat-input": () => <ChatInputDoc />,
   "components/info-label": () => <InfoLabelDoc />,
@@ -163,7 +184,9 @@ export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> 
 
   "components/card": () => <CardDoc />,
   "components/table": () => <TableDoc />,
+  "components/data-table": () => <DataTableDoc />,
   "components/avatar": () => <AvatarDoc />,
+  "components/avatar-group": () => <AvatarGroupDoc />,
   "components/chip": () => <ChipDoc />,
   "components/badge-spec": () => <BadgeSpecDoc />,
   "components/badge": () => <BadgeSpecDoc />,
@@ -174,11 +197,13 @@ export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> 
   "components/kbd": () => <KbdDoc />,
 
   "components/tabs": () => <TabsDoc />,
+  "components/tab-menu-horizontal": () => <HorizontalTabMenuDoc />,
   "components/accordion": () => <AccordionDoc />,
   "components/breadcrumbs": () => <BreadcrumbsDoc />,
   "components/pagination": () => <PaginationDoc />,
 
   "components/alert": () => <AlertDoc />,
+  "components/popover": () => <PopoverDoc />,
   "components/toast": () => <ToastDoc />,
   "components/modal": () => <ModalDoc />,
   "components/drawer": () => <DrawerDoc />,

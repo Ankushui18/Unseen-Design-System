@@ -1,12 +1,80 @@
 import { Fragment, useId, useState, type ReactNode } from "react";
-import { Check, Code2, Copy, Eye, Link2, RotateCcw } from "lucide-react";
 import { cn } from "../utils/cn";
 import { CodeBlock } from "./CodeBlock";
 import { Chip } from "../ui/Display";
 import { useCopy } from "../lib/hooks";
+import { RiCheckLine, RiCodeSSlashLine, RiEyeLine, RiFileCopyLine, RiLink, RiRestartLine } from "@remixicon/react";
 
 export function slugify(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+/* Real module paths for the source-first docs. Every `<Import>` call below the
+   page header must resolve against these — nothing points at a fake package. */
+const MODULE_OF: Record<string, string> = {
+  // ui/Button
+  Button: "ui/Button", FancyButton: "ui/Button", ButtonGroup: "ui/Button", Spinner: "ui/Button",
+  // ui/Display
+  Card: "ui/Display", CardHeader: "ui/Display", CardBody: "ui/Display", CardFooter: "ui/Display",
+  Chip: "ui/Display", Badge: "ui/Display", Avatar: "ui/Display", AvatarGroup: "ui/Display",
+  AvatarGroupCompact: "ui/Display", FeaturedIcon: "ui/Display",
+  Kbd: "ui/Display", Snippet: "ui/Display", Divider: "ui/Display", Skeleton: "ui/Display",
+  Progress: "ui/Display", CircularProgress: "ui/Display", Alert: "ui/Display", Code: "ui/Display",
+  ScrollShadow: "ui/Display",
+  // ui/Form
+  Input: "ui/Form", Textarea: "ui/Form", Select: "ui/Form", Checkbox: "ui/Form",
+  RadioGroup: "ui/Form", Switch: "ui/Form", Slider: "ui/Form",
+  // ui/Navigation
+  Tabs: "ui/Navigation", Accordion: "ui/Navigation", Breadcrumbs: "ui/Navigation",
+  Pagination: "ui/Navigation", Table: "ui/Navigation",
+  // ui/Overlay
+  Modal: "ui/Overlay", Drawer: "ui/Overlay", Tooltip: "ui/Overlay", Popover: "ui/Overlay",
+  MenuItem: "ui/Overlay", MenuSeparator: "ui/Overlay", MenuLabel: "ui/Overlay",
+  ToastProvider: "ui/Overlay", useToast: "ui/Overlay",
+  // ui/Extra
+  CompactButton: "ui/Extra", LinkButton: "ui/Extra", SocialButton: "ui/Extra",
+  StatusBadge: "ui/Extra", Tag: "ui/Extra", SegmentedControl: "ui/Extra",
+  HorizontalStepper: "ui/Extra", VerticalStepper: "ui/Extra", DotStepper: "ui/Extra",
+  DigitInput: "ui/Extra", Datepicker: "ui/Extra", FileFormatIcon: "ui/Extra",
+  Notification: "ui/Extra", Banner: "ui/Extra", Label: "ui/Extra", Hint: "ui/Extra",
+  // ui/More
+  Dropdown: "ui/More", VerticalTabMenu: "ui/More", ContentDivider: "ui/More",
+  SelectionCard: "ui/More", Rating: "ui/More", NumberInput: "ui/More", SearchInput: "ui/More",
+  TextareaCounter: "ui/More", ToggleGroup: "ui/More", WidgetBox: "ui/More",
+  ColorPicker: "ui/More", Timeline: "ui/More", EmptyState: "ui/More", SelectTrigger: "ui/More",
+  // ui/Patterns
+  ButtonTile: "ui/Patterns", InfoLabel: "ui/Patterns", InlineMessage: "ui/Patterns",
+  ListItem: "ui/Patterns", Toolbar: "ui/Patterns", ToolbarButton: "ui/Patterns",
+  ToolbarSeparator: "ui/Patterns", HoverCard: "ui/Patterns", ProfileHoverCard: "ui/Patterns",
+  ChatInput: "ui/Patterns", AlertDialog: "ui/Patterns", Combobox: "ui/Patterns",
+  PaymentCard: "ui/Patterns", Well: "ui/Patterns",
+  // ui/Pro
+  ActivityFeed: "ui/Pro", CommandMenu: "ui/Pro", NotificationFeed: "ui/Pro",
+  FileUploader: "ui/Pro", Filters: "ui/Pro", TimePicker: "ui/Pro", Calendar: "ui/Pro",
+};
+
+export function Import({ names }: { names: string }) {
+  const { copy, copied } = useCopy();
+  const byModule = new Map<string, string[]>();
+  for (const raw of names.split(",").map((s) => s.trim()).filter(Boolean)) {
+    const [name, alias] = raw.split(" as ").map((s) => s.trim());
+    const spec = alias ? `${name} as ${alias}` : name;
+    const source = MODULE_OF[name];
+    if (!source) continue;
+    const list = byModule.get(source) ?? [];
+    list.push(spec);
+    byModule.set(source, list);
+  }
+  const code = [...byModule.entries()].map(([source, specs]) => `import { ${specs.join(", ")} } from "./${source}";`).join("\n");
+  return (
+    <div className="import-panel">
+      <pre>{code}</pre>
+      <button type="button" onClick={() => copy(code)} aria-label={copied ? "Copied" : "Copy import"}>
+        {copied ? <RiCheckLine size={12} className="text-success" /> : <RiFileCopyLine size={12} />}
+        {copied ? "Copied" : "Copy"}
+      </button>
+    </div>
+  );
 }
 
 export function PageHeader({
@@ -49,7 +117,7 @@ export function Section({ title, description, children, id }: { title: string; d
           className="section-anchor"
           aria-label={`Jump to ${title}`}
         >
-          <Link2 className="h-3.5 w-3.5 text-subtle hover:text-accent" />
+          <RiLink className="h-3.5 w-3.5 text-subtle hover:text-accent" />
         </button>
       </div>
       {description && <p className="docs-section-description">{description}</p>}
@@ -84,8 +152,8 @@ export function Showcase({
           <div className="preview-tabs" role="tablist" aria-label="Example view">
           {(
             [
-              ["preview", Eye, "Preview"],
-              ["code", Code2, "Code"],
+              ["preview", RiEyeLine, "Preview"],
+              ["code", RiCodeSSlashLine, "Code"],
             ] as const
           ).map(([k, Icon, label]) => (
             <button
@@ -105,8 +173,8 @@ export function Showcase({
           ))}
           </div>
           <div className="showcase-tools">
-            <button type="button" className="studio-icon-button" title="Reset preview" aria-label="Reset preview" onClick={() => setRevision((r) => r + 1)}><RotateCcw size={14} /></button>
-            <button type="button" className="studio-icon-button" title={copied ? "Copied" : "Copy example"} aria-label={copied ? "Copied" : "Copy example"} onClick={() => copy(code)}>{copied ? <Check size={14} /> : <Copy size={14} />}</button>
+            <button type="button" className="studio-icon-button" title="Reset preview" aria-label="Reset preview" onClick={() => setRevision((r) => r + 1)}><RiRestartLine size={14} /></button>
+            <button type="button" className="studio-icon-button" title={copied ? "Copied" : "Copy example"} aria-label={copied ? "Copied" : "Copy example"} onClick={() => copy(code)}>{copied ? <RiCheckLine size={14} /> : <RiFileCopyLine size={14} />}</button>
           </div>
         </div>
       )}

@@ -1,17 +1,13 @@
 import { useState } from "react";
-import { AtSign, Download, Eye, EyeOff, Heart, Lock, Search, Settings, Trash2, Volume2, VolumeX } from "lucide-react";
-import { Callout, PageHeader, PropsTable, Section, Showcase, OptionPicker } from "../../docs/Blocks";
+import { Callout, Import, PageHeader, PropsTable, Section, Showcase, OptionPicker } from "../../docs/Blocks";
 import { Button, ButtonGroup, type Size, type Tone, type Variant } from "../../ui/Button";
 import { Checkbox, Input, RadioGroup, Select, Slider, Switch, Textarea } from "../../ui/Form";
-import { Chip, Code, Snippet } from "../../ui/Display";
+import { Chip, Code } from "../../ui/Display";
+import { RiAtLine, RiDeleteBinLine, RiDownloadLine, RiEyeLine, RiEyeOffLine, RiHeartLine, RiLockLine, RiSearchLine, RiSettings3Line, RiVolumeMuteLine, RiVolumeUpLine } from "@remixicon/react";
 
 const VARIANTS: Variant[] = ["solid", "soft", "outline", "ghost", "link"];
 const TONES: Tone[] = ["accent", "default", "success", "warning", "danger"];
 const SIZES: Size[] = ["xs", "sm", "md", "lg"];
-
-const Import = ({ names }: { names: string }) => (
-  <Snippet symbol="">{`import { ${names} } from "@aperture/react";`}</Snippet>
-);
 
 /* --------------------------------- BUTTON --------------------------------- */
 
@@ -44,8 +40,8 @@ export function ButtonDoc() {
           }
         >
           <Button variant={variant} tone={tone} size={size} loading={loading}>Continue</Button>
-          <Button variant={variant} tone={tone} size={size} loading={loading} startContent={<Download className="h-4 w-4" />}>Download</Button>
-          <Button variant={variant} tone={tone} size={size} loading={loading} iconOnly aria-label="Settings"><Settings className="h-4 w-4" /></Button>
+          <Button variant={variant} tone={tone} size={size} loading={loading} startContent={<RiDownloadLine className="h-4 w-4" />}>Download</Button>
+          <Button variant={variant} tone={tone} size={size} loading={loading} iconOnly aria-label="Settings"><RiSettings3Line className="h-4 w-4" /></Button>
           <Button variant={variant} tone={tone} size={size} disabled>Disabled</Button>
         </Showcase>
       </Section>
@@ -83,9 +79,9 @@ export function ButtonDoc() {
         <Showcase code={`<Button startContent={<Download />}>Export CSV</Button>
 <Button endContent={<ArrowRight />} variant="soft">Continue</Button>
 <Button iconOnly aria-label="Delete" tone="danger" variant="ghost"><Trash2 /></Button>`}>
-          <Button startContent={<Download className="h-4 w-4" />}>Export CSV</Button>
-          <Button variant="soft" startContent={<Heart className="h-4 w-4" />}>Favourite</Button>
-          <Button variant="ghost" tone="danger" iconOnly aria-label="Delete"><Trash2 className="h-4 w-4" /></Button>
+          <Button startContent={<RiDownloadLine className="h-4 w-4" />}>Export CSV</Button>
+          <Button variant="soft" startContent={<RiHeartLine className="h-4 w-4" />}>Favourite</Button>
+          <Button variant="ghost" tone="danger" iconOnly aria-label="Delete"><RiDeleteBinLine className="h-4 w-4" /></Button>
           <Button variant="outline" tone="default" loading>Saving</Button>
         </Showcase>
       </Section>
@@ -103,7 +99,7 @@ export function ButtonDoc() {
           </ButtonGroup>
           <ButtonGroup>
             <Button size="sm">Publish</Button>
-            <Button size="sm" iconOnly aria-label="More options"><Settings className="h-3.5 w-3.5" /></Button>
+            <Button size="sm" iconOnly aria-label="More options"><RiSettings3Line className="h-3.5 w-3.5" /></Button>
           </ButtonGroup>
         </Showcase>
       </Section>
@@ -154,11 +150,11 @@ export function ButtonGroupDoc() {
         <Showcase>
           <ButtonGroup>
             <Button>Deploy</Button>
-            <Button iconOnly aria-label="Deploy options"><Settings className="h-4 w-4" /></Button>
+            <Button iconOnly aria-label="Deploy options"><RiSettings3Line className="h-4 w-4" /></Button>
           </ButtonGroup>
           <ButtonGroup>
             <Button tone="default" variant="soft">Approve</Button>
-            <Button tone="default" variant="soft" iconOnly aria-label="More"><Settings className="h-4 w-4" /></Button>
+            <Button tone="default" variant="soft" iconOnly aria-label="More"><RiSettings3Line className="h-4 w-4" /></Button>
           </ButtonGroup>
         </Showcase>
       </Section>
@@ -194,7 +190,7 @@ export function InputDoc() {
 />`}>
           <div className="grid w-full gap-4 sm:grid-cols-2">
             <Input label="Work email" placeholder="you@company.com" description="We'll never share this." />
-            <Input label="Workspace" placeholder="acme" startContent={<AtSign />} description="Lowercase letters and dashes." />
+            <Input label="Workspace" placeholder="acme" startContent={<RiAtLine />} description="Lowercase letters and dashes." />
           </div>
         </Showcase>
       </Section>
@@ -203,7 +199,7 @@ export function InputDoc() {
         <Showcase align="stretch">
           <div className="grid w-full gap-3">
             {(["sm", "md", "lg"] as const).map((s) => (
-              <Input key={s} size={s} placeholder={`Size ${s}`} startContent={<Search />} />
+              <Input key={s} size={s} placeholder={`Size ${s}`} startContent={<RiSearchLine />} />
             ))}
           </div>
         </Showcase>
@@ -213,7 +209,7 @@ export function InputDoc() {
         <Showcase align="stretch">
           <div className="grid w-full gap-4 sm:grid-cols-2">
             <Input label="Email" value={value} onChange={(e) => setValue(e.target.value)} placeholder="Type to validate…" error={invalid ? "Enter a valid email address." : undefined} description="Live validation on each keystroke." />
-            <Input label="Password" type={show ? "text" : "password"} defaultValue="correct-horse" startContent={<Lock />} endContent={<button onClick={() => setShow((s) => !s)} aria-label="Toggle visibility">{show ? <EyeOff /> : <Eye />}</button>} />
+            <Input label="Password" type={show ? "text" : "password"} defaultValue="correct-horse" startContent={<RiLockLine />} endContent={<button onClick={() => setShow((s) => !s)} aria-label="Toggle visibility">{show ? <RiEyeOffLine /> : <RiEyeLine />}</button>} />
             <Input label="Disabled" placeholder="Not editable" disabled />
             <Input label="Read only" defaultValue="acme-prod-01" readOnly description="Generated by the system." />
           </div>
@@ -223,7 +219,7 @@ export function InputDoc() {
       <Section title="Slots">
         <Showcase align="stretch">
           <div className="grid w-full gap-4 sm:grid-cols-2">
-            <Input placeholder="Search components…" startContent={<Search />} endContent={<Chip size="sm">⌘K</Chip>} />
+            <Input placeholder="Search components…" startContent={<RiSearchLine />} endContent={<Chip size="sm">⌘K</Chip>} />
             <Input placeholder="0.00" startContent={<span className="text-paragraph-sm">$</span>} endContent={<span className="text-paragraph-xs">USD</span>} />
           </div>
         </Showcase>
@@ -439,7 +435,7 @@ export function SwitchDoc() {
           {(["sm", "md", "lg"] as const).map((s) => <Switch key={s} size={s} checked={a} onChange={setA} label={s} />)}
         </Showcase>
         <Showcase>
-          <Switch checked={a} onChange={setA} size="lg" startIcon={<VolumeX className="h-3 w-3" />} endIcon={<Volume2 className="h-3 w-3" />} label="Sound" />
+          <Switch checked={a} onChange={setA} size="lg" startIcon={<RiVolumeMuteLine className="h-3 w-3" />} endIcon={<RiVolumeUpLine className="h-3 w-3" />} label="Sound" />
         </Showcase>
       </Section>
       <Section title="API">

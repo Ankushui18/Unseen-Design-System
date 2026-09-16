@@ -1,33 +1,4 @@
 import { useMemo, useState } from "react";
-import {
-  Accessibility,
-  Bell,
-  Bookmark,
-  Calendar,
-  Check,
-  ChevronRight,
-  Cloud,
-  Copy,
-  Download,
-  Eye,
-  Filter,
-  Folder,
-  Heart,
-  Home as HomeIcon,
-  Image,
-  Layers,
-  Lock,
-  Mail,
-  MessageSquare,
-  Paperclip,
-  Search,
-  Settings,
-  Share2,
-  Star,
-  Trash2,
-  User,
-  Zap,
-} from "lucide-react";
 import { Callout, Grid, PageHeader, PropsTable, Section, Showcase } from "../docs/Blocks";
 import { CodeBlock } from "../docs/CodeBlock";
 import { Button } from "../ui/Button";
@@ -37,6 +8,7 @@ import { Table } from "../ui/Navigation";
 import { useCopy } from "../lib/hooks";
 import { useTheme } from "../lib/theme";
 import { cn } from "../utils/cn";
+import { RiAccessibilityLine, RiArrowRightSLine, RiAttachmentLine, RiBookmarkLine, RiCalendarLine, RiChat3Line, RiCheckLine, RiCloudLine, RiDeleteBinLine, RiDownloadLine, RiEyeLine, RiFileCopyLine, RiFilterLine, RiFlashlightLine, RiFolderLine, RiHeartLine, RiHome5Line, RiImageLine, RiLockLine, RiMailLine, RiNotification3Line, RiSearchLine, RiSettings3Line, RiShareLine, RiStackLine, RiStarLine, RiUserLine } from "@remixicon/react";
 
 /* --------------------------------- shared --------------------------------- */
 
@@ -46,7 +18,7 @@ function Swatch({ token, className, height = "h-16", label }: { token: string; c
     <button onClick={() => copy(`var(${token})`)} className="group text-left">
       <div className={cn("relative w-full rounded-lg border border-border transition-transform group-hover:scale-[1.02]", height, className)}>
         <span className="absolute top-1.5 right-1.5 rounded-md bg-background/70 p-1 opacity-0 backdrop-blur transition-opacity group-hover:opacity-100">
-          {copied ? <Check className="h-3 w-3 text-success" /> : <Copy className="h-3 w-3 text-foreground" />}
+          {copied ? <RiCheckLine className="h-3 w-3 text-success" /> : <RiFileCopyLine className="h-3 w-3 text-foreground" />}
         </span>
       </div>
       <p className="mt-1.5 text-paragraph-xs font-medium text-foreground">{label ?? token.replace(/^--/, "")}</p>
@@ -157,7 +129,7 @@ export function ColorPage() {
       <Section title="Usage" description="Rules that keep a large product visually coherent.">
         <div className="grid gap-4 md:grid-cols-2">
           <Card className="border-success/30 p-5">
-            <p className="mb-3 flex items-center gap-2 text-label-sm text-success"><Check className="h-4 w-4" />Do</p>
+            <p className="mb-3 flex items-center gap-2 text-label-sm text-success"><RiCheckLine className="h-4 w-4" />Do</p>
             <ul className="space-y-2 text-paragraph-sm text-muted">
               <li>Use <Code tone="success">--accent</Code> for one primary action per view.</li>
               <li>Pair every background token with its matching foreground token.</li>
@@ -488,7 +460,7 @@ export function MotionPage() {
       <Section title="Easing" description="Press play to compare curves on the same distance.">
         <Showcase
           align="stretch"
-          controls={<Button size="sm" variant="soft" onClick={() => setPlay((p) => p + 1)} startContent={<Zap className="h-3.5 w-3.5" />}>Replay</Button>}
+          controls={<Button size="sm" variant="soft" onClick={() => setPlay((p) => p + 1)} startContent={<RiFlashlightLine className="h-3.5 w-3.5" />}>Replay</Button>}
         >
           <div className="w-full space-y-4">
             {EASES.map((e) => (
@@ -533,7 +505,7 @@ export function MotionPage() {
 
 /* --------------------------------- ICONS ---------------------------------- */
 
-const ICONS = [Search, Settings, User, Bell, Mail, Heart, Star, Bookmark, Calendar, Cloud, Download, Eye, Filter, Folder, HomeIcon, Image, Layers, Lock, MessageSquare, Paperclip, Share2, Trash2, Zap, Copy, Check, ChevronRight, Accessibility, Bell];
+const ICONS = [RiSearchLine, RiSettings3Line, RiUserLine, RiNotification3Line, RiMailLine, RiHeartLine, RiStarLine, RiBookmarkLine, RiCalendarLine, RiCloudLine, RiDownloadLine, RiEyeLine, RiFilterLine, RiFolderLine, RiHome5Line, RiImageLine, RiStackLine, RiLockLine, RiChat3Line, RiAttachmentLine, RiShareLine, RiDeleteBinLine, RiFlashlightLine, RiFileCopyLine, RiCheckLine, RiArrowRightSLine, RiAccessibilityLine, RiNotification3Line];
 
 export function IconsPage() {
   const [stroke, setStroke] = useState(1.75);
@@ -573,7 +545,7 @@ export function IconsPage() {
             { key: "ctx", header: "Context" },
             { key: "text", header: "Text", render: (r) => <span className="font-mono text-paragraph-xs">{r.text}</span> },
             { key: "icon", header: "Icon", render: (r) => <span className="font-mono text-paragraph-xs text-accent">{r.icon}</span> },
-            { key: "demo", header: "Preview", align: "right", render: (r) => <span className="inline-flex items-center gap-1.5" style={{ fontSize: r.fs }}><Star size={r.is} strokeWidth={1.75} />Label</span> },
+            { key: "demo", header: "Preview", align: "right", render: (r) => <span className="inline-flex items-center gap-1.5" style={{ fontSize: r.fs }}><RiStarLine size={r.is} strokeWidth={1.75} />Label</span> },
           ]}
           rows={[
             { ctx: "Caption / chip", text: "12px", icon: "14px", fs: 12, is: 14, demo: "" },
@@ -587,9 +559,9 @@ export function IconsPage() {
       <Section title="Usage">
         <Showcase code={`<Button startContent={<Download />}>Export</Button>
 <Button iconOnly aria-label="Settings"><Settings /></Button>`}>
-          <Button startContent={<Download className="h-4 w-4" />}>Export</Button>
-          <Button variant="outline" tone="default" iconOnly aria-label="Settings"><Settings className="h-4 w-4" /></Button>
-          <Button variant="ghost" tone="default" startContent={<Filter className="h-4 w-4" />}>Filter</Button>
+          <Button startContent={<RiDownloadLine className="h-4 w-4" />}>Export</Button>
+          <Button variant="outline" tone="default" iconOnly aria-label="Settings"><RiSettings3Line className="h-4 w-4" /></Button>
+          <Button variant="ghost" tone="default" startContent={<RiFilterLine className="h-4 w-4" />}>Filter</Button>
         </Showcase>
         <Callout tone="warning" title="Always label icon-only controls">
           An icon-only button must carry an <Code>aria-label</Code> and, ideally, a tooltip. Screen readers announce
@@ -670,7 +642,7 @@ export function AccessibilityPage() {
             "No information conveyed by color alone",
           ].map((c) => (
             <div key={c} className="flex items-start gap-2.5 rounded-xl bg-surface p-3.5 ring-1 ring-border">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+              <RiCheckLine className="mt-0.5 h-4 w-4 shrink-0 text-success" />
               <span className="text-paragraph-sm text-muted">{c}</span>
             </div>
           ))}
@@ -720,7 +692,7 @@ export function TokensPage() {
       />
 
       <Section title="Search">
-        <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Filter tokens…" startContent={<Search />} />
+        <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Filter tokens…" startContent={<RiSearchLine />} />
         <Table
           columns={[
             { key: "name", header: "Token", width: "34%", render: (r) => <code className="font-mono text-paragraph-xs text-accent">{r.name}</code> },
@@ -734,7 +706,7 @@ export function TokensPage() {
       <Section title="Overriding" description="Scope overrides to :root and .dark — never to a component class.">
         <CodeBlock
           filename="app.css"
-          code={`@import "@aperture/react/styles.css";
+          code={`@import "tailwindcss";
 
 :root {
   --accent-h: 208;        /* rebrand in one line  */

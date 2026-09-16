@@ -1,16 +1,3 @@
-import {
-  ArrowDown,
-  ArrowDownUp,
-  ArrowRight,
-  ArrowUp,
-  ArrowUpDown,
-  Check,
-  ChevronDown,
-  EyeOff,
-  MoreHorizontal,
-  Search,
-  X,
-} from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { cn } from "../utils/cn";
 import { Avatar, Skeleton } from "./Display";
@@ -20,6 +7,7 @@ import { CompactButton } from "./Extra";
 import { Pagination } from "./Navigation";
 import { useCopy } from "../lib/hooks";
 import { Popover } from "./Overlay";
+import { RiArrowDownLine, RiArrowDownSLine, RiArrowRightLine, RiArrowUpDownLine, RiArrowUpLine, RiCheckLine, RiCloseLine, RiEyeOffLine, RiMoreLine, RiSearchLine } from "@remixicon/react";
 
 /* -------------------------------------------------------------------------- */
 /*                              PageHeader                                     */
@@ -71,7 +59,7 @@ export interface SearchBarProps {
 export function SearchBar({ value, onChange, placeholder = "Search…", shortcut, onSubmit, className, autoFocus }: SearchBarProps) {
   return (
     <label className={cn("search-bar", className)}>
-      <Search size={15} aria-hidden />
+      <RiSearchLine size={15} aria-hidden />
       <input
         type="search"
         value={value}
@@ -83,7 +71,7 @@ export function SearchBar({ value, onChange, placeholder = "Search…", shortcut
       />
       {value ? (
         <button type="button" aria-label="Clear search" onClick={() => onChange("")} className="search-bar-clear">
-          <X size={14} />
+          <RiCloseLine size={14} />
         </button>
       ) : (
         shortcut && <KbdShortcut value={shortcut} />
@@ -142,9 +130,9 @@ export function SortMenu({ value, onChange, options, label = "Sort" }: { value: 
     <Popover
       trigger={({ toggle, open }) => (
         <button type="button" onClick={toggle} className="sort-menu" aria-expanded={open}>
-          <ArrowDownUp size={14} />
+          <RiArrowUpDownLine size={14} />
           <span>{label}: {current.label}</span>
-          <ChevronDown size={14} className={cn("sort-menu-caret", open && "is-open")} />
+          <RiArrowDownSLine size={14} className={cn("sort-menu-caret", open && "is-open")} />
         </button>
       )}
       className="w-56 p-1"
@@ -159,7 +147,7 @@ export function SortMenu({ value, onChange, options, label = "Sort" }: { value: 
               className={cn("sort-menu-item", option.value === value && "is-active")}
             >
               {option.label}
-              {option.value === value && <Check size={14} />}
+              {option.value === value && <RiCheckLine size={14} />}
             </button>
           ))}
         </div>
@@ -288,9 +276,9 @@ export function DataTable<T>({ columns, rows, rowKey, selectable, loading, empty
                     >
                       {column.header}
                       {sort?.key === column.key ? (
-                        sort.direction === "asc" ? <ArrowUp size={12} /> : <ArrowDown size={12} />
+                        sort.direction === "asc" ? <RiArrowUpLine size={12} /> : <RiArrowDownLine size={12} />
                       ) : (
-                        <ArrowUpDown size={12} className="data-table-sort-hint" />
+                        <RiArrowUpDownLine size={12} className="data-table-sort-hint" />
                       )}
                     </button>
                   ) : column.header}
@@ -325,7 +313,7 @@ export function DataTable<T>({ columns, rows, rowKey, selectable, loading, empty
                   )}
                   {columns.map((column) => <td key={column.key} className={cellCls(column)}>{column.render(row)}</td>)}
                   <td className={cn("data-table-cell is-actions", density === "compact" && "is-compact")}>
-                    <CompactButton variant="ghost" aria-label="Open row actions"><MoreHorizontal size={16} /></CompactButton>
+                    <CompactButton variant="ghost" aria-label="Open row actions"><RiMoreLine size={16} /></CompactButton>
                   </td>
                 </tr>
               );
@@ -393,9 +381,9 @@ function TrendIndicator({ value, direction, period }: { value: number; direction
   );
   return (
     <span className={cls}>
-      {direction === "up" && <ArrowUp size={12} />}
-      {direction === "down" && <ArrowDown size={12} />}
-      {direction === "flat" && <ArrowRight size={12} />}
+      {direction === "up" && <RiArrowUpLine size={12} />}
+      {direction === "down" && <RiArrowDownLine size={12} />}
+      {direction === "flat" && <RiArrowRightLine size={12} />}
       <span className="tabular-nums">{sign}{value}%</span>
       {period && <span className="trend-indicator-period">{period}</span>}
     </span>
@@ -550,7 +538,7 @@ export function CopyField({ value, className }: { value: string; className?: str
       aria-label={copied ? "Copied" : "Copy value"}
     >
       <span className="copy-field-value">{value}</span>
-      <span className="copy-field-action">{copied ? <Check size={14} /> : <EyeOff size={14} />}</span>
+      <span className="copy-field-action">{copied ? <RiCheckLine size={14} /> : <RiEyeOffLine size={14} />}</span>
     </button>
   );
 }

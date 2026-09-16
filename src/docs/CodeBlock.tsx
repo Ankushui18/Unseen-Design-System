@@ -1,7 +1,7 @@
 import { Fragment, useMemo, type ReactNode } from "react";
-import { Check, Copy, Terminal } from "lucide-react";
 import { cn } from "../utils/cn";
 import { useCopy } from "../lib/hooks";
+import { RiCheckLine, RiFileCopyLine, RiTerminalLine } from "@remixicon/react";
 
 const KEYWORDS =
   "import|from|export|default|const|let|var|function|return|if|else|for|while|new|class|extends|async|await|type|interface|as|of|in|true|false|null|undefined|this|typeof|satisfies";
@@ -75,7 +75,7 @@ export function CodeBlock({
       {(filename || language) && (
         <div className="code-panel-header">
           <span>
-            <Terminal className="h-3.5 w-3.5" />
+            <RiTerminalLine className="h-3.5 w-3.5" />
             <span className="font-mono">{filename ?? language}</span>
           </span>
           <button
@@ -84,7 +84,7 @@ export function CodeBlock({
             className="code-copy"
             aria-label={copied ? "Code copied" : "Copy code"}
           >
-            {copied ? <Check className="h-3 w-3 text-success" /> : <Copy className="h-3 w-3" />}
+            {copied ? <RiCheckLine className="h-3 w-3 text-success" /> : <RiFileCopyLine className="h-3 w-3" />}
             {copied ? "Copied" : copyError ? "Select to copy" : "Copy code"}
           </button>
         </div>

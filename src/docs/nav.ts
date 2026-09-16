@@ -3,6 +3,18 @@ export type NavGroup = { title: string; items: NavItem[] };
 
 export const COMPONENT_GROUPS: NavGroup[] = [
   {
+    title: "PRO",
+    items: [
+      { title: "Activity Feed", href: "components/activity-feed", badge: "New", keywords: "timeline events feed updates" },
+      { title: "Command Menu", href: "components/command-menu", badge: "New", keywords: "quick actions palette fuzzy search" },
+      { title: "Notification Feed", href: "components/notification-feed", badge: "New", keywords: "inbox unread events list" },
+      { title: "File Uploader", href: "components/file-uploader", badge: "New", keywords: "dropzone drag drop attach" },
+      { title: "Filters", href: "components/filters", badge: "New", keywords: "faceted filter sidebar facet" },
+      { title: "Time Picker", href: "components/time-picker", badge: "New", keywords: "hours minutes picker" },
+      { title: "Calendar", href: "components/calendar", badge: "New", keywords: "date month grid" },
+    ],
+  },
+  {
     title: "Actions",
     items: [
       { title: "Button", href: "components/button", badge: "Updated", keywords: "cta action click submit filled stroke lighter ghost" },
@@ -41,8 +53,11 @@ export const COMPONENT_GROUPS: NavGroup[] = [
     title: "Data Display",
     items: [
       { title: "Card", href: "components/card", keywords: "surface panel container" },
+      { title: "Featured Icon", href: "components/featured-icon", badge: "New", keywords: "contained icon tinted gradient flourish" },
       { title: "Table", href: "components/table", badge: "Updated", keywords: "grid rows data" },
-      { title: "Avatar", href: "components/avatar", keywords: "profile user image" },
+      { title: "Data Table", href: "components/data-table", badge: "New", keywords: "sortable selectable rows bulk actions pagination" },
+      { title: "Avatar", href: "components/avatar", keywords: "profile user image group" },
+      { title: "Avatar Group", href: "components/avatar-group", badge: "New", keywords: "stack overlap overflow compact capsule" },
       { title: "Chip", href: "components/chip", keywords: "tag pill label" },
       { title: "Status Badge", href: "components/status-badge", badge: "New", keywords: "dot state completed pending failed" },
       { title: "Tag", href: "components/tag", badge: "New", keywords: "filter removable label" },
@@ -65,6 +80,7 @@ export const COMPONENT_GROUPS: NavGroup[] = [
     title: "Navigation",
     items: [
       { title: "Tabs", href: "components/tabs", keywords: "segmented panel" },
+      { title: "Tab Menu Horizontal", href: "components/tab-menu-horizontal", badge: "New", keywords: "underline navigation categories menu row" },
       { title: "Segmented Control", href: "components/segmented-control", badge: "New", keywords: "toggle switch view" },
       { title: "Stepper", href: "components/stepper", badge: "New", keywords: "wizard steps progress dot" },
       { title: "Tab Menu Vertical", href: "components/tab-menu-vertical", badge: "New", keywords: "sidebar settings rail" },
@@ -85,6 +101,7 @@ export const COMPONENT_GROUPS: NavGroup[] = [
       { title: "Hover Card", href: "components/hover-card", badge: "New", keywords: "preview profile popover" },
       { title: "Drawer", href: "components/drawer", keywords: "sheet sidebar panel" },
       { title: "Tooltip", href: "components/tooltip", keywords: "hint hover" },
+      { title: "Popover", href: "components/popover", badge: "New", keywords: "anchored floating helper layer" },
       { title: "Dropdown", href: "components/dropdown", badge: "New", keywords: "account menu checkbox user" },
       { title: "Menu", href: "components/menu", keywords: "dropdown popover context" },
       { title: "Empty State", href: "components/empty-state", badge: "New", keywords: "no data placeholder" },
@@ -113,12 +130,6 @@ export const NAV: NavGroup[] = [
       { title: "Motion", href: "foundations/motion", keywords: "animation easing duration" },
       { title: "Iconography", href: "foundations/icons", keywords: "icon svg symbol" },
       { title: "Accessibility", href: "foundations/accessibility", keywords: "a11y contrast wcag" },
-    ],
-  },
-  {
-    title: "Theming",
-    items: [
-      { title: "Theme Studio", href: "theme", badge: "New", keywords: "customize builder brand accent" },
       { title: "Token Reference", href: "foundations/tokens", keywords: "variables css api" },
     ],
   },

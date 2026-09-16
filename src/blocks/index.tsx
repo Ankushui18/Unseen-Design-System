@@ -1,26 +1,4 @@
 import { useRef, useState, type ReactNode } from "react";
-import {
-  ArrowDownRight,
-  ArrowRight,
-  ArrowUpRight,
-  Bell,
-  Check,
-  CloudUpload,
-  CreditCard,
-  Eye,
-  EyeOff,
-  FileText,
-  Filter,
-  GitBranch,
-  Globe,
-  Mail,
-  MoreHorizontal,
-  Search,
-  Star,
-  Users,
-  X,
-  Zap,
-} from "lucide-react";
 import { Button } from "../ui/Button";
 import { Avatar, AvatarGroup, Card, Chip, CircularProgress, Divider, Kbd, Progress } from "../ui/Display";
 import { Checkbox, Input, RadioGroup, Switch } from "../ui/Form";
@@ -28,7 +6,9 @@ import { Tabs } from "../ui/Navigation";
 import { useToast } from "../ui/Overlay";
 import { CompactButton, DigitInput, FileFormatIcon, Hint, HorizontalStepper, LinkButton, SegmentedControl, SocialButton, StatusBadge, Tag } from "../ui/Extra";
 import { Logo } from "../ui/Brand";
+import { CtaBlock, FaqBlock, FeaturesBlock, HeroBlock, LogosBlock, StatsBandBlock, TestimonialsBlock } from "./landing";
 import { cn } from "../utils/cn";
+import { RiArrowRightDownLine, RiArrowRightLine, RiArrowRightUpLine, RiBankCardLine, RiCheckLine, RiCloseLine, RiEyeLine, RiEyeOffLine, RiFileTextLine, RiFilterLine, RiFlashlightLine, RiGitBranchLine, RiGlobalLine, RiMailLine, RiMoreLine, RiNotification3Line, RiSearchLine, RiStarLine, RiTeamLine, RiUploadCloudLine } from "@remixicon/react";
 
 /* -------------------------------- Auth Card ------------------------------- */
 
@@ -56,14 +36,14 @@ export function AuthCardBlock() {
         <p>{mode === "recover" ? "Enter the email associated with your account." : "A little less setup. A little more creating."}</p>
       </div>
       <div className="auth-demo-fields">
-        <Input label="Email address" type="email" autoComplete="email" placeholder="you@company.com" value={email} onChange={(e) => { setEmail(e.target.value); setFinished(false); }} error={submitted && !emailValid ? "Enter a valid email address." : undefined} startContent={<Mail />} />
+        <Input label="Email address" type="email" autoComplete="email" placeholder="you@company.com" value={email} onChange={(e) => { setEmail(e.target.value); setFinished(false); }} error={submitted && !emailValid ? "Enter a valid email address." : undefined} startContent={<RiMailLine />} />
         {mode !== "recover" && <>
-          <Input label="Password" type={show ? "text" : "password"} autoComplete={mode === "register" ? "new-password" : "current-password"} placeholder="At least 8 characters" value={password} onChange={(e) => { setPassword(e.target.value); setFinished(false); }} error={submitted && password.length < 8 ? "Use at least 8 characters." : undefined} endContent={<button type="button" onClick={() => setShow((s) => !s)} aria-label={show ? "Hide password" : "Show password"} className="text-subtle hover:text-foreground">{show ? <EyeOff /> : <Eye />}</button>} />
+          <Input label="Password" type={show ? "text" : "password"} autoComplete={mode === "register" ? "new-password" : "current-password"} placeholder="At least 8 characters" value={password} onChange={(e) => { setPassword(e.target.value); setFinished(false); }} error={submitted && password.length < 8 ? "Use at least 8 characters." : undefined} endContent={<button type="button" onClick={() => setShow((s) => !s)} aria-label={show ? "Hide password" : "Show password"} className="text-subtle hover:text-foreground">{show ? <RiEyeOffLine /> : <RiEyeLine />}</button>} />
           <div className="auth-demo-options"><Checkbox checked={remember} label="Remember me" onChange={(e) => setRemember(e.target.checked)} size="sm" /><LinkButton type="button" variant="primary" size="sm" onClick={() => changeMode("recover")}>Forgot password?</LinkButton></div>
         </>}
       </div>
-      <Button type="submit" fullWidth className="mt-5" endContent={<ArrowRight />}>{mode === "signin" ? "Sign in" : mode === "register" ? "Create account" : "Send reset link"}</Button>
-      {finished && <p className="auth-demo-feedback" role="status"><Check size={14} /> Validation passed. This preview does not send account requests.</p>}
+      <Button type="submit" fullWidth className="mt-5" endContent={<RiArrowRightLine />}>{mode === "signin" ? "Sign in" : mode === "register" ? "Create account" : "Send reset link"}</Button>
+      {finished && <p className="auth-demo-feedback" role="status"><RiCheckLine size={14} /> Validation passed. This preview does not send account requests.</p>}
       <Divider label="or" className="my-5" />
       <div className="auth-demo-socials">
         {(["google", "apple", "github"] as const).map((brand) => <SocialButton key={brand} type="button" brand={brand} mode="stroke" iconOnly aria-label={`Continue with ${brand}`} className="w-full" onClick={() => push({ title: "Social sign-in preview", description: "Connect your own authentication provider to enable sign-in.", tone: "accent" })} />)}
@@ -77,9 +57,9 @@ export function AuthCardBlock() {
 
 export function StatsBlock({ compact }: { compact?: boolean }) {
   const stats = [
-    { label: "Total revenue", value: "$128,430", delta: "+18.2%", up: true, icon: CreditCard },
-    { label: "Active users", value: "14,205", delta: "+8.1%", up: true, icon: Users },
-    { label: "Conversion", value: "3.42%", delta: "-0.6%", up: false, icon: Zap },
+    { label: "Total revenue", value: "$128,430", delta: "+18.2%", up: true, icon: RiBankCardLine },
+    { label: "Active users", value: "14,205", delta: "+8.1%", up: true, icon: RiTeamLine },
+    { label: "Conversion", value: "3.42%", delta: "-0.6%", up: false, icon: RiFlashlightLine },
   ];
   return (
     <div className="grid w-full min-w-0 gap-4" style={{ gridTemplateColumns: compact ? "1fr" : "repeat(auto-fit, minmax(min(180px, 100%), 1fr))" }}>
@@ -89,11 +69,11 @@ export function StatsBlock({ compact }: { compact?: boolean }) {
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-surface-secondary ring-1 ring-border transition-colors duration-200 group-hover:bg-accent-soft group-hover:text-accent group-hover:ring-accent/30 sm:h-10 sm:w-10">
               <s.icon className="h-5 w-5" />
             </span>
-            <CompactButton variant="ghost" aria-label={`${s.label} options`}><MoreHorizontal /></CompactButton>
+            <CompactButton variant="ghost" aria-label={`${s.label} options`}><RiMoreLine /></CompactButton>
           </div>
           <p className="mt-3 truncate text-paragraph-xs text-muted sm:mt-4 sm:text-paragraph-sm">{s.label}</p>
           <p className="mt-1 text-title-h5 tabular-nums text-foreground">{s.value}</p>
-          <Chip size="sm" tone={s.up ? "success" : "danger"} className="mt-2 self-start" startContent={s.up ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}>
+          <Chip size="sm" tone={s.up ? "success" : "danger"} className="mt-2 self-start" startContent={s.up ? <RiArrowRightUpLine className="h-3 w-3" /> : <RiArrowRightDownLine className="h-3 w-3" />}>
             {s.delta}
           </Chip>
         </Card>
@@ -192,7 +172,7 @@ export function PricingBlock() {
   const { push } = useToast();
   const plans = [
     { name: "Starter", price: annual ? 0 : 0, desc: "For individuals exploring the system.", features: ["3 projects", "Community support", "Light & dark themes"], cta: "Get started", tone: "outline" as const },
-    { name: "Pro", price: annual ? 19 : 24, desc: "For product teams shipping to production.", features: ["Unlimited projects", "Figma library sync", "Theme Studio export", "Priority support"], cta: "Start 14-day trial", tone: "solid" as const, popular: true },
+    { name: "Pro", price: annual ? 19 : 24, desc: "For product teams shipping to production.", features: ["Unlimited projects", "Figma library sync", "Token export & source access", "Priority support"], cta: "Start 14-day trial", tone: "solid" as const, popular: true },
     { name: "Enterprise", price: annual ? 49 : 59, desc: "For organisations with compliance needs.", features: ["SSO & audit logs", "Dedicated designer", "Custom token pipeline", "SLA & onboarding"], cta: "Talk to sales", tone: "outline" as const },
   ];
   return (
@@ -216,7 +196,7 @@ export function PricingBlock() {
             <ul className="space-y-2.5">
               {p.features.map((f) => (
                 <li key={f} className="flex items-center gap-2.5 text-paragraph-sm text-muted">
-                  <span className="flex h-4.5 w-4.5 items-center justify-center rounded-full bg-success-soft text-success-soft-foreground"><Check className="h-3 w-3" strokeWidth={3} /></span>
+                  <span className="flex h-4.5 w-4.5 items-center justify-center rounded-full bg-success-soft text-success-soft-foreground"><RiCheckLine className="h-3 w-3" strokeWidth={3} /></span>
                   {f}
                 </li>
               ))}
@@ -248,8 +228,8 @@ export function TableBlock() {
           <Chip size="sm" variant="outline">{rows.length}</Chip>
         </div>
         <div className="flex items-center gap-2">
-          <Input size="sm" placeholder="Search…" startContent={<Search />} wrapperClassName="hidden w-44 md:flex" />
-          <Button size="sm" variant="outline" tone="default" startContent={<Filter />}>Filter</Button>
+          <Input size="sm" placeholder="Search…" startContent={<RiSearchLine />} wrapperClassName="hidden w-44 md:flex" />
+          <Button size="sm" variant="outline" tone="default" startContent={<RiFilterLine />}>Filter</Button>
           <Button size="sm">Add customer</Button>
         </div>
       </div>
@@ -283,7 +263,7 @@ export function TableBlock() {
                 <td className="px-3 py-3"><Tag variant="gray">{r.plan}</Tag></td>
                 <td className="px-3 py-3"><div className="flex items-center gap-2"><Progress value={r.progress} size="sm" className="w-20" tone={r.progress > 70 ? "success" : "accent"} /><span className="font-mono text-[11px] tabular-nums text-subtle">{r.progress}%</span></div></td>
                 <td className="px-3 py-3 text-right text-label-sm tabular-nums text-foreground">{r.mrr}</td>
-                <td className="px-3 py-3"><CompactButton variant="ghost" aria-label="Row actions"><MoreHorizontal /></CompactButton></td>
+                <td className="px-3 py-3"><CompactButton variant="ghost" aria-label="Row actions"><RiMoreLine /></CompactButton></td>
               </tr>
             ))}
           </tbody>
@@ -304,8 +284,8 @@ export function CommandMenuBlock() {
   const [cursor, setCursor] = useState(0);
   const { push } = useToast();
   const groups = [
-    { label: "Suggestions", items: [{ icon: FileText, label: "Create new document", k: "⌘N" }, { icon: Users, label: "Invite teammates", k: "⌘I" }, { icon: GitBranch, label: "Switch branch", k: "⌘B" }] },
-    { label: "Navigate", items: [{ icon: Globe, label: "Go to dashboard", k: "G D" }, { icon: Bell, label: "Open notifications", k: "G N" }] },
+    { label: "Suggestions", items: [{ icon: RiFileTextLine, label: "Create new document", k: "⌘N" }, { icon: RiTeamLine, label: "Invite teammates", k: "⌘I" }, { icon: RiGitBranchLine, label: "Switch branch", k: "⌘B" }] },
+    { label: "Navigate", items: [{ icon: RiGlobalLine, label: "Go to dashboard", k: "G D" }, { icon: RiNotification3Line, label: "Open notifications", k: "G N" }] },
   ];
   const filtered = groups.map((group) => ({ ...group, items: group.items.filter((item) => item.label.toLowerCase().includes(query.toLowerCase())) })).filter((group) => group.items.length);
   const commands = filtered.flatMap((group) => group.items);
@@ -313,7 +293,7 @@ export function CommandMenuBlock() {
   return (
     <Card elevation={4} className="w-full max-w-[520px] overflow-hidden">
       <div className="flex items-center gap-3 px-4">
-        <Search className="h-5 w-5 text-subtle" />
+        <RiSearchLine className="h-5 w-5 text-subtle" />
         <input aria-label="Command search" className="h-12 w-full min-w-0 bg-transparent text-paragraph-sm text-foreground outline-none placeholder:text-field-placeholder" placeholder="Type a command or search..." value={query} onChange={(e) => { setQuery(e.target.value); setCursor(0); }} onKeyDown={(e) => {
           if (e.key === "Escape") { setQuery(""); setCursor(0); }
           if (e.key === "ArrowDown") { e.preventDefault(); setCursor((n) => Math.min(n + 1, Math.max(0, commands.length - 1))); }
@@ -362,10 +342,10 @@ export function FileUploadBlock() {
   };
   return (
     <Card className="w-full max-w-[420px] p-5">
-      <input type="file" ref={input} accept=".jpg,.jpeg,.png,.pdf,.mp4" multiple hidden onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
+      <input type="file" ref={input} accept=".jpg,.jpeg,.png,.pdf,.mp4" multiple hidden aria-label="Choose files" onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
       <div onDragOver={(e) => { e.preventDefault(); setOver(true); }} onDragLeave={() => setOver(false)} onDrop={(e) => { e.preventDefault(); setOver(false); addFiles(e.dataTransfer.files); }} className={cn("flex flex-col items-center justify-center rounded-xl border border-dashed border-border-strong bg-surface-secondary/60 px-6 py-8 text-center transition-colors hover:border-accent hover:bg-accent-soft/30", over && "border-accent bg-accent-soft")}>
         <span className="flex h-12 w-12 items-center justify-center rounded-full bg-surface ring-1 ring-border shadow-xs">
-          <CloudUpload className="h-6 w-6 text-muted" />
+          <RiUploadCloudLine className="h-6 w-6 text-muted" />
         </span>
         <p className="mt-3 text-label-sm text-foreground">Choose a file or drag & drop it here</p>
         <p className="mt-1 text-paragraph-xs text-subtle">JPEG, PNG, PDF and MP4 formats, up to 50 MB.</p>
@@ -384,7 +364,7 @@ export function FileUploadBlock() {
               <p className="text-paragraph-xs text-subtle">{f.size}</p>
               {f.progress < 100 && <Progress value={f.progress} size="sm" className="mt-2" />}
             </div>
-            <button type="button" className="studio-icon-button" onClick={() => setFiles((items) => items.filter((_, i) => i !== index))} aria-label={`Remove ${f.name}`}><X size={14} /></button>
+            <button type="button" className="studio-icon-button" onClick={() => setFiles((items) => items.filter((_, i) => i !== index))} aria-label={`Remove ${f.name}`}><RiCloseLine size={14} /></button>
           </li>
         ))}
       </ul>
@@ -455,7 +435,7 @@ export function RatingBlock() {
       <div className="mt-4 flex justify-center gap-1.5" onMouseLeave={() => setHover(0)}>
         {[1, 2, 3, 4, 5].map((i) => (
           <button key={i} onMouseEnter={() => setHover(i)} onClick={() => { setRating(i); setSubmitted(false); }} className="transition-transform hover:scale-110" aria-label={`${i} stars`} aria-pressed={rating === i}>
-            <Star className={cn("h-7 w-7 transition-colors", (hover || rating) >= i ? "fill-warning text-warning" : "text-neutral-300 dark:text-neutral-700")} />
+            <RiStarLine className={cn("h-7 w-7 transition-colors", (hover || rating) >= i ? "fill-warning text-warning" : "text-neutral-300 dark:text-neutral-700")} />
           </button>
         ))}
       </div>
@@ -487,7 +467,7 @@ export function UsageBlock() {
       <Divider className="my-4" />
       <div className="flex flex-wrap items-center justify-between gap-3">
         <AvatarGroup items={[{ name: "Sophia W" }, { name: "James B" }, { name: "Lena M" }, { name: "Arthur T" }, { name: "Emma W" }]} size="sm" max={4} />
-        <Button size="sm" variant="outline" tone="default" endContent={<ArrowRight />} onClick={() => push({ title: "Example workspace usage", description: "Seats 80%, storage 64%, API calls 91%. These are demonstration values.", tone: "accent" })}>View usage</Button>
+        <Button size="sm" variant="outline" tone="default" endContent={<RiArrowRightLine />} onClick={() => push({ title: "Example workspace usage", description: "Seats 80%, storage 64%, API calls 91%. These are demonstration values.", tone: "accent" })}>View usage</Button>
       </div>
     </Card>
   );
@@ -522,13 +502,13 @@ export function OnboardingBlock() {
           <div className="mt-5"><p className="mb-2 text-label-sm text-foreground">Team size</p><div className="flex flex-wrap gap-2">{[{ value: "1", label: "Just me" }, { value: "2-10", label: "2-10" }, { value: "11-50", label: "11-50" }, { value: "50+", label: "50+" }].map((size) => <Button size="sm" key={size.value} tone="default" variant={size.value === team ? "solid" : "outline"} aria-pressed={size.value === team} onClick={() => setTeam(size.value)}>{size.label}</Button>)}</div></div>
         </>}
         {step === 2 && <div className="space-y-4"><h3 className="text-label-lg">Build together</h3><p className="text-paragraph-sm text-muted">Add a teammate to the preview, or finish without an invitation.</p><Input label="Teammate email (optional)" type="email" placeholder="teammate@company.com" value={invite} onChange={(e) => setInvite(e.target.value)} /></div>}
-        {step === 3 && <div className="space-y-4 text-center" role="status"><Check className="mx-auto h-8 w-8 text-success" /><h3 className="text-title-h6">{workspace || "Your workspace"} is ready</h3><p className="text-paragraph-sm text-muted">Created in the local preview for {name}. No account or invitation was sent.</p><Button variant="outline" tone="default" onClick={() => { setStep(0); setWorkspace(""); }}>Start another</Button></div>}
+        {step === 3 && <div className="space-y-4 text-center" role="status"><RiCheckLine className="mx-auto h-8 w-8 text-success" /><h3 className="text-title-h6">{workspace || "Your workspace"} is ready</h3><p className="text-paragraph-sm text-muted">Created in the local preview for {name}. No account or invitation was sent.</p><Button variant="outline" tone="default" onClick={() => { setStep(0); setWorkspace(""); }}>Start another</Button></div>}
       </div>
       <div className="flex items-center justify-between gap-3 border-t border-separator bg-surface-secondary/60 px-4 py-4 sm:px-6">
         <Button variant="ghost" tone="default" disabled={step === 0} onClick={() => { setAttempted(false); setStep((s) => Math.max(0, s - 1)); }}>Back</Button>
         <div className="flex items-center gap-3">
           <span className="hidden text-paragraph-xs text-subtle sm:inline">Step {step + 1} of {steps.length}</span>
-          {step < 3 && <Button onClick={next} endContent={<ArrowRight />}>{step === 2 ? "Finish setup" : "Continue"}</Button>}
+          {step < 3 && <Button onClick={next} endContent={<RiArrowRightLine />}>{step === 2 ? "Finish setup" : "Continue"}</Button>}
         </div>
       </div>
     </Card>
@@ -542,7 +522,7 @@ export function VerifyBlock() {
   const [status, setStatus] = useState<"idle" | "error" | "success">("idle");
   return (
     <Card elevation={3} className="w-full max-w-[400px] p-7 text-center">
-      <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-surface-secondary ring-1 ring-border"><Mail className="h-6 w-6 text-foreground" /></span>
+      <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-surface-secondary ring-1 ring-border"><RiMailLine className="h-6 w-6 text-foreground" /></span>
       <h3 className="mt-4 text-title-h6 text-foreground">Check your email</h3>
       <p className="mt-1 text-paragraph-sm text-muted">Try the four-digit verification flow. The demo code is <strong>1234</strong>.</p>
       <div className="mt-6 flex justify-center"><DigitInput length={4} value={code} error={status === "error"} onChange={(value) => { setCode(value); setStatus("idle"); }} /></div>
@@ -571,4 +551,11 @@ export const BLOCKS: BlockDef[] = [
   { key: "settings", title: "Settings Form", category: "Forms", description: "Tabbed settings with radios, switches and a sticky action bar.", render: () => <SettingsBlock />, span: 2, width: 640, pro: true },
   { key: "rating", title: "Rating", category: "Feedback", description: "Five-star rating with hover preview.", render: () => <RatingBlock />, width: 380 },
   { key: "pricing", title: "Pricing", category: "Marketing", description: "Three tiers with annual toggle and highlighted plan.", render: () => <PricingBlock />, span: 3, width: 900, pro: true },
+  { key: "hero", title: "Hero Section", category: "Marketing", description: "Announcement pill, gradient headline, dual CTAs and social proof.", render: () => <HeroBlock />, span: 3, width: 980, pro: true },
+  { key: "logos", title: "Brands & Social Proof", category: "Marketing", description: "A quiet wordmark strip under a single caption.", render: () => <LogosBlock />, span: 3, width: 980, pro: true },
+  { key: "features", title: "Features Grid", category: "Marketing", description: "Icon-led value props in a responsive card grid.", render: () => <FeaturesBlock />, span: 3, width: 980, pro: true },
+  { key: "metrics", title: "Stats Band", category: "Marketing", description: "A four-up band of headline metrics on a soft well.", render: () => <StatsBandBlock />, span: 3, width: 980, pro: true },
+  { key: "testimonials", title: "Testimonials", category: "Marketing", description: "Three quote cards with ratings and verified avatars.", render: () => <TestimonialsBlock />, span: 3, width: 980, pro: true },
+  { key: "cta", title: "Call to Action", category: "Marketing", description: "Inverse band with dot grid, CTAs and trust points.", render: () => <CtaBlock />, span: 2, width: 760, pro: true },
+  { key: "faq", title: "FAQ", category: "Marketing", description: "Flush accordion of the five questions that matter.", render: () => <FaqBlock />, span: 2, width: 680, pro: true },
 ];

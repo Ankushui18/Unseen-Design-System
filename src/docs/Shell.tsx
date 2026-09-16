@@ -1,11 +1,11 @@
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
-import { ArrowLeft, ArrowRight, ChevronRight, Command, Menu, Moon, Search, Sun, X } from "lucide-react";
 import { cn } from "../utils/cn";
 import { useTheme } from "../lib/theme";
 import { useDialogFocus, useLockBody } from "../lib/hooks";
 import { ALL_ITEMS, NAV, findItem, siblings } from "./nav";
 import { Kbd } from "../ui/Display";
 import { Logo } from "../ui/Brand";
+import { RiArrowLeftLine, RiArrowRightLine, RiArrowRightSLine, RiCloseLine, RiCommandLine, RiMenuLine, RiMoonLine, RiSearchLine, RiSunLine } from "@remixicon/react";
 export { Logo } from "../ui/Brand";
 
 export function GithubIcon({ className }: { className?: string }) {
@@ -25,7 +25,6 @@ const MAIN_NAV = [
   { title: "Blocks", href: "blocks" },
   { title: "Foundations", href: "foundations/spacing" },
   { title: "Icons", href: "foundations/icons" },
-  { title: "Theme Studio", href: "theme" },
 ];
 
 export function CommandPalette({ open, onClose, navigate }: { open: boolean; onClose: () => void; navigate: (to: string) => void }) {
@@ -48,20 +47,20 @@ export function CommandPalette({ open, onClose, navigate }: { open: boolean; onC
   return <div className="command-backdrop" onMouseDown={(e) => { if (e.currentTarget === e.target) onClose(); }}>
     <div className="command-dialog" role="dialog" aria-modal="true" aria-label="Search Aperture" ref={dialog} tabIndex={-1}>
       <div className="command-search">
-        <Search size={20} aria-hidden />
+        <RiSearchLine size={20} aria-hidden />
         <input ref={input} aria-label="Search documentation" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls={id} aria-activedescendant={results[cursor] ? `${id}-${cursor}` : undefined} placeholder="Search components, foundations, and guides..." value={q} onChange={(e) => { setQ(e.target.value); setCursor(0); }} onKeyDown={(e) => {
           if (e.key === "ArrowDown") { e.preventDefault(); setCursor((c) => Math.min(c + 1, Math.max(0, results.length - 1))); }
           if (e.key === "ArrowUp") { e.preventDefault(); setCursor((c) => Math.max(0, c - 1)); }
           if (e.key === "Enter" && results[cursor]) { e.preventDefault(); navigate(results[cursor].href); onClose(); }
         }} />
-        <button className="studio-icon-button" onClick={onClose} aria-label="Close search"><X size={18} /></button>
+        <button className="studio-icon-button" onClick={onClose} aria-label="Close search"><RiCloseLine size={18} /></button>
       </div>
       <div id={id} role="listbox" aria-label="Search results" ref={list} className="command-results ds-scroll">
         <p className="command-caption">{q ? `${results.length} results` : "Quick navigation"}</p>
         {results.map((r, i) => <button id={`${id}-${i}`} key={`${r.href}-${i}`} role="option" aria-selected={i === cursor} className="command-result" onMouseEnter={() => setCursor(i)} onClick={() => { navigate(r.href); onClose(); }}>
-          <span>{r.title}</span><small>{r.group}</small><ChevronRight size={14} />
+          <span>{r.title}</span><small>{r.group}</small><RiArrowRightSLine size={14} />
         </button>)}
-        {!results.length && <div className="search-empty"><Search size={24} /><p>No results for "{q}"</p><span>Try a component name, such as button or input.</span></div>}
+        {!results.length && <div className="search-empty"><RiSearchLine size={24} /><p>No results for "{q}"</p><span>Try a component name, such as button or input.</span></div>}
       </div>
       <div className="command-footer"><span><Kbd>Enter</Kbd> to open</span><span><Kbd>Esc</Kbd> to close</span></div>
     </div>
@@ -72,9 +71,9 @@ export function SidebarNav({ route, navigate, onNavigate }: { route: string; nav
   const [q, setQ] = useState("");
   const groups = NAV.map((g) => ({ ...g, items: g.items.filter((i) => `${g.title} ${i.title}`.toLowerCase().includes(q.toLowerCase())) })).filter((g) => g.items.length);
   return <>
-    <label className="sidebar-search"><Search size={15} /><input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Filter navigation..." aria-label="Filter navigation" /></label>
+    <label className="sidebar-search"><RiSearchLine size={15} /><input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Filter navigation..." aria-label="Filter navigation" /></label>
     <nav aria-label="Documentation" className="sidebar-nav">
-      <a href="#/components" className={cn("sidebar-overview", route === "components" && "is-active")} onClick={(e) => { e.preventDefault(); navigate("components"); onNavigate?.(); }}><Command size={16} /> Library overview <ChevronRight size={14} /></a>
+      <a href="#/components" className={cn("sidebar-overview", route === "components" && "is-active")} onClick={(e) => { e.preventDefault(); navigate("components"); onNavigate?.(); }}><RiCommandLine size={16} /> Library overview <RiArrowRightSLine size={14} /></a>
       {groups.map((g) => <div className="sidebar-group" key={g.title}>
         <h2>{g.title}</h2>
         {g.items.map((item) => <a href={`#/${item.href}`} key={item.href} aria-current={route === item.href ? "page" : undefined} onClick={(e) => { e.preventDefault(); navigate(item.href); onNavigate?.(); }} className="sidebar-item">
@@ -94,8 +93,8 @@ export function MobileNavigation({ open, onClose, route, navigate }: { open: boo
   if (!open) return null;
   return <div className="mobile-nav-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
     <div className="mobile-nav-panel ds-scroll" role="dialog" aria-modal="true" aria-label="Navigation" tabIndex={-1} ref={dialog}>
-      <div className="mobile-nav-heading"><a href="#/" onClick={onClose}><Logo /><strong>Aperture</strong></a><button className="studio-icon-button" onClick={onClose} aria-label="Close navigation"><X size={20} /></button></div>
-      <div className="mobile-primary">{MAIN_NAV.map((i) => <a key={i.href} href={`#/${i.href}`} onClick={onClose}>{i.title}<ArrowRight size={15} /></a>)}</div>
+      <div className="mobile-nav-heading"><a href="#/" onClick={onClose}><Logo /><strong>Aperture</strong></a><button className="studio-icon-button" onClick={onClose} aria-label="Close navigation"><RiCloseLine size={20} /></button></div>
+      <div className="mobile-primary">{MAIN_NAV.map((i) => <a key={i.href} href={`#/${i.href}`} onClick={onClose}>{i.title}<RiArrowRightLine size={15} /></a>)}</div>
       <SidebarNav route={route} navigate={navigate} onNavigate={onClose} />
     </div>
   </div>;
@@ -104,15 +103,15 @@ export function MobileNavigation({ open, onClose, route, navigate }: { open: boo
 export function Navbar({ route, navigate, onOpenSearch, onOpenMobile }: { route: string; navigate: (to: string) => void; onOpenSearch: () => void; onOpenMobile: () => void }) {
   const { mode, toggleMode } = useTheme();
   return <header className="site-header">
-    <div className="beta-announcement"><span className="beta-status-dot" /> <span>Public beta. Every component and block is free to explore.</span><a href="#/pricing">About the beta <ArrowRight size={13} /></a></div>
+    <div className="beta-announcement"><span className="beta-status-dot" /> <span>Public beta. Every component and block is free to explore.</span><a href="#/pricing">About the beta <RiArrowRightLine size={13} /></a></div>
     <div className="site-nav">
-      <button className="studio-icon-button mobile-menu-trigger" onClick={onOpenMobile} aria-label="Open navigation"><Menu size={20} /></button>
+      <button className="studio-icon-button mobile-menu-trigger" onClick={onOpenMobile} aria-label="Open navigation"><RiMenuLine size={20} /></button>
       <a href="#/" onClick={(e) => { e.preventDefault(); navigate(""); }} className="brand-link"><Logo size={29} /><span>Aperture<span className="brand-period">.</span></span><small>beta</small></a>
       <nav aria-label="Main" className="primary-nav">{MAIN_NAV.map((i) => <a key={i.href} href={`#/${i.href}`} aria-current={route === i.href || (i.href === "components" && route.startsWith("components/")) ? "page" : undefined}>{i.title}</a>)}</nav>
       <div className="nav-tools">
-        <button className="nav-search-button" onClick={onOpenSearch} aria-label="Search Aperture"><Search size={16} /><span>Search...</span><kbd>Ctrl K</kbd></button>
-        <button className="studio-icon-button theme-toggle" aria-label={`Switch to ${mode === "dark" ? "light" : "dark"} mode`} onClick={toggleMode}>{mode === "dark" ? <Sun size={18} /> : <Moon size={18} />}</button>
-        <a className="nav-cta" href="#/docs/installation">Start building <ArrowRight size={14} /></a>
+        <button className="nav-search-button" onClick={onOpenSearch} aria-label="Search Aperture"><RiSearchLine size={16} /><span>Search...</span><kbd>Ctrl K</kbd></button>
+        <button className="studio-icon-button theme-toggle" aria-label={`Switch to ${mode === "dark" ? "light" : "dark"} mode`} onClick={toggleMode}>{mode === "dark" ? <RiSunLine size={18} /> : <RiMoonLine size={18} />}</button>
+        <a className="nav-cta" href="#/docs/installation">Start building <RiArrowRightLine size={14} /></a>
       </div>
     </div>
   </header>;
@@ -122,7 +121,7 @@ export function Toc({ headings, active }: { headings: { id: string; title: strin
   return <aside className="docs-toc">
     <div className="toc-sticky">
       {headings.length > 0 && <><h2>On this page</h2><nav aria-label="On this page">{headings.map((h) => <button key={h.id} className={active === h.id ? "is-active" : ""} onClick={() => document.getElementById(h.id)?.scrollIntoView({ behavior: "smooth", block: "start" })}>{h.title}</button>)}</nav></>}
-      <div className="toc-note"><span className="beta-status-dot" /><p>Free during public beta</p><small>Explore, build, and help us refine the details.</small><a href="#/pricing">Beta information <ArrowRight size={12} /></a></div>
+      <div className="toc-note"><span className="beta-status-dot" /><p>Free during public beta</p><small>Explore, build, and help us refine the details.</small><a href="#/pricing">Beta information <RiArrowRightLine size={12} /></a></div>
     </div>
   </aside>;
 }
@@ -146,11 +145,11 @@ export function DocsLayout({ route, navigate, children, headings, activeHeading 
     <div className="docs-layout">
       <aside className="docs-sidebar ds-scroll"><SidebarNav route={route} navigate={navigate} /></aside>
       <main id="main" tabIndex={-1} className="docs-main">
-        <nav className="docs-breadcrumb" aria-label="Breadcrumb"><a href="#/">Home</a><ChevronRight size={12} /><span>{item?.group ?? "Library"}</span><ChevronRight size={12} /><span aria-current="page">{item?.title ?? "Overview"}</span></nav>
+        <nav className="docs-breadcrumb" aria-label="Breadcrumb"><a href="#/">Home</a><RiArrowRightSLine size={12} /><span>{item?.group ?? "Library"}</span><RiArrowRightSLine size={12} /><span aria-current="page">{item?.title ?? "Overview"}</span></nav>
         <div key={route} className="docs-content page-enter">{children}</div>
         {(prev || next) && <nav className="docs-pagination" aria-label="Previous and next pages">
-          {prev ? <a href={`#/${prev.href}`}><span><ArrowLeft size={14} /> Previous</span><strong>{prev.title}</strong></a> : <span />}
-          {next && <a href={`#/${next.href}`}><span>Next <ArrowRight size={14} /></span><strong>{next.title}</strong></a>}
+          {prev ? <a href={`#/${prev.href}`}><span><RiArrowLeftLine size={14} /> Previous</span><strong>{prev.title}</strong></a> : <span />}
+          {next && <a href={`#/${next.href}`}><span>Next <RiArrowRightLine size={14} /></span><strong>{next.title}</strong></a>}
         </nav>}
         <footer className="docs-footer"><span>Aperture Design System</span><a href="#/pricing">Public beta</a></footer>
       </main>

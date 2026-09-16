@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Archive, Bell, Copy, ExternalLink, Folder, Pencil, Share2, Trash2, Users } from "lucide-react";
-import { Callout, PageHeader, PropsTable, Section, Showcase } from "../../docs/Blocks";
+import { Callout, Import, PageHeader, PropsTable, Section, Showcase } from "../../docs/Blocks";
 import { Button } from "../../ui/Button";
 import {
   Alert,
   Avatar,
   AvatarGroup,
+  AvatarGroupCompact,
   Badge,
   Card,
   CardBody,
@@ -23,8 +23,10 @@ import {
 } from "../../ui/Display";
 import { Spinner } from "../../ui/Button";
 import { Table } from "../../ui/Navigation";
+import { StatusBadge } from "../../ui/Extra";
+import { DataTable, type DataTableColumn } from "../../ui/ProductPatterns";
+import { RiArchiveLine, RiDeleteBinLine, RiExternalLinkLine, RiFileCopyLine, RiFolderLine, RiNotification3Line, RiPencilLine, RiRocketLine, RiShareLine, RiTeamLine } from "@remixicon/react";
 
-const Import = ({ names }: { names: string }) => <Snippet symbol="">{`import { ${names} } from "@aperture/react";`}</Snippet>;
 const TONES = ["accent", "default", "success", "warning", "danger"] as const;
 
 /* ---------------------------------- CARD ---------------------------------- */
@@ -76,9 +78,9 @@ export function CardDoc() {
       <Section title="Interactive" description="Adds a lift transition, accent border on hover and a pointer cursor.">
         <Showcase>
           {[
-            { i: Folder, t: "Projects", d: "18 active" },
-            { i: Users, t: "Members", d: "42 seats" },
-            { i: Archive, t: "Archive", d: "310 items" },
+            { i: RiFolderLine, t: "Projects", d: "18 active" },
+            { i: RiTeamLine, t: "Members", d: "42 seats" },
+            { i: RiArchiveLine, t: "Archive", d: "310 items" },
           ].map((c) => (
             <Card key={c.t} interactive className="w-44 p-4">
               <c.i className="mb-2.5 h-4.5 w-4.5 text-accent" />
@@ -161,6 +163,123 @@ export function TableDoc() {
   );
 }
 
+/* -------------------------------- DATA TABLE ------------------------------ */
+
+type MemberRow = { id: string; name: string; email: string; role: "Owner" | "Admin" | "Member"; status: "active" | "pending" | "offline"; usage: number };
+
+const MEMBER_ROWS: MemberRow[] = [
+  { id: "m1", name: "Ada Lovelace", email: "ada@aperture.io", role: "Owner", status: "active", usage: 92 },
+  { id: "m2", name: "Grace Hopper", email: "grace@aperture.io", role: "Admin", status: "active", usage: 64 },
+  { id: "m3", name: "Alan Turing", email: "alan@aperture.io", role: "Member", status: "pending", usage: 0 },
+  { id: "m4", name: "Kat Johnson", email: "kat@aperture.io", role: "Member", status: "offline", usage: 38 },
+];
+
+export function DataTableDoc() {
+  const [loading, setLoading] = useState(false);
+  const memberColumns: DataTableColumn<MemberRow>[] = [
+    {
+      key: "name",
+      header: "Name",
+      sortable: true,
+      sortKey: (m) => m.name,
+      render: (m) => (
+        <div className="flex items-center gap-3">
+          <Avatar name={m.name} size="sm" tone={m.role === "Owner" ? "accent" : "default"} />
+          <div className="min-w-0">
+            <p className="truncate text-label-sm">{m.name}</p>
+            <p className="truncate text-paragraph-xs text-subtle">{m.email}</p>
+          </div>
+        </div>
+      ),
+    },
+    { key: "role", header: "Role", render: (m) => <span className="text-paragraph-sm text-muted">{m.role}</span> },
+    {
+      key: "status",
+      header: "Status",
+      render: (m) => (
+        <StatusBadge status={m.status === "active" ? "completed" : m.status === "pending" ? "pending" : "disabled"} size="sm" className="capitalize">
+          {m.status}
+        </StatusBadge>
+      ),
+    },
+    {
+      key: "usage",
+      header: "Usage",
+      align: "right",
+      alignNumeric: true,
+      sortable: true,
+      sortKey: (m) => m.usage,
+      render: (m) => <span className="font-mono text-paragraph-xs tabular-nums">{m.usage}%</span>,
+    },
+  ];
+  return (
+    <>
+      <PageHeader eyebrow="Components · Data Display" title="Data Table" description="The full-stack table: sorting, selection with a bulk-action bar, loading, empty state and a paginated footer. Show at most three actions per row and keep numeric columns right-aligned." tags={["Sorting", "Selection", "Bulk actions"]} />
+      <Import names="DataTable" />
+      <Section title="Usage">
+        <Showcase
+          align="stretch"
+          controls={<Button size="sm" variant="soft" onClick={() => setLoading((l) => !l)}>{loading ? "Show rows" : "Simulate loading"}</Button>}
+          code={`<DataTable\n  columns={columns}\n  rows={members}\n  rowKey={(m) => m.id}\n  selectable\n  initialSort={{ key: "name", direction: "asc" }}\n  bulkActions={[\n    { id: "invite", label: "Invite", icon: <RiRocketLine />, onSelect(rows) {} },\n    { id: "remove", label: "Remove", tone: "danger", onSelect(rows) {} },\n  ]}\n  pagination={{ page: 1, totalPages: 4, onPageChange() {} }}\n  loading={${loading}}\n/>`}
+        >
+          <div className="w-full">
+            <DataTable
+              columns={memberColumns}
+              rows={MEMBER_ROWS}
+              rowKey={(m) => m.id}
+              selectable
+              initialSort={{ key: "name", direction: "asc" }}
+              loading={loading}
+              bulkActions={[
+                { id: "invite", label: "Invite", icon: <RiRocketLine />, onSelect: () => {} },
+                { id: "remove", label: "Remove", tone: "danger", onSelect: () => {} },
+              ]}
+              pagination={{ page: 1, totalPages: 4, onPageChange: () => {} }}
+            />
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="Compact density" description="Tighter padding for admin and reporting views.">
+        <Showcase align="stretch">
+          <div className="w-full">
+            <DataTable
+              density="compact"
+              columns={memberColumns}
+              rows={MEMBER_ROWS.slice(0, 3)}
+              rowKey={(m) => m.id}
+            />
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="Empty state">
+        <Showcase align="stretch">
+          <div className="w-full">
+            <DataTable
+              columns={memberColumns}
+              rows={[]}
+              rowKey={(m) => m.id}
+              emptyState={<p className="data-table-empty">No members match this filter.</p>}
+            />
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "columns", type: "DataTableColumn<T>[]", required: true, description: "Keys, headers, alignment, width, render, and optional sortKey/sortable." },
+          { name: "rows", type: "T[]", required: true, description: "Row data. Renders emptyState (or a fallback) when empty." },
+          { name: "rowKey", type: "(row: T) => string", required: true, description: "Stable identity used for selection and React keys." },
+          { name: "selectable", type: "boolean", default: "false", description: "Adds checkbox columns and the bulk-action bar." },
+          { name: "loading", type: "boolean", default: "false", description: "Shows skeleton rows while data fetches." },
+          { name: "initialSort", type: "{ key, direction }", description: "Sort applied on first render." },
+          { name: "bulkActions", type: "DataTableBulkAction[]", description: "Actions exposed in the selection bar." },
+          { name: "pagination", type: "{ page, totalPages, onPageChange }", description: "Renders the paginated footer." },
+          { name: "density", type: '"comfortable" | "compact"', default: '"comfortable"', description: "Row padding scale." },
+        ]} />
+      </Section>
+    </>
+  );
+}
+
 /* --------------------------------- AVATAR --------------------------------- */
 
 export function AvatarDoc() {
@@ -200,6 +319,66 @@ export function AvatarDoc() {
           { name: "square", type: "boolean", default: "false", description: "Uses a rounded square instead of a circle." },
           { name: "status", type: '"online" | "offline" | "busy"', description: "Presence indicator in the lower-right corner." },
         ]} />
+      </Section>
+    </>
+  );
+}
+
+/* ------------------------------- AVATAR GROUP ----------------------------- */
+
+const GROUP_MEMBERS = [
+  { name: "Ada Lovelace" },
+  { name: "Grace Hopper" },
+  { name: "Alan Turing" },
+  { name: "Kat Johnson" },
+  { name: "Lin Chen" },
+  { name: "Ray Banks" },
+];
+
+export function AvatarGroupDoc() {
+  return (
+    <>
+      <PageHeader eyebrow="Components · Data Display" title="Avatar Group" description="Two or more avatars in an inline stack. Members overlap with a background ring; overflow collapses into a counter. A compact capsule variant holds tighter stacks for tables, feeds and comments." tags={["Stack", "Overflow", "Compact"]} />
+      <Import names="AvatarGroup, AvatarGroupCompact" />
+      <Section title="Stack">
+        <Showcase code={`<AvatarGroup\n  max={4}\n  items={[\n    { name: "Ada Lovelace" },\n    { name: "Grace Hopper" },\n    { name: "Alan Turing" },\n    { name: "Kat Johnson" },\n    { name: "Lin Chen" },\n    { name: "Ray Banks" },\n  ]}\n/>`}>
+          <AvatarGroup items={GROUP_MEMBERS} max={5} />
+          <AvatarGroup items={GROUP_MEMBERS} max={3} size="lg" />
+          <AvatarGroup items={GROUP_MEMBERS} max={4} size="sm" />
+        </Showcase>
+      </Section>
+      <Section title="Compact capsule" description="A tighter, softer alternative for cramped layouts. `stroke` adds a hairline around the whole capsule.">
+        <Showcase code={`<AvatarGroupCompact max={3} items={members} />\n<AvatarGroupCompact max={3} size="sm" variant="stroke" items={members} />`}>
+          <AvatarGroupCompact items={GROUP_MEMBERS} max={3} />
+          <AvatarGroupCompact items={GROUP_MEMBERS} max={3} size="sm" variant="stroke" />
+          <AvatarGroupCompact items={GROUP_MEMBERS} max={4} size="lg" variant="stroke" />
+        </Showcase>
+      </Section>
+      <Section title="Single tone">
+        <Showcase>
+          <AvatarGroupCompact items={GROUP_MEMBERS} max={4} tone="accent" />
+          <AvatarGroupCompact items={GROUP_MEMBERS} max={4} tone="success" variant="stroke" />
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable
+          title="AvatarGroup props"
+          rows={[
+            { name: "items", type: "{ name, src? }[]", required: true, description: "Members to render. The last slot becomes a counter beyond max." },
+            { name: "max", type: "number", default: "4", description: "Avatars shown before collapsing into a +n counter." },
+            { name: "size", type: '"xs" | "sm" | "md" | "lg"', default: '"md"', description: "Avatar dimensions." },
+          ]}
+        />
+        <PropsTable
+          title="AvatarGroupCompact props"
+          rows={[
+            { name: "items", type: "{ name, src? }[]", required: true, description: "Members to render." },
+            { name: "max", type: "number", default: "3", description: "Avatars shown before the +n label." },
+            { name: "size", type: '"xs" | "sm" | "md" | "lg"', default: '"md"', description: "Avatar and overflow label size." },
+            { name: "tone", type: "Tone", default: '"default"', description: "Cycles palette tones by default; pass a tone for a uniform set." },
+            { name: "variant", type: '"default" | "stroke"', default: '"default"', description: "Adds a hairline ring around the capsule." },
+          ]}
+        />
       </Section>
     </>
   );
@@ -264,8 +443,8 @@ export function BadgeDoc() {
         <Showcase code={`<Badge content="8" tone="danger">
   <Button iconOnly aria-label="Action" variant="outline" tone="default"><Bell /></Button>
 </Badge>`}>
-          <Badge content="8" tone="danger"><Button iconOnly variant="outline" tone="default" aria-label="Notifications"><Bell /></Button></Badge>
-          <Badge content="99+" tone="accent"><Button iconOnly variant="outline" tone="default" aria-label="Messages"><Share2 className="h-4 w-4" /></Button></Badge>
+          <Badge content="8" tone="danger"><Button iconOnly variant="outline" tone="default" aria-label="Notifications"><RiNotification3Line /></Button></Badge>
+          <Badge content="99+" tone="accent"><Button iconOnly variant="outline" tone="default" aria-label="Messages"><RiShareLine className="h-4 w-4" /></Button></Badge>
           <Badge dot tone="success"><Avatar name="Ada L" tone="default" /></Badge>
           <Badge dot tone="warning" placement="bottom-right"><Avatar name="Grace H" tone="default" square /></Badge>
         </Showcase>
@@ -385,11 +564,11 @@ export function SnippetDoc() {
       <PageHeader eyebrow="Components · Data Display" title="Snippet" description="A one-line code block with a copy affordance. Used for install commands, IDs and tokens." tags={["Clipboard", "Monospace"]} />
       <Import names="Snippet, Code" />
       <Section title="Usage">
-        <Showcase align="stretch" code={`<Snippet>npm install @aperture/react</Snippet>
-<Snippet symbol="">npx aperture init</Snippet>`}>
+        <Showcase align="stretch" code={`<Snippet>npm install @remixicon/react clsx tailwind-merge</Snippet>
+<Snippet symbol="$">npx remixicon init</Snippet>`}>
           <div className="w-full space-y-3">
-            <Snippet>npm install @aperture/react</Snippet>
-            <Snippet symbol="">wk_live_51H8xQ2eZvKYlo2C</Snippet>
+            <Snippet>npm install @remixicon/react clsx tailwind-merge</Snippet>
+            <Snippet symbol="$">wk_live_51H8xQ2eZvKYlo2C</Snippet>
             <Snippet symbol="›">git commit -m "feat: token pipeline"</Snippet>
           </div>
         </Showcase>
@@ -429,7 +608,7 @@ export function KbdDoc() {
       <Section title="In context">
         <Showcase align="stretch">
           <div className="w-full max-w-sm divide-y divide-separator-secondary overflow-hidden rounded-2xl bg-surface ring-1 ring-border shadow-xs">
-            {[[<Copy key="c" />, "Copy", "⌘C"], [<Pencil key="p" />, "Rename", "F2"], [<Trash2 key="t" />, "Delete", "⌫"]].map(([icon, label, k], i) => (
+            {[[<RiFileCopyLine key="c" />, "Copy", "⌘C"], [<RiPencilLine key="p" />, "Rename", "F2"], [<RiDeleteBinLine key="t" />, "Delete", "⌫"]].map(([icon, label, k], i) => (
               <div key={i} className="flex items-center gap-3 px-3.5 py-2.5 text-paragraph-sm">
                 <span className="text-subtle [&_svg]:h-4 [&_svg]:w-4">{icon as React.ReactNode}</span>
                 <span className="flex-1">{label as string}</span>
@@ -502,10 +681,10 @@ export function AlertDoc() {
   Version 3.2.0 is live in production.
 </Alert>`}>
           <div className="w-full space-y-3">
-            <Alert tone="accent" title="New version available">Aperture 3.2 adds the Theme Studio and nine components.</Alert>
+            <Alert tone="accent" title="New version available">Aperture 3.2 adds featured icons, richer surfaces and nine new components.</Alert>
             <Alert tone="success" title="Deployment complete">Version 3.2.0 is live in production.</Alert>
             <Alert tone="warning" title="Approaching seat limit">You are using 9 of 10 seats.</Alert>
-            <Alert tone="danger" title="Build failed">Module not found: <Code>@aperture/icons</Code>.</Alert>
+            <Alert tone="danger" title="Build failed">Module not found: <Code>./ui/Alert</Code>.</Alert>
           </div>
         </Showcase>
       </Section>
@@ -522,7 +701,7 @@ export function AlertDoc() {
         <Showcase align="stretch">
           <div className="w-full space-y-3">
             {open && (
-              <Alert tone="warning" title="Payment method expires soon" onClose={() => setOpen(false)} action={<Button size="sm" variant="soft" tone="warning" startContent={<ExternalLink className="h-3.5 w-3.5" />}>Update card</Button>}>
+              <Alert tone="warning" title="Payment method expires soon" onClose={() => setOpen(false)} action={<Button size="sm" variant="soft" tone="warning" startContent={<RiExternalLinkLine className="h-3.5 w-3.5" />}>Update card</Button>}>
                 Visa ending 4242 expires next month.
               </Alert>
             )}

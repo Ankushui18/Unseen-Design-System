@@ -1,8 +1,53 @@
 import { useState, type HTMLAttributes, type ReactNode } from "react";
-import { AlertTriangle, Check, CheckCircle2, Copy, Info, XCircle } from "lucide-react";
 import { cn } from "../utils/cn";
 import type { Tone } from "./Button";
 import { useCopy } from "../lib/hooks";
+import { RiCheckLine, RiCheckboxCircleLine, RiCloseCircleLine, RiErrorWarningLine, RiFileCopyLine, RiInformationLine } from "@remixicon/react";
+
+/* ------------------------------ Featured Icon ------------------------------ */
+
+const featuredSoft: Record<Tone, string> = {
+  accent: "bg-accent-soft text-accent ring-accent/25 ring-inset shadow-xs",
+  default: "bg-surface-secondary text-muted ring-border ring-inset shadow-xs",
+  success: "bg-success-soft text-success-soft-foreground ring-success/25 ring-inset shadow-xs",
+  warning: "bg-warning-soft text-warning-soft-foreground ring-warning/25 ring-inset shadow-xs",
+  danger: "bg-danger-soft text-danger-soft-foreground ring-danger/25 ring-inset shadow-xs",
+};
+
+const featuredSolid: Record<Tone, string> = {
+  accent: "btn-accent-fill text-white",
+  default: "btn-neutral-fill text-white dark:text-neutral-950",
+  success: "bg-success text-success-foreground shadow-sm",
+  warning: "bg-warning text-warning-foreground shadow-sm",
+  danger: "bg-danger text-danger-foreground shadow-sm",
+};
+
+export function FeaturedIcon({
+  icon,
+  tone = "accent",
+  size = "md",
+  variant = "soft",
+  className,
+}: {
+  icon: ReactNode;
+  tone?: Tone;
+  size?: "xs" | "sm" | "md" | "lg";
+  variant?: "soft" | "solid" | "gradient";
+  className?: string;
+}) {
+  const dims = {
+    xs: "h-8 w-8 rounded-lg [&_svg]:h-[18px] [&_svg]:w-[18px]",
+    sm: "h-10 w-10 rounded-10 [&_svg]:h-[18px] [&_svg]:w-[18px]",
+    md: "h-12 w-12 rounded-xl [&_svg]:h-5 [&_svg]:w-5",
+    lg: "h-14 w-14 rounded-2xl [&_svg]:h-[22px] [&_svg]:w-[22px]",
+  }[size];
+  const treatment = variant === "solid" ? featuredSolid[tone] : variant === "gradient" ? `${tone === "accent" ? "btn-accent-fill" : "btn-neutral-fill"} text-white dark:text-neutral-950` : featuredSoft[tone];
+  return (
+    <span className={cn("inline-flex shrink-0 items-center justify-center ring-1 transition-transform duration-200 ease-out-quint", dims, treatment, variant === "soft" && "active:scale-95", className)}>
+      {icon}
+    </span>
+  );
+}
 
 /* ---------------------------------- Card ---------------------------------- */
 
@@ -222,11 +267,12 @@ export function Avatar({
 export function AvatarGroup({ items, max = 4, size = "md" }: { items: { name: string; src?: string }[]; max?: number; size?: "xs" | "sm" | "md" | "lg" }) {
   const shown = items.slice(0, max);
   const rest = items.length - shown.length;
+  const tones: Tone[] = ["accent", "success", "warning", "danger", "default"];
   return (
     <div className="flex items-center -space-x-2">
       {shown.map((it, i) => (
         <span key={i} className="rounded-full ring-2 ring-background">
-          <Avatar {...it} size={size} tone={(["accent", "success", "warning", "danger", "default"] as Tone[])[i % 5]} />
+          <Avatar {...it} size={size} tone={tones[i % tones.length]} />
         </span>
       ))}
       {rest > 0 && (
@@ -234,6 +280,45 @@ export function AvatarGroup({ items, max = 4, size = "md" }: { items: { name: st
           <Avatar name={`+${rest}`} size={size} />
         </span>
       )}
+    </div>
+  );
+}
+
+/** AlignUI-style compact grouping: a tighter stack inside a soft capsule. */
+export function AvatarGroupCompact({
+  items,
+  max = 3,
+  size = "md",
+  tone = "default",
+  variant = "default",
+  className,
+}: {
+  items: { name: string; src?: string }[];
+  max?: number;
+  size?: "xs" | "sm" | "md" | "lg";
+  tone?: Tone;
+  variant?: "default" | "stroke";
+  className?: string;
+}) {
+  const shown = items.slice(0, max);
+  const rest = items.length - shown.length;
+  const pad = { xs: "px-1 text-paragraph-xs", sm: "px-1.5 text-paragraph-xs", md: "px-2 text-paragraph-sm", lg: "px-2.5 text-paragraph-sm" }[size];
+  return (
+    <div
+      className={cn(
+        "flex w-max items-center rounded-full bg-surface p-0.5 shadow-xs",
+        variant === "stroke" && "ring-1 ring-border",
+        className,
+      )}
+    >
+      <div className="flex items-center -space-x-1">
+        {shown.map((it, i) => (
+          <span key={i} className="rounded-full ring-2 ring-surface">
+            <Avatar {...it} size={size} tone={tone === "default" ? (["accent", "success", "warning", "danger", "default", "accent"] as Tone[])[i % 6] : tone} />
+          </span>
+        ))}
+      </div>
+      {rest > 0 && <span className={cn("font-medium text-muted tabular-nums", pad)}>+{rest}</span>}
     </div>
   );
 }
@@ -263,7 +348,7 @@ export function Snippet({ children, className, symbol = "$" }: { children: strin
         className="shrink-0 rounded-md p-1.5 text-subtle transition hover:bg-surface-hover hover:text-foreground"
         aria-label="Copy"
       >
-        {copied ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
+        {copied ? <RiCheckLine className="h-3.5 w-3.5 text-success" /> : <RiFileCopyLine className="h-3.5 w-3.5" />}
       </button>
     </div>
   );
@@ -368,11 +453,11 @@ export function CircularProgress({ value = 0, size = 56, stroke = 5, tone = "acc
 /* ---------------------------------- Alert --------------------------------- */
 
 const alertIcons = {
-  accent: Info,
-  default: Info,
-  success: CheckCircle2,
-  warning: AlertTriangle,
-  danger: XCircle,
+  accent: RiInformationLine,
+  default: RiInformationLine,
+  success: RiCheckboxCircleLine,
+  warning: RiErrorWarningLine,
+  danger: RiCloseCircleLine,
 };
 
 export function Alert({

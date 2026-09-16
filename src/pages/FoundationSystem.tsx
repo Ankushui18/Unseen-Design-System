@@ -1,5 +1,4 @@
 import { useState, type CSSProperties, type ReactNode } from "react";
-import { ArrowRight, Check, Copy, Grid2x2, List, Mail, Plus, RotateCcw } from "lucide-react";
 import { PageHeader, Section } from "../docs/Blocks";
 import { CodeBlock } from "../docs/CodeBlock";
 import { useCopy } from "../lib/hooks";
@@ -7,6 +6,7 @@ import { RADIUS_PRESETS, useTheme } from "../lib/theme";
 import { Button } from "../ui/Button";
 import { Avatar } from "../ui/Display";
 import { Input } from "../ui/Form";
+import { RiAddLine, RiArrowRightLine, RiCheckLine, RiFileCopyLine, RiLayoutGridLine, RiListUnordered, RiMailLine, RiRestartLine } from "@remixicon/react";
 
 const SPACING = [
   { name: "0", px: 0 }, { name: "0.5", px: 2 }, { name: "1", px: 4 }, { name: "1.5", px: 6 },
@@ -31,7 +31,7 @@ const RADII = [
 function TokenCopy({ text, children, className = "", style }: { text: string; children: ReactNode; className?: string; style?: CSSProperties }) {
   const { copy, copied } = useCopy();
   return <button type="button" className={`token-specimen ${className}`} style={style} onClick={() => copy(text)} aria-label={`Copy ${text}`}>
-    <span className="token-copy-indicator">{copied ? <Check size={13} /> : <Copy size={13} />}</span>
+    <span className="token-copy-indicator">{copied ? <RiCheckLine size={13} /> : <RiFileCopyLine size={13} />}</span>
     {children}
     <span className="sr-only" aria-live="polite">{copied ? "Copied" : ""}</span>
   </button>;
@@ -51,8 +51,8 @@ export function SpacingPage() {
         <div className="foundation-panel-toolbar">
           <span className="foundation-panel-title">Base scale <span>16 values</span></span>
           <div className="preview-tabs" role="tablist" aria-label="Spacing scale view">
-            <button role="tab" aria-selected={view === "visual"} onClick={() => setView("visual")}><Grid2x2 size={14} /> Visual</button>
-            <button role="tab" aria-selected={view === "reference"} onClick={() => setView("reference")}><List size={14} /> Reference</button>
+            <button role="tab" aria-selected={view === "visual"} onClick={() => setView("visual")}><RiLayoutGridLine size={14} /> Visual</button>
+            <button role="tab" aria-selected={view === "reference"} onClick={() => setView("reference")}><RiListUnordered size={14} /> Reference</button>
           </div>
         </div>
         {view === "visual" ? <div className="spacing-specimen-grid page-enter">
@@ -75,7 +75,7 @@ export function SpacingPage() {
         <div className="spacing-context-controls">
           <label>Container padding <output>{padding}px</output><input type="range" min="8" max="40" step="4" value={padding} onChange={(e) => setPadding(Number(e.target.value))} /></label>
           <label>Element gap <output>{gap}px</output><input type="range" min="4" max="32" step="4" value={gap} onChange={(e) => setGap(Number(e.target.value))} /></label>
-          <button onClick={() => { setGap(16); setPadding(24); }} className="foundation-reset"><RotateCcw size={13} /> Reset to default</button>
+          <button onClick={() => { setGap(16); setPadding(24); }} className="foundation-reset"><RiRestartLine size={13} /> Reset to default</button>
         </div>
         <div className="spacing-context-canvas">
           <div className="spacing-context-frame" style={{ padding }}>
@@ -131,7 +131,7 @@ export function ElevationPage() {
         <div className="radius-specimen-grid">
           {RADII.map((token) => <RadiusSpecimen key={token.name} token={token} scale={radiusScale} selected={selectedRadius === token.name} onSelect={() => setSelectedRadius(token.name)} />)}
         </div>
-        <div className="foundation-panel-footer">Scales with your theme <button className="foundation-reset" onClick={() => set({ radiusScale: 1 })}><RotateCcw size={12} /> Reset multiplier</button></div>
+        <div className="foundation-panel-footer">Scales with your theme <button className="foundation-reset" onClick={() => set({ radiusScale: 1 })}><RiRestartLine size={12} /> Reset multiplier</button></div>
       </div>
     </Section>
 
@@ -139,10 +139,10 @@ export function ElevationPage() {
       <div className="radius-context-canvas">
         <div className="radius-context-meta"><code>rounded-{selectedRadius}</code><span>{current.use}</span><strong>{current.px === 9999 ? "Fully rounded" : `${Number((current.px * radiusScale).toFixed(1))}px`}</strong></div>
         <form className="radius-context-card" style={{ borderRadius: appliedRadius }} onSubmit={(e) => e.preventDefault()}>
-          <div className="radius-context-icon"><Plus size={20} /></div>
+          <div className="radius-context-icon"><RiAddLine size={20} /></div>
           <h3>Your next workspace</h3><p>A little structure for your next big idea.</p>
           <Input label="Workspace name" value={sampleName} onChange={(e) => setSampleName(e.target.value)} />
-          <Button fullWidth endContent={<ArrowRight size={16} />} onClick={() => setSampleName("Workspace created")}>Create workspace</Button>
+          <Button fullWidth endContent={<RiArrowRightLine size={16} />} onClick={() => setSampleName("Workspace created")}>Create workspace</Button>
         </form>
       </div>
     </Section>
@@ -150,7 +150,7 @@ export function ElevationPage() {
     <Section title="Elevation" description="Most surfaces only need a border. Reserve stronger shadows for elements that float above the page.">
       <div className="elevation-specimen-grid">
         {elevations.map((level) => <TokenCopy key={level.name} text={level.name === "none" ? "shadow-none" : `shadow-${level.name}`} className="elevation-specimen">
-          <div className="elevation-object" style={{ boxShadow: level.shadow }}><Mail size={18} /><span>{level.label}</span></div>
+          <div className="elevation-object" style={{ boxShadow: level.shadow }}><RiMailLine size={18} /><span>{level.label}</span></div>
           <div className="token-specimen-label"><code>shadow-{level.name}</code></div><small>{level.context}</small>
         </TokenCopy>)}
       </div>
@@ -164,7 +164,7 @@ export function ElevationPage() {
         <tr><td>Floating menu</td><td><code>rounded-xl</code></td><td><code>shadow-md</code></td></tr>
         <tr><td>Dialog</td><td><code>rounded-2xl</code></td><td><code>shadow-xl</code></td></tr>
       </tbody></table></div>
-      <div className="foundation-guidance"><Check size={16} /><p>Shadows and surfaces respond to light and dark mode. Use the theme toggle in the navigation to compare them.</p></div>
+      <div className="foundation-guidance"><RiCheckLine size={16} /><p>Shadows and surfaces respond to light and dark mode. Use the theme toggle in the navigation to compare them.</p></div>
     </Section>
   </>;
 }
@@ -173,7 +173,7 @@ function RadiusSpecimen({ token, scale, selected, onSelect }: { token: typeof RA
   const { copy, copied } = useCopy();
   const value = token.px === 9999 ? 9999 : token.px * scale;
   return <button className={`token-specimen radius-specimen ${selected ? "is-selected" : ""}`} onClick={() => { onSelect(); copy(`rounded-${token.name}`); }} aria-label={`Select and copy rounded-${token.name}`} aria-pressed={selected}>
-    <span className="token-copy-indicator">{copied ? <Check size={13} /> : <Copy size={13} />}</span>
+    <span className="token-copy-indicator">{copied ? <RiCheckLine size={13} /> : <RiFileCopyLine size={13} />}</span>
     <div className="radius-guide"><span className="radius-shape" style={{ borderRadius: value }} /></div>
     <div className="token-specimen-label"><code>{token.name}</code><span>{token.px === 9999 ? "Full" : `${Number(value.toFixed(1))}px`}</span></div>
   </button>;
