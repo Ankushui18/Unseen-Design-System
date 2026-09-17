@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, FancyButton } from "../ui/Button";
-import { Avatar, Card, Chip, Kbd, Progress, Snippet } from "../ui/Display";
+import { Avatar, AvatarGroupCompact, Card, Chip, Kbd, Progress, Snippet, User } from "../ui/Display";
 import { Input, Switch } from "../ui/Form";
 import { Accordion, Breadcrumbs, Tabs } from "../ui/Navigation";
 import { LiveEditor, LiveError, LivePreview, LiveProvider } from "react-live";
@@ -12,6 +12,7 @@ import { PREVIEWS } from "../docs/previews";
 import { useCopy } from "../lib/hooks";
 import { DigitInput } from "../ui/Extra";
 import {
+  AiAssistantTemplate,
   AnalyticsDashboardTemplate,
   BillingPageTemplate,
   TeamPeopleTemplate,
@@ -70,7 +71,7 @@ const COMPONENT_COUNT = COMPONENT_GROUPS.reduce((count, group) => count + group.
 const noop = () => {};
 
 /* -------------------------------------------------------------------------- */
-/*             1. HEROUI & SHADCN/UI INSPIRED BENTO MOSAIC CARDS             */
+/*           1. HEROUI & SHADCN/UI INTERACTIVE BENTO MICRO-APPS               */
 /* -------------------------------------------------------------------------- */
 
 function MusicPlayerShowcase() {
@@ -405,6 +406,8 @@ function AiPromptShowcase() {
       <div className="flex items-center gap-2">
         <div className="relative flex-1">
           <input
+            id="ai-prompt-input-hero"
+            aria-label="Ask neural co-pilot"
             type="text"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -446,16 +449,11 @@ function ProfileShowcaseCard() {
   return (
     <Card elevation={2} className="border-glow p-5 space-y-4 text-left">
       <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <Avatar name="Elena Vance" size="md" tone="accent" />
-            <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-success ring-2 ring-surface" />
-          </div>
-          <div>
-            <h4 className="text-label-sm font-medium text-foreground">Elena Vance</h4>
-            <p className="text-paragraph-xs text-subtle">Staff Design Technologist</p>
-          </div>
-        </div>
+        <User
+          name="Elena Vance"
+          description="Staff Design Technologist"
+          avatarProps={{ tone: "accent", size: "md" }}
+        />
         <Button
           size="sm"
           variant={following ? "outline" : "solid"}
@@ -484,7 +482,7 @@ function ProfileShowcaseCard() {
 
       <div className="flex items-center gap-1.5 flex-wrap">
         <Chip size="sm" variant="soft" tone="accent">React 19</Chip>
-        <Chip size="sm" variant="soft" tone="default">Design Tokens</Chip>
+        <Chip size="sm" variant="soft" tone="default">HeroUI Parity</Chip>
         <Chip size="sm" variant="soft" tone="success">OKLCH</Chip>
       </div>
     </Card>
@@ -704,85 +702,6 @@ function ActionsDemo() {
   );
 }
 
-function AiChatShowcase() {
-  const [messages, setMessages] = useState<{ id: string; role: "user" | "assistant"; text: string; time: string }[]>([
-    { id: "1", role: "assistant", text: "Hello! I can help you compose layouts, optimize OKLCH palettes, or write accessible React 19 components. What are you building today?", time: "10:42 AM" },
-    { id: "2", role: "user", text: "How do I ensure subpixel borders look crisp across high-DPI retina screens?", time: "10:43 AM" },
-    { id: "3", role: "assistant", text: "Use inset box-shadows `box-shadow: inset 0 0 0 1px var(--border)` instead of fractional border-widths. This guarantees hardware-accelerated 1px physical rasterization regardless of DPR scaling.", time: "10:43 AM" },
-  ]);
-  const [input, setInput] = useState("");
-  const { push } = useToast();
-
-  const handleSend = () => {
-    if (!input.trim()) return;
-    const userMsg = input.trim();
-    const newId = String(Date.now());
-    setMessages((prev) => [...prev, { id: newId, role: "user", text: userMsg, time: "Just now" }]);
-    setInput("");
-
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: String(Date.now() + 1),
-          role: "assistant",
-          text: `Unseen tokens applied for "${userMsg}". All color variables have been verified for WCAG AAA contrast in dark and light mode.`,
-          time: "Just now",
-        },
-      ]);
-      push({ title: "Assistant Replied", tone: "accent" });
-    }, 600);
-  };
-
-  return (
-    <Card elevation={2} className="border-glow p-5 space-y-4 text-left max-w-2xl mx-auto">
-      <div className="flex items-center justify-between border-b border-separator pb-3">
-        <div className="flex items-center gap-2.5">
-          <Avatar name="Unseen AI" size="sm" tone="accent" />
-          <div>
-            <h4 className="text-label-sm font-medium text-foreground">Unseen Chat</h4>
-            <p className="text-[11px] text-subtle">Context: Design System Foundations</p>
-          </div>
-        </div>
-        <Chip tone="success" size="sm" variant="soft" dot>Connected</Chip>
-      </div>
-
-      <div className="space-y-3 max-h-[280px] overflow-y-auto pr-1">
-        {messages.map((m) => (
-          <div
-            key={m.id}
-            className={cn(
-              "flex flex-col max-w-[85%] rounded-10 p-3 text-paragraph-xs leading-relaxed",
-              m.role === "user"
-                ? "ml-auto bg-accent text-accent-foreground rounded-br-none"
-                : "bg-surface-secondary text-foreground rounded-bl-none border border-border"
-            )}
-          >
-            <span>{m.text}</span>
-            <span className={cn("text-[9px] mt-1 font-mono", m.role === "user" ? "text-accent-foreground/70 text-right" : "text-subtle")}>
-              {m.time}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      <div className="flex items-center gap-2 pt-2 border-t border-separator">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSend()}
-          placeholder="Ask a question about components or tokens..."
-          className="flex-1 rounded-10 border border-border bg-surface px-3 py-2 text-paragraph-xs text-foreground placeholder:text-muted focus:outline-none focus:ring-1 focus:ring-accent"
-        />
-        <Button size="sm" variant="solid" tone="accent" onClick={handleSend} disabled={!input.trim()} startContent={<RiSendPlane2Fill size={14} />}>
-          Send
-        </Button>
-      </div>
-    </Card>
-  );
-}
-
 /* -------------------------------------------------------------------------- */
 /*             2. FLAGSHIP INTERACTIVE PRODUCT WORKSPACE SHOWCASE            */
 /* -------------------------------------------------------------------------- */
@@ -809,7 +728,7 @@ function WorkspaceShowcase() {
           <h2>Experience the system in action.</h2>
         </div>
         <p>
-          Switch between micro-apps, financial dashboards, AI assistants, and enterprise templates. Everything rendered live with aperture primitives.
+          Switch between micro-apps, financial dashboards, AI assistants, and enterprise templates. Everything rendered live with Unseen primitives.
         </p>
       </div>
 
@@ -874,7 +793,7 @@ function WorkspaceShowcase() {
 
         {activeTab === "ai" && (
           <div className="rounded-14 border border-border bg-surface p-6 shadow-sm">
-            <AiChatShowcase />
+            <AiAssistantTemplate />
           </div>
         )}
 
@@ -1025,7 +944,7 @@ const HERO_SNIPPETS: Record<string, { filename: string; code: string; imports: s
         label="Master Password"
         type="password"
         placeholder="••••••••••"
-        defaultValue="aperture_2026"
+        defaultValue="unseen_2026"
       />
     </div>
   );
@@ -1053,7 +972,7 @@ const HERO_SNIPPETS: Record<string, { filename: string; code: string; imports: s
   },
 };
 
-const HERO_SCOPE = { Button, FancyButton, Input, Switch, Chip, React };
+const HERO_SCOPE = { Button, FancyButton, Input, Switch, Chip, User, React };
 
 function HeroEditor() {
   const [activeFile, setActiveFile] = useState<string>("workspace-card.tsx");
@@ -1502,7 +1421,7 @@ const SECTOR_DATA: Record<SectorKey, SectorData> = {
       { label: "Latency P99", val: "142ms", change: "-18ms" },
       { label: "Cache Hit Rate", val: "94.8%" },
     ],
-    templateHref: "templates/analytics",
+    templateHref: "templates/ai",
   },
   hr: {
     id: "hr",
@@ -1710,7 +1629,7 @@ function SectorTemplatesSection({ navigate }: { navigate: (to: string) => void }
                       <span className="font-mono text-success text-[10px]">128 tok/sec</span>
                     </div>
                     <p className="text-muted text-[11px] font-mono">
-                      {`{"status": "streaming", "model": "aperture-neural-v2", "context_tokens": 1284, "temperature": 0.7}`}
+                      {`{"status": "streaming", "model": "unseen-neural-v2", "context_tokens": 1284, "temperature": 0.7}`}
                     </p>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
@@ -1990,11 +1909,13 @@ function HomeDirectory({ navigate }: { navigate: (to: string) => void }) {
 /* -------------------------------------------------------------------------- */
 
 export default function Home({ navigate }: { navigate: (to: string) => void }) {
+  const [heroVariant, setHeroVariant] = useState<"solid" | "fancy" | "soft" | "outline" | "ghost">("fancy");
+
   return (
     <main id="main" tabIndex={-1} className="home-page relative">
       {/* AlignUI Ambient Glow & Subtle Grid Layers */}
-      <div className="hero-ambient-glow" aria-hidden="true" />
-      <div className="subtle-grid-pattern absolute inset-0 h-[640px] pointer-events-none" aria-hidden="true" />
+      <div className="hero-ambient-mesh" aria-hidden="true" />
+      <div className="subtle-grid-pattern absolute inset-0 h-[680px] pointer-events-none" aria-hidden="true" />
 
       {/* Blueprint Coordinate Header Strip */}
       <div className="w-full border-b border-border bg-surface-secondary/40 py-1 px-4 text-center">
@@ -2020,12 +1941,15 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
 
       <section className="home-hero page-enter relative z-10 max-w-5xl mx-auto pt-8">
         {/* Top Feature Announcement Pill with Social Proof Pile */}
-        <div className="inline-flex items-center gap-3 rounded-full bg-surface/85 py-1 pl-2 pr-4 ring-1 ring-border shadow-xs backdrop-blur-md transition hover:ring-border-strong hover:scale-[1.01] mb-6">
-          <div className="flex -space-x-1.5 items-center">
-            <Avatar name="Sarah Jenkins" size="xs" tone="accent" />
-            <Avatar name="Marcus Chen" size="xs" tone="success" />
-            <Avatar name="Elena Vance" size="xs" tone="warning" />
-          </div>
+        <div className="inline-flex items-center gap-3 rounded-full bg-surface/85 py-1.5 pl-2 pr-4 ring-1 ring-border shadow-xs backdrop-blur-md transition hover:ring-border-strong hover:scale-[1.01] mb-6">
+          <AvatarGroupCompact
+            items={[
+              { name: "Sarah Jenkins" },
+              { name: "Marcus Chen" },
+              { name: "Elena Vance" },
+            ]}
+            size="xs"
+          />
           <span className="text-paragraph-xs font-medium text-foreground">
             Trusted by 2,400+ designers & engineers
           </span>
@@ -2035,30 +1959,73 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
           </span>
         </div>
 
-        {/* High-Impact Master Headline */}
-        <h1 className="tracking-tight text-title-h3 sm:text-title-h1 text-foreground font-medium max-w-4xl mx-auto leading-[1.08]">
-          Design & Development | <span className="text-gradient">perfectly aligned</span>.
+        {/* High-Impact Master Headline (HeroUI + AlignUI Synthesis) */}
+        <h1 className="tracking-tight text-title-h3 sm:text-title-h1 text-foreground font-medium max-w-4xl mx-auto leading-[1.06]">
+          Design & Development <span className="text-muted/30 font-light">|</span> <span className="text-gradient">perfectly aligned</span>.
         </h1>
         <p className="mt-5 max-w-2xl mx-auto text-paragraph-md sm:text-paragraph-lg text-muted leading-relaxed">
-          Flexible components, consistent UI, quick development, easy integration. Built for React 19 and styled with Tailwind CSS v4 & OKLCH tokens.
+          The accessible React 19 component library combining HeroUI's interactive sandbox, shadcn's copy-paste flexibility, and AlignUI's sub-pixel token craft.
         </p>
 
-        {/* Action Button Strip */}
-        <div className="home-hero-actions mt-8">
-          <FancyButton size="lg" tone="accent" onClick={() => navigate("components")}>
-            Get Started — It's free <RiArrowRightLine size={18} />
-          </FancyButton>
-          <Button size="lg" variant="outline" tone="default" onClick={() => navigate("blocks")}>
-            Browse 40+ blocks
-          </Button>
-          <Button size="lg" variant="ghost" tone="default" onClick={() => navigate("templates")}>
-            Sectoral templates
-          </Button>
+        {/* shadcn/ui Interactive Hero Component Switcher */}
+        <div className="mt-8 flex flex-col items-center gap-3">
+          <div className="inline-flex items-center gap-1 rounded-14 border border-border bg-surface-secondary/70 p-1 backdrop-blur-sm shadow-xs">
+            {(["fancy", "solid", "soft", "outline", "ghost"] as const).map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => setHeroVariant(v)}
+                className={cn(
+                  "rounded-10 px-3 py-1 text-[11px] font-medium transition-all capitalize",
+                  heroVariant === v
+                    ? "bg-surface text-foreground shadow-xs border border-border font-medium"
+                    : "text-muted hover:text-foreground"
+                )}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-3 mt-2">
+            {heroVariant === "fancy" && (
+              <FancyButton size="lg" tone="accent" onClick={() => navigate("components")}>
+                Get Started — It's free <RiArrowRightLine size={18} />
+              </FancyButton>
+            )}
+            {heroVariant === "solid" && (
+              <Button size="lg" variant="solid" tone="accent" onClick={() => navigate("components")}>
+                Solid Primary Button <RiArrowRightLine size={18} />
+              </Button>
+            )}
+            {heroVariant === "soft" && (
+              <Button size="lg" variant="soft" tone="accent" onClick={() => navigate("components")}>
+                Soft Tinted Button <RiArrowRightLine size={18} />
+              </Button>
+            )}
+            {heroVariant === "outline" && (
+              <Button size="lg" variant="outline" tone="default" onClick={() => navigate("components")}>
+                Stroke Bordered Button <RiArrowRightLine size={18} />
+              </Button>
+            )}
+            {heroVariant === "ghost" && (
+              <Button size="lg" variant="ghost" tone="default" onClick={() => navigate("components")}>
+                Ghost Action Button <RiArrowRightLine size={18} />
+              </Button>
+            )}
+
+            <Button size="lg" variant="outline" tone="default" onClick={() => navigate("blocks")}>
+              Browse 40+ blocks
+            </Button>
+            <Button size="lg" variant="ghost" tone="default" onClick={() => navigate("templates")}>
+              Sectoral templates
+            </Button>
+          </div>
         </div>
 
         {/* 4 Pillars Grid (AlignUI Free vs Pro Architecture) */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-12 text-left">
-          <div className="p-4 rounded-10 border border-border bg-surface/70 backdrop-blur-sm">
+          <div className="p-4 rounded-10 border border-border bg-surface/70 backdrop-blur-sm card-specular-glow">
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-label-xs font-medium text-foreground">Base Components</span>
               <span className="px-1.5 py-0.2 rounded-full bg-success/15 text-success text-[9px] font-mono font-medium">FREE</span>
@@ -2066,7 +2033,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
             <p className="text-[11px] text-muted">76+ open-source components with zero bundle lock-in.</p>
           </div>
 
-          <div className="p-4 rounded-10 border border-border bg-surface/70 backdrop-blur-sm">
+          <div className="p-4 rounded-10 border border-border bg-surface/70 backdrop-blur-sm card-specular-glow">
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-label-xs font-medium text-foreground">Components & Blocks</span>
               <span className="px-1.5 py-0.2 rounded-full bg-accent/15 text-accent text-[9px] font-mono font-medium">PRO</span>
@@ -2074,7 +2041,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
             <p className="text-[11px] text-muted">40+ ready-made compositions for lightning speed.</p>
           </div>
 
-          <div className="p-4 rounded-10 border border-border bg-surface/70 backdrop-blur-sm">
+          <div className="p-4 rounded-10 border border-border bg-surface/70 backdrop-blur-sm card-specular-glow">
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-label-xs font-medium text-foreground">Sectoral Templates</span>
               <span className="px-1.5 py-0.2 rounded-full bg-accent/15 text-accent text-[9px] font-mono font-medium">PRO</span>
@@ -2082,7 +2049,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
             <p className="text-[11px] text-muted">Multi-page flows for AI, HR, Finance, Crypto.</p>
           </div>
 
-          <div className="p-4 rounded-10 border border-border bg-surface/70 backdrop-blur-sm">
+          <div className="p-4 rounded-10 border border-border bg-surface/70 backdrop-blur-sm card-specular-glow">
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-label-xs font-medium text-foreground">Token Aligned</span>
               <span className="px-1.5 py-0.2 rounded-full bg-accent/15 text-accent text-[9px] font-mono font-medium">PRO</span>
@@ -2092,7 +2059,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
         </div>
       </section>
 
-      {/* Live React Playground / Editor */}
+      {/* Live Multi-File React Playground / Studio */}
       <div className="home-container relative z-10 mt-8">
         <div className="hero-showcase page-enter">
           <HeroEditor />
@@ -2196,13 +2163,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
           <div className="visual-language-panel">
             <p className="visual-language-label">Data</p>
             <div className="visual-language-items" style={{ maxWidth: 200 }}>
-              <div className="flex items-center gap-2.5">
-                <Avatar name="Alex" size="sm" tone="accent" />
-                <div className="min-w-0">
-                  <p className="text-label-xs text-foreground truncate">Alex Morgan</p>
-                  <p className="text-[10px] text-subtle">Product Design</p>
-                </div>
-              </div>
+              <User name="Alex Morgan" description="Product Design" avatarProps={{ tone: "accent", size: "sm" }} />
               <div className="flex items-center gap-2.5">
                 <Avatar name="B" size="xs" tone="success" square />
                 <span className="text-paragraph-xs text-subtle">Payment Card</span>
@@ -2266,7 +2227,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
                 multiple
                 items={[
                   { key: "free", title: "Is everything really 100% free and open-source?", content: "Yes. All 76+ primitives, 40+ composed blocks, and 5 sectoral templates are completely unlocked under the permissive MIT license." },
-                  { key: "commercial", title: "Can I use Unseen components in client and commercial SaaS projects?", content: "Yes. You have full rights to build and deploy commercial SaaS products, client client projects, internal dashboards, and open-source tools without royalties." },
+                  { key: "commercial", title: "Can I use Unseen components in client and commercial SaaS projects?", content: "Yes. You have full rights to build and deploy commercial SaaS products, client projects, internal dashboards, and open-source tools without royalties." },
                 ]}
               />
             </div>
