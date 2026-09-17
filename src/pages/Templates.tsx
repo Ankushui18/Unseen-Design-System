@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { PageHeader, Showcase } from "../docs/Blocks";
+import { useCopy } from "../lib/hooks";
 import { Button } from "../ui/Button";
 import { Avatar, AvatarGroupCompact, Card, Chip, FeaturedIcon, Progress } from "../ui/Display";
 import { Input, Select, Slider } from "../ui/Form";
@@ -26,11 +27,13 @@ import {
   RiArrowUpLine,
   RiAttachment2,
   RiBankCardLine,
+  RiCheckLine,
   RiCheckboxCircleLine,
   RiCloseLine,
   RiDashboardLine,
   RiDownloadLine,
   RiEyeLine,
+  RiFileCopyLine,
   RiFolderLine,
   RiHomeLine,
   RiLifebuoyLine,
@@ -1425,9 +1428,6 @@ export function MetricGrid() {
         <div className="mt-2 flex items-baseline gap-2">
           <h3 className="text-title-h3 font-mono font-medium">$128,450</h3>
         </div>
-        <div className="mt-3 h-1 w-full rounded-full bg-surface-secondary overflow-hidden">
-          <div className="h-full bg-accent" style={{ width: "72%" }} />
-        </div>
       </Card>
     </div>
   );
@@ -1444,6 +1444,7 @@ export function AiAssistantTemplate() {
   const [selectedModel, setSelectedModel] = useState("Unseen Vision-4");
   const [temperature, setTemperature] = useState(0.7);
   const [totalTokens, setTotalTokens] = useState(3840);
+  const { copy, copied } = useCopy();
   const { push } = useToast();
 
   const handleSend = () => {
@@ -1464,8 +1465,8 @@ export function AiAssistantTemplate() {
       const assistantMsg: AiMessage = {
         id: String(Date.now() + 1),
         role: "assistant",
-        text: `Generated response for "${userPrompt}". All token variables verified with WCAG AAA conformance standards.`,
-        code: `// Synthesized with model: ${selectedModel}\nexport const TokenSpec = { tone: "accent", radius: "10px", elevation: 2 };`,
+        text: `Synthesized production-grade response for: "${userPrompt}". All tokens mathematically aligned to the OKLCH color space with full WCAG AAA contrast conformance.`,
+        code: `import { Card, Chip } from "./ui/Display";\nimport { FancyButton } from "./ui/Button";\n\nexport function Specimen() {\n  return (\n    <Card className="p-4 border-glow">\n      <Chip tone="accent" dot>Active Specimen</Chip>\n      <FancyButton tone="accent" size="sm" className="mt-3">Action</FancyButton>\n    </Card>\n  );\n}`,
         time: "Just now",
         model: selectedModel,
       };
@@ -1481,83 +1482,90 @@ export function AiAssistantTemplate() {
   };
 
   return (
-    <div className="w-full rounded-20 bg-surface ring-1 ring-border shadow-md overflow-hidden text-left">
-      {/* Studio Top Ticker Bar */}
-      <div className="border-b border-separator bg-surface-secondary/60 px-4 py-2 flex items-center justify-between text-[11px] font-mono text-subtle">
+    <div className="w-full rounded-16 bg-surface ring-1 ring-border shadow-lg overflow-hidden text-left card-specular-glow">
+      {/* Studio Top Control Strip */}
+      <div className="border-b border-separator bg-surface-secondary/70 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-subtle">
         <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
-          <span className="text-foreground font-medium">Neural Studio Active</span>
-          <span>•</span>
-          <span>Latency: 38ms</span>
+          <span className="flex h-2 w-2 rounded-full bg-success animate-pulse" />
+          <span className="text-foreground font-medium">Neural Enclave Active</span>
+          <span className="text-subtle">•</span>
+          <span className="rounded bg-surface px-1.5 py-0.5 text-[10px] text-accent ring-1 ring-border">{selectedModel}</span>
         </div>
         <div className="flex items-center gap-4">
-          <span>Tokens: {totalTokens.toLocaleString()} / 128k</span>
-          <span>Session: #892-AE</span>
+          <span className="text-foreground font-medium font-mono">{totalTokens.toLocaleString()} / 128,000 tkn</span>
+          <span className="hidden sm:inline">P99: 38ms</span>
+          <span className="rounded-full bg-success/15 px-2 py-0.5 text-[9px] font-mono font-medium text-success">OKLCH Grounded</span>
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-12 min-h-[720px]">
+      <div className="grid lg:grid-cols-12 min-h-[640px]">
         {/* Left Parameter Tuning Sidebar */}
-        <aside className="lg:col-span-4 border-r border-separator bg-surface-secondary/40 p-5 space-y-6">
+        <aside className="lg:col-span-4 border-r border-separator bg-surface-secondary/30 p-5 space-y-5">
           <div className="space-y-1">
-            <h3 className="text-label-sm font-medium text-foreground">Model Parameters</h3>
-            <p className="text-[11px] text-muted">Configure neural hyper-parameters & runtime context</p>
+            <h3 className="text-label-sm font-medium text-foreground">Hyperparameters</h3>
+            <p className="text-[11px] text-muted">Tune sampling randomness and token context window</p>
           </div>
 
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <label htmlFor="ai-model-select" className="text-label-xs font-medium block text-foreground">Active Model</label>
+              <label htmlFor="ai-model-select" className="text-label-xs font-medium block text-foreground">Active Architecture</label>
               <select
                 id="ai-model-select"
                 aria-label="Active Model"
                 value={selectedModel}
                 onChange={(e) => setSelectedModel(e.target.value)}
-                className="w-full rounded-10 border border-border bg-surface px-3 py-2 text-paragraph-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
+                className="w-full rounded-10 border border-border bg-surface px-3 py-2 text-paragraph-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent shadow-xs"
               >
-                <option value="Unseen Vision-4">Unseen Vision-4 (Flagship)</option>
-                <option value="Claude-3.5-Sonnet">Claude 3.5 Sonnet</option>
-                <option value="GPT-4o-Neural">GPT-4o Neural</option>
+                <option value="Unseen Vision-4">Unseen Vision-4 (128k Flagship)</option>
+                <option value="Claude-3.5-Sonnet">Claude 3.5 Sonnet (200k Context)</option>
+                <option value="GPT-4o-Neural">GPT-4o Neural (Omni)</option>
               </select>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <div className="flex justify-between text-label-xs">
-                <label htmlFor="temp-slider" className="font-medium text-foreground">Temperature</label>
-                <span className="font-mono text-muted">{temperature}</span>
+                <label htmlFor="temp-slider-range" className="font-medium text-foreground">Temperature (Entropy)</label>
+                <span className="font-mono text-foreground font-medium">{temperature.toFixed(2)}</span>
               </div>
               <input
-                id="temp-slider"
+                id="temp-slider-range"
                 aria-label="Temperature slider"
                 type="range"
                 min="0"
                 max="1"
-                step="0.1"
+                step="0.05"
                 value={temperature}
                 onChange={(e) => setTemperature(parseFloat(e.target.value))}
-                className="w-full accent-[var(--accent)] cursor-pointer"
+                className="w-full h-1.5 rounded-full bg-surface-secondary accent-[var(--accent)] cursor-pointer"
               />
-              <span className="text-[10px] text-subtle block">Controls sampling creativity vs precision</span>
+              <div className="flex justify-between text-[10px] font-mono text-subtle">
+                <span>Deterministic (0.0)</span>
+                <span>Creative (1.0)</span>
+              </div>
             </div>
 
-            <div className="space-y-2 pt-2 border-t border-separator">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-subtle block">Prompt Presets</span>
+            <div className="space-y-2 pt-3 border-t border-separator">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-subtle block">Curated Prompt Presets</span>
               <div className="space-y-1.5">
                 {[
-                  "Design System Architect",
-                  "OKLCH Token Generator",
-                  "Accessibility Auditor",
-                  "Tailwind v4 Converter",
+                  { title: "Design System Architect", tag: "System" },
+                  { title: "OKLCH Token Generator", tag: "Colors" },
+                  { title: "Accessibility Auditor", tag: "WCAG" },
+                  { title: "Tailwind v4 Bridge", tag: "Tokens" },
                 ].map((preset) => (
                   <button
-                    key={preset}
+                    key={preset.title}
                     type="button"
                     onClick={() => {
-                      setInput(`Generate guidelines for: ${preset}`);
-                      push({ title: "Preset Loaded", description: `Loaded prompt: ${preset}`, tone: "default" });
+                      setInput(`Generate guidelines for: ${preset.title}`);
+                      push({ title: "Preset Loaded", description: `Loaded prompt: ${preset.title}`, tone: "default" });
                     }}
-                    className="w-full text-left p-2 rounded-8 border border-border bg-surface hover:border-accent text-[11px] font-medium text-foreground transition-all"
+                    className="w-full text-left p-2.5 rounded-8 border border-border bg-surface hover:border-accent hover:bg-surface-secondary text-[11px] font-medium text-foreground transition-all flex items-center justify-between shadow-xs group"
                   >
-                    {preset}
+                    <span>{preset.title}</span>
+                    <span className="rounded bg-surface-secondary px-1.5 py-0.2 text-[9px] font-mono text-subtle group-hover:text-foreground">
+                      {preset.tag}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -1566,42 +1574,64 @@ export function AiAssistantTemplate() {
         </aside>
 
         {/* Right Chat Stream Canvas */}
-        <main className="lg:col-span-8 flex flex-col justify-between p-6 bg-surface">
+        <main className="lg:col-span-8 flex flex-col justify-between p-5 sm:p-6 bg-surface">
           {/* Message Thread */}
-          <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+          <div className="space-y-4 max-h-[480px] overflow-y-auto pr-1">
             {messages.map((msg) => (
               <div
                 key={msg.id}
                 className={cn(
-                  "p-4 rounded-14 text-paragraph-xs leading-relaxed max-w-[90%]",
+                  "p-4 rounded-14 text-paragraph-xs leading-relaxed max-w-[92%] transition-all",
                   msg.role === "user"
                     ? "ml-auto bg-accent text-accent-foreground rounded-br-none shadow-xs"
-                    : "bg-surface-secondary border border-border text-foreground rounded-bl-none shadow-xs"
+                    : "bg-surface-secondary/70 border border-border text-foreground rounded-bl-none shadow-xs"
                 )}
               >
-                <div className="flex items-center justify-between mb-1.5 text-[10px] opacity-75">
-                  <span className="font-medium font-mono uppercase">{msg.role === "user" ? "You" : msg.model ?? "Neural"}</span>
-                  <span>{msg.time}</span>
+                <div className="flex items-center justify-between mb-2 text-[10px] opacity-80 border-b border-black/5 dark:border-white/10 pb-1">
+                  <span className="font-medium font-mono uppercase flex items-center gap-1.5">
+                    {msg.role === "user" ? (
+                      <>You</>
+                    ) : (
+                      <>
+                        <RiSparkling2Line size={12} className="text-accent" />
+                        {msg.model ?? "Neural Assistant"}
+                      </>
+                    )}
+                  </span>
+                  <span className="font-mono">{msg.time}</span>
                 </div>
                 <p className="whitespace-pre-wrap">{msg.text}</p>
                 {msg.code && (
-                  <pre className="mt-3 p-3 rounded-10 bg-surface/90 border border-border text-foreground font-mono text-[11px] overflow-x-auto">
-                    <code>{msg.code}</code>
-                  </pre>
+                  <div className="mt-3 rounded-10 border border-border bg-surface overflow-hidden">
+                    <div className="flex items-center justify-between border-b border-separator bg-surface-secondary px-3 py-1.5 text-[10px] font-mono text-subtle">
+                      <span>React 19 Component</span>
+                      <button
+                        type="button"
+                        onClick={() => copy(msg.code!)}
+                        className="flex items-center gap-1 text-accent hover:underline font-mono"
+                      >
+                        {copied ? <RiCheckLine size={11} /> : <RiFileCopyLine size={11} />}
+                        {copied ? "Copied" : "Copy"}
+                      </button>
+                    </div>
+                    <pre className="p-3 font-mono text-[11px] text-foreground overflow-x-auto leading-relaxed">
+                      <code>{msg.code}</code>
+                    </pre>
+                  </div>
                 )}
               </div>
             ))}
             {streaming && (
               <div className="p-4 rounded-14 bg-surface-secondary border border-border text-foreground max-w-[80%] rounded-bl-none animate-pulse flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-accent animate-ping" />
-                <span className="text-[11px] font-mono text-muted">Synthesizing completion...</span>
+                <span className="text-[11px] font-mono text-muted">Streaming tokens from {selectedModel}...</span>
               </div>
             )}
           </div>
 
           {/* Chat Input Console */}
           <div className="pt-4 border-t border-separator mt-4">
-            <div className="relative rounded-14 border border-border bg-surface-secondary p-2 focus-within:ring-1 focus-within:ring-accent focus-within:border-accent transition-all">
+            <div className="rounded-14 border border-border bg-surface-secondary/50 p-2.5 focus-within:ring-1 focus-within:ring-accent focus-within:border-accent transition-all shadow-xs">
               <textarea
                 id="ai-prompt-console"
                 aria-label="Ask neural copilot"
@@ -1615,17 +1645,17 @@ export function AiAssistantTemplate() {
                 }}
                 rows={2}
                 placeholder="Ask about design tokens, color ramps, or component APIs (Enter to send)..."
-                className="w-full bg-transparent p-2 text-paragraph-xs text-foreground placeholder:text-muted resize-none focus:outline-none"
+                className="w-full bg-transparent p-1.5 text-paragraph-xs text-foreground placeholder:text-muted resize-none focus:outline-none leading-relaxed"
               />
-              <div className="flex items-center justify-between pt-1 border-t border-separator/50 px-1">
-                <div className="flex items-center gap-1.5 text-muted">
-                  <button type="button" aria-label="Upload document" className="p-1 rounded-6 hover:bg-surface text-subtle hover:text-foreground">
+              <div className="flex items-center justify-between pt-2 border-t border-separator/60 px-1">
+                <div className="flex items-center gap-2 text-muted">
+                  <button type="button" aria-label="Upload document" className="p-1.5 rounded-6 hover:bg-surface text-subtle hover:text-foreground transition-colors">
                     <RiAttachment2 size={16} />
                   </button>
-                  <button type="button" aria-label="Voice input" className="p-1 rounded-6 hover:bg-surface text-subtle hover:text-foreground">
+                  <button type="button" aria-label="Voice input" className="p-1.5 rounded-6 hover:bg-surface text-subtle hover:text-foreground transition-colors">
                     <RiMicLine size={16} />
                   </button>
-                  <span className="text-[10px] font-mono text-subtle ml-2">Markdown enabled</span>
+                  <span className="text-[10px] font-mono text-subtle hidden sm:inline">Markdown & JSX enabled</span>
                 </div>
                 <Button
                   size="sm"

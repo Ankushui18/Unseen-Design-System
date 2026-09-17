@@ -351,9 +351,9 @@ export function User({ name, description, avatarProps, className, ...props }: Us
 
 /* ---------------------------------- Kbd ----------------------------------- */
 
-export function Kbd({ children }: { children: ReactNode }) {
+export function Kbd({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <kbd className="inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-surface px-1.5 font-mono text-[10px] font-medium text-subtle ring-1 ring-border shadow-[0_1px_0_0_var(--border)]">
+    <kbd className={cn("inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-surface px-1.5 font-mono text-[10px] font-medium text-subtle ring-1 ring-border shadow-[0_1px_0_0_var(--border)]", className)}>
       {children}
     </kbd>
   );
