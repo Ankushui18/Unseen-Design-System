@@ -20,6 +20,7 @@ import {
   ScrollShadow,
   Skeleton,
   Snippet,
+  User,
 } from "../../ui/Display";
 import { Spinner } from "../../ui/Button";
 import { Table } from "../../ui/Navigation";
@@ -309,6 +310,22 @@ export function AvatarDoc() {
       <Section title="Group" description="Overlaps avatars and collapses the overflow into a counter.">
         <Showcase code={`<AvatarGroup max={4} items={members} />`}>
           <AvatarGroup items={[{ name: "Ada L" }, { name: "Grace H" }, { name: "Alan T" }, { name: "Kat J" }, { name: "Lin C" }, { name: "Ray B" }]} />
+        </Showcase>
+      </Section>
+      <Section title="User (HeroUI Compound)" description="Compound component displaying avatar, full name, and description/role in a unified layout.">
+        <Showcase code={`<User\n  name="Elena Vance"\n  description="Lead Design Technologist"\n  avatarProps={{ tone: "accent", size: "md" }}\n/>\n<User\n  name="Marcus Chen"\n  description="marcus@unseen.design"\n  avatarProps={{ tone: "success", size: "sm" }}\n/>`}>
+          <div className="flex flex-col sm:flex-row gap-6">
+            <User
+              name="Elena Vance"
+              description="Lead Design Technologist"
+              avatarProps={{ tone: "accent", size: "md" }}
+            />
+            <User
+              name="Marcus Chen"
+              description="marcus@unseen.design"
+              avatarProps={{ tone: "success", size: "sm" }}
+            />
+          </div>
         </Showcase>
       </Section>
       <Section title="API">
@@ -681,7 +698,7 @@ export function AlertDoc() {
   Version 3.2.0 is live in production.
 </Alert>`}>
           <div className="w-full space-y-3">
-            <Alert tone="accent" title="New version available">Aperture 3.2 adds featured icons, richer surfaces and nine new components.</Alert>
+            <Alert tone="accent" title="New version available">Unseen 3.2 adds featured icons, richer surfaces and nine new components.</Alert>
             <Alert tone="success" title="Deployment complete">Version 3.2.0 is live in production.</Alert>
             <Alert tone="warning" title="Approaching seat limit">You are using 9 of 10 seats.</Alert>
             <Alert tone="danger" title="Build failed">Module not found: <Code>./ui/Alert</Code>.</Alert>

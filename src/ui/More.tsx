@@ -53,10 +53,10 @@ export function Dropdown({
               );
             if (e.type === "checkbox")
               return (
-                <button key={i} onClick={() => e.onChange(!e.checked)} className="mx-1.5 flex w-[calc(100%-12px)] items-center gap-2.5 rounded-lg px-2 py-2 text-left text-paragraph-sm text-foreground transition-colors hover:bg-surface-hover">
+                <button key={i} onClick={() => e.onChange(!e.checked)} className="mx-1.5 flex w-[calc(100%-12px)] items-center gap-2.5 rounded-8 px-2 py-2 text-left text-paragraph-sm text-foreground transition-colors hover:bg-surface-hover">
                   {e.icon && <span className="text-subtle [&_svg]:h-5 [&_svg]:w-5">{e.icon}</span>}
                   <span className="flex-1">{e.label}</span>
-                  <span className={cn("flex h-4 w-4 items-center justify-center rounded-[4px] transition-colors", e.checked ? "bg-accent text-white" : "ring-1 ring-inset ring-border-strong")}>
+                  <span className={cn("flex h-4 w-4 items-center justify-center rounded-4 transition-colors", e.checked ? "bg-accent text-white" : "ring-1 ring-inset ring-border-strong")}>
                     {e.checked && <RiCheckLine size={12} />}
                   </span>
                 </button>
@@ -67,7 +67,7 @@ export function Dropdown({
                 disabled={e.disabled}
                 onClick={() => { e.onSelect?.(); close(); }}
                 className={cn(
-                  "mx-1.5 flex w-[calc(100%-12px)] items-center gap-2.5 rounded-lg px-2 py-2 text-left text-paragraph-sm transition-colors disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)]",
+                  "mx-1.5 flex w-[calc(100%-12px)] items-center gap-2.5 rounded-8 px-2 py-2 text-left text-paragraph-sm transition-colors disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)]",
                   e.danger ? "text-danger hover:bg-danger-soft" : "text-foreground hover:bg-surface-hover",
                 )}
               >
@@ -109,7 +109,7 @@ export function VerticalTabMenu<T extends string>({
             disabled={it.disabled}
             onClick={() => onChange(it.value)}
             className={cn(
-              "flex items-center gap-2.5 rounded-lg px-3 py-2 text-left text-label-sm transition-colors disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)]",
+              "flex items-center gap-2.5 rounded-8 px-3 py-2 text-left text-label-sm transition-colors disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)]",
               active ? "bg-surface-secondary text-foreground" : "text-muted hover:bg-surface-hover hover:text-foreground",
             )}
           >
@@ -170,7 +170,7 @@ export function SelectionCard({
   return (
     <label
       className={cn(
-        "group flex cursor-pointer items-start gap-3.5 rounded-2xl bg-surface p-4 transition-all",
+        "group flex cursor-pointer items-start gap-3.5 rounded-14 bg-surface p-4 transition-all",
         checked ? "shadow-sm ring-2 ring-accent" : "ring-1 ring-border hover:ring-border-strong hover:shadow-xs",
         disabled && "pointer-events-none opacity-[var(--disabled-opacity)]",
         className,
@@ -186,7 +186,7 @@ export function SelectionCard({
       <span
         className={cn(
           "mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center transition-all",
-          type === "radio" ? "rounded-full" : "rounded-[5px]",
+          type === "radio" ? "rounded-full" : "rounded-6",
           checked ? "bevel bg-accent text-white shadow-fancy-accent" : "bg-surface ring-1 ring-inset ring-border-strong group-hover:bg-surface-hover",
         )}
       >
@@ -345,7 +345,7 @@ export function ColorPicker({ value, onChange, className }: { value: string; onC
           <button
             key={c}
             onClick={() => commit(c)}
-            className={cn("flex aspect-square items-center justify-center rounded-lg ring-1 ring-inset ring-black/10 transition-transform hover:scale-105 dark:ring-white/10", value.toUpperCase() === c && "ring-2 ring-foreground ring-offset-2 ring-offset-surface")}
+            className={cn("flex aspect-square items-center justify-center rounded-6 ring-1 ring-inset ring-black/10 transition-transform hover:scale-105 dark:ring-white/10", value.toUpperCase() === c && "ring-2 ring-foreground ring-offset-2 ring-offset-surface")}
             style={{ background: c }}
             aria-label={c}
           >
@@ -354,7 +354,7 @@ export function ColorPicker({ value, onChange, className }: { value: string; onC
         ))}
       </div>
       <div className="mt-4 flex items-center gap-2">
-        <span className="h-10 w-10 shrink-0 rounded-lg ring-1 ring-inset ring-black/10 dark:ring-white/10" style={{ background: value }} />
+        <span className="h-10 w-10 shrink-0 rounded-8 ring-1 ring-inset ring-black/10 dark:ring-white/10" style={{ background: value }} />
         <div className="flex h-10 flex-1 items-center rounded-10 bg-field px-3 font-mono text-paragraph-sm shadow-xs ring-1 ring-inset ring-border focus-within:ring-foreground focus-within:shadow-ring-neutral">
           <span className="text-subtle">#</span>
           <input aria-label="Hex colour" value={hex.replace("#", "")} onChange={(e) => commit("#" + e.target.value.replace(/[^0-9a-f]/gi, "").slice(0, 6))} className="w-full bg-transparent uppercase outline-none" />

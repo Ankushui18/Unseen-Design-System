@@ -5,12 +5,16 @@ import { Chip } from "../../ui/Display";
 import { Input, Switch } from "../../ui/Form";
 import {
   ActivityFeed,
+  AiPromptInput,
   Calendar,
   CommandMenu,
+  CryptoAddressChip,
+  CurrencyAmountInput,
   FileUploader,
   Filters,
   NotificationFeed,
   TimePicker,
+  VoiceVisualizer,
   type FeedNotification,
   type UploadFile,
 } from "../../ui/Pro";
@@ -107,7 +111,7 @@ export function CommandMenuDoc() {
             ]}
           />
         </Showcase>
-        <Callout title="Global shortcut">Bind this to <code className="font-mono text-paragraph-xs">⌘K</code> — it is the expected affordance in every modern product, and Aperture's own shell palette already uses it.</Callout>
+        <Callout title="Global shortcut">Bind this to <code className="font-mono text-paragraph-xs">⌘K</code> — it is the expected affordance in every modern product, and Unseen's own shell palette already uses it.</Callout>
       </Section>
       <Section title="API">
         <PropsTable rows={[
@@ -359,5 +363,156 @@ function DocsMonthCycle() {
         <Button size="sm" variant="outline" tone="default" onClick={() => setRunning((r) => !r)}>{running ? "Pause cycle" : "Resume cycle"}</Button>
       </div>
     </div>
+  );
+}
+
+/* ---------------------------- AI Prompt Input ------------------------------ */
+
+export function AiPromptInputDoc() {
+  const [prompt, setPrompt] = useState("");
+  const [model, setModel] = useState("Claude 3.5 Sonnet");
+  const [loading, setLoading] = useState(false);
+  const { push } = useToast();
+
+  const handleSend = () => {
+    setLoading(true);
+    push({ title: "Prompt Sent", description: `Dispatched to ${model}: "${prompt.slice(0, 30)}..."`, tone: "accent" });
+    setTimeout(() => setLoading(false), 2000);
+  };
+
+  return (
+    <>
+      <PageHeader eyebrow="Components · PRO & AI" title="AI Prompt Input" description="Multi-modal AI prompt composer with model switcher, dynamic textarea growth, file attachment trigger, voice dictation, and streaming stop/submit states." tags={["AI Chat", "Model Switcher", "Voice dictation", "Multi-modal"]} />
+      <Import names="AiPromptInput" />
+      <Section title="Usage">
+        <Showcase align="stretch" code={`<AiPromptInput\n  value={prompt}\n  onChange={setPrompt}\n  onSubmit={handleSend}\n  onStop={() => setLoading(false)}\n  loading={loading}\n  model={model}\n  onModelChange={setModel}\n/>`}>
+          <div className="w-full max-w-2xl mx-auto">
+            <AiPromptInput
+              value={prompt}
+              onChange={setPrompt}
+              onSubmit={handleSend}
+              onStop={() => setLoading(false)}
+              loading={loading}
+              model={model}
+              onModelChange={setModel}
+              placeholder="Ask anything, attach code snippets, or generate design system UI..."
+            />
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "value", type: "string", required: true, description: "Controlled input text value." },
+          { name: "onChange", type: "(val: string) => void", required: true, description: "Callback fired on text change." },
+          { name: "onSubmit", type: "() => void", required: true, description: "Fired when user clicks Send or presses Enter." },
+          { name: "onStop", type: "() => void", description: "Fired when user clicks Stop while streaming/loading." },
+          { name: "loading", type: "boolean", default: "false", description: "Indicates active inference or generation." },
+          { name: "model", type: "string", default: "\"Claude 3.5 Sonnet\"", description: "Selected model name." },
+          { name: "models", type: "string[]", description: "Available models list for the popover picker." },
+          { name: "onModelChange", type: "(m: string) => void", description: "Fired when user picks a model." },
+        ]} />
+      </Section>
+    </>
+  );
+}
+
+/* --------------------------- Crypto Address Chip --------------------------- */
+
+export function CryptoAddressChipDoc() {
+  return (
+    <>
+      <PageHeader eyebrow="Components · Web3 & Fintech" title="Crypto Address Chip" description="Compact truncated wallet address chip with network indicator, one-click copy feedback, and block explorer triggers." tags={["Fintech", "Web3", "Wallet", "Copy Action"]} />
+      <Import names="CryptoAddressChip" />
+      <Section title="Usage">
+        <Showcase code={`<CryptoAddressChip address="0x71C67930742131bf4eFDCf8dD7B92aB7bB2f8C41" network="Ethereum" />\n<CryptoAddressChip address="0x34a1bC67930742131bf4eFDCf8dD7B92aB7bB2e9" network="Base" />`}>
+          <div className="flex flex-wrap items-center gap-3">
+            <CryptoAddressChip address="0x71C67930742131bf4eFDCf8dD7B92aB7bB2f8C41" network="Ethereum" />
+            <CryptoAddressChip address="0x34a1bC67930742131bf4eFDCf8dD7B92aB7bB2e9" network="Base" />
+            <CryptoAddressChip address="0x99fEaC67930742131bf4eFDCf8dD7B92aB7bB431" network="Solana" />
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "address", type: "string", required: true, description: "Full hexadecimal or base58 crypto address." },
+          { name: "network", type: "string", default: "\"Ethereum\"", description: "Network label name." },
+          { name: "explorerUrl", type: "string", default: "\"https://etherscan.io\"", description: "Explorer base URL." },
+        ]} />
+      </Section>
+    </>
+  );
+}
+
+/* ---------------------------- Voice Visualizer ----------------------------- */
+
+export function VoiceVisualizerDoc() {
+  const [recording, setRecording] = useState(true);
+  return (
+    <>
+      <PageHeader eyebrow="Components · Audio & Media" title="Voice Visualizer" description="Animated audio frequency waveform visualizer for real-time speech input, voice search, and AI assistant recording states." tags={["Audio Waveform", "Voice Recording", "Pulsing Bars"]} />
+      <Import names="VoiceVisualizer" />
+      <Section title="Usage">
+        <Showcase code={`<VoiceVisualizer recording={recording} duration="00:24" onStop={() => setRecording(false)} />`}>
+          <div className="flex flex-col items-center gap-4">
+            <VoiceVisualizer recording={recording} duration="00:24" onStop={() => setRecording(!recording)} />
+            <Button size="sm" variant="outline" tone="default" onClick={() => setRecording(!recording)}>
+              {recording ? "Pause Recording" : "Resume Recording"}
+            </Button>
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "recording", type: "boolean", default: "true", description: "Whether audio capture is currently active." },
+          { name: "duration", type: "string", default: "\"00:18\"", description: "Formatted elapsed recording time." },
+          { name: "onStop", type: "() => void", description: "Optional stop/cancel button callback." },
+        ]} />
+      </Section>
+    </>
+  );
+}
+
+/* ------------------------- Currency Amount Input ------------------------- */
+
+export function CurrencyAmountInputDoc() {
+  const [amount, setAmount] = useState("2,450.00");
+  const [currency, setCurrency] = useState("USD");
+
+  const handleQuickPercent = (pct: number) => {
+    const base = 14820;
+    const calc = (base * (pct / 100)).toFixed(2);
+    setAmount(calc);
+  };
+
+  return (
+    <>
+      <PageHeader eyebrow="Components · Fintech & Crypto" title="Currency Amount Input" description="High-precision currency input with currency dropdown selector, available balance indicator, quick percentage buttons (25%, 50%, MAX), and approximate exchange rate." tags={["Fintech", "Crypto", "Currency Picker", "Quick %"]} />
+      <Import names="CurrencyAmountInput" />
+      <Section title="Usage">
+        <Showcase code={`<CurrencyAmountInput\n  amount={amount}\n  onAmountChange={setAmount}\n  currency={currency}\n  onCurrencyChange={setCurrency}\n  balance="$14,820.00"\n  onQuickPercent={handleQuickPercent}\n/>`}>
+          <div className="w-full max-w-sm mx-auto">
+            <CurrencyAmountInput
+              amount={amount}
+              onAmountChange={setAmount}
+              currency={currency}
+              onCurrencyChange={setCurrency}
+              balance="$14,820.00"
+              onQuickPercent={handleQuickPercent}
+            />
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "amount", type: "string", required: true, description: "Controlled numeric amount string." },
+          { name: "onAmountChange", type: "(val: string) => void", required: true, description: "Fired when user changes amount." },
+          { name: "currency", type: "string", default: "\"USD\"", description: "Active currency code." },
+          { name: "currencies", type: "{ code, symbol, label }[]", description: "Supported currency list." },
+          { name: "onCurrencyChange", type: "(code: string) => void", description: "Fired when user selects currency." },
+          { name: "balance", type: "string", description: "Available account balance text." },
+          { name: "onQuickPercent", type: "(pct: number) => void", description: "Fired when clicking 25%, 50%, MAX buttons." },
+        ]} />
+      </Section>
+    </>
   );
 }

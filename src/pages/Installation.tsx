@@ -11,7 +11,7 @@ const source = import.meta.glob<string>(["../ui/*.{ts,tsx}", "../lib/*.{ts,tsx}"
 export function InstallationPage({ navigate }: { navigate: (to: string) => void }) {
   const download = () => {
     const files = Object.fromEntries(Object.entries(source).map(([name, content]) => [`src/${name.replace(/^\.\.\//, "")}`, content]));
-    const data = { description: "Aperture public-beta source files. Recreate these paths in a React + Tailwind v4 project.", files };
+    const data = { description: "Unseen public-beta source files. Recreate these paths in a React + Tailwind v4 project.", files };
     const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }));
     const a = document.createElement("a"); a.href = url; a.download = "aperture-source.json"; a.click(); window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   };

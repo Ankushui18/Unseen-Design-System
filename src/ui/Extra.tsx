@@ -21,7 +21,7 @@ export function CompactButton({
   }[variant];
   return (
     <button
-      className={cn("inline-flex shrink-0 items-center justify-center transition-all outline-none focus-visible:shadow-ring-neutral disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)]", fullRadius ? "rounded-full" : "rounded-md", s, v, className)}
+      className={cn("inline-flex shrink-0 items-center justify-center transition-all outline-none focus-visible:shadow-ring-neutral disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)]", fullRadius ? "rounded-full" : "rounded-6", s, v, className)}
       {...props}
     >
       {children}
@@ -50,7 +50,7 @@ export function LinkButton({
   return (
     <button
       className={cn(
-        "inline-flex items-center gap-1 transition-colors outline-none focus-visible:rounded focus-visible:shadow-ring-neutral disabled:pointer-events-none disabled:text-disabled",
+        "inline-flex items-center gap-1 transition-colors outline-none focus-visible:rounded-6 focus-visible:shadow-ring-neutral disabled:pointer-events-none disabled:text-disabled",
         size === "sm" ? "text-label-xs [&_svg]:h-4 [&_svg]:w-4" : "text-label-sm [&_svg]:h-5 [&_svg]:w-5",
         underline && "underline decoration-current/40 underline-offset-[3px] hover:decoration-current",
         v,
@@ -109,7 +109,7 @@ export function SocialButton({
   children,
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & { brand: keyof typeof Brand; mode?: "brand" | "stroke"; size?: "sm" | "md" | "lg"; iconOnly?: boolean }) {
-  const s = { sm: "h-8 px-2.5 text-label-sm gap-2 rounded-lg", md: "h-10 px-3.5 text-label-sm gap-2.5 rounded-10", lg: "h-12 px-4 text-label-md gap-3 rounded-10" }[size];
+  const s = { sm: "h-8 px-2.5 text-label-sm gap-2 rounded-8", md: "h-10 px-3.5 text-label-sm gap-2.5 rounded-10", lg: "h-12 px-4 text-label-md gap-3 rounded-12" }[size];
   const w = { sm: "w-8", md: "w-10", lg: "w-12" }[size];
   const v = mode === "brand" ? brandStyles[brand].brand : "bg-surface text-foreground ring-1 ring-inset ring-border shadow-xs hover:bg-surface-hover";
   return (
@@ -138,7 +138,7 @@ export function StatusBadge({
   const dot = { completed: "bg-success", pending: "bg-warning", failed: "bg-danger", disabled: "bg-subtle", info: "bg-accent" }[status];
   const light = { completed: "bg-success-soft text-success-soft-foreground", pending: "bg-warning-soft text-warning-soft-foreground", failed: "bg-danger-soft text-danger-soft-foreground", disabled: "bg-default text-muted", info: "bg-accent-soft text-accent-soft-foreground" }[status];
   return (
-    <span className={cn("inline-flex items-center gap-1.5 rounded-md whitespace-nowrap", size === "sm" ? "h-5 px-1.5 text-label-xs" : "h-6 px-2 text-label-xs", variant === "stroke" ? "bg-surface text-muted ring-1 ring-inset ring-border" : light, className)}>
+    <span className={cn("inline-flex items-center gap-1.5 rounded-6 whitespace-nowrap", size === "sm" ? "h-5 px-1.5 text-label-xs" : "h-6 px-2 text-label-xs", variant === "stroke" ? "bg-surface text-muted ring-1 ring-inset ring-border" : light, className)}>
       <span className={cn("h-1.5 w-1.5 rounded-full", dot)} />
       {children}
     </span>
@@ -165,7 +165,7 @@ export function Tag({
   return (
     <span
       className={cn(
-        "inline-flex h-6 items-center gap-1.5 rounded-md pl-2 text-label-xs transition-colors",
+        "inline-flex h-6 items-center gap-1.5 rounded-6 pl-2 text-label-xs transition-colors",
         onRemove ? "pr-1" : "pr-2",
         variant === "stroke" ? "bg-surface text-muted ring-1 ring-inset ring-border hover:bg-surface-hover" : "bg-default text-muted hover:bg-default-hover",
         active && "bg-neutral-950 text-white ring-0 hover:bg-neutral-900 dark:bg-neutral-200 dark:text-neutral-950",
@@ -175,7 +175,7 @@ export function Tag({
       {startContent && <span className="[&_svg]:h-3.5 [&_svg]:w-3.5">{startContent}</span>}
       {children}
       {onRemove && (
-        <button onClick={onRemove} className="rounded p-0.5 opacity-60 hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/15" aria-label="Remove">
+        <button onClick={onRemove} className="rounded-4 p-0.5 opacity-60 hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/15" aria-label="Remove">
           <RiCloseLine className="h-3 w-3" strokeWidth={2.5} />
         </button>
       )}
@@ -210,7 +210,7 @@ export function SegmentedControl<T extends string>({
     <div ref={ref} role="tablist" className={cn("relative inline-flex items-center rounded-10 bg-surface-secondary p-1 ring-1 ring-inset ring-border", fullWidth && "flex w-full", className)}>
       {ind && (
         <span
-          className="absolute top-1 bottom-1 rounded-lg bg-surface shadow-toggle ring-1 ring-border/60 transition-all duration-300 ease-out-quint"
+          className="absolute top-1 bottom-1 rounded-8 bg-surface shadow-toggle ring-1 ring-border/60 transition-all duration-300 ease-out-quint"
           style={{ left: ind.left, width: ind.width }}
         />
       )}
@@ -224,7 +224,7 @@ export function SegmentedControl<T extends string>({
           disabled={it.disabled}
           onClick={() => onChange(it.value)}
           className={cn(
-            "relative z-10 inline-flex items-center justify-center gap-1.5 rounded-lg px-3 transition-colors whitespace-nowrap",
+            "relative z-10 inline-flex items-center justify-center gap-1.5 rounded-8 px-3 transition-colors whitespace-nowrap",
             size === "sm" ? "h-7 text-label-xs" : "h-8 text-label-sm",
             "[&_svg]:h-4 [&_svg]:w-4",
             it.value === value ? "text-foreground" : "text-muted hover:text-foreground",
@@ -386,7 +386,7 @@ export function Datepicker({ value, onChange, className }: { value: Date | null;
   const same = (a: Date | null, y: number, m: number, d: number) => !!a && a.getFullYear() === y && a.getMonth() === m && a.getDate() === d;
 
   return (
-    <div className={cn("w-full max-w-[320px] rounded-xl bg-surface p-4 ring-1 ring-border shadow-sm", className)}>
+    <div className={cn("w-full max-w-[320px] rounded-14 bg-surface p-4 ring-1 ring-border shadow-sm", className)}>
       <div className="flex items-center justify-between">
         <CompactButton variant="stroke" onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))} aria-label="Previous month"><RiArrowLeftSLine /></CompactButton>
         <p className="text-label-sm text-foreground">{MONTHS[view.getMonth()]} {view.getFullYear()}</p>
@@ -404,7 +404,7 @@ export function Datepicker({ value, onChange, className }: { value: Date | null;
               key={i}
               onClick={() => onChange(date)}
               className={cn(
-                "mx-auto flex h-9 w-full max-w-9 items-center justify-center rounded-lg text-paragraph-sm transition-colors",
+                "mx-auto flex h-9 w-full max-w-9 items-center justify-center rounded-8 text-paragraph-sm transition-colors",
                 c.m !== 0 ? "text-disabled" : "text-foreground hover:bg-surface-hover",
                 isToday && !selected && "ring-1 ring-inset ring-border text-label-sm",
                 selected && "bevel bg-neutral-950 text-white shadow-fancy-neutral hover:bg-neutral-900 dark:bg-neutral-200 dark:text-neutral-950",
@@ -440,7 +440,7 @@ export function FileFormatIcon({ format, size = 40, className }: { format: strin
         <path d="M20 0v8a4 4 0 0 0 4 4h8L20 0Z" fill="var(--surface-tertiary)" />
       </svg>
       <span
-        className="absolute bottom-[14%] left-[-8%] rounded-[3px] px-1 py-px text-[8px] leading-[11px] font-bold tracking-wide text-white uppercase"
+        className="absolute bottom-[14%] left-[-8%] rounded-4 px-1 py-px text-[8px] leading-[11px] font-bold tracking-wide text-white uppercase"
         style={{ background: color, fontSize: Math.max(7, size * 0.2) }}
       >
         {format.slice(0, 4)}
@@ -475,7 +475,7 @@ export function Notification({
   const light = { accent: "bg-accent-soft text-accent-soft-foreground", default: "bg-default text-foreground", success: "bg-success-soft text-success-soft-foreground", warning: "bg-warning-soft text-warning-soft-foreground", danger: "bg-danger-soft text-danger-soft-foreground" }[tone];
   const filled = { accent: "bg-accent text-accent-foreground", default: "bg-neutral-950 text-white dark:bg-neutral-200 dark:text-neutral-950", success: "bg-success text-white", warning: "bg-warning text-neutral-950", danger: "bg-danger text-white" }[tone];
   return (
-    <div className={cn("flex w-full max-w-[400px] items-start gap-3 rounded-2xl p-4", variant === "stroke" && "bg-surface ring-1 ring-border shadow-lg", variant === "light" && light, variant === "filled" && filled, className)} role="status">
+    <div className={cn("flex w-full max-w-[400px] items-start gap-3 rounded-14 p-4", variant === "stroke" && "bg-surface ring-1 ring-border shadow-lg", variant === "light" && light, variant === "filled" && filled, className)} role="status">
       <Icon className={cn("mt-px h-5 w-5 shrink-0", variant === "stroke" && color)} />
       <div className="min-w-0 flex-1">
         <p className="text-label-sm">{title}</p>
@@ -483,7 +483,7 @@ export function Notification({
         {actions && <div className="mt-3 flex items-center gap-3">{actions}</div>}
       </div>
       {onClose && (
-        <button onClick={onClose} className="-mt-1 -mr-1 rounded-md p-1 opacity-60 transition hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/10" aria-label="Dismiss">
+        <button onClick={onClose} className="-mt-1 -mr-1 rounded-6 p-1 opacity-60 transition hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/10" aria-label="Dismiss">
           <RiCloseLine className="h-4 w-4" />
         </button>
       )}
@@ -502,7 +502,7 @@ export function Banner({ children, tone = "accent", variant = "filled", action, 
       <Icon className="h-5 w-5 shrink-0" />
       <div className="flex-1">{children}</div>
       {action}
-      {onClose && <button onClick={onClose} className="rounded-md p-1 opacity-70 hover:opacity-100" aria-label="Dismiss"><RiCloseLine className="h-4 w-4" /></button>}
+      {onClose && <button onClick={onClose} className="rounded-6 p-1 opacity-70 hover:opacity-100" aria-label="Dismiss"><RiCloseLine className="h-4 w-4" /></button>}
     </div>
   );
 }

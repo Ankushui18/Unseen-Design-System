@@ -5,6 +5,10 @@ export const COMPONENT_GROUPS: NavGroup[] = [
   {
     title: "PRO",
     items: [
+      { title: "AI Prompt Input", href: "components/ai-prompt-input", badge: "New", keywords: "llm ai chat prompt multimodal model picker" },
+      { title: "Currency Amount Input", href: "components/currency-amount-input", badge: "New", keywords: "fintech crypto currency amount balance" },
+      { title: "Crypto Address Chip", href: "components/crypto-address-chip", badge: "New", keywords: "web3 crypto hash wallet address" },
+      { title: "Voice Visualizer", href: "components/voice-visualizer", badge: "New", keywords: "audio voice waveform recording speech" },
       { title: "Activity Feed", href: "components/activity-feed", badge: "New", keywords: "timeline events feed updates" },
       { title: "Command Menu", href: "components/command-menu", badge: "New", keywords: "quick actions palette fuzzy search" },
       { title: "Notification Feed", href: "components/notification-feed", badge: "New", keywords: "inbox unread events list" },
@@ -131,6 +135,16 @@ export const NAV: NavGroup[] = [
       { title: "Iconography", href: "foundations/icons", keywords: "icon svg symbol" },
       { title: "Accessibility", href: "foundations/accessibility", keywords: "a11y contrast wcag" },
       { title: "Token Reference", href: "foundations/tokens", keywords: "variables css api" },
+    ],
+  },
+  {
+    title: "Templates",
+    items: [
+      { title: "AI & Neural Studio", href: "templates/ai", badge: "New", keywords: "ai neural chat assistant streaming model parameters" },
+      { title: "Analytics Dashboard", href: "templates/analytics", badge: "New", keywords: "dashboard kpi metrics charts widgetbox data table" },
+      { title: "Settings Screen", href: "templates/settings", badge: "New", keywords: "preferences vertical tab account security slider alert" },
+      { title: "Billing & Plans", href: "templates/billing", badge: "New", keywords: "subscription payment card invoices pricing coupon" },
+      { title: "Team & People", href: "templates/team", badge: "New", keywords: "members permissions data table filters activity feed" },
     ],
   },
   {

@@ -9,7 +9,7 @@ export function IntroductionPage({ navigate }: { navigate: (t: string) => void }
       <PageHeader
         eyebrow="Getting Started"
         title="Introduction"
-        description="Aperture is a source-first React design-system preview. Explore the components, inspect their code, and tune the shared tokens to suit your product. Everything in the beta is free to evaluate."
+        description="Unseen is a source-first React design-system preview. Explore the components, inspect their code, and tune the shared tokens to suit your product. Everything in the beta is free to evaluate."
         tags={["React 19", "Tailwind CSS v4", "TypeScript", "MIT"]}
       />
 
@@ -81,7 +81,7 @@ export function IntroductionPage({ navigate }: { navigate: (t: string) => void }
 }
 
 const PRINCIPLES = [
-  { n: "01", t: "Semantics over appearance", d: "Name things by what they mean, not what they look like. `--danger` survives a rebrand; `--red-500` does not. Every token, variant and prop in Aperture is named for intent.", e: "tone=\"danger\"  not  color=\"red\"" },
+  { n: "01", t: "Semantics over appearance", d: "Name things by what they mean, not what they look like. `--danger` survives a rebrand; `--red-500` does not. Every token, variant and prop in Unseen is named for intent.", e: "tone=\"danger\"  not  color=\"red\"" },
   { n: "02", t: "Constrain, then allow escape", d: "A system earns trust by saying no. Five elevations, nine type steps, one accent. When a product genuinely needs more, component-level tokens provide a documented escape hatch rather than a fork.", e: "--button-bg: var(--brand-gradient)" },
   { n: "03", t: "Accessible by construction", d: "Contrast, focus order and ARIA are decided when the component is designed, not audited afterwards. If a variant cannot pass AA, the variant does not ship.", e: "focus-visible:outline-2 outline-accent" },
   { n: "04", t: "Motion must explain", d: "Animation communicates causality and continuity. If removing an animation loses no information, remove it. Nothing exceeds 400ms and everything degrades under reduced motion.", e: "transition duration-150 ease-out-quint" },
@@ -168,7 +168,7 @@ export function ChangelogPage() {
   const badge = { added: "success", changed: "accent", removed: "danger", fixed: "warning" } as const;
   return (
     <>
-      <PageHeader eyebrow="Getting Started" title="Changelog" description="Aperture follows semantic versioning. Breaking changes only land in major releases and always ship with a codemod." tags={["SemVer", "Codemods"]} />
+      <PageHeader eyebrow="Getting Started" title="Changelog" description="Unseen follows semantic versioning. Breaking changes only land in major releases and always ship with a codemod." tags={["SemVer", "Codemods"]} />
       <Section title="Releases">
         <div className="space-y-8">
           {RELEASES.map((r) => (

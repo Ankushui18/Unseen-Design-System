@@ -46,7 +46,7 @@ export function ColorPage() {
       <PageHeader
         eyebrow="Foundations"
         title="Color"
-        description="Aperture's color system is built around semantic intent, not visual abundance. A small set of meaningful roles covers the majority of interface needs, and every value is generated in OKLCH so lightness stays perceptually even across hues."
+        description="Unseen's color system is built around semantic intent, not visual abundance. A small set of meaningful roles covers the majority of interface needs, and every value is generated in OKLCH so lightness stays perceptually even across hues."
         tags={["OKLCH", "Semantic", "Light & dark"]}
       />
 
@@ -227,7 +227,7 @@ export function TypographyPage() {
         </div>
       </Section>
 
-      <Section title="Measure & rhythm" description="Line length is the single biggest lever on readability. Aperture caps prose at 68 characters and UI copy at 52.">
+      <Section title="Measure & rhythm" description="Line length is the single biggest lever on readability. Unseen caps prose at 68 characters and UI copy at 52.">
         <Showcase align="stretch" code={`<p className="max-w-[68ch] text-[0.9375rem] leading-[1.65]">
   Long-form documentation copy is capped at 68 characters…
 </p>`}>
@@ -436,7 +436,7 @@ export function MotionPage() {
       <PageHeader
         eyebrow="Foundations"
         title="Motion"
-        description="Motion in Aperture is functional: it explains where an element came from and where it went. Durations are short, easings are asymmetric, and everything respects prefers-reduced-motion."
+        description="Motion in Unseen is functional: it explains where an element came from and where it went. Durations are short, easings are asymmetric, and everything respects prefers-reduced-motion."
         tags={["4 easings", "5 durations", "Reduced motion"]}
       />
 
@@ -687,7 +687,7 @@ export function TokensPage() {
       <PageHeader
         eyebrow="Theming"
         title="Token Reference"
-        description="Every variable Aperture exposes, what it controls, and where it is safe to override. Tokens marked calculated are derived — override their source instead."
+        description="Every variable Unseen exposes, what it controls, and where it is safe to override. Tokens marked calculated are derived — override their source instead."
         tags={["312 tokens", "CSS variables", "Tailwind bridge"]}
       />
 
