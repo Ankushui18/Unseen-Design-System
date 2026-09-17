@@ -3,6 +3,7 @@ import { ThemeProvider } from "./lib/theme";
 import { ToastProvider } from "./ui/Overlay";
 import { useHashRoute, useScrollSpy } from "./lib/hooks";
 import { CommandPalette, DocsLayout, MobileNavigation, Navbar } from "./docs/Shell";
+import { findItem } from "./docs/nav";
 import { ROUTES } from "./pages/registry";
 import Home from "./pages/Home";
 import { BlocksPage } from "./pages/Blocks";
@@ -35,6 +36,19 @@ function Shell() {
   }, [isPublicPage]);
 
   useEffect(() => { setMobile(false); setSearch(false); }, [route]);
+
+  /* Route-aware document title (WCAG 2.4.2) — screen readers and browser tabs
+     announce the current page, not just the product name. */
+  useEffect(() => {
+    const base = "Unseen Design System";
+    if (isHome) {
+      document.title = `${base} | Design & Development perfectly aligned`;
+      return;
+    }
+    const staticTitles: Record<string, string> = { blocks: "Blocks", pricing: "Pricing", patterns: "Patterns", templates: "Templates" };
+    const title = staticTitles[route] ?? findItem(route)?.title;
+    document.title = title ? `${title} · ${base}` : base;
+  }, [route, isHome]);
 
   useEffect(() => {
     if (isPublicPage) {

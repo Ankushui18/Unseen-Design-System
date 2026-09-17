@@ -608,7 +608,7 @@ export function IntegrationsBlock() {
               >
                 Configure <RiArrowRightLine size={12} />
               </button>
-              <Switch checked={item.connected} onChange={() => {}} size="sm" />
+              <Switch checked={item.connected} onChange={() => {}} size="sm" aria-label={`Connect ${item.name}`} />
             </div>
           </Card>
         ))}

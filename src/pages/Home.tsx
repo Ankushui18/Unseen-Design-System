@@ -876,7 +876,7 @@ const HERO_SNIPPETS: Record<string, { filename: string; code: string; imports: s
           <span style={{ fontSize: 13, color: "var(--muted)" }}>
             Annual billing
           </span>
-          <Switch size="sm" checked={plan} onChange={setPlan} />
+          <Switch size="sm" checked={plan} onChange={setPlan} aria-label="Annual billing" />
         </div>
         <FancyButton tone="accent" size="lg" fullWidth>
           Create workspace
@@ -960,11 +960,11 @@ const HERO_SNIPPETS: Record<string, { filename: string; code: string; imports: s
     <div style={{ width: "100%", maxWidth: 320, display: "flex", flexDirection: "column", gap: 16, padding: 20 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span style={{ fontSize: 13, fontWeight: 500 }}>Push Notifications</span>
-        <Switch size="sm" checked={enabled} onChange={setEnabled} />
+        <Switch size="sm" checked={enabled} onChange={setEnabled} aria-label="Push Notifications" />
       </div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span style={{ fontSize: 13, fontWeight: 500 }}>Email Digests</span>
-        <Switch size="sm" checked={notify} onChange={setNotify} />
+        <Switch size="sm" checked={notify} onChange={setNotify} aria-label="Email Digests" />
       </div>
     </div>
   );
@@ -2155,7 +2155,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
             <div className="visual-language-items" style={{ maxWidth: 200 }}>
               <Input size="sm" placeholder="Workspace name" wrapperClassName="w-full" />
               <div className="flex items-center gap-2">
-                <Switch checked onChange={() => {}} size="sm" />
+                <Switch checked onChange={() => {}} size="sm" aria-label="Enable" />
                 <span className="text-paragraph-xs text-muted">Enable</span>
               </div>
             </div>

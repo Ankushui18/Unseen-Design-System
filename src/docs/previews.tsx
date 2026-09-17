@@ -323,9 +323,9 @@ export const PREVIEWS: Record<string, () => ReactNode> = {
   ),
   "components/switch": () => (
     <div className="flex gap-2.5 items-center justify-center">
-      <Switch checked onChange={noop} size="sm" />
-      <Switch checked={false} onChange={noop} size="sm" />
-      <Switch checked onChange={noop} size="md" />
+      <Switch checked onChange={noop} size="sm" aria-label="Enabled (small)" />
+      <Switch checked={false} onChange={noop} size="sm" aria-label="Disabled (small)" />
+      <Switch checked onChange={noop} size="md" aria-label="Enabled (medium)" />
     </div>
   ),
   "components/slider": () => (

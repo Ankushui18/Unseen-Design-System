@@ -681,14 +681,16 @@ export function SettingsScreenTemplate() {
 
         {/* Bio Textarea */}
         <div className="space-y-1.5 border-t border-separator pt-5">
-          <label className="text-label-xs font-medium text-foreground">Bio Description</label>
+          <label htmlFor="settings-bio" className="text-label-xs font-medium text-foreground">Bio Description</label>
           <textarea
+            id="settings-bio"
             rows={3}
             value={bio}
             onChange={(e) => setBio(e.target.value)}
+            aria-describedby="settings-bio-hint"
             className="w-full rounded-10 border border-border bg-field p-3 text-paragraph-sm text-foreground focus:border-accent focus:outline-none"
           />
-          <span className="text-[11px] text-subtle">275 characters left</span>
+          <span id="settings-bio-hint" className="text-[11px] text-subtle">275 characters left</span>
         </div>
 
         {/* Country & Timezone */}

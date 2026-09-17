@@ -378,7 +378,7 @@ export function TableBlock() {
         <table className="w-full text-left">
           <thead>
             <tr className="bg-surface-secondary text-subheading-xs uppercase text-subtle">
-              <th className="w-10 px-4 py-2.5"><Checkbox size="sm" checked={all} indeterminate={!all && sel.length > 0} onChange={() => setSel(all ? [] : rows.map((_, i) => i))} /></th>
+              <th className="w-10 px-4 py-2.5"><Checkbox size="sm" checked={all} indeterminate={!all && sel.length > 0} onChange={() => setSel(all ? [] : rows.map((_, i) => i))} aria-label="Select all rows" /></th>
               <th className="px-3 py-2.5 font-medium">Customer</th>
               <th className="px-3 py-2.5 font-medium">Status</th>
               <th className="px-3 py-2.5 font-medium">Plan</th>
@@ -390,7 +390,7 @@ export function TableBlock() {
           <tbody className="divide-y divide-separator-secondary">
             {rows.map((r, i) => (
               <tr key={r.name} className={cn("transition-colors hover:bg-surface-hover", sel.includes(i) && "bg-accent-soft/25")}>
-                <td className="px-4 py-3"><Checkbox size="sm" checked={sel.includes(i)} onChange={() => toggle(i)} /></td>
+                <td className="px-4 py-3"><Checkbox size="sm" checked={sel.includes(i)} onChange={() => toggle(i)} aria-label={`Select row ${i + 1}`} /></td>
                 <td className="px-3 py-3">
                   <div className="flex items-center gap-3">
                     <Avatar name={r.name} size="sm" square tone={(["accent", "success", "warning", "default"] as const)[i]} />

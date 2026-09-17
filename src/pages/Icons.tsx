@@ -54,7 +54,7 @@ export function IconsPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <Input placeholder="Search icons…" startContent={<RiSearchLine />} value={q} onChange={(e) => setQ(e.target.value)} wrapperClassName="sm:max-w-xs" />
             <SegmentedControl size="sm" value={style} onChange={setStyle} items={[{ value: "all", label: "All" }, { value: "line", label: "Line" }, { value: "fill", label: "Fill" }]} />
-            <div className="w-40 sm:ml-auto"><Slider value={size} onChange={setSize} min={16} max={32} step={2} formatValue={(v) => `${v}px`} /></div>
+            <div className="w-40 sm:ml-auto"><Slider value={size} onChange={setSize} min={16} max={32} step={2} formatValue={(v) => `${v}px`} aria-label="Preview icon size" /></div>
           </div>
           <div className="flex flex-wrap gap-1.5">
             {["All", ...ICON_CATEGORIES].map((c) => (

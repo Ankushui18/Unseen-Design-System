@@ -389,6 +389,7 @@ export function Switch({
   className,
   startIcon,
   endIcon,
+  "aria-label": ariaLabel,
 }: {
   checked: boolean;
   onChange: (v: boolean) => void;
@@ -400,6 +401,8 @@ export function Switch({
   className?: string;
   startIcon?: ReactNode;
   endIcon?: ReactNode;
+  /** Accessible name when no visible `label` is rendered. Required by WCAG 4.1.2. */
+  "aria-label"?: string;
 }) {
   const dims = {
     sm: { track: "h-4 w-7 p-[2px]", thumb: "h-3 w-3", shift: "translate-x-3" },
@@ -410,7 +413,7 @@ export function Switch({
   return (
     <label className={cn("group inline-flex cursor-pointer items-center gap-3 select-none", disabled && "cursor-not-allowed opacity-[var(--disabled-opacity)]", className)}>
       <span className="relative inline-flex">
-        <input type="checkbox" className="peer sr-only" checked={checked} disabled={disabled} onChange={(e) => onChange(e.target.checked)} />
+        <input type="checkbox" role="switch" aria-checked={checked} className="peer sr-only" checked={checked} disabled={disabled} aria-label={ariaLabel} onChange={(e) => onChange(e.target.checked)} />
         <span
           className={cn(
             "relative flex shrink-0 items-center rounded-full transition-colors duration-200 ease-out-quint",
@@ -454,6 +457,7 @@ export function Slider({
   tone = "accent",
   disabled,
   className,
+  "aria-label": ariaLabel,
 }: {
   value: number;
   onChange: (v: number) => void;
@@ -465,14 +469,17 @@ export function Slider({
   tone?: Tone;
   disabled?: boolean;
   className?: string;
+  /** Accessible name when no visible `label` is rendered. Required by WCAG 4.1.2. */
+  "aria-label"?: string;
 }) {
+  const id = useId();
   const pct = ((value - min) / (max - min)) * 100;
   const fill = { accent: "var(--accent)", default: "var(--foreground)", success: "var(--success)", warning: "var(--warning)", danger: "var(--danger)" }[tone];
   return (
     <div className={cn("flex w-full flex-col gap-2", disabled && "opacity-[var(--disabled-opacity)]", className)}>
       {(label || formatValue) && (
         <div className="flex items-center justify-between gap-3">
-          {label && <span className="text-label-sm text-foreground">{label}</span>}
+          {label && <label htmlFor={id} className="text-label-sm text-foreground">{label}</label>}
           {formatValue && (
             <span className="rounded-6 bg-surface-secondary px-1.5 py-0.5 font-mono text-[11px] tabular-nums text-muted">
               {" "}
@@ -482,12 +489,14 @@ export function Slider({
         </div>
       )}
       <input
+        id={id}
         type="range"
         min={min}
         max={max}
         step={step}
         value={value}
         disabled={disabled}
+        aria-label={label ? undefined : ariaLabel}
         onChange={(e) => onChange(Number(e.target.value))}
         className="ds-range h-5 w-full cursor-pointer appearance-none bg-transparent outline-none disabled:cursor-not-allowed"
         style={
