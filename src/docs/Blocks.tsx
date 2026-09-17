@@ -235,23 +235,46 @@ export function Showcase({
           <div
             data-theme={canvasTheme !== "auto" ? canvasTheme : undefined}
             className={cn(
-              "showcase-preview relative",
-              align,
-              !padded && "no-padding",
+              "showcase-preview relative flex flex-col items-center justify-center min-h-[220px] p-4 sm:p-6 lg:p-8 overflow-hidden",
               canvasTheme === "dark" && "dark bg-surface-secondary text-foreground",
               canvasTheme === "light" && "light bg-surface text-foreground",
               className,
             )}
           >
-            <div
-              className={cn(
-                "transition-all duration-300 ease-out-quint w-full min-w-0",
-                viewport === "tablet" && "max-w-[768px] mx-auto rounded-16 ring-1 ring-border shadow-lg bg-surface overflow-hidden",
-                viewport === "mobile" && "max-w-[390px] mx-auto rounded-20 ring-1 ring-border shadow-xl bg-surface overflow-hidden",
-              )}
-            >
-              <Fragment key={revision}>{children}</Fragment>
-            </div>
+            {viewport === "desktop" ? (
+              <div className={cn("w-full min-w-0 transition-all duration-300", align === "center" ? "flex items-center justify-center" : align === "start" ? "flex items-start justify-start" : "w-full")}>
+                <Fragment key={revision}>{children}</Fragment>
+              </div>
+            ) : viewport === "tablet" ? (
+              <div className="w-full max-w-[768px] mx-auto rounded-16 border border-border/80 bg-surface shadow-xl overflow-hidden transition-all duration-300 ring-1 ring-black/5 dark:ring-white/10">
+                {/* Simulated Tablet Chrome Header */}
+                <div className="flex items-center justify-between border-b border-separator/80 bg-surface-secondary/70 px-4 py-2 text-[10px] font-mono text-subtle select-none">
+                  <div className="flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-border-strong" />
+                    <span className="h-2 w-2 rounded-full bg-border-strong" />
+                  </div>
+                  <span className="font-medium text-foreground/80">768 × 1024 · Tablet Viewport</span>
+                  <span className="text-[9px] uppercase tracking-wider">100%</span>
+                </div>
+                <div className={cn("w-full min-w-0 transition-all duration-200 overflow-x-auto", padded ? "p-6" : "p-0", align === "center" ? "flex flex-col items-center justify-center" : align === "start" ? "flex flex-col items-start justify-start" : "w-full")}>
+                  <Fragment key={revision}>{children}</Fragment>
+                </div>
+              </div>
+            ) : (
+              <div className="w-full max-w-[390px] mx-auto rounded-20 border border-border/80 bg-surface shadow-2xl overflow-hidden transition-all duration-300 ring-1 ring-black/10 dark:ring-white/10">
+                {/* Simulated Mobile Chrome Header with Dynamic Island Notch */}
+                <div className="flex items-center justify-between border-b border-separator/80 bg-surface-secondary/70 px-3.5 py-2 text-[10px] font-mono text-subtle select-none">
+                  <span className="text-[10px] font-medium text-foreground/90">9:41</span>
+                  <div className="h-3 w-16 rounded-full bg-foreground/20" />
+                  <div className="flex items-center gap-1 text-[9px]">
+                    <span className="font-medium text-foreground/80">390px</span>
+                  </div>
+                </div>
+                <div className={cn("w-full min-w-0 transition-all duration-200 overflow-x-auto", padded ? "p-4 sm:p-5" : "p-0", align === "center" ? "flex flex-col items-center justify-center" : align === "start" ? "flex flex-col items-start justify-start" : "w-full")}>
+                  <Fragment key={revision}>{children}</Fragment>
+                </div>
+              </div>
+            )}
           </div>
       ) : (
         <CodeBlock code={code!} filename="Example.tsx" maxHeight={460} />
