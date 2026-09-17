@@ -58,6 +58,11 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   size?: "sm" | "md" | "lg";
   startContent?: ReactNode;
   endContent?: ReactNode;
+  /** HeroUI feature: clear button */
+  isClearable?: boolean;
+  onClear?: () => void;
+  /** HeroUI alias for required */
+  isRequired?: boolean;
   /** Divided prefix section, e.g. "https://" */
   prefixAffix?: ReactNode;
   /** Divided suffix section, e.g. ".com" or a unit */
@@ -66,12 +71,31 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { label, description, error, size = "md", startContent, endContent, prefixAffix, suffixAffix, className, wrapperClassName, required, id: providedId, ...props },
+  {
+    label,
+    description,
+    error,
+    size = "md",
+    startContent,
+    endContent,
+    isClearable,
+    onClear,
+    isRequired,
+    prefixAffix,
+    suffixAffix,
+    className,
+    wrapperClassName,
+    required: nativeRequired,
+    id: providedId,
+    value,
+    ...props
+  },
   ref,
 ) {
   const generatedId = useId();
   const id = providedId ?? generatedId;
   const helperId = `${id}-description`;
+  const required = nativeRequired || isRequired;
   const affixPad = size === "md" || size === "lg" ? "px-3" : "px-2.5";
   const inner = fieldSizes[size];
   const heightOnly = inner.split(" ").filter((c) => c.startsWith("h-") || c.startsWith("rounded") || c.startsWith("text-")).join(" ");
@@ -93,6 +117,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           <input
             id={id}
             ref={ref}
+            value={value}
             required={required}
             aria-invalid={!!error || undefined}
             aria-describedby={error || description ? helperId : undefined}
@@ -104,6 +129,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
             )}
             {...props}
           />
+          {isClearable && onClear && (
+            <button
+              type="button"
+              aria-label="Clear input"
+              onClick={onClear}
+              className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-subtle hover:text-foreground opacity-60 hover:opacity-100 transition-opacity"
+            >
+              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+          )}
           {endContent && <span className="flex shrink-0 items-center justify-center text-subtle [&_svg]:h-5 [&_svg]:w-5">{endContent}</span>}
         </div>
         {suffixAffix && <span className={cn("flex shrink-0 items-center bg-surface text-paragraph-sm text-subtle group-focus-within:text-muted", affixPad)}>{suffixAffix}</span>}

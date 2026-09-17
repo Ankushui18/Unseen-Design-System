@@ -188,7 +188,7 @@ export function ChatInput({ value, onChange, onSend, placeholder = "Ask anything
         <div className="mt-1.5 flex items-center gap-1">
           <button className="flex h-8 w-8 items-center justify-center rounded-lg text-muted transition hover:bg-surface-hover hover:text-foreground" aria-label="Attach"><RiAttachment2 size={18} /></button>
           <button className="flex h-8 w-8 items-center justify-center rounded-lg text-muted transition hover:bg-surface-hover hover:text-foreground" aria-label="Voice"><RiMicLine size={18} /></button>
-          <span className="ml-1 hidden items-center gap-1 rounded-lg bg-surface-secondary px-2 py-1 text-label-xs text-muted sm:inline-flex"><RiSparkling2Line size={14} className="text-accent" /> Aperture 3.2</span>
+          <span className="ml-1 hidden items-center gap-1 rounded-lg bg-surface-secondary px-2 py-1 text-label-xs text-muted sm:inline-flex"><RiSparkling2Line size={14} className="text-accent" /> Unseen 3.2</span>
           <div className="flex-1" />
           <span className="hidden text-paragraph-xs text-subtle sm:inline">Shift + ↵ for new line</span>
           <button onClick={onSend} disabled={!value.trim()} className="ml-2 flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-950 text-white transition hover:bg-neutral-800 disabled:bg-surface-secondary disabled:text-disabled dark:bg-white dark:text-neutral-950" aria-label="Send"><RiSendPlane2Fill size={16} /></button>

@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import { BlocksPage } from "./pages/Blocks";
 import { PatternsPage } from "./pages/Patterns";
 import { PricingPage } from "./pages/Pricing";
+import { TemplatesOverviewPage } from "./pages/Templates";
 import { Button } from "./ui/Button";
 import { PageHeader } from "./docs/Blocks";
 
@@ -19,7 +20,7 @@ function Shell() {
   const activeHeading = useScrollSpy(headings.map((h) => h.id));
 
   const isHome = route === "" || route === "/";
-  const isPublicPage = isHome || route === "blocks" || route === "pricing" || route === "patterns";
+  const isPublicPage = isHome || route === "blocks" || route === "pricing" || route === "patterns" || route === "templates";
 
   useEffect(() => {
     if (!isPublicPage) return;
@@ -63,6 +64,8 @@ function Shell() {
           <BlocksPage />
         ) : route === "pricing" ? (
           <PricingPage navigate={navigate} />
+        ) : route === "templates" ? (
+          <TemplatesOverviewPage navigate={navigate} />
         ) : (
           <PatternsPage />
         )}

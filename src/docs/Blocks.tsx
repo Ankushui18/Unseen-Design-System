@@ -3,7 +3,7 @@ import { cn } from "../utils/cn";
 import { CodeBlock } from "./CodeBlock";
 import { Chip } from "../ui/Display";
 import { useCopy } from "../lib/hooks";
-import { RiCheckLine, RiCodeSSlashLine, RiEyeLine, RiFileCopyLine, RiLink, RiRestartLine } from "@remixicon/react";
+import { RiCheckLine, RiCodeSSlashLine, RiComputerLine, RiEyeLine, RiFileCopyLine, RiLink, RiMoonLine, RiRestartLine, RiSmartphoneLine, RiSunLine, RiTabletLine } from "@remixicon/react";
 
 export function slugify(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -17,7 +17,7 @@ const MODULE_OF: Record<string, string> = {
   // ui/Display
   Card: "ui/Display", CardHeader: "ui/Display", CardBody: "ui/Display", CardFooter: "ui/Display",
   Chip: "ui/Display", Badge: "ui/Display", Avatar: "ui/Display", AvatarGroup: "ui/Display",
-  AvatarGroupCompact: "ui/Display", FeaturedIcon: "ui/Display",
+  AvatarGroupCompact: "ui/Display", User: "ui/Display", FeaturedIcon: "ui/Display",
   Kbd: "ui/Display", Snippet: "ui/Display", Divider: "ui/Display", Skeleton: "ui/Display",
   Progress: "ui/Display", CircularProgress: "ui/Display", Alert: "ui/Display", Code: "ui/Display",
   ScrollShadow: "ui/Display",
@@ -51,6 +51,8 @@ const MODULE_OF: Record<string, string> = {
   // ui/Pro
   ActivityFeed: "ui/Pro", CommandMenu: "ui/Pro", NotificationFeed: "ui/Pro",
   FileUploader: "ui/Pro", Filters: "ui/Pro", TimePicker: "ui/Pro", Calendar: "ui/Pro",
+  AiPromptInput: "ui/Pro", CryptoAddressChip: "ui/Pro", VoiceVisualizer: "ui/Pro",
+  CurrencyAmountInput: "ui/Pro",
 };
 
 export function Import({ names }: { names: string }) {
@@ -133,6 +135,7 @@ export function Showcase({
   className,
   align = "center",
   padded = true,
+  allowViewport = false,
 }: {
   children: ReactNode;
   code?: string;
@@ -140,14 +143,18 @@ export function Showcase({
   className?: string;
   align?: "center" | "start" | "stretch";
   padded?: boolean;
+  allowViewport?: boolean;
 }) {
   const [tab, setTab] = useState<"preview" | "code">("preview");
+  const [viewport, setViewport] = useState<"desktop" | "tablet" | "mobile">("desktop");
+  const [canvasTheme, setCanvasTheme] = useState<"auto" | "light" | "dark">("auto");
   const [revision, setRevision] = useState(0);
   const { copy, copied } = useCopy();
   const id = useId();
+
   return (
     <div className="showcase" data-has-code={code ? "true" : undefined}>
-      {code && (
+      {(code || allowViewport) && (
         <div className="showcase-toolbar">
           <div className="preview-tabs" role="tablist" aria-label="Example view">
           {(
@@ -172,23 +179,102 @@ export function Showcase({
             </button>
           ))}
           </div>
+
           <div className="showcase-tools">
+            {tab === "preview" && (
+              <>
+                <div className="viewport-switcher" role="group" aria-label="Preview viewport">
+                  <button
+                    type="button"
+                    aria-pressed={viewport === "desktop"}
+                    aria-label="Desktop viewport"
+                    title="Desktop (100%)"
+                    onClick={() => setViewport("desktop")}
+                  >
+                    <RiComputerLine size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    aria-pressed={viewport === "tablet"}
+                    aria-label="Tablet viewport (768px)"
+                    title="Tablet (768px)"
+                    onClick={() => setViewport("tablet")}
+                  >
+                    <RiTabletLine size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    aria-pressed={viewport === "mobile"}
+                    aria-label="Mobile viewport (390px)"
+                    title="Mobile (390px)"
+                    onClick={() => setViewport("mobile")}
+                  >
+                    <RiSmartphoneLine size={13} />
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  className="studio-icon-button"
+                  title={canvasTheme === "auto" ? "Canvas: System (Click for Dark)" : canvasTheme === "dark" ? "Canvas: Dark (Click for Light)" : "Canvas: Light (Click for Auto)"}
+                  aria-label="Toggle canvas theme"
+                  onClick={() => setCanvasTheme((c) => c === "auto" ? "dark" : c === "dark" ? "light" : "auto")}
+                >
+                  {canvasTheme === "dark" ? <RiMoonLine size={14} className="text-accent" /> : canvasTheme === "light" ? <RiSunLine size={14} className="text-warning" /> : <RiSunLine size={14} />}
+                </button>
+              </>
+            )}
             <button type="button" className="studio-icon-button" title="Reset preview" aria-label="Reset preview" onClick={() => setRevision((r) => r + 1)}><RiRestartLine size={14} /></button>
-            <button type="button" className="studio-icon-button" title={copied ? "Copied" : "Copy example"} aria-label={copied ? "Copied" : "Copy example"} onClick={() => copy(code)}>{copied ? <RiCheckLine size={14} /> : <RiFileCopyLine size={14} />}</button>
+            {code && (
+              <button type="button" className="studio-icon-button" title={copied ? "Copied" : "Copy example"} aria-label={copied ? "Copied" : "Copy example"} onClick={() => copy(code)}>{copied ? <RiCheckLine size={14} className="text-success" /> : <RiFileCopyLine size={14} />}</button>
+            )}
           </div>
         </div>
       )}
       <div role={code ? "tabpanel" : undefined} id={`${id}-panel`} aria-labelledby={code ? `${id}-${tab}` : undefined}>
       {tab === "preview" ? (
           <div
+            data-theme={canvasTheme !== "auto" ? canvasTheme : undefined}
             className={cn(
-              "showcase-preview",
-              align,
-              !padded && "no-padding",
+              "showcase-preview relative flex flex-col items-center justify-center min-h-[220px] p-4 sm:p-6 lg:p-8 overflow-hidden",
+              canvasTheme === "dark" && "dark bg-surface-secondary text-foreground",
+              canvasTheme === "light" && "light bg-surface text-foreground",
               className,
             )}
           >
-            <Fragment key={revision}>{children}</Fragment>
+            {viewport === "desktop" ? (
+              <div className={cn("w-full min-w-0 transition-all duration-300", align === "center" ? "flex items-center justify-center" : align === "start" ? "flex items-start justify-start" : "w-full")}>
+                <Fragment key={revision}>{children}</Fragment>
+              </div>
+            ) : viewport === "tablet" ? (
+              <div className="w-full max-w-[768px] mx-auto rounded-16 border border-border/80 bg-surface shadow-xl overflow-hidden transition-all duration-300 ring-1 ring-black/5 dark:ring-white/10">
+                {/* Simulated Tablet Chrome Header */}
+                <div className="flex items-center justify-between border-b border-separator/80 bg-surface-secondary/70 px-4 py-2 text-[10px] font-mono text-subtle select-none">
+                  <div className="flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-border-strong" />
+                    <span className="h-2 w-2 rounded-full bg-border-strong" />
+                  </div>
+                  <span className="font-medium text-foreground/80">768 × 1024 · Tablet Viewport</span>
+                  <span className="text-[9px] uppercase tracking-wider">100%</span>
+                </div>
+                <div className={cn("w-full min-w-0 transition-all duration-200 overflow-x-auto", padded ? "p-6" : "p-0", align === "center" ? "flex flex-col items-center justify-center" : align === "start" ? "flex flex-col items-start justify-start" : "w-full")}>
+                  <Fragment key={revision}>{children}</Fragment>
+                </div>
+              </div>
+            ) : (
+              <div className="w-full max-w-[390px] mx-auto rounded-20 border border-border/80 bg-surface shadow-2xl overflow-hidden transition-all duration-300 ring-1 ring-black/10 dark:ring-white/10">
+                {/* Simulated Mobile Chrome Header with Dynamic Island Notch */}
+                <div className="flex items-center justify-between border-b border-separator/80 bg-surface-secondary/70 px-3.5 py-2 text-[10px] font-mono text-subtle select-none">
+                  <span className="text-[10px] font-medium text-foreground/90">9:41</span>
+                  <div className="h-3 w-16 rounded-full bg-foreground/20" />
+                  <div className="flex items-center gap-1 text-[9px]">
+                    <span className="font-medium text-foreground/80">390px</span>
+                  </div>
+                </div>
+                <div className={cn("w-full min-w-0 transition-all duration-200 overflow-x-auto", padded ? "p-4 sm:p-5" : "p-0", align === "center" ? "flex flex-col items-center justify-center" : align === "start" ? "flex flex-col items-start justify-start" : "w-full")}>
+                  <Fragment key={revision}>{children}</Fragment>
+                </div>
+              </div>
+            )}
           </div>
       ) : (
         <CodeBlock code={code!} filename="Example.tsx" maxHeight={460} />

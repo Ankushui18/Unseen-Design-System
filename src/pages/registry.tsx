@@ -50,6 +50,14 @@ import { ComponentsIndex } from "./ComponentsIndex";
 import { IconsPage as RemixIconsPage } from "./Icons";
 import { PatternsPage } from "./Patterns";
 import {
+  AiTemplatePage,
+  AnalyticsTemplatePage,
+  BillingTemplatePage,
+  SettingsTemplatePage,
+  TeamTemplatePage,
+  TemplatesOverviewPage,
+} from "./Templates";
+import {
   AlertDialogDoc,
   BadgeSpecDoc,
   ButtonSpecDoc,
@@ -66,12 +74,16 @@ import {
 } from "./components/PatternDocs";
 import {
   ActivityFeedDoc,
+  AiPromptInputDoc,
   CalendarDoc,
   CommandMenuDoc,
+  CryptoAddressChipDoc,
+  CurrencyAmountInputDoc,
   FileUploadDoc,
   FiltersDoc,
   NotificationFeedDoc,
   TimePickerDoc,
+  VoiceVisualizerDoc,
 } from "./components/ProDocs";
 import {
   ColorPickerDoc,
@@ -124,8 +136,18 @@ export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> 
   patterns: () => <PatternsPage />,
   pricing: (nav) => <PricingPage navigate={nav} />,
   blocks: () => <BlocksPage />,
+  templates: (nav) => <TemplatesOverviewPage navigate={nav} />,
+  "templates/ai": () => <AiTemplatePage />,
+  "templates/analytics": () => <AnalyticsTemplatePage />,
+  "templates/settings": () => <SettingsTemplatePage />,
+  "templates/billing": () => <BillingTemplatePage />,
+  "templates/team": () => <TeamTemplatePage />,
   components: (nav) => <ComponentsIndex navigate={nav} />,
 
+  "components/ai-prompt-input": () => <AiPromptInputDoc />,
+  "components/currency-amount-input": () => <CurrencyAmountInputDoc />,
+  "components/crypto-address-chip": () => <CryptoAddressChipDoc />,
+  "components/voice-visualizer": () => <VoiceVisualizerDoc />,
   "components/activity-feed": () => <ActivityFeedDoc />,
   "components/command-menu": () => <CommandMenuDoc />,
   "components/notification-feed": () => <NotificationFeedDoc />,

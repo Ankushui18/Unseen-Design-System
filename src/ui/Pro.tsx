@@ -1,5 +1,5 @@
 /**
- * Aperture PRO Components — the premium tier of the system, built to close
+ * Unseen PRO Components — the premium tier of the system, built to close
  * the gap with AlignUI PRO. Everything here reuses the same token graph as
  * the base components (no private colours, no hex, no raw Tailwind scales).
  *
@@ -16,6 +16,7 @@ import {
   RiCheckboxCircleLine,
   RiCloseLine,
   RiDeleteBinLine,
+  RiExternalLinkLine,
   RiFileLine,
   RiFileTextLine,
   RiFilterLine,
@@ -23,8 +24,10 @@ import {
   RiInformationLine,
   RiNotification3Line,
   RiSearchLine,
+  RiSparkling2Line,
   RiTimeLine,
   RiUploadCloudLine,
+  RiVoiceprintLine,
 } from "@remixicon/react";
 import { cn } from "../utils/cn";
 import { useDialogFocus, useLockBody, useOnClickOutside } from "../lib/hooks";
@@ -702,6 +705,335 @@ export function Calendar({
         <button onClick={() => onChange(today)} className="text-paragraph-xs text-accent transition hover:text-accent-hover">Today</button>
         {value && <span className="text-paragraph-xs tabular-nums text-subtle">{value.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</span>}
       </footer>
+    </div>
+  );
+}
+
+/* ----------------------------- AI Prompt Input ----------------------------- */
+
+export interface AiPromptInputProps {
+  value: string;
+  onChange: (v: string) => void;
+  onSubmit: () => void;
+  onStop?: () => void;
+  loading?: boolean;
+  placeholder?: string;
+  model?: string;
+  models?: string[];
+  onModelChange?: (m: string) => void;
+  className?: string;
+}
+
+export function AiPromptInput({
+  value,
+  onChange,
+  onSubmit,
+  onStop,
+  loading = false,
+  placeholder = "Ask anything, attach code, or generate UI...",
+  model = "Claude 3.5 Sonnet",
+  models = ["Claude 3.5 Sonnet", "GPT-4o", "DeepSeek R1", "Gemini 1.5 Pro"],
+  onModelChange,
+  className,
+}: AiPromptInputProps) {
+  const [modelOpen, setModelOpen] = useState(false);
+  const [micActive, setMicActive] = useState(false);
+
+  return (
+    <div className={cn("w-full rounded-20 bg-surface p-3 ring-1 ring-border shadow-md transition-all focus-within:ring-2 focus-within:ring-accent", className)}>
+      <textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            if (value.trim() && !loading) onSubmit();
+          }
+        }}
+        rows={3}
+        placeholder={placeholder}
+        className="w-full resize-none bg-transparent px-2 text-paragraph-sm text-foreground placeholder:text-subtle focus:outline-none"
+      />
+
+      <div className="mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-separator pt-2.5">
+        <div className="flex items-center gap-1.5">
+          {/* Model selector */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setModelOpen(!modelOpen)}
+              className="inline-flex items-center gap-1.5 rounded-8 bg-surface-secondary px-2.5 py-1 text-paragraph-xs font-medium text-foreground ring-1 ring-border hover:bg-surface-hover"
+            >
+              <RiSparkling2Line size={13} className="text-accent" />
+              <span>{model}</span>
+              <RiArrowDownSLine size={13} className="text-subtle" />
+            </button>
+            {modelOpen && (
+              <div className="absolute bottom-full mb-1.5 left-0 z-30 w-48 rounded-12 bg-overlay p-1 ring-1 ring-border shadow-lg">
+                {models.map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => { onModelChange?.(m); setModelOpen(false); }}
+                    className={cn(
+                      "flex w-full items-center justify-between rounded-8 px-2.5 py-1.5 text-paragraph-xs font-medium transition-colors",
+                      model === m ? "bg-accent-soft text-accent" : "text-foreground hover:bg-surface-hover"
+                    )}
+                  >
+                    <span>{m}</span>
+                    {model === m && <RiCheckLine size={14} />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <button
+            type="button"
+            className="flex h-8 w-8 items-center justify-center rounded-8 text-subtle transition hover:bg-surface-hover hover:text-foreground"
+            title="Attach file"
+            aria-label="Attach file"
+          >
+            <RiFileLine size={16} />
+          </button>
+          <button
+            type="button"
+            onClick={() => setMicActive(!micActive)}
+            className={cn(
+              "flex h-8 w-8 items-center justify-center rounded-8 transition",
+              micActive ? "bg-danger-soft text-danger animate-pulse" : "text-subtle hover:bg-surface-hover hover:text-foreground"
+            )}
+            title={micActive ? "Stop dictation" : "Voice dictation"}
+            aria-label="Voice dictation"
+          >
+            <RiVoiceprintLine size={16} />
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] font-mono text-subtle">{value.length} chars</span>
+          {loading ? (
+            <button
+              type="button"
+              onClick={onStop}
+              className="inline-flex items-center gap-1.5 rounded-8 bg-danger px-3 py-1.5 text-paragraph-xs font-medium text-white shadow-xs hover:bg-danger-hover"
+            >
+              <RiCloseLine size={14} /> Stop
+            </button>
+          ) : (
+            <button
+              type="button"
+              disabled={!value.trim()}
+              onClick={onSubmit}
+              className="inline-flex items-center gap-1.5 rounded-8 bg-accent px-3.5 py-1.5 text-paragraph-xs font-medium text-white shadow-xs transition hover:bg-accent-hover disabled:pointer-events-none disabled:opacity-40"
+            >
+              Send <RiArrowRightSLine size={14} />
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* --------------------------- Crypto Address Chip --------------------------- */
+
+export interface CryptoAddressChipProps {
+  address: string;
+  network?: string;
+  networkIcon?: ReactNode;
+  explorerUrl?: string;
+  className?: string;
+}
+
+export function CryptoAddressChip({
+  address,
+  network = "Ethereum",
+  explorerUrl = "https://etherscan.io",
+  className,
+}: CryptoAddressChipProps) {
+  const [copied, setCopied] = useState(false);
+  const truncated = `${address.slice(0, 6)}...${address.slice(-4)}`;
+
+  const copy = () => {
+    navigator.clipboard?.writeText(address);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className={cn("inline-flex items-center gap-2 rounded-full bg-surface-secondary/80 py-1 pl-2.5 pr-1.5 ring-1 ring-border text-foreground backdrop-blur-sm", className)}>
+      <span className="flex h-2 w-2 rounded-full bg-success animate-pulse" />
+      <span className="text-paragraph-xs font-medium text-muted">{network}</span>
+      <span className="h-3 w-px bg-separator" />
+      <span className="font-mono text-paragraph-xs font-medium text-foreground tracking-wide">{truncated}</span>
+      <button
+        type="button"
+        onClick={copy}
+        title={copied ? "Copied address" : "Copy address"}
+        aria-label="Copy crypto address"
+        className="flex h-6 w-6 items-center justify-center rounded-full text-subtle transition hover:bg-surface-hover hover:text-foreground"
+      >
+        {copied ? <RiCheckLine size={12} className="text-success" /> : <RiSearchLine size={12} />}
+      </button>
+      {explorerUrl && (
+        <a
+          href={`${explorerUrl}/address/${address}`}
+          target="_blank"
+          rel="noreferrer"
+          title="View on block explorer"
+          aria-label="View on block explorer"
+          className="flex h-6 w-6 items-center justify-center rounded-full text-subtle transition hover:bg-surface-hover hover:text-foreground"
+        >
+          <RiExternalLinkLine size={12} />
+        </a>
+      )}
+    </div>
+  );
+}
+
+/* ---------------------------- Voice Visualizer ---------------------------- */
+
+export function VoiceVisualizer({
+  recording = true,
+  duration = "00:18",
+  onStop,
+  className,
+}: {
+  recording?: boolean;
+  duration?: string;
+  onStop?: () => void;
+  className?: string;
+}) {
+  return (
+    <div className={cn("flex items-center gap-3 rounded-14 bg-surface p-3 ring-1 ring-border shadow-sm", className)}>
+      <span className="flex h-3 w-3 rounded-full bg-danger animate-ping" />
+      <span className="font-mono text-paragraph-xs font-medium text-danger">{duration}</span>
+      <div className="flex items-center gap-1 h-6">
+        {[18, 28, 40, 16, 32, 48, 24, 38, 52, 20, 36, 14].map((h, i) => (
+          <span
+            key={i}
+            style={{ height: recording ? `${h}%` : "20%" }}
+            className="w-1 rounded-full bg-accent transition-all duration-150"
+          />
+        ))}
+      </div>
+      {onStop && (
+        <button
+          type="button"
+          onClick={onStop}
+          className="ml-auto rounded-8 bg-surface-secondary px-2.5 py-1 text-paragraph-xs font-medium text-foreground ring-1 ring-border hover:bg-surface-hover"
+        >
+          Cancel
+        </button>
+      )}
+    </div>
+  );
+}
+
+/* ------------------------- Currency Amount Input ------------------------- */
+
+export interface CurrencyAmountInputProps {
+  amount: string;
+  onAmountChange: (val: string) => void;
+  currency?: string;
+  currencies?: { code: string; symbol: string; label: string }[];
+  onCurrencyChange?: (code: string) => void;
+  balance?: string;
+  onQuickPercent?: (percent: number) => void;
+  className?: string;
+}
+
+export function CurrencyAmountInput({
+  amount,
+  onAmountChange,
+  currency = "USD",
+  currencies = [
+    { code: "USD", symbol: "$", label: "US Dollar" },
+    { code: "EUR", symbol: "€", label: "Euro" },
+    { code: "GBP", symbol: "£", label: "British Pound" },
+    { code: "BTC", symbol: "₿", label: "Bitcoin" },
+    { code: "ETH", symbol: "Ξ", label: "Ethereum" },
+  ],
+  onCurrencyChange,
+  balance = "$14,820.00",
+  onQuickPercent,
+  className,
+}: CurrencyAmountInputProps) {
+  const [open, setOpen] = useState(false);
+  const activeCurrency = currencies.find((c) => c.code === currency) ?? currencies[0];
+
+  return (
+    <div className={cn("w-full rounded-16 bg-surface p-4 ring-1 ring-border shadow-sm space-y-3", className)}>
+      <div className="flex items-center justify-between text-paragraph-xs text-muted">
+        <span>Amount</span>
+        {balance && (
+          <span className="tabular-nums">
+            Available: <strong className="font-medium text-foreground">{balance}</strong>
+          </span>
+        )}
+      </div>
+
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-baseline gap-1.5 flex-1 min-w-0">
+          <span className="text-title-h4 font-medium text-subtle">{activeCurrency.symbol}</span>
+          <input
+            type="text"
+            inputMode="decimal"
+            placeholder="0.00"
+            value={amount}
+            onChange={(e) => onAmountChange(e.target.value)}
+            className="w-full bg-transparent text-title-h3 font-medium tabular-nums text-foreground placeholder:text-subtle focus:outline-none"
+          />
+        </div>
+
+        {/* Currency selector */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setOpen(!open)}
+            className="inline-flex items-center gap-1.5 rounded-10 bg-surface-secondary px-3 py-1.5 text-label-sm font-medium text-foreground ring-1 ring-border hover:bg-surface-hover"
+          >
+            <span>{activeCurrency.code}</span>
+            <RiArrowDownSLine size={14} className="text-subtle" />
+          </button>
+          {open && (
+            <div className="absolute right-0 top-full mt-1 z-30 w-44 rounded-12 bg-overlay p-1 ring-1 ring-border shadow-lg">
+              {currencies.map((c) => (
+                <button
+                  key={c.code}
+                  type="button"
+                  onClick={() => { onCurrencyChange?.(c.code); setOpen(false); }}
+                  className={cn(
+                    "flex w-full items-center justify-between rounded-8 px-2.5 py-1.5 text-paragraph-xs font-medium transition-colors",
+                    currency === c.code ? "bg-accent-soft text-accent" : "text-foreground hover:bg-surface-hover"
+                  )}
+                >
+                  <span>{c.code} ({c.symbol})</span>
+                  {currency === c.code && <RiCheckLine size={14} />}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Fast percentage pills */}
+      <div className="flex items-center justify-between gap-2 border-t border-separator pt-2.5">
+        <div className="flex items-center gap-1.5">
+          {[25, 50, 75, 100].map((pct) => (
+            <button
+              key={pct}
+              type="button"
+              onClick={() => onQuickPercent?.(pct)}
+              className="rounded-6 bg-surface-secondary px-2 py-0.5 text-[11px] font-medium text-muted ring-1 ring-border hover:bg-surface-hover hover:text-foreground transition-colors"
+            >
+              {pct === 100 ? "MAX" : `${pct}%`}
+            </button>
+          ))}
+        </div>
+        <span className="text-[11px] text-subtle tabular-nums">≈ {amount ? `$${(parseFloat(String(amount).replace(/[^0-9.]/g, "") || "0") * 1.0).toFixed(2)} USD` : "$0.00 USD"}</span>
+      </div>
     </div>
   );
 }

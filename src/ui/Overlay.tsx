@@ -210,15 +210,33 @@ export function Tooltip({
 
 /* -------------------------------- Popover --------------------------------- */
 
+export type PopoverPlacement =
+  | "top"
+  | "top-start"
+  | "top-end"
+  | "bottom"
+  | "bottom-start"
+  | "bottom-end"
+  | "left"
+  | "left-start"
+  | "left-end"
+  | "right"
+  | "right-start"
+  | "right-end";
+
 export function Popover({
   trigger,
   children,
   placement = "bottom",
+  showArrow = false,
+  showClose = false,
   className,
 }: {
   trigger: (props: { open: boolean; toggle: () => void }) => ReactNode;
   children: ReactNode | ((close: () => void) => ReactNode);
-  placement?: "bottom" | "top" | "bottom-end" | "bottom-start";
+  placement?: PopoverPlacement;
+  showArrow?: boolean;
+  showClose?: boolean;
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -232,18 +250,68 @@ export function Popover({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, close]);
 
-  const pos = {
-    bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
-    "bottom-start": "top-full left-0 mt-2",
-    "bottom-end": "top-full right-0 mt-2",
-    top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
-  }[placement];
+  const pos: Record<PopoverPlacement, string> = {
+    top: "bottom-full left-1/2 -translate-x-1/2 mb-2.5",
+    "top-start": "bottom-full left-0 mb-2.5",
+    "top-end": "bottom-full right-0 mb-2.5",
+    bottom: "top-full left-1/2 -translate-x-1/2 mt-2.5",
+    "bottom-start": "top-full left-0 mt-2.5",
+    "bottom-end": "top-full right-0 mt-2.5",
+    left: "right-full top-1/2 -translate-y-1/2 mr-2.5",
+    "left-start": "right-full top-0 mr-2.5",
+    "left-end": "right-full bottom-0 mr-2.5",
+    right: "left-full top-1/2 -translate-y-1/2 ml-2.5",
+    "right-start": "left-full top-0 ml-2.5",
+    "right-end": "left-full bottom-0 ml-2.5",
+  };
+
+  const arrowPos: Record<PopoverPlacement, string> = {
+    top: "-bottom-1.5 left-1/2 -translate-x-1/2 border-b border-r",
+    "top-start": "-bottom-1.5 left-4 border-b border-r",
+    "top-end": "-bottom-1.5 right-4 border-b border-r",
+    bottom: "-top-1.5 left-1/2 -translate-x-1/2 border-t border-l",
+    "bottom-start": "-top-1.5 left-4 border-t border-l",
+    "bottom-end": "-top-1.5 right-4 border-t border-l",
+    left: "-right-1.5 top-1/2 -translate-y-1/2 border-t border-r",
+    "left-start": "-right-1.5 top-4 border-t border-r",
+    "left-end": "-right-1.5 bottom-4 border-t border-r",
+    right: "-left-1.5 top-1/2 -translate-y-1/2 border-b border-l",
+    "right-start": "-left-1.5 top-4 border-b border-l",
+    "right-end": "-left-1.5 bottom-4 border-b border-l",
+  };
 
   return (
     <div className="relative inline-flex" ref={ref}>
       {trigger({ open, toggle: () => setOpen((o) => !o) })}
       {open && (
-        <div className={cn("animate-pop-in absolute z-50 min-w-48 rounded-2xl bg-overlay p-1.5 shadow-lg ring-1 ring-border", pos, className)}>
+        <div
+          role="dialog"
+          aria-modal="false"
+          className={cn(
+            "animate-pop-in absolute z-50 min-w-48 rounded-2xl bg-overlay p-4 shadow-xl ring-1 ring-border backdrop-blur-md",
+            pos[placement],
+            className
+          )}
+        >
+          {showArrow && (
+            <span
+              className={cn(
+                "absolute h-3 w-3 rotate-45 border-border bg-overlay pointer-events-none",
+                arrowPos[placement]
+              )}
+              aria-hidden="true"
+            />
+          )}
+          {showClose && (
+            <button
+              type="button"
+              aria-label="Close popover"
+              onClick={close}
+              className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-6 text-subtle hover:bg-surface-hover hover:text-foreground transition-colors"
+            >
+              <RiCloseLine size={15} />
+            </button>
+          )}
           {typeof children === "function" ? children(close) : children}
         </div>
       )}

@@ -491,75 +491,108 @@ export function MenuDoc() {
 /* --------------------------------- POPOVER -------------------------------- */
 
 export function PopoverDoc() {
+  const [position, setPosition] = useState<"top" | "bottom" | "left" | "right">("bottom");
+
   return (
     <>
-      <PageHeader eyebrow="Components · Overlays" title="Popover" description="A floating layer anchored to a trigger — click to open, outside-click or Escape to close. The foundation for dropdowns, menus, custom select and helper content. Never use it to hide a critical path." tags={["Anchored", "Outside click", "Arrow keys"]} />
+      <PageHeader
+        eyebrow="Components · Overlays"
+        title="Popover"
+        description="Popover is used to bring attention to specific user interface elements. Anchored to a trigger with customizable alignment, arrows, dismiss actions, and full keyboard navigation."
+        tags={["Anchored", "Arrow", "Outside click", "AlignUI Parity"]}
+      />
       <Import names="Popover" />
-      <Section title="Usage">
+
+      <Section title="Position & Alignment" description="Support for all cardinal alignments (top, bottom, left, right) with automatic directional arrow positioning.">
         <Showcase
-          code={`<Popover\n  placement="bottom"\n  trigger={({ toggle }) => <Button onClick={toggle}>Open popover</Button>}\n>\n  {(close) => (\n    <div className="p-3">\n      <p className="text-label-sm">Ready to launch</p>\n      <p className="text-paragraph-xs text-muted">Deploy main to production?</p>\n      <Button size="sm" onClick={close}>Launch</Button>\n    </div>\n  )}\n</Popover>`}
+          controls={
+            <OptionPicker
+              label="Placement Direction"
+              value={position}
+              options={["top", "bottom", "left", "right"] as const}
+              onChange={setPosition}
+            />
+          }
+          code={`<Popover\n  placement="${position}"\n  showArrow\n  showClose\n  trigger={({ toggle, open }) => (\n    <Button onClick={toggle} aria-expanded={open}>\n      Open ${position} popover\n    </Button>\n  )}\n>\n  {(close) => (\n    <div className="w-64 space-y-3">\n      <h4 className="text-label-sm font-medium text-foreground">Dimensions</h4>\n      <p className="text-paragraph-xs text-muted">Set the dimensions for the active layer canvas.</p>\n      <Button size="sm" fullWidth onClick={close}>Save dimensions</Button>\n    </div>\n  )}\n</Popover>`}
         >
           <Popover
-            placement="bottom"
-            trigger={({ toggle }) => <Button onClick={toggle}>Open popover</Button>}
+            key={position}
+            placement={position}
+            showArrow
+            showClose
+            trigger={({ toggle, open }) => (
+              <Button onClick={toggle} aria-expanded={open}>
+                Open {position} popover
+              </Button>
+            )}
           >
             {(close) => (
-              <div className="w-56 p-3">
-                <p className="text-label-sm">Ready to launch</p>
-                <p className="text-paragraph-xs text-muted">Deploy main@4f21ac to production?</p>
-                <Button size="sm" fullWidth className="mt-2.5" onClick={close}>Launch</Button>
+              <div className="w-64 space-y-3 pt-1">
+                <h4 className="text-label-sm font-medium text-foreground">Canvas Dimensions</h4>
+                <p className="text-paragraph-xs text-muted">Set the default width and aspect ratio for the export render.</p>
+                <div className="grid grid-cols-2 gap-2 text-[11px] font-mono text-muted">
+                  <div className="rounded-8 bg-surface-secondary p-2 ring-1 ring-border">
+                    <span>Width: </span><strong className="text-foreground">1440px</strong>
+                  </div>
+                  <div className="rounded-8 bg-surface-secondary p-2 ring-1 ring-border">
+                    <span>Height: </span><strong className="text-foreground">900px</strong>
+                  </div>
+                </div>
+                <Button size="sm" fullWidth onClick={close}>Apply Changes</Button>
               </div>
             )}
           </Popover>
+        </Showcase>
+      </Section>
 
+      <Section title="Menu & Actions" description="Popovers serve as the foundation for dropdown menus, selection pickers, and multi-action sheets.">
+        <Showcase
+          code={`<Popover\n  placement="bottom-end"\n  showArrow\n  trigger={({ toggle }) => (\n    <Button variant="outline" tone="default" onClick={toggle}>\n      Options\n    </Button>\n  )}\n>\n  {(close) => (\n    <div className="w-56 p-0">\n      <MenuItem onClick={close}>Review component</MenuItem>\n      <MenuItem onClick={close}>Duplicate pattern</MenuItem>\n    </div>\n  )}\n</Popover>`}
+        >
           <Popover
             placement="bottom-end"
-            trigger={({ toggle }) => <Button variant="outline" tone="default" onClick={toggle} endContent={<RiArrowRightSLine className="h-3.5 w-3.5" />}>Raise a flag</Button>}
+            showArrow
+            trigger={({ toggle }) => (
+              <Button variant="outline" tone="default" onClick={toggle} endContent={<RiArrowRightSLine className="h-3.5 w-3.5" />}>
+                Workspace Actions
+              </Button>
+            )}
             className="w-64 p-0"
           >
             {(close) => (
               <div>
-                <MenuLabel>Flag reason</MenuLabel>
-                <MenuItem icon={<RiNotification3Line />} onClick={close}>Needs design review</MenuItem>
-                <MenuItem icon={<RiFileCopyLine />} onClick={close}>Duplicate of another issue</MenuItem>
+                <MenuLabel>Quick actions</MenuLabel>
+                <MenuItem icon={<RiNotification3Line />} onClick={close}>Request design review</MenuItem>
+                <MenuItem icon={<RiFileCopyLine />} onClick={close}>Duplicate component</MenuItem>
                 <MenuSeparator />
-                <MenuItem icon={<RiDeleteBinLine />} tone="danger" onClick={close}>Report abuse</MenuItem>
+                <MenuItem icon={<RiDeleteBinLine />} tone="danger" onClick={close}>Delete workspace</MenuItem>
               </div>
             )}
           </Popover>
         </Showcase>
       </Section>
-      <Section title="With a hint" description="Popovers can carry non-essential helper content — but copy that users need later belongs in a Tooltip's sibling, not behind a click.">
-        <Showcase>
-          <Popover
-            placement="bottom-start"
-            trigger={({ toggle }) => <Button variant="ghost" tone="default" onClick={toggle} endContent={<RiArrowRightSLine className="h-3.5 w-3.5" />}>How is usage metered?</Button>}
-          >
-            <div className="max-w-64 p-3">
-              <p className="text-label-sm">Usage metering</p>
-              <p className="mt-1 text-paragraph-xs text-muted">Bandwidth is billed in gigabyte-hours and reset at the start of each UTC month.</p>
-            </div>
-          </Popover>
-        </Showcase>
-      </Section>
-      <Section title="Keyboard">
+
+      <Section title="Keyboard Navigation">
         <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-surface p-4 ring-1 ring-border shadow-xs text-paragraph-sm text-muted">
           <span className="flex items-center gap-1.5"><Kbd>Tab</Kbd> focus the content</span>
           <Divider orientation="vertical" className="h-4" />
-          <span className="flex items-center gap-1.5"><Kbd>Esc</Kbd> close</span>
+          <span className="flex items-center gap-1.5"><Kbd>Esc</Kbd> dismiss popover</span>
           <Divider orientation="vertical" className="h-4" />
-          <span>click outside to dismiss</span>
+          <span>outside-click automatically closes</span>
         </div>
       </Section>
-      <Section title="API">
+
+      <Section title="API Reference">
         <PropsTable rows={[
-          { name: "trigger", type: "({ open, toggle }) => ReactNode", required: true, description: "Render prop for the anchor element." },
-          { name: "children", type: "ReactNode | ((close: () => void) => ReactNode)", required: true, description: "Popover content. The function form receives a close callback." },
-          { name: "placement", type: '"bottom" | "top" | "bottom-start" | "bottom-end"', default: '"bottom"', description: "Anchor alignment relative to the trigger." },
-          { name: "className", type: "string", description: "Overrides the floating panel's default width and padding." },
+          { name: "trigger", type: "({ open, toggle }) => ReactNode", required: true, description: "Render prop for the anchor trigger element." },
+          { name: "children", type: "ReactNode | ((close: () => void) => ReactNode)", required: true, description: "Popover content. Function form receives the close callback." },
+          { name: "placement", type: '"top" | "bottom" | "left" | "right" | "top-start" | "top-end" | ...', default: '"bottom"', description: "Anchor position relative to trigger." },
+          { name: "showArrow", type: "boolean", default: "false", description: "Whether to render an indicator arrow pointing at the trigger." },
+          { name: "showClose", type: "boolean", default: "false", description: "Whether to render a dismiss close icon in the top right." },
+          { name: "className", type: "string", description: "Custom classes applied to the floating card layer." },
         ]} />
         <Callout>
-          Compose richer overlays on top of Popover — Dropdown, Menu and the custom select picker are all built from it.
+          Based on AlignUI v1.2 specifications and Radix UI Popover primitive ergonomics with OKLCH semantic token alignment.
         </Callout>
       </Section>
     </>
