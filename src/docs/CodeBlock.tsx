@@ -89,7 +89,7 @@ export function CodeBlock({
           </button>
         </div>
       )}
-      <div className="code-body ds-scroll" style={{ maxHeight }}>
+      <div className="code-body ds-scroll" style={{ maxHeight }} tabIndex={0} role="region" aria-label="Code example (scrollable)">
         <pre>
           <code>
             {showLineNumbers

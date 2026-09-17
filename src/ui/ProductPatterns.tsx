@@ -266,13 +266,20 @@ export function DataTable<T>({ columns, rows, rowKey, selectable, loading, empty
                 </th>
               )}
               {columns.map((column) => (
-                <th key={column.key} className={headerCls(column)} scope="col" style={{ width: column.width }}>
+                <th
+                  key={column.key}
+                  className={headerCls(column)}
+                  scope="col"
+                  style={{ width: column.width }}
+                  /* aria-sort belongs on the columnheader, not the inner button (WCAG 4.1.2),
+                     and only on the column that currently drives the sort. */
+                  aria-sort={sort?.key === column.key ? (sort.direction === "asc" ? "ascending" : "descending") : undefined}
+                >
                   {column.sortable ? (
                     <button
                       type="button"
                       className="data-table-sort-button"
                       onClick={() => setSort((current) => current?.key === column.key ? { key: column.key, direction: current.direction === "asc" ? "desc" : "asc" } : { key: column.key, direction: "asc" })}
-                      aria-sort={sort?.key === column.key ? (sort.direction === "asc" ? "ascending" : "descending") : "none"}
                     >
                       {column.header}
                       {sort?.key === column.key ? (

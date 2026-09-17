@@ -87,7 +87,7 @@ export function Modal({
             </button>
           </div>
         )}
-        {children && <div className="ds-scroll min-h-0 overflow-y-auto p-5 text-paragraph-sm text-muted">{children}</div>}
+        {children && <div className="ds-scroll min-h-0 overflow-y-auto p-5 text-paragraph-sm text-muted" tabIndex={0}>{children}</div>}
         {footer && <div className="flex flex-wrap justify-end gap-3 border-t border-separator p-5">{footer}</div>}
       </div>
     </div>,
@@ -153,7 +153,7 @@ export function Drawer({
             <RiCloseLine className="h-4 w-4" />
           </button>
         </div>
-        <div className="ds-scroll flex-1 overflow-y-auto p-4 text-paragraph-sm text-muted">{children}</div>
+        <div className="ds-scroll flex-1 overflow-y-auto p-4 text-paragraph-sm text-muted" tabIndex={0}>{children}</div>
         {footer && <div className="flex items-center justify-end gap-2 border-t border-separator p-4">{footer}</div>}
       </div>
     </div>,

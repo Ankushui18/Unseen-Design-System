@@ -681,14 +681,16 @@ export function SettingsScreenTemplate() {
 
         {/* Bio Textarea */}
         <div className="space-y-1.5 border-t border-separator pt-5">
-          <label className="text-label-xs font-medium text-foreground">Bio Description</label>
+          <label htmlFor="settings-bio" className="text-label-xs font-medium text-foreground">Bio Description</label>
           <textarea
+            id="settings-bio"
             rows={3}
             value={bio}
             onChange={(e) => setBio(e.target.value)}
+            aria-describedby="settings-bio-hint"
             className="w-full rounded-10 border border-border bg-field p-3 text-paragraph-sm text-foreground focus:border-accent focus:outline-none"
           />
-          <span className="text-[11px] text-subtle">275 characters left</span>
+          <span id="settings-bio-hint" className="text-[11px] text-subtle">275 characters left</span>
         </div>
 
         {/* Country & Timezone */}
@@ -1576,7 +1578,7 @@ export function AiAssistantTemplate() {
         {/* Right Chat Stream Canvas */}
         <main className="lg:col-span-8 flex flex-col justify-between p-5 sm:p-6 bg-surface">
           {/* Message Thread */}
-          <div className="space-y-4 max-h-[480px] overflow-y-auto pr-1">
+          <div className="space-y-4 max-h-[480px] overflow-y-auto pr-1" role="log" aria-label="Conversation" tabIndex={0}>
             {messages.map((msg) => (
               <div
                 key={msg.id}
@@ -1614,7 +1616,7 @@ export function AiAssistantTemplate() {
                         {copied ? "Copied" : "Copy"}
                       </button>
                     </div>
-                    <pre className="p-3 font-mono text-[11px] text-foreground overflow-x-auto leading-relaxed">
+                    <pre className="p-3 font-mono text-[11px] text-foreground overflow-x-auto leading-relaxed" tabIndex={0} role="region" aria-label="Streamed response (scrollable)">
                       <code>{msg.code}</code>
                     </pre>
                   </div>

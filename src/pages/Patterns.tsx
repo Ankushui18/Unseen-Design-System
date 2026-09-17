@@ -294,7 +294,7 @@ export function PatternsPage() {
                 </div>
                 <p className="mt-3 truncate font-mono text-paragraph-sm text-foreground">{key.value}</p>
                 <p className="mt-1 text-paragraph-xs text-subtle">{key.time}</p>
-                <div className="mt-4 flex gap-2">
+                <div className="mt-4 grid grid-cols-2 gap-2">
                   <Button size="xs" variant="outline" tone="default" fullWidth>View usage</Button>
                   <Button size="xs" tone="default" fullWidth>Reveal</Button>
                 </div>

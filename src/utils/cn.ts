@@ -17,7 +17,9 @@ const merge = extendTailwindMerge({
         "fancy-accent", "fancy-neutral", "fancy-danger", "fancy-success",
         "fancy-warning", "fancy-stroke", "ring-accent", "ring-neutral", "ring-danger",
       ],
-      radius: ["10", "20"],
+      // Every numeric step of the system radius scale — otherwise
+      // cn("rounded-10", "rounded-8") keeps both and the winner is CSS order.
+      radius: ["4", "6", "8", "10", "12", "14", "16", "20"],
     },
   },
 });

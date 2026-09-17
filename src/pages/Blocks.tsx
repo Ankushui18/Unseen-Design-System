@@ -67,7 +67,7 @@ export function BlocksPage() {
                   <span
                     className={cn(
                       "rounded-full px-1.5 py-0.2 text-[9px] font-mono",
-                      isSelected ? "bg-white/20 text-white" : "bg-surface text-subtle"
+                      isSelected ? "bg-black/25 text-white" : "bg-surface text-subtle"
                     )}
                   >
                     {count}

@@ -460,7 +460,7 @@ export function MenuDoc() {
                   <p className="truncate text-paragraph-xs text-muted">ada@acme.io</p>
                 </div>
               </div>
-              <div className="mt-3 flex gap-2">
+              <div className="mt-3 grid grid-cols-2 gap-2">
                 <Button size="sm" fullWidth>Profile</Button>
                 <Button size="sm" variant="outline" tone="default" fullWidth>Switch</Button>
               </div>

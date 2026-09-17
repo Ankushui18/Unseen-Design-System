@@ -756,7 +756,7 @@ function WorkspaceShowcase() {
                   <span
                     className={cn(
                       "rounded-full px-1.5 py-0.2 text-[9px] font-mono uppercase tracking-wider",
-                      isActive ? "bg-white/20 text-white" : "bg-accent/15 text-accent"
+                      isActive ? "bg-black/25 text-white" : "bg-surface text-muted"
                     )}
                   >
                     {tab.badge}
@@ -876,7 +876,7 @@ const HERO_SNIPPETS: Record<string, { filename: string; code: string; imports: s
           <span style={{ fontSize: 13, color: "var(--muted)" }}>
             Annual billing
           </span>
-          <Switch size="sm" checked={plan} onChange={setPlan} />
+          <Switch size="sm" checked={plan} onChange={setPlan} aria-label="Annual billing" />
         </div>
         <FancyButton tone="accent" size="lg" fullWidth>
           Create workspace
@@ -960,11 +960,11 @@ const HERO_SNIPPETS: Record<string, { filename: string; code: string; imports: s
     <div style={{ width: "100%", maxWidth: 320, display: "flex", flexDirection: "column", gap: 16, padding: 20 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span style={{ fontSize: 13, fontWeight: 500 }}>Push Notifications</span>
-        <Switch size="sm" checked={enabled} onChange={setEnabled} />
+        <Switch size="sm" checked={enabled} onChange={setEnabled} aria-label="Push Notifications" />
       </div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span style={{ fontSize: 13, fontWeight: 500 }}>Email Digests</span>
-        <Switch size="sm" checked={notify} onChange={setNotify} />
+        <Switch size="sm" checked={notify} onChange={setNotify} aria-label="Email Digests" />
       </div>
     </div>
   );
@@ -1298,7 +1298,7 @@ function TokenCustomizerSection() {
                     style={{
                       borderRadius: radius === "full" ? "9999px" : "6px",
                       background: activeColor.alpha10,
-                      color: activeColor.hex,
+                      color: "var(--foreground)",
                     }}
                   >
                     Security
@@ -1316,7 +1316,7 @@ function TokenCustomizerSection() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-1.5">
                     <label htmlFor="customizer-email" className="text-label-xs font-medium block text-foreground">
-                      Email Address <span style={{ color: activeColor.hex }}>*</span>
+                      Email Address <span className="text-danger">*</span>
                     </label>
                     <div className="relative">
                       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -1351,7 +1351,7 @@ function TokenCustomizerSection() {
                         Trust this device
                       </span>
                     </label>
-                    <a href="#" onClick={(e) => e.preventDefault()} style={{ color: activeColor.hex }} className="text-paragraph-xs font-medium hover:underline">
+                    <a href="#" onClick={(e) => e.preventDefault()} className="text-paragraph-xs font-medium text-accent hover:underline">
                       Need help?
                     </a>
                   </div>
@@ -1360,7 +1360,7 @@ function TokenCustomizerSection() {
                     type="submit"
                     style={{
                       borderRadius: radius === "full" ? "9999px" : `calc(${activeRadius.px} - 2px)`,
-                      background: `linear-gradient(180deg, ${activeColor.hex} 0%, ${activeColor.dark} 100%)`,
+                      background: `linear-gradient(180deg, ${activeColor.dark} 0%, color-mix(in srgb, ${activeColor.dark} 82%, #000) 100%)`,
                       boxShadow: `0 2px 10px -2px ${activeColor.alpha24}, inset 0 1px 0 rgba(255, 255, 255, 0.3)`,
                     }}
                     className="w-full py-2.5 px-4 text-label-xs font-medium text-white transition-all hover:brightness-110 active:scale-[0.99] flex items-center justify-center gap-2"
@@ -1371,7 +1371,7 @@ function TokenCustomizerSection() {
 
                 <div className="text-center text-paragraph-xs border-t border-separator pt-3.5 text-muted">
                   Don't have access anymore?{" "}
-                  <button type="button" style={{ color: activeColor.hex }} className="font-medium hover:underline">
+                  <button type="button" className="font-medium text-accent hover:underline">
                     Try another method
                   </button>
                 </div>
@@ -2155,7 +2155,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
             <div className="visual-language-items" style={{ maxWidth: 200 }}>
               <Input size="sm" placeholder="Workspace name" wrapperClassName="w-full" />
               <div className="flex items-center gap-2">
-                <Switch checked onChange={() => {}} size="sm" />
+                <Switch checked onChange={() => {}} size="sm" aria-label="Enable" />
                 <span className="text-paragraph-xs text-muted">Enable</span>
               </div>
             </div>
