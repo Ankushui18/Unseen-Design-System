@@ -58,7 +58,7 @@ export function Modal({
         aria-label={title ? undefined : "Dialog"}
         ref={dialog}
         tabIndex={-1}
-        className={cn("animate-pop-in relative z-10 flex max-h-[90dvh] w-full min-w-0 flex-col rounded-2xl bg-overlay shadow-xl ring-1 ring-border", w)}
+        className={cn("animate-pop-in relative z-10 flex max-h-[90dvh] w-full min-w-0 flex-col rounded-20 bg-overlay shadow-xl ring-1 ring-border", w)}
       >
         {(title || description || icon) && (
           <div className={cn("flex items-start gap-3.5 p-5", (children || footer) && "border-b border-separator")}>
@@ -82,7 +82,7 @@ export function Modal({
               {title && <h2 id={titleId} className="text-label-md text-foreground">{title}</h2>}
               {description && <p className="text-paragraph-sm text-muted">{description}</p>}
             </div>
-            <button onClick={onClose} className="-mt-1 -mr-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Close">
+            <button onClick={onClose} className="-mt-1 -mr-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-6 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Close">
               <RiCloseLine className="h-4 w-4" />
             </button>
           </div>
@@ -122,10 +122,10 @@ export function Drawer({
 
   const posCls =
     side === "bottom"
-      ? "inset-x-0 bottom-0 rounded-t-2xl border-t max-h-[80vh]"
+      ? "inset-x-0 bottom-0 rounded-t-20 border-t max-h-[80vh]"
       : side === "left"
-        ? "inset-y-0 left-0 rounded-r-2xl border-r"
-        : "inset-y-0 right-0 rounded-l-2xl border-l";
+        ? "inset-y-0 left-0 rounded-r-20 border-r"
+        : "inset-y-0 right-0 rounded-l-20 border-l";
 
   return createPortal(
     <div className="fixed inset-0 z-[100]">
@@ -149,7 +149,7 @@ export function Drawer({
       >
         <div className="flex items-center justify-between gap-4 border-b border-separator p-4">
           <h2 id={titleId} className="text-paragraph-sm font-medium tracking-tight">{title ?? "Details"}</h2>
-          <button onClick={onClose} className="rounded-lg p-1.5 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Close">
+          <button onClick={onClose} className="rounded-6 p-1.5 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Close">
             <RiCloseLine className="h-4 w-4" />
           </button>
         </div>
@@ -197,7 +197,7 @@ export function Tooltip({
         <span
           role="tooltip"
           className={cn(
-            "animate-pop-in pointer-events-none absolute z-50 rounded-lg bg-neutral-950 px-2.5 py-1.5 text-label-xs whitespace-nowrap text-white shadow-tooltip dark:bg-white dark:text-neutral-950",
+            "animate-pop-in pointer-events-none absolute z-50 rounded-8 bg-neutral-950 px-2.5 py-1.5 text-label-xs whitespace-nowrap text-white shadow-tooltip dark:bg-white dark:text-neutral-950",
             pos,
           )}
         >
@@ -288,7 +288,7 @@ export function Popover({
           role="dialog"
           aria-modal="false"
           className={cn(
-            "animate-pop-in absolute z-50 min-w-48 rounded-2xl bg-overlay p-4 shadow-xl ring-1 ring-border backdrop-blur-md",
+            "animate-pop-in absolute z-50 min-w-48 rounded-16 bg-overlay p-4 shadow-xl ring-1 ring-border backdrop-blur-md",
             pos[placement],
             className
           )}
@@ -338,7 +338,7 @@ export function MenuItem({
     <button
       onClick={onClick}
       className={cn(
-        "flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-paragraph-sm transition-colors",
+        "flex w-full items-center gap-2.5 rounded-8 px-2.5 py-2 text-left text-paragraph-sm transition-colors",
         tone === "danger" ? "text-danger hover:bg-danger-soft" : "text-foreground hover:bg-surface-hover",
         active && "bg-accent-soft text-accent-soft-foreground",
       )}
@@ -392,13 +392,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 danger: "text-danger",
               }[t.tone];
               return (
-                <div key={t.id} className="animate-slide-up pointer-events-auto flex items-start gap-3 rounded-2xl bg-overlay p-3.5 shadow-lg ring-1 ring-border">
+                <div key={t.id} className="animate-slide-up pointer-events-auto flex items-start gap-3 rounded-14 bg-overlay p-3.5 shadow-lg ring-1 ring-border">
                   <Icon className={cn("mt-0.5 h-4.5 w-4.5 shrink-0", accentColor)} />
                   <div className="flex-1 space-y-0.5">
                     <p className="text-paragraph-sm leading-tight font-medium text-foreground">{t.title}</p>
                     {t.description && <p className="text-paragraph-xs text-muted">{t.description}</p>}
                   </div>
-                  <button onClick={() => setItems((s) => s.filter((i) => i.id !== t.id))} className="rounded-md p-1 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Dismiss">
+                  <button onClick={() => setItems((s) => s.filter((i) => i.id !== t.id))} className="rounded-6 p-1 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Dismiss">
                     <RiCloseLine className="h-3.5 w-3.5" />
                   </button>
                 </div>

@@ -40,9 +40,9 @@ export function Tabs({
           const active = it.key === value;
           const base = cn("relative inline-flex shrink-0 items-center justify-center gap-2 font-medium transition-all duration-200 ease-out-quint whitespace-nowrap", pad, fullWidth && "flex-1", it.disabled && "pointer-events-none opacity-[var(--disabled-opacity)]");
           const styles = {
-            solid: cn("rounded-lg", active ? "bg-surface text-foreground shadow-toggle ring-1 ring-border/60" : "text-muted hover:text-foreground"),
-            segment: cn("rounded-lg", active ? "bg-surface text-foreground shadow-toggle" : "text-muted hover:text-foreground"),
-            underline: cn("rounded-t-md -mb-px border-b-2", active ? "border-accent text-foreground" : "border-transparent text-muted hover:text-foreground"),
+            solid: cn("rounded-8", active ? "bg-surface text-foreground shadow-toggle ring-1 ring-border/60" : "text-muted hover:text-foreground"),
+            segment: cn("rounded-8", active ? "bg-surface text-foreground shadow-toggle" : "text-muted hover:text-foreground"),
+            underline: cn("rounded-t-6 -mb-px border-b-2", active ? "border-accent text-foreground" : "border-transparent text-muted hover:text-foreground"),
             pill: cn("rounded-full", active ? "bevel bg-neutral-950 text-white shadow-fancy-neutral dark:bg-neutral-200 dark:text-neutral-950" : "text-muted hover:bg-surface-hover hover:text-foreground"),
           }[variant];
           return (
@@ -101,7 +101,7 @@ export function Accordion({
     setOpen((s) => (s.includes(k) ? s.filter((i) => i !== k) : multiple ? [...s, k] : [k]));
 
   const wrap = {
-    bordered: "rounded-2xl bg-surface ring-1 ring-border divide-y divide-separator overflow-hidden shadow-xs",
+    bordered: "rounded-14 bg-surface ring-1 ring-border divide-y divide-separator overflow-hidden shadow-xs",
     split: "flex flex-col gap-2.5",
     flush: "divide-y divide-separator",
   }[variant];
@@ -111,7 +111,7 @@ export function Accordion({
       {items.map((it) => {
         const isOpen = open.includes(it.key);
         return (
-          <div key={it.key} className={cn(variant === "split" && "overflow-hidden rounded-2xl bg-surface ring-1 ring-border shadow-xs", it.disabled && "opacity-[var(--disabled-opacity)]")}>
+          <div key={it.key} className={cn(variant === "split" && "overflow-hidden rounded-14 bg-surface ring-1 ring-border shadow-xs", it.disabled && "opacity-[var(--disabled-opacity)]")}>
             <button
               disabled={it.disabled}
               onClick={() => toggle(it.key)}
@@ -183,7 +183,7 @@ export function Pagination({
   if (end < total - 1) push("…");
   if (total > 1) push(total);
 
-  const btn = "inline-flex h-9 min-w-9 items-center justify-center rounded-lg px-2 text-paragraph-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-40";
+  const btn = "inline-flex h-9 min-w-9 items-center justify-center rounded-8 px-2 text-paragraph-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-40";
 
   return (
     <nav className="flex items-center gap-1" aria-label="Pagination">
@@ -243,7 +243,7 @@ export function Table<T extends Record<string, unknown>>({
   className?: string;
 }) {
   return (
-    <div className={cn("overflow-hidden rounded-2xl bg-surface ring-1 ring-border shadow-xs", className)}>
+    <div className={cn("overflow-hidden rounded-14 bg-surface ring-1 ring-border shadow-xs", className)}>
       <div className="ds-scroll overflow-x-auto">
         <table className="w-full text-left text-paragraph-sm">
           {caption && <caption className="border-b border-separator px-4 py-2.5 text-left text-paragraph-xs text-muted">{caption}</caption>}

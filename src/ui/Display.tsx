@@ -36,10 +36,10 @@ export function FeaturedIcon({
   className?: string;
 }) {
   const dims = {
-    xs: "h-8 w-8 rounded-lg [&_svg]:h-[18px] [&_svg]:w-[18px]",
+    xs: "h-8 w-8 rounded-8 [&_svg]:h-[18px] [&_svg]:w-[18px]",
     sm: "h-10 w-10 rounded-10 [&_svg]:h-[18px] [&_svg]:w-[18px]",
-    md: "h-12 w-12 rounded-xl [&_svg]:h-5 [&_svg]:w-5",
-    lg: "h-14 w-14 rounded-2xl [&_svg]:h-[22px] [&_svg]:w-[22px]",
+    md: "h-12 w-12 rounded-12 [&_svg]:h-5 [&_svg]:w-5",
+    lg: "h-14 w-14 rounded-14 [&_svg]:h-[22px] [&_svg]:w-[22px]",
   }[size];
   const treatment = variant === "solid" ? featuredSolid[tone] : variant === "gradient" ? `${tone === "accent" ? "btn-accent-fill" : "btn-neutral-fill"} text-white dark:text-neutral-950` : featuredSoft[tone];
   return (
@@ -62,7 +62,7 @@ export function Card({
   return (
     <div
       className={cn(
-        "min-w-0 rounded-xl bg-surface text-foreground ring-1 ring-border",
+        "min-w-0 rounded-14 bg-surface text-foreground ring-1 ring-border card-specular-glow",
         shadow,
         interactive &&
           "cursor-pointer transition-[box-shadow,transform] duration-200 ease-out-quint hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong",
@@ -152,7 +152,7 @@ export function Chip({
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-md font-medium normal-case tracking-normal whitespace-nowrap transition-colors duration-150",
+        "inline-flex shrink-0 items-center justify-center rounded-6 font-medium normal-case tracking-normal whitespace-nowrap transition-colors duration-150",
         sz,
         square && "aspect-square px-1",
         disabled ? "bg-transparent text-disabled ring-1 ring-inset ring-border" : treatment,
@@ -163,7 +163,7 @@ export function Chip({
       {startContent && <span className="flex shrink-0 items-center justify-center [&_svg]:h-3.5 [&_svg]:w-3.5" aria-hidden>{startContent}</span>}
       {children}
       {onClose && (
-        <button type="button" disabled={disabled} onClick={onClose} className="-mr-1 ml-0.5 flex h-4 w-4 items-center justify-center rounded-sm opacity-70 transition hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/15" aria-label={typeof children === "string" ? `Remove ${children}` : "Remove label"}>
+        <button type="button" disabled={disabled} onClick={onClose} className="-mr-1 ml-0.5 flex h-4 w-4 items-center justify-center rounded-4 opacity-70 transition hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/15" aria-label={typeof children === "string" ? `Remove ${children}` : "Remove label"}>
           <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
         </button>
       )}
@@ -242,7 +242,7 @@ export function Avatar({
       <span
         className={cn(
           "inline-flex items-center justify-center overflow-hidden font-medium select-none",
-          square ? "rounded-lg" : "rounded-full",
+          square ? "rounded-8" : "rounded-full",
           s,
           chipTones[tone].soft,
           className,
@@ -511,7 +511,7 @@ export function Alert({
     solid: chipTones[tone].solid,
   }[variant];
   return (
-    <div className={cn("flex items-start gap-3 rounded-xl p-3.5", styles, className)} role="alert">
+    <div className={cn("flex items-start gap-3 rounded-12 p-3.5", styles, className)} role="alert">
       <Icon className={cn("mt-px h-5 w-5 shrink-0", variant === "outline" && iconColor)} />
       <div className="flex-1 space-y-0.5">
         {title && <p className="text-label-sm">{title}</p>}
@@ -519,7 +519,7 @@ export function Alert({
         {action && <div className="pt-2">{action}</div>}
       </div>
       {onClose && (
-        <button onClick={onClose} className="rounded-md p-1 opacity-60 transition hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/10" aria-label="Dismiss">
+        <button onClick={onClose} className="rounded-6 p-1 opacity-60 transition hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/10" aria-label="Dismiss">
           <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
         </button>
       )}
@@ -530,7 +530,7 @@ export function Alert({
 /* ---------------------------------- Code ---------------------------------- */
 
 export function Code({ children, tone = "default" }: { children: ReactNode; tone?: Tone }) {
-  return <code className={cn("rounded-md px-1.5 py-0.5 font-mono text-[0.85em]", chipTones[tone].soft)}>{children}</code>;
+  return <code className={cn("rounded-6 px-1.5 py-0.5 font-mono text-[0.85em]", chipTones[tone].soft)}>{children}</code>;
 }
 
 /* -------------------------------- ScrollShadow ----------------------------- */

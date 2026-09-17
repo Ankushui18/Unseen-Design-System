@@ -161,7 +161,7 @@ export function CommandMenu({
   return createPortal(
     <div className="fixed inset-0 z-[120] flex items-start justify-center p-4 pt-[12vh]">
       <div className="animate-fade-in absolute inset-0 bg-backdrop backdrop-blur-[3px]" onMouseDown={onClose} />
-      <div ref={dialog} tabIndex={-1} role="dialog" aria-modal="true" aria-label="Command menu" className="animate-pop-in relative z-10 w-full max-w-lg overflow-hidden rounded-2xl bg-overlay shadow-xl ring-1 ring-border dark:bg-surface">
+      <div ref={dialog} tabIndex={-1} role="dialog" aria-modal="true" aria-label="Command menu" className="animate-pop-in relative z-10 w-full max-w-lg overflow-hidden rounded-16 bg-overlay shadow-xl ring-1 ring-border dark:bg-surface">
         <div className="flex items-center gap-3 border-b border-separator px-4">
           <RiSearchLine size={20} className="shrink-0 text-subtle" aria-hidden />
           <input
@@ -207,11 +207,11 @@ export function CommandMenu({
                     onMouseEnter={() => setCursor(r.idx)}
                     onClick={() => activate(r.it)}
                     className={cn(
-                      "flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left transition-colors",
+                      "flex w-full items-center gap-3 rounded-8 px-2.5 py-2 text-left transition-colors",
                       flat[cursor] === r ? "bg-surface-secondary text-foreground" : "text-muted",
                     )}
                   >
-                    {r.it.icon && <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-surface-secondary text-foreground ring-1 ring-inset ring-border [&_svg]:h-4 [&_svg]:w-4">{r.it.icon}</span>}
+                    {r.it.icon && <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-6 bg-surface-secondary text-foreground ring-1 ring-inset ring-border [&_svg]:h-4 [&_svg]:w-4">{r.it.icon}</span>}
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-paragraph-sm">{r.it.label}</span>
                       {r.it.hint && <span className="block truncate text-paragraph-xs text-subtle">{r.it.hint}</span>}
@@ -334,7 +334,7 @@ export function FileUploader({
         onDragLeave={() => setDragging(false)}
         onDrop={(e) => { e.preventDefault(); setDragging(false); read(e.dataTransfer.files); }}
         className={cn(
-          "flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed px-6 py-9 text-center transition-colors",
+          "flex flex-col items-center justify-center gap-2 rounded-16 border border-dashed px-6 py-9 text-center transition-colors",
           dragging ? "border-accent bg-accent-soft/40" : "border-border-strong bg-surface-secondary/50 hover:border-accent hover:bg-surface-secondary",
         )}
       >
@@ -353,7 +353,7 @@ export function FileUploader({
             const tone = f.status === "error" ? "danger" : f.status === "done" ? "success" : "accent";
             return (
               <li key={f.id} className="flex items-center gap-3 rounded-10 bg-surface px-3.5 py-2.5 ring-1 ring-border">
-                <span className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ring-1 ring-inset ring-border [&_svg]:h-4.5 [&_svg]:w-4.5", toneSoft[tone])}>
+                <span className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-8 ring-1 ring-inset ring-border [&_svg]:h-4.5 [&_svg]:w-4.5", toneSoft[tone])}>
                   <Glyph size={18} />
                 </span>
                 <div className="min-w-0 flex-1">
@@ -372,7 +372,7 @@ export function FileUploader({
                     <p className="mt-0.5 flex items-center gap-1 text-paragraph-xs text-success"><RiCheckboxCircleLine size={13} /> Uploaded</p>
                   )}
                 </div>
-                <button onClick={() => onRemove(f.id)} className="rounded-lg p-1.5 text-subtle transition hover:bg-surface-hover hover:text-danger" aria-label={`Remove ${f.name}`}>
+                <button onClick={() => onRemove(f.id)} className="rounded-6 p-1.5 text-subtle transition hover:bg-surface-hover hover:text-danger" aria-label={`Remove ${f.name}`}>
                   <RiDeleteBinLine size={16} />
                 </button>
               </li>
@@ -439,7 +439,7 @@ export function Filters({
       </button>
 
       {open && (
-        <div className="animate-pop-in absolute top-full left-0 z-50 mt-2 w-72 rounded-2xl bg-overlay p-2 shadow-lg ring-1 ring-border">
+        <div className="animate-pop-in absolute top-full left-0 z-50 mt-2 w-72 rounded-14 bg-overlay p-2 shadow-lg ring-1 ring-border">
           {sections.map((section) => (
             <div key={section.id} className="pb-1">
               <p className="px-2.5 pt-2 pb-1 text-subheading-2xs uppercase text-subtle">{section.name}</p>
@@ -451,9 +451,9 @@ export function Filters({
                     onClick={() => toggle(section.id, opt.value)}
                     role="checkbox"
                     aria-checked={on}
-                    className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left transition-colors hover:bg-surface-hover"
+                    className="flex w-full items-center gap-2.5 rounded-8 px-2.5 py-2 text-left transition-colors hover:bg-surface-hover"
                   >
-                    <span className={cn("flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-[5px] transition-colors", on ? "bg-accent text-white" : "ring-1 ring-inset ring-border-strong")}>
+                    <span className={cn("flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-4 transition-colors", on ? "bg-accent text-white" : "ring-1 ring-inset ring-border-strong")}>
                       {on && <RiCheckLine size={12} />}
                     </span>
                     <span className="flex-1 text-paragraph-sm text-foreground">{opt.label}</span>
@@ -577,10 +577,10 @@ export function TimePicker({
   return createPortal(
     <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
       <div className="animate-fade-in absolute inset-0 bg-backdrop backdrop-blur-[3px]" onMouseDown={onClose} />
-      <div ref={dialog} tabIndex={-1} role="dialog" aria-modal="true" aria-label="Pick a time" className="animate-pop-in relative z-10 rounded-2xl bg-overlay p-4 shadow-xl ring-1 ring-border">
+      <div ref={dialog} tabIndex={-1} role="dialog" aria-modal="true" aria-label="Pick a time" className="animate-pop-in relative z-10 rounded-16 bg-overlay p-4 shadow-xl ring-1 ring-border">
         <div className="mb-3 flex items-center justify-between gap-4 px-1">
           <p className="text-label-sm text-foreground">Select time</p>
-          <button onClick={onClose} className="rounded-lg p-1 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Close">
+          <button onClick={onClose} className="rounded-6 p-1 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Close">
             <RiCloseLine size={16} />
           </button>
         </div>
@@ -602,10 +602,10 @@ export function TimePicker({
           )}
         </div>
         <div className="mt-4 flex justify-end gap-2 border-t border-separator pt-3">
-          <button onClick={onClose} className="inline-flex h-9 items-center rounded-lg px-3 text-label-sm text-muted transition hover:bg-surface-hover hover:text-foreground">Cancel</button>
+          <button onClick={onClose} className="inline-flex h-9 items-center rounded-8 px-3 text-label-sm text-muted transition hover:bg-surface-hover hover:text-foreground">Cancel</button>
           <button
             onClick={() => { onChange(draft); onClose(); }}
-            className="inline-flex h-9 items-center rounded-lg bg-accent px-3.5 text-label-sm text-white transition hover:bg-accent-hover"
+            className="inline-flex h-9 items-center rounded-8 bg-accent px-3.5 text-label-sm text-white transition hover:bg-accent-hover"
           >
             Done
           </button>
@@ -667,9 +667,9 @@ export function Calendar({
   return (
     <div className={cn("w-72 rounded-20 bg-surface p-4 ring-1 ring-border shadow-lg", className)}>
       <header className="mb-2 flex items-center justify-between">
-        <button onClick={() => shift(-1)} className="rounded-lg p-1.5 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Previous month"><RiArrowLeftSLine size={18} /></button>
+        <button onClick={() => shift(-1)} className="rounded-6 p-1.5 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Previous month"><RiArrowLeftSLine size={18} /></button>
         <p className="text-label-sm text-foreground">{monthName} <span className="text-subtle">{view.year}</span></p>
-        <button onClick={() => shift(1)} className="rounded-lg p-1.5 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Next month"><RiArrowRightSLine size={18} /></button>
+        <button onClick={() => shift(1)} className="rounded-6 p-1.5 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Next month"><RiArrowRightSLine size={18} /></button>
       </header>
       <div className="flex flex-col gap-1" role="grid" aria-label={`${monthName} ${view.year}`}>
         <div className="flex" role="row">

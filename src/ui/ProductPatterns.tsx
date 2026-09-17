@@ -290,7 +290,7 @@ export function DataTable<T>({ columns, rows, rowKey, selectable, loading, empty
           <tbody>
             {loading && Array.from({ length: 5 }).map((_, i) => (
               <tr key={i}>
-                {selectable && <td className="data-table-cell is-checkbox is-compact"><Skeleton className="h-4 w-4 rounded-sm" /></td>}
+                {selectable && <td className="data-table-cell is-checkbox is-compact"><Skeleton className="h-4 w-4 rounded-4" /></td>}
                 {columns.map((column, j) => <td key={j} className={cellCls(column)}><Skeleton className="h-4 w-3/4" /></td>)}
                 <td className={cellCls({ key: "actions" } as DataTableColumn<T>)} />
               </tr>

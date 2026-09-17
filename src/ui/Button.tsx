@@ -13,19 +13,19 @@ export type Tone = "accent" | "default" | "success" | "warning" | "danger";
 export type Size = "xxs" | "xs" | "sm" | "md" | "lg";
 
 const sizes: Record<Size, string> = {
-  xxs: "h-7 gap-2.5 rounded-lg px-2 text-label-sm",
-  xs: "h-8 gap-2.5 rounded-lg px-2.5 text-label-sm",
-  sm: "h-9 gap-3 rounded-lg px-3 text-label-sm",
+  xxs: "h-7 gap-2.5 rounded-8 px-2 text-label-sm",
+  xs: "h-8 gap-2.5 rounded-8 px-2.5 text-label-sm",
+  sm: "h-9 gap-3 rounded-8 px-3 text-label-sm",
   md: "h-10 gap-3 rounded-10 px-3.5 text-label-sm",
-  lg: "h-12 gap-3 rounded-10 px-5 text-label-md",
+  lg: "h-12 gap-3 rounded-12 px-5 text-label-md",
 };
 
 const iconOnlySizes: Record<Size, string> = {
-  xxs: "h-7 w-7 rounded-lg",
-  xs: "h-8 w-8 rounded-lg",
-  sm: "h-9 w-9 rounded-lg",
+  xxs: "h-7 w-7 rounded-8",
+  xs: "h-8 w-8 rounded-8",
+  sm: "h-9 w-9 rounded-8",
   md: "h-10 w-10 rounded-10",
-  lg: "h-12 w-12 rounded-10",
+  lg: "h-12 w-12 rounded-12",
 };
 
 /* filled */

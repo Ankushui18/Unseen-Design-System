@@ -13,9 +13,9 @@ import { RiArrowDownSLine, RiCheckLine, RiSubtractLine } from "@remixicon/react"
 /* ------------------------------- Field shell ------------------------------ */
 
 const fieldSizes: Record<"sm" | "md" | "lg", string> = {
-  sm: "h-8 gap-1.5 px-2 rounded-lg text-paragraph-sm",
+  sm: "h-8 gap-1.5 px-2.5 rounded-8 text-paragraph-sm",
   md: "h-10 gap-2 px-3 rounded-10 text-paragraph-sm",
-  lg: "h-12 gap-2 px-3.5 rounded-10 text-paragraph-md",
+  lg: "h-12 gap-2 px-3.5 rounded-12 text-paragraph-md",
 };
 
 /* AlignUI input shell: hairline ring, xs shadow at rest, weak fill on hover, strong ring + double halo on focus */
@@ -263,7 +263,7 @@ export function Checkbox({
   checked,
   ...props
 }: CheckboxProps) {
-  const box = { sm: "h-4 w-4 rounded-[4px]", md: "h-[18px] w-[18px] rounded-[5px]", lg: "h-5 w-5 rounded-md" }[size];
+  const box = { sm: "h-4 w-4 rounded-4", md: "h-[18px] w-[18px] rounded-6", lg: "h-5 w-5 rounded-6" }[size];
   const on = checked || indeterminate;
   return (
     <label
@@ -474,7 +474,7 @@ export function Slider({
         <div className="flex items-center justify-between gap-3">
           {label && <span className="text-label-sm text-foreground">{label}</span>}
           {formatValue && (
-            <span className="rounded-md bg-surface-secondary px-1.5 py-0.5 font-mono text-[11px] tabular-nums text-muted">
+            <span className="rounded-6 bg-surface-secondary px-1.5 py-0.5 font-mono text-[11px] tabular-nums text-muted">
               {" "}
               {formatValue(value)}
             </span>
