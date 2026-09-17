@@ -121,7 +121,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const cssExport = useMemo(
     () =>
-      `/* Add after Aperture's token stylesheet. */
+      `/* Add after Unseen's token stylesheet. */
 :root {
   --accent-h: ${state.accentH};
   --accent-c: ${state.accentC};

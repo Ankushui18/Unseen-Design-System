@@ -380,7 +380,7 @@ export function BannerDoc() {
       <Section title="Variants">
         <Showcase align="stretch" padded={false}>
           <div className="w-full divide-y divide-separator">
-            {open && <Banner tone="accent" onClose={() => setOpen(false)} action={<LinkButton variant="gray" size="sm" className="text-current underline">See what's new</LinkButton>}>Aperture 3.2 is out — 11 premium blocks and 14 new components.</Banner>}
+            {open && <Banner tone="accent" onClose={() => setOpen(false)} action={<LinkButton variant="gray" size="sm" className="text-current underline">See what's new</LinkButton>}>Unseen 3.2 is out — 11 premium blocks and 14 new components.</Banner>}
             <Banner tone="warning" variant="light" action={<Button size="xs" tone="warning">Upgrade</Button>}>Your trial ends in 3 days.</Banner>
             <Banner tone="danger" variant="light">Scheduled maintenance on Saturday 02:00–04:00 UTC.</Banner>
             <Banner tone="default" variant="stroke" action={<LinkButton variant="primary" size="sm" startContent={<RiFileCopyLine />}>Copy link</LinkButton>}>Share this page with your team.</Banner>

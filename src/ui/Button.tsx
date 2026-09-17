@@ -1,8 +1,8 @@
-import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { forwardRef, cloneElement, isValidElement, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactElement, type ReactNode } from "react";
 import { cn } from "../utils/cn";
 
 /**
- * Button — matches AlignUI's button contract:
+ * Button — matches AlignUI's button contract with full polymorphism (asChild & href support):
  *   variant (intent) : accent(primary) | default(neutral) | success | warning | danger(error)
  *   mode             : solid(filled) | outline(stroke) | soft(lighter) | ghost | link
  *   size             : md 40 · sm 36 · xs 32 · xxs 28  (+ lg 48 for marketing)
@@ -74,15 +74,27 @@ const link: Record<Tone, string> = {
 
 const map = { solid, soft, outline, ghost, link };
 
-export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "prefix"> {
+export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "prefix" | "color"> {
   variant?: Variant;
   tone?: Tone;
+  /** HeroUI alias for tone */
+  color?: Tone;
   size?: Size;
   loading?: boolean;
+  /** HeroUI alias for loading */
+  isLoading?: boolean;
   iconOnly?: boolean;
+  /** HeroUI alias for iconOnly */
+  isIconOnly?: boolean;
+  /** HeroUI alias for disabled */
+  isDisabled?: boolean;
   fullWidth?: boolean;
   startContent?: ReactNode;
   endContent?: ReactNode;
+  asChild?: boolean;
+  href?: string;
+  target?: string;
+  rel?: string;
 }
 
 export const Spinner = ({ className }: { className?: string }) => (
@@ -97,32 +109,89 @@ const Icon = ({ children }: { children: ReactNode }) => (
 );
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { className, variant = "solid", tone = "accent", size = "md", loading = false, iconOnly = false, fullWidth = false, startContent, endContent, children, disabled, type = "button", ...props },
+  {
+    className,
+    variant = "solid",
+    tone: baseTone,
+    color,
+    size = "md",
+    loading: baseLoading = false,
+    isLoading,
+    iconOnly: baseIconOnly = false,
+    isIconOnly,
+    fullWidth = false,
+    startContent,
+    endContent,
+    children,
+    disabled: baseDisabled,
+    isDisabled,
+    type = "button",
+    asChild = false,
+    href,
+    target,
+    rel,
+    ...props
+  },
   ref,
 ) {
+  const tone = color ?? baseTone ?? "accent";
+  const loading = isLoading ?? baseLoading;
+  const iconOnly = isIconOnly ?? baseIconOnly;
+  const disabled = isDisabled ?? baseDisabled;
   const isLink = variant === "link";
+  const buttonClasses = cn(
+    "group relative inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap outline-none",
+    "transition duration-200 ease-out active:translate-y-px font-medium",
+    !isLink && "disabled:pointer-events-none disabled:bg-surface-secondary disabled:text-disabled disabled:shadow-none disabled:ring-transparent",
+    isLink && "disabled:pointer-events-none disabled:text-disabled",
+    isLink ? "h-auto gap-1 p-0 text-label-sm" : iconOnly ? iconOnlySizes[size] : sizes[size],
+    map[variant][tone],
+    fullWidth && "w-full",
+    className,
+  );
+
+  const innerContent = (
+    <>
+      {loading && <Icon><Spinner /></Icon>}
+      {!iconOnly && !loading && startContent && <Icon>{startContent}</Icon>}
+      {iconOnly ? !loading && <Icon>{children ?? startContent ?? endContent}</Icon> : children}
+      {!iconOnly && !loading && endContent && <Icon>{endContent}</Icon>}
+    </>
+  );
+
+  if (asChild && isValidElement(children)) {
+    const child = children as ReactElement<{ className?: string }>;
+    return cloneElement(child, {
+      className: cn(buttonClasses, child.props.className),
+      ...props,
+    });
+  }
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target={target}
+        rel={rel}
+        className={buttonClasses}
+        aria-disabled={disabled || loading || undefined}
+        {...(props as unknown as AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {innerContent}
+      </a>
+    );
+  }
+
   return (
     <button
       ref={ref}
       type={type}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
-      className={cn(
-        "group relative inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap outline-none",
-        "transition duration-200 ease-out active:translate-y-px",
-        !isLink && "disabled:pointer-events-none disabled:bg-surface-secondary disabled:text-disabled disabled:shadow-none disabled:ring-transparent",
-        isLink && "disabled:pointer-events-none disabled:text-disabled",
-        isLink ? "h-auto gap-1 p-0 text-label-sm" : iconOnly ? iconOnlySizes[size] : sizes[size],
-        map[variant][tone],
-        fullWidth && "w-full",
-        className,
-      )}
+      className={buttonClasses}
       {...props}
     >
-      {loading && <Icon><Spinner /></Icon>}
-      {!iconOnly && !loading && startContent && <Icon>{startContent}</Icon>}
-      {iconOnly ? !loading && <Icon>{children ?? startContent ?? endContent}</Icon> : children}
-      {!iconOnly && !loading && endContent && <Icon>{endContent}</Icon>}
+      {innerContent}
     </button>
   );
 });
@@ -141,29 +210,53 @@ export interface FancyButtonProps extends Omit<ButtonProps, "variant" | "tone"> 
 }
 
 export const FancyButton = forwardRef<HTMLButtonElement, FancyButtonProps>(function FancyButton(
-  { className, tone = "accent", size = "md", loading, iconOnly, fullWidth, startContent, endContent, children, disabled, type = "button", ...props },
+  { className, tone = "accent", size = "md", loading, iconOnly, fullWidth, startContent, endContent, children, disabled, type = "button", asChild, href, target, rel, ...props },
   ref,
 ) {
+  const fancyClasses = cn(
+    "relative inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap outline-none transition duration-200 ease-out active:translate-y-px font-medium",
+    "disabled:pointer-events-none disabled:bg-surface-secondary disabled:text-disabled disabled:shadow-none disabled:before:hidden",
+    iconOnly ? iconOnlySizes[size] : sizes[size],
+    fancy[tone],
+    fullWidth && "w-full",
+    className,
+  );
+
+  const innerContent = (
+    <>
+      {loading && <Icon><Spinner /></Icon>}
+      {!iconOnly && !loading && startContent && <Icon>{startContent}</Icon>}
+      {iconOnly ? !loading && <Icon>{children ?? startContent ?? endContent}</Icon> : children}
+      {!iconOnly && !loading && endContent && <Icon>{endContent}</Icon>}
+    </>
+  );
+
+  if (asChild && isValidElement(children)) {
+    const child = children as ReactElement<{ className?: string }>;
+    return cloneElement(child, {
+      className: cn(fancyClasses, child.props.className),
+      ...props,
+    });
+  }
+
+  if (href) {
+    return (
+      <a href={href} target={target} rel={rel} className={fancyClasses} {...(props as unknown as AnchorHTMLAttributes<HTMLAnchorElement>)}>
+        {innerContent}
+      </a>
+    );
+  }
+
   return (
     <button
       ref={ref}
       type={type}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
-      className={cn(
-        "relative inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap outline-none transition duration-200 ease-out active:translate-y-px",
-        "disabled:pointer-events-none disabled:bg-surface-secondary disabled:text-disabled disabled:shadow-none disabled:before:hidden",
-        iconOnly ? iconOnlySizes[size] : sizes[size],
-        fancy[tone],
-        fullWidth && "w-full",
-        className,
-      )}
+      className={fancyClasses}
       {...props}
     >
-      {loading && <Icon><Spinner /></Icon>}
-      {!iconOnly && !loading && startContent && <Icon>{startContent}</Icon>}
-      {iconOnly ? !loading && <Icon>{children ?? startContent ?? endContent}</Icon> : children}
-      {!iconOnly && !loading && endContent && <Icon>{endContent}</Icon>}
+      {innerContent}
     </button>
   );
 });

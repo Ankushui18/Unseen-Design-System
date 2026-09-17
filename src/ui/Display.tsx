@@ -323,6 +323,32 @@ export function AvatarGroupCompact({
   );
 }
 
+/* ---------------------------------- User ---------------------------------- */
+
+export interface UserProps extends React.HTMLAttributes<HTMLDivElement> {
+  name: string;
+  description?: ReactNode;
+  avatarProps?: { src?: string; size?: "xs" | "sm" | "md" | "lg"; tone?: Tone; square?: boolean };
+}
+
+export function User({ name, description, avatarProps, className, ...props }: UserProps) {
+  return (
+    <div className={cn("inline-flex items-center gap-2.5 text-left", className)} {...props}>
+      <Avatar
+        name={name}
+        size={avatarProps?.size ?? "sm"}
+        src={avatarProps?.src}
+        tone={avatarProps?.tone ?? "accent"}
+        square={avatarProps?.square}
+      />
+      <div className="flex flex-col min-w-0">
+        <span className="text-label-xs font-medium text-foreground truncate">{name}</span>
+        {description && <span className="text-[11px] text-muted truncate">{description}</span>}
+      </div>
+    </div>
+  );
+}
+
 /* ---------------------------------- Kbd ----------------------------------- */
 
 export function Kbd({ children }: { children: ReactNode }) {

@@ -3,7 +3,7 @@ import { cn } from "../utils/cn";
 import { CodeBlock } from "./CodeBlock";
 import { Chip } from "../ui/Display";
 import { useCopy } from "../lib/hooks";
-import { RiCheckLine, RiCodeSSlashLine, RiEyeLine, RiFileCopyLine, RiLink, RiRestartLine } from "@remixicon/react";
+import { RiCheckLine, RiCodeSSlashLine, RiComputerLine, RiEyeLine, RiFileCopyLine, RiLink, RiMoonLine, RiRestartLine, RiSmartphoneLine, RiSunLine, RiTabletLine } from "@remixicon/react";
 
 export function slugify(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -17,7 +17,7 @@ const MODULE_OF: Record<string, string> = {
   // ui/Display
   Card: "ui/Display", CardHeader: "ui/Display", CardBody: "ui/Display", CardFooter: "ui/Display",
   Chip: "ui/Display", Badge: "ui/Display", Avatar: "ui/Display", AvatarGroup: "ui/Display",
-  AvatarGroupCompact: "ui/Display", FeaturedIcon: "ui/Display",
+  AvatarGroupCompact: "ui/Display", User: "ui/Display", FeaturedIcon: "ui/Display",
   Kbd: "ui/Display", Snippet: "ui/Display", Divider: "ui/Display", Skeleton: "ui/Display",
   Progress: "ui/Display", CircularProgress: "ui/Display", Alert: "ui/Display", Code: "ui/Display",
   ScrollShadow: "ui/Display",
@@ -51,6 +51,8 @@ const MODULE_OF: Record<string, string> = {
   // ui/Pro
   ActivityFeed: "ui/Pro", CommandMenu: "ui/Pro", NotificationFeed: "ui/Pro",
   FileUploader: "ui/Pro", Filters: "ui/Pro", TimePicker: "ui/Pro", Calendar: "ui/Pro",
+  AiPromptInput: "ui/Pro", CryptoAddressChip: "ui/Pro", VoiceVisualizer: "ui/Pro",
+  CurrencyAmountInput: "ui/Pro",
 };
 
 export function Import({ names }: { names: string }) {
@@ -133,6 +135,7 @@ export function Showcase({
   className,
   align = "center",
   padded = true,
+  allowViewport = false,
 }: {
   children: ReactNode;
   code?: string;
@@ -140,14 +143,18 @@ export function Showcase({
   className?: string;
   align?: "center" | "start" | "stretch";
   padded?: boolean;
+  allowViewport?: boolean;
 }) {
   const [tab, setTab] = useState<"preview" | "code">("preview");
+  const [viewport, setViewport] = useState<"desktop" | "tablet" | "mobile">("desktop");
+  const [canvasTheme, setCanvasTheme] = useState<"auto" | "light" | "dark">("auto");
   const [revision, setRevision] = useState(0);
   const { copy, copied } = useCopy();
   const id = useId();
+
   return (
     <div className="showcase" data-has-code={code ? "true" : undefined}>
-      {code && (
+      {(code || allowViewport) && (
         <div className="showcase-toolbar">
           <div className="preview-tabs" role="tablist" aria-label="Example view">
           {(
@@ -172,23 +179,79 @@ export function Showcase({
             </button>
           ))}
           </div>
+
           <div className="showcase-tools">
+            {tab === "preview" && (
+              <>
+                <div className="viewport-switcher" role="group" aria-label="Preview viewport">
+                  <button
+                    type="button"
+                    aria-pressed={viewport === "desktop"}
+                    aria-label="Desktop viewport"
+                    title="Desktop (100%)"
+                    onClick={() => setViewport("desktop")}
+                  >
+                    <RiComputerLine size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    aria-pressed={viewport === "tablet"}
+                    aria-label="Tablet viewport (768px)"
+                    title="Tablet (768px)"
+                    onClick={() => setViewport("tablet")}
+                  >
+                    <RiTabletLine size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    aria-pressed={viewport === "mobile"}
+                    aria-label="Mobile viewport (390px)"
+                    title="Mobile (390px)"
+                    onClick={() => setViewport("mobile")}
+                  >
+                    <RiSmartphoneLine size={13} />
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  className="studio-icon-button"
+                  title={canvasTheme === "auto" ? "Canvas: System (Click for Dark)" : canvasTheme === "dark" ? "Canvas: Dark (Click for Light)" : "Canvas: Light (Click for Auto)"}
+                  aria-label="Toggle canvas theme"
+                  onClick={() => setCanvasTheme((c) => c === "auto" ? "dark" : c === "dark" ? "light" : "auto")}
+                >
+                  {canvasTheme === "dark" ? <RiMoonLine size={14} className="text-accent" /> : canvasTheme === "light" ? <RiSunLine size={14} className="text-warning" /> : <RiSunLine size={14} />}
+                </button>
+              </>
+            )}
             <button type="button" className="studio-icon-button" title="Reset preview" aria-label="Reset preview" onClick={() => setRevision((r) => r + 1)}><RiRestartLine size={14} /></button>
-            <button type="button" className="studio-icon-button" title={copied ? "Copied" : "Copy example"} aria-label={copied ? "Copied" : "Copy example"} onClick={() => copy(code)}>{copied ? <RiCheckLine size={14} /> : <RiFileCopyLine size={14} />}</button>
+            {code && (
+              <button type="button" className="studio-icon-button" title={copied ? "Copied" : "Copy example"} aria-label={copied ? "Copied" : "Copy example"} onClick={() => copy(code)}>{copied ? <RiCheckLine size={14} className="text-success" /> : <RiFileCopyLine size={14} />}</button>
+            )}
           </div>
         </div>
       )}
       <div role={code ? "tabpanel" : undefined} id={`${id}-panel`} aria-labelledby={code ? `${id}-${tab}` : undefined}>
       {tab === "preview" ? (
           <div
+            data-theme={canvasTheme !== "auto" ? canvasTheme : undefined}
             className={cn(
-              "showcase-preview",
+              "showcase-preview relative",
               align,
               !padded && "no-padding",
+              canvasTheme === "dark" && "dark bg-surface-secondary text-foreground",
+              canvasTheme === "light" && "light bg-surface text-foreground",
               className,
             )}
           >
-            <Fragment key={revision}>{children}</Fragment>
+            <div
+              className={cn(
+                "transition-all duration-300 ease-out-quint w-full min-w-0",
+                viewport === "tablet" && "max-w-[768px] mx-auto rounded-16 ring-1 ring-border shadow-lg bg-surface overflow-hidden",
+                viewport === "mobile" && "max-w-[390px] mx-auto rounded-20 ring-1 ring-border shadow-xl bg-surface overflow-hidden",
+              )}
+            >
+              <Fragment key={revision}>{children}</Fragment>
+            </div>
           </div>
       ) : (
         <CodeBlock code={code!} filename="Example.tsx" maxHeight={460} />

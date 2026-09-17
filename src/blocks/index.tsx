@@ -6,9 +6,10 @@ import { Tabs } from "../ui/Navigation";
 import { useToast } from "../ui/Overlay";
 import { CompactButton, DigitInput, FileFormatIcon, Hint, HorizontalStepper, LinkButton, SegmentedControl, SocialButton, StatusBadge, Tag } from "../ui/Extra";
 import { Logo } from "../ui/Brand";
-import { CtaBlock, FaqBlock, FeaturesBlock, HeroBlock, LogosBlock, StatsBandBlock, TestimonialsBlock } from "./landing";
+import { CtaBlock, FaqBlock, FeaturesBentoBlock, FeaturesBlock, HeroBlock, HeroInverseBlock, HeroLitBlock, HeroSplitBlock, HowItWorksBlock, IntegrationsBlock, LogosBlock, NewsletterBlock, StatsBandBlock, TestimonialsBlock } from "./landing";
+import { AnalyticsDashboardTemplate, BillingPageTemplate, SettingsScreenTemplate, TeamPeopleTemplate } from "../pages/Templates";
 import { cn } from "../utils/cn";
-import { RiArrowRightDownLine, RiArrowRightLine, RiArrowRightUpLine, RiBankCardLine, RiCheckLine, RiCloseLine, RiEyeLine, RiEyeOffLine, RiFileTextLine, RiFilterLine, RiFlashlightLine, RiGitBranchLine, RiGlobalLine, RiMailLine, RiMoreLine, RiNotification3Line, RiSearchLine, RiStarLine, RiTeamLine, RiUploadCloudLine } from "@remixicon/react";
+import { RiArrowRightDownLine, RiArrowRightLine, RiArrowRightUpLine, RiBankCardLine, RiCheckLine, RiCloseLine, RiEyeLine, RiEyeOffLine, RiFileTextLine, RiFilterLine, RiFlashlightLine, RiGitBranchLine, RiGlobalLine, RiMailLine, RiMoreLine, RiNotification3Line, RiSearchLine, RiStarLine, RiSubtractLine, RiTeamLine, RiUploadCloudLine } from "@remixicon/react";
 
 /* -------------------------------- Auth Card ------------------------------- */
 
@@ -48,7 +49,7 @@ export function AuthCardBlock() {
       <div className="auth-demo-socials">
         {(["google", "apple", "github"] as const).map((brand) => <SocialButton key={brand} type="button" brand={brand} mode="stroke" iconOnly aria-label={`Continue with ${brand}`} className="w-full" onClick={() => push({ title: "Social sign-in preview", description: "Connect your own authentication provider to enable sign-in.", tone: "accent" })} />)}
       </div>
-      <div className="auth-demo-switch"><span>{mode === "signin" ? "New to Aperture?" : "Already have an account?"}</span>{" "}<LinkButton type="button" variant="black" size="sm" onClick={() => changeMode(mode === "signin" ? "register" : "signin")}>{mode === "signin" ? "Create an account" : "Sign in"}</LinkButton></div>
+      <div className="auth-demo-switch"><span>{mode === "signin" ? "New to Unseen?" : "Already have an account?"}</span>{" "}<LinkButton type="button" variant="black" size="sm" onClick={() => changeMode(mode === "signin" ? "register" : "signin")}>{mode === "signin" ? "Create an account" : "Sign in"}</LinkButton></div>
     </form>
   );
 }
@@ -169,34 +170,111 @@ export function NotificationBlock() {
 
 export function PricingBlock() {
   const [annual, setAnnual] = useState(true);
+  const [showComparison, setShowComparison] = useState(false);
   const { push } = useToast();
+
   const plans = [
-    { name: "Starter", price: annual ? 0 : 0, desc: "For individuals exploring the system.", features: ["3 projects", "Community support", "Light & dark themes"], cta: "Get started", tone: "outline" as const },
-    { name: "Pro", price: annual ? 19 : 24, desc: "For product teams shipping to production.", features: ["Unlimited projects", "Figma library sync", "Token export & source access", "Priority support"], cta: "Start 14-day trial", tone: "solid" as const, popular: true },
-    { name: "Enterprise", price: annual ? 49 : 59, desc: "For organisations with compliance needs.", features: ["SSO & audit logs", "Dedicated designer", "Custom token pipeline", "SLA & onboarding"], cta: "Talk to sales", tone: "outline" as const },
+    {
+      name: "Starter",
+      price: 0,
+      period: "free forever",
+      desc: "For individuals and indie makers exploring the system.",
+      features: ["20+ core primitives", "Light & dark themes", "Community support", "Public beta access"],
+      cta: "Get started free",
+      tone: "outline" as const,
+      popular: false,
+    },
+    {
+      name: "Pro",
+      price: annual ? 19 : 24,
+      period: "per seat / mo",
+      desc: "For fast-moving teams shipping to production.",
+      features: ["All 76+ components & PRO", "Figma token synchronization", "Direct source copy & tokens", "Priority email & Slack support"],
+      cta: "Start 14-day trial",
+      tone: "solid" as const,
+      popular: true,
+    },
+    {
+      name: "Enterprise",
+      price: annual ? 49 : 59,
+      period: "per seat / mo",
+      desc: "For organisations needing custom pipelines and SLA.",
+      features: ["Everything in Pro", "SSO & SAML authentication", "Custom token transform pipeline", "Dedicated SLA & design audit"],
+      cta: "Talk to sales",
+      tone: "outline" as const,
+      popular: false,
+    },
   ];
+
+  const comparisonRows = [
+    { category: "Core Components", features: [
+      { name: "Documented UI Primitives", starter: "20+", pro: "76+", enterprise: "All 76+ & PRO" },
+      { name: "OKLCH Token System", starter: true, pro: true, enterprise: true },
+      { name: "Light / Dark Graph", starter: true, pro: true, enterprise: true },
+      { name: "PRO Primitives (Command, Feed)", starter: false, pro: true, enterprise: true },
+    ]},
+    { category: "Tooling & Integration", features: [
+      { name: "Source Code Inspection", starter: true, pro: true, enterprise: true },
+      { name: "Figma Library Sync", starter: false, pro: true, enterprise: true },
+      { name: "Custom Token Pipeline", starter: false, pro: false, enterprise: true },
+    ]},
+    { category: "Team & Support", features: [
+      { name: "Workspace Seats", starter: "1 user", pro: "Unlimited", enterprise: "Unlimited" },
+      { name: "SSO & Audit Logs", starter: false, pro: false, enterprise: true },
+      { name: "Support Guarantee", starter: "Community", pro: "Priority 24h", enterprise: "99.9% SLA" },
+    ]},
+  ];
+
   return (
     <div className="w-full">
-      <div className="mb-6 flex items-center justify-center gap-3">
-        <SegmentedControl value={annual ? "annual" : "monthly"} onChange={(v) => setAnnual(v === "annual")} items={[{ value: "monthly", label: "Monthly" }, { value: "annual", label: "Annual" }]} />
-        <Chip size="sm" tone="success" variant="soft">Save 20%</Chip>
+      <div className="mb-8 flex flex-col items-center justify-center gap-3 text-center sm:flex-row">
+        <SegmentedControl
+          value={annual ? "annual" : "monthly"}
+          onChange={(v) => setAnnual(v === "annual")}
+          items={[{ value: "monthly", label: "Monthly" }, { value: "annual", label: "Annual" }]}
+        />
+        <div className="flex items-center gap-2">
+          <Chip size="sm" tone="success" variant="soft" dot>Save 20% on Annual</Chip>
+          <Chip size="sm" tone="default" variant="soft">per seat / month</Chip>
+        </div>
       </div>
-      <div className="grid gap-4 md:grid-cols-3">
+
+      <div className="grid gap-6 md:grid-cols-3">
         {plans.map((p) => (
-          <Card key={p.name} className={cn("relative flex flex-col p-6", p.popular && "ring-2 ring-accent shadow-md")}>
-            {p.popular && <Chip tone="accent" size="sm" className="absolute -top-2.5 left-6">Most popular</Chip>}
-            <p className="text-label-md text-foreground">{p.name}</p>
+          <Card
+            key={p.name}
+            className={cn(
+              "relative flex flex-col p-6 transition-all duration-200",
+              p.popular ? "border-glow surface-lit shadow-lg ring-1 ring-accent/30" : "hover:shadow-md hover:ring-border-strong"
+            )}
+          >
+            {p.popular && (
+              <Chip tone="accent" size="sm" className="absolute -top-3 left-6 shadow-xs">
+                Most popular
+              </Chip>
+            )}
+            <p className="text-label-lg text-foreground">{p.name}</p>
             <p className="mt-1 text-paragraph-sm text-muted">{p.desc}</p>
-            <div className="mt-5 flex items-baseline gap-1">
-              <span className="text-title-h3 tabular-nums text-foreground">${p.price}</span>
-              <span className="text-paragraph-sm text-subtle">/ seat / mo</span>
+            <div className="mt-5 flex items-baseline gap-1.5 transition-all">
+              <span className="text-title-h2 tabular-nums text-foreground">${p.price}</span>
+              <span className="text-paragraph-xs text-subtle">/{p.period}</span>
             </div>
-            <Button fullWidth variant={p.tone} tone={p.popular ? "accent" : "default"} className="mt-5" onClick={() => push({ title: `${p.name} plan selected`, description: "This is a fictional product-pricing example. Aperture's beta remains free.", tone: "accent" })}>{p.cta}</Button>
+            <Button
+              fullWidth
+              variant={p.tone}
+              tone={p.popular ? "accent" : "default"}
+              className={cn("mt-5", p.popular && "btn-accent-fill")}
+              onClick={() => push({ title: `${p.name} plan selected`, description: "This is a demonstration block in the Unseen preview.", tone: "accent" })}
+            >
+              {p.cta}
+            </Button>
             <Divider className="my-5" />
-            <ul className="space-y-2.5">
+            <ul className="space-y-2.5 flex-1">
               {p.features.map((f) => (
                 <li key={f} className="flex items-center gap-2.5 text-paragraph-sm text-muted">
-                  <span className="flex h-4.5 w-4.5 items-center justify-center rounded-full bg-success-soft text-success-soft-foreground"><RiCheckLine className="h-3 w-3" strokeWidth={3} /></span>
+                  <span className="flex h-4.5 w-4.5 items-center justify-center rounded-full bg-success-soft text-success-soft-foreground">
+                    <RiCheckLine className="h-3 w-3" strokeWidth={3} />
+                  </span>
                   {f}
                 </li>
               ))}
@@ -204,6 +282,69 @@ export function PricingBlock() {
           </Card>
         ))}
       </div>
+
+      <div className="mt-8 text-center">
+        <Button
+          variant="ghost"
+          tone="default"
+          size="sm"
+          onClick={() => setShowComparison((s) => !s)}
+        >
+          {showComparison ? "Hide feature comparison" : "Compare all plan features"}
+        </Button>
+      </div>
+
+      {showComparison && (
+        <Card className="mt-6 overflow-hidden">
+          <div className="overflow-x-auto ds-scroll">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="border-b border-separator bg-surface-secondary text-subheading-xs uppercase text-subtle">
+                  <th className="px-5 py-3 font-medium">Feature</th>
+                  <th className="px-5 py-3 font-medium">Starter</th>
+                  <th className="px-5 py-3 font-medium text-accent">Pro</th>
+                  <th className="px-5 py-3 font-medium">Enterprise</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-separator-secondary text-paragraph-sm">
+                {comparisonRows.map((cat) => (
+                  <tr key={cat.category} className="contents">
+                    <tr className="bg-surface-secondary/40 font-medium text-label-xs text-foreground">
+                      <td colSpan={4} className="px-5 py-2.5">{cat.category}</td>
+                    </tr>
+                    {cat.features.map((f) => (
+                      <tr key={f.name} className="transition-colors hover:bg-surface-hover">
+                        <td className="px-5 py-3 text-foreground">{f.name}</td>
+                        <td className="px-5 py-3 text-muted">
+                          {typeof f.starter === "boolean" ? (
+                            f.starter ? <RiCheckLine className="text-success h-4 w-4" /> : <RiSubtractLine className="text-subtle h-4 w-4" />
+                          ) : (
+                            <span>{f.starter}</span>
+                          )}
+                        </td>
+                        <td className="px-5 py-3 text-foreground font-medium">
+                          {typeof f.pro === "boolean" ? (
+                            f.pro ? <RiCheckLine className="text-success h-4 w-4" /> : <RiSubtractLine className="text-subtle h-4 w-4" />
+                          ) : (
+                            <span>{f.pro}</span>
+                          )}
+                        </td>
+                        <td className="px-5 py-3 text-muted">
+                          {typeof f.enterprise === "boolean" ? (
+                            f.enterprise ? <RiCheckLine className="text-success h-4 w-4" /> : <RiSubtractLine className="text-subtle h-4 w-4" />
+                          ) : (
+                            <span>{f.enterprise}</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
     </div>
   );
 }
@@ -431,7 +572,7 @@ export function RatingBlock() {
   return (
     <Card className="w-full max-w-[380px] p-6 text-center">
       <p className="text-label-md text-foreground">How was your experience?</p>
-      <p className="mt-1 text-paragraph-sm text-muted">Your feedback helps us improve Aperture.</p>
+      <p className="mt-1 text-paragraph-sm text-muted">Your feedback helps us improve Unseen.</p>
       <div className="mt-4 flex justify-center gap-1.5" onMouseLeave={() => setHover(0)}>
         {[1, 2, 3, 4, 5].map((i) => (
           <button key={i} onMouseEnter={() => setHover(i)} onClick={() => { setRating(i); setSubmitted(false); }} className="transition-transform hover:scale-110" aria-label={`${i} stars`} aria-pressed={rating === i}>
@@ -538,6 +679,19 @@ export function VerifyBlock() {
 export type BlockDef = { key: string; title: string; category: string; description: string; render: () => ReactNode; span?: 1 | 2 | 3; width?: number; pro?: boolean };
 
 export const BLOCKS: BlockDef[] = [
+  { key: "hero-lit", title: "Hero · Lit", category: "Marketing", description: "Ambient glow, gradient headline, FeaturedIcon pill and social proof.", render: () => <HeroLitBlock />, span: 3, width: 980, pro: true },
+  { key: "hero-split", title: "Hero · Split", category: "Marketing", description: "Copy and primary CTAs paired with a live interactive deployment panel.", render: () => <HeroSplitBlock />, span: 3, width: 980, pro: true },
+  { key: "hero-inverse", title: "Hero · Inverse", category: "Marketing", description: "Dark high-contrast surface with dot-grid, gradient CTA and metric cards.", render: () => <HeroInverseBlock />, span: 3, width: 980, pro: true },
+  { key: "features", title: "Features Grid", category: "Marketing", description: "FeaturedIcon-led value props in a responsive card grid with border-glow.", render: () => <FeaturesBlock />, span: 3, width: 980, pro: true },
+  { key: "features-bento", title: "Features · Bento", category: "Marketing", description: "Variable-span bento layout with live theme swatches, shortcuts and code snippets.", render: () => <FeaturesBentoBlock />, span: 3, width: 980, pro: true },
+  { key: "pricing", title: "Pricing & Comparison", category: "Marketing", description: "Three tiers with annual crossfade, glowing popular tier and full comparison matrix.", render: () => <PricingBlock />, span: 3, width: 980, pro: true },
+  { key: "how-it-works", title: "How It Works", category: "Marketing", description: "3-step interactive architecture flow with live code snippets and card activation.", render: () => <HowItWorksBlock />, span: 3, width: 980, pro: true },
+  { key: "integrations", title: "Integrations & Connectors", category: "Marketing", description: "Interactive ecosystem grid with categories, status chips and switches.", render: () => <IntegrationsBlock />, span: 3, width: 980, pro: true },
+  { key: "newsletter", title: "Newsletter Subscription", category: "Marketing", description: "High-conversion email signup card with social proof, privacy badge and instant toast.", render: () => <NewsletterBlock />, span: 2, width: 760, pro: true },
+  { key: "template-analytics", title: "Analytics Dashboard", category: "Templates", description: "MRR velocity, transaction tables, circular progress targets and SLA monitors.", render: () => <AnalyticsDashboardTemplate />, span: 3, width: 1100, pro: true },
+  { key: "template-settings", title: "Settings Screen", category: "Templates", description: "Workspace profile, domain prefix inputs, slider timeouts, 2FA toggles, and notification digest.", render: () => <SettingsScreenTemplate />, span: 3, width: 1100, pro: true },
+  { key: "template-billing", title: "Billing & Subscription", category: "Templates", description: "Subscription tier management, payment card, invoice receipts and promo snippet.", render: () => <BillingPageTemplate />, span: 3, width: 1100, pro: true },
+  { key: "template-team", title: "Team & Collaborators", category: "Templates", description: "Faceted member directory, selectable table with bulk invites and activity feed.", render: () => <TeamPeopleTemplate />, span: 3, width: 1100, pro: true },
   { key: "auth", title: "Auth Card", category: "Authentication", description: "Login with social sign-in, remember me and password reveal.", render: () => <AuthCardBlock />, width: 400 },
   { key: "verify", title: "Verification", category: "Authentication", description: "OTP entry with digit inputs, paste support and validation.", render: () => <VerifyBlock />, width: 400 },
   { key: "onboarding", title: "Onboarding", category: "Forms", description: "Stepper-driven wizard with segmented team-size picker.", render: () => <OnboardingBlock />, span: 2, width: 560, pro: true },
@@ -550,10 +704,8 @@ export const BLOCKS: BlockDef[] = [
   { key: "usage", title: "Plan Usage", category: "Dashboard", description: "Circular and linear progress with team avatars.", render: () => <UsageBlock />, width: 380 },
   { key: "settings", title: "Settings Form", category: "Forms", description: "Tabbed settings with radios, switches and a sticky action bar.", render: () => <SettingsBlock />, span: 2, width: 640, pro: true },
   { key: "rating", title: "Rating", category: "Feedback", description: "Five-star rating with hover preview.", render: () => <RatingBlock />, width: 380 },
-  { key: "pricing", title: "Pricing", category: "Marketing", description: "Three tiers with annual toggle and highlighted plan.", render: () => <PricingBlock />, span: 3, width: 900, pro: true },
   { key: "hero", title: "Hero Section", category: "Marketing", description: "Announcement pill, gradient headline, dual CTAs and social proof.", render: () => <HeroBlock />, span: 3, width: 980, pro: true },
   { key: "logos", title: "Brands & Social Proof", category: "Marketing", description: "A quiet wordmark strip under a single caption.", render: () => <LogosBlock />, span: 3, width: 980, pro: true },
-  { key: "features", title: "Features Grid", category: "Marketing", description: "Icon-led value props in a responsive card grid.", render: () => <FeaturesBlock />, span: 3, width: 980, pro: true },
   { key: "metrics", title: "Stats Band", category: "Marketing", description: "A four-up band of headline metrics on a soft well.", render: () => <StatsBandBlock />, span: 3, width: 980, pro: true },
   { key: "testimonials", title: "Testimonials", category: "Marketing", description: "Three quote cards with ratings and verified avatars.", render: () => <TestimonialsBlock />, span: 3, width: 980, pro: true },
   { key: "cta", title: "Call to Action", category: "Marketing", description: "Inverse band with dot grid, CTAs and trust points.", render: () => <CtaBlock />, span: 2, width: 760, pro: true },
