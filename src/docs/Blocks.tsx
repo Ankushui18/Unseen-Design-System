@@ -70,7 +70,7 @@ export function Import({ names }: { names: string }) {
   const code = [...byModule.entries()].map(([source, specs]) => `import { ${specs.join(", ")} } from "./${source}";`).join("\n");
   return (
     <div className="import-panel">
-      <pre>{code}</pre>
+      <pre tabIndex={0}>{code}</pre>
       <button type="button" onClick={() => copy(code)} aria-label={copied ? "Copied" : "Copy import"}>
         {copied ? <RiCheckLine size={12} className="text-success" /> : <RiFileCopyLine size={12} />}
         {copied ? "Copied" : "Copy"}

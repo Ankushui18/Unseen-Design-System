@@ -128,7 +128,7 @@ export function HeroSplitBlock() {
                     )}
                   >
                     <span className="text-label-xs font-medium">Pro Node</span>
-                    <span className="text-[11px] opacity-80">$29/mo · 8 vCPU</span>
+                    <span className="text-[11px]">$29/mo · 8 vCPU</span>
                   </button>
                   <button
                     type="button"
@@ -139,7 +139,7 @@ export function HeroSplitBlock() {
                     )}
                   >
                     <span className="text-label-xs font-medium">Dedicated</span>
-                    <span className="text-[11px] opacity-80">$99/mo · 32 vCPU</span>
+                    <span className="text-[11px]">$99/mo · 32 vCPU</span>
                   </button>
                 </div>
               </div>

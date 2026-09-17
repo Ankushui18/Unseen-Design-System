@@ -365,7 +365,7 @@ export function Snippet({ children, className, symbol = "$" }: { children: strin
   const { copied, copy } = useCopy();
   return (
     <div className={cn("group flex items-center justify-between gap-4 rounded-10 bg-surface px-3.5 py-2.5 ring-1 ring-border shadow-xs", className)}>
-      <code className="overflow-x-auto font-mono text-paragraph-sm whitespace-nowrap text-foreground no-scrollbar">
+      <code className="overflow-x-auto font-mono text-paragraph-sm whitespace-nowrap text-foreground no-scrollbar" tabIndex={0} role="region" aria-label="Command (scrollable)">
         {symbol && <span className="mr-2 select-none text-subtle">{symbol}</span>}
         {children}
       </code>
@@ -515,7 +515,7 @@ export function Alert({
       <Icon className={cn("mt-px h-5 w-5 shrink-0", variant === "outline" && iconColor)} />
       <div className="flex-1 space-y-0.5">
         {title && <p className="text-label-sm">{title}</p>}
-        {children && <div className={cn("text-paragraph-sm", variant === "solid" ? "opacity-90" : variant === "outline" ? "text-muted" : "opacity-85")}>{children}</div>}
+        {children && <div className={cn("text-paragraph-sm", variant === "solid" ? "opacity-90" : variant === "outline" ? "text-muted" : "")}>{children}</div>}
         {action && <div className="pt-2">{action}</div>}
       </div>
       {onClose && (
@@ -542,6 +542,10 @@ export function ScrollShadow({ children, className, maxHeight = 220 }: { childre
       <div
         className={cn("ds-scroll overflow-y-auto", className)}
         style={{ maxHeight }}
+        /* Keyboard access to the scroll (WCAG 2.1.1 / axe scrollable-region-focusable) */
+        tabIndex={0}
+        role="region"
+        aria-label="Scrollable content"
         onScroll={(e) => {
           const el = e.currentTarget;
           setState({ top: el.scrollTop > 4, bottom: el.scrollTop + el.clientHeight < el.scrollHeight - 4 });

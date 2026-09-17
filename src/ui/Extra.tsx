@@ -441,7 +441,8 @@ export function FileFormatIcon({ format, size = 40, className }: { format: strin
       </svg>
       <span
         className="absolute bottom-[14%] left-[-8%] rounded-4 px-1 py-px text-[8px] leading-[11px] font-bold tracking-wide text-white uppercase"
-        style={{ background: color, fontSize: Math.max(7, size * 0.2) }}
+        /* White text needs the hue darkened to ~L0.42 for AA (raw brand hues sit at 2.4–3.7). */
+        style={{ background: `color-mix(in srgb, ${color} 68%, #000)`, fontSize: Math.max(7, size * 0.2) }}
       >
         {format.slice(0, 4)}
       </span>

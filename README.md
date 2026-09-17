@@ -33,6 +33,23 @@ npm run audit:components         # per-component state/a11y/docs matrix
 npm run audit:components -- --md # same, as Markdown (docs/COMPONENT-AUDIT.md is generated from this)
 ```
 
+### Real-browser suite (optional, offline)
+
+The browser gate is separate because it needs a real Chromium: `npm run test:browser` builds the app,
+extracts a bundled browser on first run (`scripts/browser-setup.mjs` → `/tmp/chromium`), and runs three
+Playwright suites in `tests-browser/` against the production build:
+
+| Suite | Coverage |
+|---|---|
+| `a11y` | `axe-core` WCAG 2.1 A/AA **with the color-contrast rule** (impossible in jsdom) on all 101 routes × light/dark — 202 tests |
+| `responsive` | No horizontal overflow at 320→1600px on layout-critical routes (WCAG 1.4.10 reflow) + the 200%-zoom-equivalent viewport (1.4.4) |
+| `visual` | Pixel-diff screenshots of 29 core surfaces × both themes against committed baselines (`tests-browser/visual.spec.ts-snapshots/`) |
+
+```bash
+npm run test:browser             # run all three suites
+npm run test:browser:update      # deliberately refresh visual baselines after an intended change
+```
+
 ## Repository layout
 
 ```

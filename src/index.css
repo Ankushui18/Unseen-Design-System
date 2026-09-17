@@ -74,7 +74,7 @@
 
   --foreground: #0e121b;
   --muted: #525866;
-  --subtle: #99a0ae;
+  --subtle: #616874;
   --disabled: #cacfd8;
   --link: var(--accent-600);
   --overlay: #ffffff;
@@ -89,13 +89,13 @@
   --field: #ffffff;
   --field-hover: #f5f7fa;
   --field-focus: #ffffff;
-  --field-placeholder: #99a0ae;
+  --field-placeholder: #616874;
   --field-foreground: #0e121b;
 
   --accent: var(--accent-600);
   --accent-hover: var(--accent-700);
   --accent-foreground: #ffffff;
-  --accent-soft: oklch(0.955 calc(var(--accent-c) * 0.2) var(--accent-h));
+  --accent-soft: oklch(0.965 calc(var(--accent-c) * 0.2) var(--accent-h));  /* lighter tint: text-accent pairs reach AA */
   --accent-soft-foreground: var(--accent-700);
 
   --default: #f2f5f8;
@@ -103,8 +103,8 @@
   --default-foreground: #0e121b;
   --default-soft: #f5f7fa;
 
-  --success: #1fc16b;
-  --success-hover: #1daf61;
+  --success: #0c8340;   /* AA: white text on fill = 4.84 */
+  --success-hover: #0a6e36;
   --success-foreground: #ffffff;
   --success-soft: #e0faec;
   --success-soft-foreground: #0b7a3e;
@@ -113,10 +113,10 @@
   --warning-hover: #e2a212;
   --warning-foreground: #0e121b;
   --warning-soft: #fff4d6;
-  --warning-soft-foreground: #8f6a00;
+  --warning-soft-foreground: #7a5d00;   /* AA on --warning-soft: ~5.3 (was 4.45) */
 
-  --danger: #fb3748;
-  --danger-hover: #d00416;
+  --danger: #d61d31;    /* AA: white text on fill = 5.15 */
+  --danger-hover: #b91a2b;
   --danger-foreground: #ffffff;
   --danger-soft: #ffebec;
   --danger-soft-foreground: #b3101f;
@@ -180,7 +180,7 @@
 
   --foreground: #f5f7fa;
   --muted: #99a0ae;
-  --subtle: #717784;
+  --subtle: #8f96a1;   /* AA on dark surfaces: 4.43–5.76 */
   --disabled: #525866;
   --link: var(--accent-400);
   --overlay: #181b25;
@@ -195,12 +195,12 @@
   --field: #181b25;
   --field-hover: #222530;
   --field-focus: #181b25;
-  --field-placeholder: #717784;
+  --field-placeholder: #8f96a1;
   --field-foreground: #f5f7fa;
 
-  --accent: var(--accent-500);
-  --accent-hover: var(--accent-400);
-  --accent-foreground: #ffffff;
+  --accent: var(--accent-400);   /* bright enough on dark surfaces */
+  --accent-hover: var(--accent-300);
+  --accent-foreground: #0e121b;  /* ink on the bright fill (white was 3.9) */
   --accent-soft: oklch(0.27 calc(var(--accent-c) * 0.42) var(--accent-h));
   --accent-soft-foreground: oklch(0.85 calc(var(--accent-c) * 0.55) var(--accent-h));
 
@@ -223,7 +223,7 @@
 
   --danger: #fb3748;
   --danger-hover: #ff5b6a;
-  --danger-foreground: #ffffff;
+  --danger-foreground: #0e121b;  /* ink on the bright fill: 5.12 (white was 3.66) */
   --danger-soft: #341418;
   --danger-soft-foreground: #ff8a95;
 

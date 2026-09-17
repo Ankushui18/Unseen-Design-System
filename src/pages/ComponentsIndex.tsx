@@ -71,7 +71,7 @@ export function ComponentsIndex({ navigate }: { navigate: (t: string) => void })
                   <span
                     className={cn(
                       "rounded-full px-1.5 py-0.2 text-[9px] font-mono",
-                      isSelected ? "bg-white/20 text-white" : "bg-surface text-subtle"
+                      isSelected ? "bg-black/25 text-white" : "bg-surface text-subtle"
                     )}
                   >
                     {count}
@@ -153,7 +153,7 @@ export function ComponentsIndex({ navigate }: { navigate: (t: string) => void })
                       <div className="flex items-center gap-1.5">
                         <span>{it.title}</span>
                         {it.badge && (
-                          <span className="rounded-full bg-accent/15 px-1.5 py-0.2 text-[9px] font-mono font-medium text-accent">
+                          <span className="rounded-full bg-accent-soft px-1.5 py-0.2 text-[9px] font-mono font-medium text-accent-soft-foreground">
                             {it.badge}
                           </span>
                         )}

@@ -650,7 +650,7 @@ export const PREVIEWS: Record<string, () => ReactNode> = {
         <Kbd className="text-[8px] py-0 px-1">⌘K</Kbd>
       </div>
       <div className="p-1 space-y-0.5">
-        <div className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] bg-accent/10 text-accent font-medium">
+        <div className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] bg-accent-soft text-accent-soft-foreground font-medium">
           <RiRocketLine size={10} />
           <span>New project</span>
         </div>
