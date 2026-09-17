@@ -42,6 +42,8 @@ Also fixed by this pass: stale diverged `Design-system/` duplicate (old lucide-b
 | Bare textareas/inputs labeled (bio field w/ `aria-describedby`, block table row-selection checkboxes) | `src/pages/Templates.tsx`, `src/blocks/index.tsx` | axe `label` clean |
 | Repo hygiene: removed stale `Design-system/` duplicate (recoverable from git history) | — | `tsc` + build + all gates green |
 | `README.md` (install, dev, gates, structure) | `README.md` | — |
+| **P1.1 Unit + interaction tests (Vitest + Testing Library)** — 46 tests: `cn` merge contract, `useCopy`/`useHashRoute`/`useOnClickOutside`, DigitInput (type/advance/backspace/arrows/paste + per-cell labels), Datepicker (month nav/select/today), Switch (`role=switch`/aria-checked/labels/disabled), Slider (label association/aria-label/numeric change), Combobox (open/typeahead/arrow+Enter/Escape/outside-click/hover-cursor), DataTable (sort both directions + `aria-sort` on `th`, row/all selection, bulk actions, loading, empty, pagination), Modal + Drawer (open/close, Esc, backdrop, initial+trapped+returned focus, body scroll lock) | `vitest.config.ts`, `tests/` (7 files), `npm run test:unit` in the `npm test` chain | 46/46 green |
+| `cn` contract fix: full radius scale registered with tailwind-merge (`rounded-4…20`, 285 usages) — radius overrides now merge instead of racing CSS order | `src/utils/cn.ts` + `tests/cn.test.ts` | regression-locked by tests |
 
 ### Known harness limits (explicitly out of the jsdom gate)
 
@@ -68,7 +70,7 @@ Also fixed by this pass: stale diverged `Design-system/` duplicate (old lucide-b
 
 | # | Task | Approach | Acceptance |
 |---|---|---|---|
-| 1.1 | Unit + interaction tests | Vitest + Testing Library + jsdom (deps only; no visual stack). Start with: `cn` merge contract, `hooks.ts`, `DigitInput` (typing/paste/backspace), `Datepicker` (month nav, selection), `Slider` (keyboard arrows), `Combobox` (typeahead), `DataTable` (sort/selection), `Modal`/`Drawer` (focus trap, Esc, return-focus) | `npm run test:unit`; every overlay has Esc + focus-trap tests; every form primitive has keyboard tests |
+| ~~1.1~~ | ~~Unit + interaction tests~~ ✅ landed (this pass) | Vitest + Testing Library; 46 tests across `cn`, hooks, DigitInput, Datepicker, Switch, Slider, Combobox, DataTable, Modal, Drawer. Next: grow with new components + Tabs/Accordion/Stepper/Dropdown coverage | `npm run test:unit` in `npm test` |
 | 1.2 | Real-browser a11y + responsive validation | Playwright across 320/375/768/1024/1440 + 200% zoom; run axe incl. `color-contrast`; light + dark | `npm run test:browser` green; contrast report attached to DESIGN-REVIEW |
 | 1.3 | Visual regression | Playwright screenshots of the 30 core component pages (light/dark), pixel-diff baseline in CI | Baseline committed; diff report on change |
 | 1.4 | State-matrix uplift | Close audit gaps where meaningful: loading (19%→ target 100% of action components), error (16%→100% of inputs), keyboard where semantics aren't native (28%) | Audit tally moves; per-component matrix tables added to doc pages |

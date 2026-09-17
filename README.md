@@ -17,7 +17,8 @@ npm test           # the full gate — see below
 
 | Step | Command | What it enforces |
 |---|---|---|
-| Types | `npm run test:types` | `tsc --noEmit` — zero type errors |
+| Types | `npm run test:types` | `tsc --noEmit` — zero type errors (src **and** tests) |
+| Unit | `npm run test:unit` | Vitest + Testing Library: component interaction, keyboard, focus management, stateful primitives, the `cn` merge contract |
 | Build | `npm run build` | Production bundle compiles |
 | Design lint | `npm run lint:design` | The design contract: semantic tokens only (no raw hex/palette), the custom type scale, elevation tokens, nav/routes/previews parity, real `cn` merge behavior |
 | Smoke | `npm run test:smoke` | Every route renders from the production bundle in jsdom — no crashes, no empty pages, heading present, plus label/alt heuristics |
@@ -26,6 +27,7 @@ npm test           # the full gate — see below
 Useful extras:
 
 ```bash
+npm run test:unit:watch          # watch-mode unit tests
 npm run test:a11y -- --strict    # zero-tolerance a11y run
 npm run audit:components         # per-component state/a11y/docs matrix
 npm run audit:components -- --md # same, as Markdown (docs/COMPONENT-AUDIT.md is generated from this)
@@ -43,6 +45,7 @@ src/
   blocks/        copy-paste product blocks (auth, tables, settings, heroes…)
   index.css      the token layer: primitive → semantic → component
   styles/        component-scoped CSS (data table, sliders, studio chrome)
+tests/           Vitest unit + interaction tests (jsdom)
 scripts/
   design-lint.mjs      static design-contract enforcement
   smoke.mjs            jsdom render of all routes from dist/
