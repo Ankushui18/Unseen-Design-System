@@ -214,7 +214,7 @@ export function AlertDialog({ open, onClose, onConfirm, title, description, conf
 
 /* --------------------------------- Combobox -------------------------------- */
 
-export function Combobox<T extends { value: string; label: string; description?: string; icon?: ReactNode }>({ items, value, onChange, placeholder = "Select…", label, size = "md", className }: { items: T[]; value: string | null; onChange: (v: string) => void; placeholder?: string; label?: string; size?: "sm" | "md"; className?: string }) {
+export function Combobox<T extends { value: string; label: string; description?: string; icon?: ReactNode }>({ items, value, onChange, placeholder = "Select…", label, size = "md", className }: { items: T[]; value: string | null; onChange: (v: string) => void; placeholder?: string; label?: string; size?: "sm" | "md" | "lg"; className?: string }) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const [cursor, setCursor] = useState(0);
@@ -223,7 +223,7 @@ export function Combobox<T extends { value: string; label: string; description?:
   const filtered = useMemo(() => items.filter((i) => i.label.toLowerCase().includes(q.toLowerCase())), [items, q]);
   const selected = items.find((i) => i.value === value);
   useEffect(() => setCursor(0), [q]);
-  const h = size === "sm" ? "h-8 rounded-8 px-2.5" : "h-10 rounded-10 px-3";
+  const h = { sm: "h-8 rounded-8 px-2.5", md: "h-10 rounded-10 px-3", lg: "h-12 rounded-12 px-3.5" }[size];
   return (
     <div ref={ref} className={cn("relative flex w-full flex-col gap-1.5", className)}>
       {label && <span className="text-label-sm text-foreground">{label}</span>}

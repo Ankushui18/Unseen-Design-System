@@ -190,6 +190,30 @@ export function SelectionCardDoc() {
           </div>
         </Showcase>
       </Section>
+      <Section title="Variants" description="Inline drops the card surface for list-style selection rows; card keeps the full elevated tile.">
+        <Showcase align="stretch" code={`<SelectionCard variant="inline" type="radio" checked={on} onChange={() => {}} title="Monthly billing" />`}>
+          <div className="grid w-full gap-4 sm:grid-cols-2">
+            <div className="rounded-14 ring-1 ring-border">
+              <SelectionCard variant="inline" type="radio" checked={plan === "pro"} onChange={() => setPlan("pro")} title="Monthly billing" description="Cancel anytime" />
+              <SelectionCard variant="inline" type="radio" checked={plan !== "pro"} onChange={() => setPlan("starter")} title="Annual billing" description="2 months free" />
+            </div>
+            <div className="space-y-3">
+              <SelectionCard variant="card" checked={addons.includes("sso")} onChange={() => t("sso")} icon={<RiShieldCheckLine />} title="Single sign-on" description="SAML and OIDC providers" />
+              <SelectionCard variant="card" checked={addons.includes("audit")} onChange={() => t("audit")} icon={<RiFileTextLine />} title="Audit logs" description="90-day retention" />
+            </div>
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "type", type: '"checkbox" | "radio"', default: '"checkbox"', description: "Indicator kind; the native input keeps the matching role." },
+          { name: "checked", type: "boolean", required: true, description: "Controlled state." },
+          { name: "onChange", type: "(checked: boolean) => void", required: true, description: "Fires on toggle." },
+          { name: "variant", type: '"card" | "inline"', default: '"card"', description: "Elevated tile or flat list row." },
+          { name: "icon", type: "ReactNode", description: "Leading glyph in a round well." },
+          { name: "meta", type: "ReactNode", description: "Trailing value, e.g. a price." },
+        ]} />
+      </Section>
     </>
   );
 }
@@ -198,7 +222,7 @@ export function RatingDoc() {
   const [v, setV] = useState(4);
   return (
     <>
-      <PageHeader eyebrow="Components · Forms" title="Rating" description="Star ratings for input and display. Hover previews the value; read-only mode renders without interaction." tags={["3 sizes", "Read only"]} />
+      <PageHeader eyebrow="Components · Forms" title="Rating" description="Star ratings for input and display. Hover previews the value; read-only mode renders without interaction." tags={["3 sizes", "3 tones", "Read only"]} />
       <Import names="Rating" />
       <Section title="Usage">
         <Showcase code={`<Rating value={rating} onChange={setRating} />`}>
@@ -207,10 +231,26 @@ export function RatingDoc() {
           <Rating value={v} onChange={setV} size="lg" />
         </Showcase>
       </Section>
+      <Section title="Tones" description="Default is the classic amber; accent follows your brand; danger marks destructive or failing scores.">
+        <Showcase code={`<Rating value={v} tone="danger" readOnly />`}>
+          <div className="flex items-center gap-2"><Rating value={v} tone="default" readOnly /><span className="font-mono text-[11px] text-subtle">default</span></div>
+          <div className="flex items-center gap-2"><Rating value={v} tone="accent" readOnly /><span className="font-mono text-[11px] text-subtle">accent</span></div>
+          <div className="flex items-center gap-2"><Rating value={v} tone="danger" readOnly /><span className="font-mono text-[11px] text-subtle">danger</span></div>
+        </Showcase>
+      </Section>
       <Section title="Read only">
         <Showcase>
           <div className="flex items-center gap-2"><Rating value={4} readOnly size="sm" /><span className="text-paragraph-sm text-muted">4.0 · 1,284 reviews</span></div>
         </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "value", type: "number", required: true, description: "Current rating." },
+          { name: "onChange", type: "(v: number) => void", description: "Omit for read-only display." },
+          { name: "max", type: "number", default: "5", description: "Star count." },
+          { name: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "16, 20 or 28px stars." },
+          { name: "tone", type: '"default" | "accent" | "danger"', default: '"default"', description: "Filled star colour." },
+        ]} />
       </Section>
     </>
   );
@@ -229,6 +269,7 @@ export function InputsMoreDoc() {
         <Showcase code={`<NumberInput label="Seats" value={n} onChange={setN} min={1} max={50} suffix="seats" />`}>
           <NumberInput label="Seats" value={n} onChange={setN} min={1} max={50} suffix="seats" />
           <NumberInput label="Quantity" value={n} onChange={setN} min={0} size="sm" />
+          <NumberInput label="Budget" value={n} onChange={setN} min={0} max={1000} size="lg" suffix="$" />
         </Showcase>
       </Section>
       <Section title="Search input">
@@ -236,6 +277,8 @@ export function InputsMoreDoc() {
           <div className="grid gap-3 sm:grid-cols-2">
             <SearchInput value={q} onChange={setQ} shortcut="⌘K" />
             <SearchInput value={q} onChange={setQ} size="sm" placeholder="Filter members…" />
+            <SearchInput value={q} onChange={setQ} size="lg" placeholder="Command search…" shortcut="⌘K" />
+            <SearchInput value={q} onChange={setQ} size="lg" disabled placeholder="Search disabled" />
           </div>
         </Showcase>
       </Section>

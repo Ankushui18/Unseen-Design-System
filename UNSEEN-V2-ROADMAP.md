@@ -111,29 +111,29 @@ Current axes are read from the actual source (`src/ui/*.tsx`); required axes com
 
 ### 4.2 Forms 〔required: R2 — size 3 (sm/md/lg) × state 5 (default/focus/disabled/error/loading) × label; R3 for selection controls〕
 
-| Component | Current axes | Target axes | Cells | Action | Priority |
+| Component | Current axes (measured) | Target axes | Cells | Action | Priority |
 |---|---|---|---|---|---|
-| Input | size 3 + error/loading/disabled + prefix/suffix | size 3 × state + label placement (top/left) | 12 | Label-placement axis; docs matrix | P2a |
-| Textarea | size 3 + error + counter | size 3 × state + counter on/off | 12 | Docs matrix | P2a |
-| Select | size 3 + error | size 3 × state | 12 | Docs matrix; `multiple` variant | P2a |
-| Checkbox | size 1 + indeterminate + error | size 3 × state 5 | 15 | Add size axis (sm/md/lg) | P2a |
-| RadioGroup | size 3 + error | size 3 × state | 15 | Add disabled-cell demo | P2a |
-| Switch | size 1 + loading | size 3 × state + labels | 12 | Add size axis | P2a |
-| Slider | size 3 + labels | size 3 × orientation 2 (h/v) | 12 | Vertical demo + matrix | P2b |
-| NumberInput | size 2 + suffix | size 3 × state | 12 | Add size | P2b |
-| DigitInput | cells + error + full keyboard model | size 3 × state | 12 | Add size | P2b |
-| SearchInput | size 3 + shortcut | size 3 × state + kbd | 12 | Docs matrix | P2b |
-| TextareaCounter | single (sub-part of Textarea) | — | 0 | Fold into Textarea page | P2c |
-| Rating | size 3 + readOnly | size 3 × tone 3 (default/accent/danger) | 9 | Tone axis | P2b |
-| ColorPicker | swatch + custom | swatch 3 (sm/md/lg) | 3 | Document | P2c |
-| Combobox | size 2 | size 3 × multiple on/off | 6 | Size + multiple | P2a |
-| ChatInput | single (AI-optimized) | size 2 (md/lg) | 2 | Document | P2c |
-| SelectionCard | single | variant 2 (card/inline) | 2 | Variant axis | P2b |
-| Datepicker | single | size 2 × view 3 (day/month/year) × range on/off | 12 | Views + range picker | P2b |
-| TimePicker | single | size 2 | 2 | Document | P2c |
+| Input | size 3 + labelPlacement 2 (top/left) + prefix/suffix | size 3 × label 2 | 3 (size counted; labelPlacement is a layout axis, not a canonical variant) | ~~Label-placement axis~~ **Done (wave 2)** — added `labelPlacement` | done |
+| Textarea | size 3 (sm/md/lg) + error | size 3 | 3 | ~~Add size~~ **Done (wave 2)** — was missing entirely | done |
+| Select | size 3 + error | size 3 | 3 | Docs matrix done; `multiple` left to a Select page pass | P2c |
+| Checkbox | intent 5 × size 3 (was already at target — table was stale) | intent 5 × size 3 | 15 | Already at target | — |
+| RadioGroup | intent 5 × orientation 2 × size 3 | intent 5 × orientation 2 × size 3 | 30 | ~~Add size~~ **Done (wave 2)** | done |
+| Switch | intent 5 × size 3 (was already at target — table was stale) | intent 5 × size 3 | 15 | Already at target | — |
+| Slider | intent 5 × orientation 2 (h/v) × size 3 | intent 5 × orientation 2 × size 3 | 30 | ~~Vertical + size~~ **Done (wave 2)** | done |
+| NumberInput | size 3 (sm/md/lg) | size 3 | 3 | ~~Add size lg~~ **Done (wave 2)** | done |
+| DigitInput | size 3 (sm/md/lg) + error + keyboard model | size 3 | 3 | ~~Add size~~ **Done (wave 2)** | done |
+| SearchInput | size 3 + shortcut | size 3 | 3 | Docs matrix done | — |
+| TextareaCounter | single (sub-part of Textarea) | — | 0 | Document on Textarea page | P2c |
+| Rating | size 3 × tone 3 (default/accent/danger) | size 3 × tone 3 | 9 | ~~Tone axis~~ **Done (wave 2)** | done |
+| ColorPicker | swatch + custom | — | 0 | Document | P2c |
+| Combobox | size 3 (sm/md/lg) | size 3 | 3 | ~~Add size lg~~ **Done (wave 2)**; `multiple` deferred | done |
+| ChatInput | single (AI-optimized) | — | 0 | Document | P2c |
+| SelectionCard | variant 2 (card/inline) | variant 2 | 2 | ~~Variant axis~~ **Done (wave 2)** | done |
+| Datepicker | size 2 (sm/md) | size 2 × view 3 × range | 2 (size counted) | ~~Add size~~ **Done (wave 2)**; month/year views + range picker still open | P2b |
+| TimePicker | single | size 2 | 0 | Document | P2c |
 | Label & Hint | tone 3 (default/error/success) | — | 0 | Already fine | — |
 
-**Forms subtotal: ≈ 157 cells.**
+**Forms subtotal: 124 cells measured** (RadioGroup 30, Slider 30, Checkbox 15, Switch 15, Rating 9, then 3 each: Input/Textarea/Select/NumberInput/DigitInput/SearchInput/Combobox, 2 each: SelectionCard/Datepicker). Open remainders: Datepicker views + range, Combobox `multiple`, and documentation-only P2c items.
 
 ### 4.3 Data display 〔required: R4 — tone 5 × variant 2–3 × size 3; R8 for containers — density 2 × variant/elevation 2–3〕
 
@@ -236,7 +236,7 @@ Current axes are read from the actual source (`src/ui/*.tsx`); required axes com
 | PRO / product patterns | 37 |
 | **Total** | **≈ 1,249 core cells** |
 
-Measured **baseline: 853** (2026-09-18, before Phase 2 — the system is further along than this plan initially assumed: Chip, Avatar, FeaturedIcon and the Badge/StatusBadge families already carry most of their cells). **✅ The 1,000+ milestone was crossed in Phase 2 wave 1: measured 1,051 cells** (Actions + Feedback depth — Fancy/Compact/Link/Social/Tile/Toolbar/ToggleGroup axes, Alert/Notification/Drawer/Dropdown/Toast axes). Remaining gap: mostly **missing axes** (Banner `size`, form `size` scales, Tag intent, Tabs orientation, Stepper size) plus **documenting cells that already exist**. State matrix coverage is measured separately (target: 100% of interactive components on disabled/focus; ≥90% on loading/error where meaningful).
+Measured **baseline: 853** (2026-09-18, before Phase 2 — the system is further along than this plan initially assumed: Chip, Avatar, FeaturedIcon and the Badge/StatusBadge families already carry most of their cells). **✅ The 1,000+ milestone was crossed in Phase 2 wave 1 (1,051 cells, Actions + Feedback depth) and extended in wave 2: measured 1,114 cells** (Forms depth — Input label-placement, Textarea/NumberInput/DigitInput/Combobox size ladders, RadioGroup/Slider size + Slider vertical, Rating tone, SelectionCard variant, Datepicker size). Remaining gap: mostly **missing axes** (Banner `size`, Tag intent, Tabs orientation, Stepper size, Datepicker views + range, Combobox `multiple`) plus **documenting cells that already exist**. State matrix coverage is measured separately (target: 100% of interactive components on disabled/focus; ≥90% on loading/error where meaningful).
 
 ### 4.8 Core-36 (Phase 2 first wave, in order)
 

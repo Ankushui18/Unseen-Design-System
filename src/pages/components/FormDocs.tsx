@@ -225,10 +225,21 @@ export function InputDoc() {
         </Showcase>
       </Section>
 
+      <Section title="Label placement" description="Left-placed labels suit horizontal forms and dense settings screens; top labels stay the default for everything else.">
+        <Showcase align="stretch" code={`<Input label="First name" placeholder="Ada" labelPlacement="left" />`}>
+          <div className="w-full max-w-lg space-y-3">
+            <Input label="First name" placeholder="Ada" labelPlacement="left" />
+            <Input label="Last name" placeholder="Lovelace" labelPlacement="left" />
+            <Input label="Company (optional)" placeholder="Analytical Engines" labelPlacement="left" />
+          </div>
+        </Showcase>
+      </Section>
+
       <Section title="API">
         <PropsTable
           rows={[
             { name: "label", type: "string", description: "Visible label wired to the input via htmlFor." },
+            { name: "labelPlacement", type: '"top" | "left"', default: '"top"', description: "Label above the field or to its left (horizontal forms)." },
             { name: "description", type: "ReactNode", description: "Helper text below the field." },
             { name: "error", type: "string", description: "Error message. Overrides description and sets the danger state." },
             { name: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Field height and padding." },
@@ -245,7 +256,7 @@ export function InputDoc() {
 export function TextareaDoc() {
   return (
     <>
-      <PageHeader eyebrow="Components · Forms" title="Textarea" description="A multi-line text field that inherits every field token from Input, including focus ring, validation and disabled treatment." tags={["Resizable", "Validation"]} />
+      <PageHeader eyebrow="Components · Forms" title="Textarea" description="A multi-line text field that inherits every field token from Input, including focus ring, validation and disabled treatment." tags={["3 sizes", "Resizable", "Validation"]} />
       <Import names="Textarea" />
       <Section title="Usage">
         <Showcase align="stretch" code={`<Textarea
@@ -259,9 +270,19 @@ export function TextareaDoc() {
           </div>
         </Showcase>
       </Section>
+      <Section title="Sizes">
+        <Showcase align="stretch" code={`<Textarea size="sm" placeholder="Compact" />`} >
+          <div className="grid w-full gap-4 sm:grid-cols-3">
+            {(["sm", "md", "lg"] as const).map((s) => (
+              <Textarea key={s} size={s} label={s} placeholder={`Size ${s}`} rows={3} />
+            ))}
+          </div>
+        </Showcase>
+      </Section>
       <Section title="API">
         <PropsTable rows={[
           { name: "label", type: "string", description: "Visible label for the field." },
+          { name: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Minimum height, padding and text scale." },
           { name: "description", type: "ReactNode", description: "Helper text below the field." },
           { name: "error", type: "string", description: "Error message and danger state." },
           { name: "rows", type: "number", default: "3", description: "Initial visible line count." },
@@ -396,12 +417,22 @@ export function RadioDoc() {
           <RadioGroup orientation="horizontal" value={o} onChange={setO} options={[{ value: "card", label: "Card" }, { value: "bank", label: "Bank transfer" }, { value: "invoice", label: "Invoice" }]} />
         </Showcase>
       </Section>
+      <Section title="Sizes">
+        <Showcase align="stretch" code={`<RadioGroup size="lg" value={v} onChange={setV} options={[…]} />`}>
+          <div className="grid w-full gap-6 sm:grid-cols-3">
+            {(["sm", "md", "lg"] as const).map((s) => (
+              <RadioGroup key={s} size={s} value={o} onChange={setO} options={[{ value: "card", label: `${s} · Card` }, { value: "bank", label: `${s} · Bank transfer` }]} />
+            ))}
+          </div>
+        </Showcase>
+      </Section>
       <Section title="API">
         <PropsTable rows={[
           { name: "value", type: "string", required: true, description: "Currently selected value." },
           { name: "onChange", type: "(value: string) => void", required: true, description: "Fires with the newly selected value." },
           { name: "options", type: "{ value, label, description?, disabled? }[]", required: true, description: "Available choices." },
           { name: "orientation", type: '"vertical" | "horizontal"', default: '"vertical"', description: "Layout direction." },
+          { name: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Indicator diameter." },
           { name: "tone", type: "Tone", default: '"accent"', description: "Indicator color." },
         ]} />
       </Section>
@@ -484,12 +515,26 @@ export function SliderDoc() {
           </div>
         </Showcase>
       </Section>
+      <Section title="Vertical & sizes" description="Vertical sliders render bottom-to-top (min at the bottom). Sizes set the track thickness.">
+        <Showcase align="stretch" code={`<Slider orientation="vertical" value={value} onChange={setValue} label="Volume" />`}>
+          <div className="flex flex-wrap items-end gap-10">
+            <Slider orientation="vertical" value={v} onChange={setV} label="Volume" formatValue={(x) => `${x}%`} />
+            <div className="flex flex-col gap-5">
+              <Slider size="sm" value={v} onChange={setV} label="sm · 4px" formatValue={(x) => `${x}`} />
+              <Slider size="md" value={v} onChange={setV} label="md · 6px" formatValue={(x) => `${x}`} />
+              <Slider size="lg" value={v} onChange={setV} label="lg · 8px" formatValue={(x) => `${x}`} />
+            </div>
+          </div>
+        </Showcase>
+      </Section>
       <Section title="API">
         <PropsTable rows={[
           { name: "value", type: "number", required: true, description: "Controlled value." },
           { name: "onChange", type: "(value: number) => void", required: true, description: "Fires on each committed change." },
           { name: "min / max", type: "number", default: "0 / 100", description: "Range bounds." },
           { name: "step", type: "number", default: "1", description: "Increment between valid values." },
+          { name: "orientation", type: '"horizontal" | "vertical"', default: '"horizontal"', description: "Vertical renders bottom-to-top in a 160px column." },
+          { name: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Track thickness — 4, 6 or 8px." },
           { name: "formatValue", type: "(value: number) => string", description: "Renders the numeric readout." },
           { name: "tone", type: "Tone", default: '"accent"', description: "Fill and thumb color." },
         ]} />

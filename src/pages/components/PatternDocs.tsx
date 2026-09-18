@@ -420,6 +420,18 @@ export function ComboboxDoc() {
           </div>
         </Showcase>
       </Section>
+      <Section title="Sizes">
+        <Showcase code={`<Combobox size="sm" label="Region" value={v} onChange={setV} items={[…]} />`}>
+          <div className="grid w-full gap-4 sm:grid-cols-3">
+            {(["sm", "md", "lg"] as const).map((s) => (
+              <Combobox key={s} size={s} label={s} value={v} onChange={setV} items={[
+                { value: "use1", label: "us-east-1", description: "N. Virginia", icon: <RiBuildingLine /> },
+                { value: "euw2", label: "eu-west-2", description: "London", icon: <RiBuildingLine /> },
+              ]} />
+            ))}
+          </div>
+        </Showcase>
+      </Section>
       <Section title="API">
         <PropsTable rows={[
           { name: "items", type: "{ value: string; label: string; description?: string; icon?: ReactNode }[]", required: true, description: "Options with optional description line and icon." },
@@ -427,7 +439,7 @@ export function ComboboxDoc() {
           { name: "onChange", type: "(v: string) => void", required: true, description: "" },
           { name: "placeholder", type: "string", default: '"Select…"', description: "" },
           { name: "label", type: "string", description: "Field label above the trigger." },
-          { name: "size", type: '"sm" | "md"', default: '"md"', description: "" },
+          { name: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Trigger height — 32, 40 or 48px." },
         ]} />
       </Section>
     </>

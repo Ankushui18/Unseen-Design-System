@@ -373,9 +373,14 @@ export function DotStepper({ count, current, onChange, className }: { count: num
 
 /* -------------------------------- Digit Input ------------------------------ */
 
-export function DigitInput({ length = 4, value, onChange, error, className }: { length?: number; value: string; onChange: (v: string) => void; error?: boolean; className?: string }) {
+export function DigitInput({ length = 4, value, onChange, error, size = "md", className }: { length?: number; value: string; onChange: (v: string) => void; error?: boolean; size?: "sm" | "md" | "lg"; className?: string }) {
   const refs = useRef<(HTMLInputElement | null)[]>([]);
   const digits = useMemo(() => Array.from({ length }, (_, i) => value[i] ?? ""), [value, length]);
+  const cell = {
+    sm: "h-10 w-8 max-w-10 rounded-8 text-paragraph-md",
+    md: "h-12 w-10 max-w-14 rounded-10 text-title-h5",
+    lg: "h-14 w-12 max-w-16 rounded-12 text-title-h4",
+  }[size];
   const setAt = (i: number, d: string) => {
     const next = digits.slice();
     next[i] = d;
@@ -406,7 +411,8 @@ export function DigitInput({ length = 4, value, onChange, error, className }: { 
             if (text) { e.preventDefault(); onChange(text); refs.current[Math.min(text.length, length) - 1]?.focus(); }
           }}
           className={cn(
-            "min-w-0 flex-1 h-12 w-10 max-w-14 rounded-10 bg-field text-center text-title-h5 text-foreground shadow-xs ring-1 ring-inset ring-border outline-none transition-all",
+            "min-w-0 flex-1 bg-field text-center text-foreground shadow-xs ring-1 ring-inset ring-border outline-none transition-all",
+            cell,
             "hover:bg-field-hover hover:ring-border-strong focus:bg-field-focus focus:ring-foreground focus:shadow-ring-neutral",
             d && "ring-border-strong",
             error && "ring-danger focus:ring-danger focus:shadow-ring-danger",
@@ -422,8 +428,9 @@ export function DigitInput({ length = 4, value, onChange, error, className }: { 
 const DAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-export function Datepicker({ value, onChange, className }: { value: Date | null; onChange: (d: Date) => void; className?: string }) {
+export function Datepicker({ value, onChange, size = "md", className }: { value: Date | null; onChange: (d: Date) => void; size?: "sm" | "md"; className?: string }) {
   const [view, setView] = useState(() => new Date((value ?? new Date()).getFullYear(), (value ?? new Date()).getMonth(), 1));
+  const dp = size === "sm" ? { box: "max-w-[280px] rounded-12 p-3", day: "h-8 max-w-8 text-paragraph-xs" } : { box: "max-w-[320px] rounded-14 p-4", day: "h-9 max-w-9 text-paragraph-sm" };
   const today = new Date();
   const first = new Date(view.getFullYear(), view.getMonth(), 1);
   const offset = (first.getDay() + 6) % 7;
@@ -436,11 +443,11 @@ export function Datepicker({ value, onChange, className }: { value: Date | null;
   const same = (a: Date | null, y: number, m: number, d: number) => !!a && a.getFullYear() === y && a.getMonth() === m && a.getDate() === d;
 
   return (
-    <div className={cn("w-full max-w-[320px] rounded-14 bg-surface p-4 ring-1 ring-border shadow-sm", className)}>
+    <div className={cn("w-full bg-surface ring-1 ring-border shadow-sm", dp.box, className)}>
       <div className="flex items-center justify-between">
-        <CompactButton variant="stroke" onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))} aria-label="Previous month"><RiArrowLeftSLine /></CompactButton>
-        <p className="text-label-sm text-foreground">{MONTHS[view.getMonth()]} {view.getFullYear()}</p>
-        <CompactButton variant="stroke" onClick={() => setView(new Date(view.getFullYear(), view.getMonth() + 1, 1))} aria-label="Next month"><RiArrowRightSLine /></CompactButton>
+        <CompactButton variant="stroke" size={size === "sm" ? "sm" : "md"} onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))} aria-label="Previous month"><RiArrowLeftSLine /></CompactButton>
+        <p className={cn("text-foreground", size === "sm" ? "text-label-xs" : "text-label-sm")}>{MONTHS[view.getMonth()]} {view.getFullYear()}</p>
+        <CompactButton variant="stroke" size={size === "sm" ? "sm" : "md"} onClick={() => setView(new Date(view.getFullYear(), view.getMonth() + 1, 1))} aria-label="Next month"><RiArrowRightSLine /></CompactButton>
       </div>
       <div className="mt-4 grid grid-cols-7 gap-y-1">
         {DAYS.map((d) => <span key={d} className="py-1 text-center text-subheading-2xs uppercase text-subtle">{d}</span>)}
@@ -454,9 +461,10 @@ export function Datepicker({ value, onChange, className }: { value: Date | null;
               key={i}
               onClick={() => onChange(date)}
               className={cn(
-                "mx-auto flex h-9 w-full max-w-9 items-center justify-center rounded-8 text-paragraph-sm transition-colors",
+                "mx-auto flex w-full items-center justify-center rounded-8 transition-colors",
+                dp.day,
                 c.m !== 0 ? "text-disabled" : "text-foreground hover:bg-surface-hover",
-                isToday && !selected && "ring-1 ring-inset ring-border text-label-sm",
+                isToday && !selected && "ring-1 ring-inset ring-border",
                 selected && "bevel bg-neutral-950 text-white shadow-fancy-neutral hover:bg-neutral-900 dark:bg-neutral-200 dark:text-neutral-950",
               )}
             >

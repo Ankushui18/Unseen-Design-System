@@ -390,7 +390,7 @@ export function DigitInputDoc() {
   const ok = code === "1234";
   return (
     <>
-      <PageHeader eyebrow="Components · Forms" title="Digit Input" description="One-time-code entry with auto-advance, backspace navigation and paste support." tags={["OTP", "Paste"]} />
+      <PageHeader eyebrow="Components · Forms" title="Digit Input" description="One-time-code entry with auto-advance, backspace navigation and paste support." tags={["OTP", "3 sizes", "Paste"]} />
       <Import names="DigitInput" />
       <Section title="Usage">
         <Showcase align="stretch" code={`<DigitInput length={4} value={code} onChange={setCode} />`}>
@@ -402,6 +402,33 @@ export function DigitInputDoc() {
             <LinkButton variant="gray" size="sm">Resend code</LinkButton>
           </div>
         </Showcase>
+      </Section>
+      <Section title="Sizes">
+        <Showcase code={`<DigitInput size="sm" length={4} value={code} onChange={setCode} />`}>
+          <div className="flex flex-col items-start gap-4">
+            <div className="flex items-center gap-3">
+              <span className="w-8 font-mono text-[11px] text-subtle">sm</span>
+              <DigitInput size="sm" length={4} value={code} onChange={setCode} />
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="w-8 font-mono text-[11px] text-subtle">md</span>
+              <DigitInput size="md" length={4} value={code} onChange={setCode} />
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="w-8 font-mono text-[11px] text-subtle">lg</span>
+              <DigitInput size="lg" length={4} value={code} onChange={setCode} />
+            </div>
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "length", type: "number", default: "4", description: "Number of cells." },
+          { name: "value", type: "string", required: true, description: "Controlled digits." },
+          { name: "onChange", type: "(v: string) => void", required: true, description: "Fires on every cell change, paste and backspace." },
+          { name: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Cell dimensions — 40, 48 or 56px." },
+          { name: "error", type: "boolean", default: "false", description: "Danger ring for failed verification." },
+        ]} />
       </Section>
     </>
   );
@@ -425,10 +452,19 @@ export function DatepickerDoc() {
           <Input label="Start date" readOnly value={d ? d.toLocaleDateString() : ""} startContent={<RiCalendarLine />} wrapperClassName="w-60" />
         </Showcase>
       </Section>
+      <Section title="Sizes">
+        <Showcase code={`<Datepicker size="sm" value={date} onChange={setDate} />`}>
+          <div className="flex flex-wrap gap-6">
+            <Datepicker value={d} onChange={setD} />
+            <Datepicker size="sm" value={d} onChange={setD} />
+          </div>
+        </Showcase>
+      </Section>
       <Section title="API">
         <PropsTable rows={[
           { name: "value", type: "Date | null", required: true, description: "Selected date (controlled)." },
           { name: "onChange", type: "(d: Date) => void", required: true, description: "Fires when a day cell is chosen." },
+          { name: "size", type: '"sm" | "md"', default: '"md"', description: "Compact 280px or standard 320px calendar." },
         ]} />
       </Section>
     </>
