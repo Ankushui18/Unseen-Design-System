@@ -62,6 +62,7 @@
 .sidebar-item:hover, .sidebar-overview:hover { background: var(--surface-secondary); color: var(--foreground); }
 .sidebar-item[aria-current], .sidebar-overview.is-active { background: var(--accent-soft); color: var(--accent-soft-foreground); font-weight: 550; }
 .sidebar-update { margin-left: auto; font-size: 10px; line-height: 16px; padding: 1px 5px; border-radius: 4px; color: var(--muted); background: var(--surface-secondary); }
+.sidebar-pro { margin-left: auto; font-size: 10px; line-height: 16px; padding: 1px 5px; border-radius: 4px; color: var(--accent); background: var(--accent-soft); }
 .sidebar-empty { color: var(--muted); font-size: 13px; padding: 14px 8px; }
 .docs-main { min-width: 0; padding: 28px 0 64px; outline: none; }
 .docs-breadcrumb { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: 12px; line-height: 18px; margin-bottom: 24px; }

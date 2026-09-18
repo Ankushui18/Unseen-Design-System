@@ -96,6 +96,7 @@ export function SidebarNav({ route, navigate, onNavigate }: { route: string; nav
         <h2>{g.title}</h2>
         {g.items.map((item) => <a href={`#/${item.href}`} key={item.href} aria-current={route === item.href ? "page" : undefined} onClick={(e) => { e.preventDefault(); navigate(item.href); onNavigate?.(); }} className="sidebar-item">
           <span>{item.title}</span>
+          {item.pro && <span className="sidebar-pro" title="Pro tier — included, badged, not a separate category">Pro</span>}
           {item.badge === "Updated" && <span className="sidebar-update" title="Updated">Updated</span>}
         </a>)}
       </div>)}

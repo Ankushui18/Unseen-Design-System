@@ -140,8 +140,18 @@ export function ComponentsIndex({ navigate }: { navigate: (t: string) => void })
                     >
                       <div className="flex items-center gap-1.5">
                         <span>{it.title}</span>
+                        {/* The commercial tier is a badge on the component, never a
+                            shelf in the navigation (WEBSITE-IA.md §3.2). */}
+                        {it.pro && (
+                          <span
+                            className="rounded-full bg-accent-soft px-1.5 py-0.2 text-[9px] font-mono font-medium text-accent-soft-foreground"
+                            title="Pro tier"
+                          >
+                            Pro
+                          </span>
+                        )}
                         {it.badge && (
-                          <span className="rounded-full bg-accent-soft px-1.5 py-0.2 text-[9px] font-mono font-medium text-accent-soft-foreground">
+                          <span className="rounded-full bg-surface-secondary px-1.5 py-0.2 text-[9px] font-mono font-medium text-muted">
                             {it.badge}
                           </span>
                         )}

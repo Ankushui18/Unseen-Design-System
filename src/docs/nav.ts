@@ -1,23 +1,7 @@
-export type NavItem = { title: string; href: string; badge?: "New" | "Beta" | "Updated"; keywords?: string };
+export type NavItem = { title: string; href: string; badge?: "New" | "Beta" | "Updated"; /** Commercial tier — a badge on the item, never a nav category (WEBSITE-IA.md §3.2). */ pro?: boolean; keywords?: string };
 export type NavGroup = { title: string; items: NavItem[] };
 
 export const COMPONENT_GROUPS: NavGroup[] = [
-  {
-    title: "PRO",
-    items: [
-      { title: "AI Prompt Input", href: "components/ai-prompt-input", badge: "New", keywords: "llm ai chat prompt multimodal model picker" },
-      { title: "Currency Amount Input", href: "components/currency-amount-input", badge: "New", keywords: "fintech crypto currency amount balance" },
-      { title: "Crypto Address Chip", href: "components/crypto-address-chip", badge: "New", keywords: "web3 crypto hash wallet address" },
-      { title: "Voice Visualizer", href: "components/voice-visualizer", badge: "New", keywords: "audio voice waveform recording speech" },
-      { title: "Activity Feed", href: "components/activity-feed", badge: "New", keywords: "timeline events feed updates" },
-      { title: "Command Menu", href: "components/command-menu", badge: "New", keywords: "quick actions palette fuzzy search" },
-      { title: "Notification Feed", href: "components/notification-feed", badge: "New", keywords: "inbox unread events list" },
-      { title: "File Uploader", href: "components/file-uploader", badge: "New", keywords: "dropzone drag drop attach" },
-      { title: "Filters", href: "components/filters", badge: "New", keywords: "faceted filter sidebar facet" },
-      { title: "Time Picker", href: "components/time-picker", badge: "New", keywords: "hours minutes picker" },
-      { title: "Calendar", href: "components/calendar", badge: "New", keywords: "date month grid" },
-    ],
-  },
   {
     title: "Actions",
     items: [
@@ -35,6 +19,11 @@ export const COMPONENT_GROUPS: NavGroup[] = [
   {
     title: "Forms",
     items: [
+      { title: "AI Prompt Input", href: "components/ai-prompt-input", badge: "New", pro: true, keywords: "llm ai chat prompt multimodal model picker" },
+      { title: "Currency Amount Input", href: "components/currency-amount-input", badge: "New", pro: true, keywords: "fintech crypto currency amount balance" },
+      { title: "File Uploader", href: "components/file-uploader", badge: "New", pro: true, keywords: "dropzone drag drop attach" },
+      { title: "Time Picker", href: "components/time-picker", badge: "New", pro: true, keywords: "hours minutes picker" },
+      { title: "Calendar", href: "components/calendar", badge: "New", pro: true, keywords: "date month grid" },
       { title: "Input", href: "components/input", keywords: "text field form" },
       { title: "Textarea", href: "components/textarea", keywords: "multiline" },
       { title: "Select", href: "components/select", keywords: "dropdown picker" },
@@ -56,6 +45,9 @@ export const COMPONENT_GROUPS: NavGroup[] = [
   {
     title: "Data Display",
     items: [
+      { title: "Crypto Address Chip", href: "components/crypto-address-chip", badge: "New", pro: true, keywords: "web3 crypto hash wallet address" },
+      { title: "Activity Feed", href: "components/activity-feed", badge: "New", pro: true, keywords: "timeline events feed updates" },
+      { title: "Notification Feed", href: "components/notification-feed", badge: "New", pro: true, keywords: "inbox unread events list" },
       { title: "Card", href: "components/card", keywords: "surface panel container" },
       { title: "Featured Icon", href: "components/featured-icon", badge: "New", keywords: "contained icon tinted gradient flourish" },
       { title: "Table", href: "components/table", badge: "Updated", keywords: "grid rows data" },
@@ -69,14 +61,8 @@ export const COMPONENT_GROUPS: NavGroup[] = [
       { title: "Info Label & Message", href: "components/info-label", badge: "New", keywords: "stat caption inline message" },
       { title: "List Item", href: "components/list-item", badge: "New", keywords: "row cell" },
       { title: "Payment Card", href: "components/payment-card", badge: "New", keywords: "credit visa billing" },
-      { title: "Well", href: "components/well", badge: "New", keywords: "container recessed inset" },
       { title: "Progress", href: "components/progress", keywords: "bar loading circular" },
       { title: "Skeleton", href: "components/skeleton", keywords: "placeholder shimmer loading" },
-      { title: "Snippet", href: "components/snippet", keywords: "code copy terminal" },
-      { title: "Keyboard Key", href: "components/kbd", keywords: "kbd shortcut hotkey" },
-      { title: "File Format Icon", href: "components/file-format-icon", badge: "New", keywords: "pdf document extension" },
-      { title: "Widget Box", href: "components/widget-box", badge: "New", keywords: "dashboard panel container" },
-      { title: "Content Divider", href: "components/content-divider", badge: "New", keywords: "section separator label" },
       { title: "Timeline", href: "components/timeline", badge: "New", keywords: "activity log history" },
     ],
   },
@@ -94,12 +80,20 @@ export const COMPONENT_GROUPS: NavGroup[] = [
     ],
   },
   {
-    title: "Feedback & Overlays",
+    title: "Feedback",
     items: [
       { title: "Alert", href: "components/alert", keywords: "banner callout notice" },
       { title: "Notification", href: "components/notification", badge: "New", keywords: "toast rich actions" },
       { title: "Banner", href: "components/banner", badge: "New", keywords: "announcement strip top" },
       { title: "Toast", href: "components/toast", badge: "New", keywords: "notification snackbar" },
+      { title: "Empty State", href: "components/empty-state", badge: "New", keywords: "no data placeholder" },
+      { title: "Spinner", href: "components/spinner", keywords: "loader loading" },
+    ],
+  },
+  {
+    title: "Overlay",
+    items: [
+      { title: "Command Menu", href: "components/command-menu", badge: "New", pro: true, keywords: "quick actions palette fuzzy search" },
       { title: "Modal", href: "components/modal", badge: "Updated", keywords: "dialog popup" },
       { title: "Alert Dialog", href: "components/alert-dialog", badge: "New", keywords: "confirm destructive" },
       { title: "Hover Card", href: "components/hover-card", badge: "New", keywords: "preview profile popover" },
@@ -108,20 +102,50 @@ export const COMPONENT_GROUPS: NavGroup[] = [
       { title: "Popover", href: "components/popover", badge: "New", keywords: "anchored floating helper layer" },
       { title: "Dropdown", href: "components/dropdown", badge: "New", keywords: "account menu checkbox user" },
       { title: "Menu", href: "components/menu", keywords: "dropdown popover context" },
-      { title: "Empty State", href: "components/empty-state", badge: "New", keywords: "no data placeholder" },
-      { title: "Spinner", href: "components/spinner", keywords: "loader loading" },
+    ],
+  },
+  {
+    title: "Layout",
+    items: [
+      { title: "Well", href: "components/well", badge: "New", keywords: "container recessed inset" },
+      { title: "Widget Box", href: "components/widget-box", badge: "New", keywords: "dashboard panel container" },
+      { title: "Content Divider", href: "components/content-divider", badge: "New", keywords: "section separator label" },
+    ],
+  },
+  {
+    title: "Utilities",
+    items: [
+      { title: "Voice Visualizer", href: "components/voice-visualizer", badge: "New", pro: true, keywords: "audio voice waveform recording speech" },
+      { title: "Filters", href: "components/filters", badge: "New", pro: true, keywords: "faceted filter sidebar facet" },
+      { title: "Snippet", href: "components/snippet", keywords: "code copy terminal" },
+      { title: "Keyboard Key", href: "components/kbd", keywords: "kbd shortcut hotkey" },
+      { title: "File Format Icon", href: "components/file-format-icon", badge: "New", keywords: "pdf document extension" },
     ],
   },
 ];
 
 export const NAV: NavGroup[] = [
   {
-    title: "Getting Started",
+    title: "Components",
+    items: [{ title: "Overview", href: "components", keywords: "all gallery list" }],
+  },
+  ...COMPONENT_GROUPS,
+  {
+    title: "Blocks",
+    items: [{ title: "All Blocks", href: "blocks", badge: "New", keywords: "auth login pricing table dashboard premium" }],
+  },
+  {
+    title: "Patterns",
+    items: [{ title: "Product Patterns", href: "patterns", badge: "New", keywords: "pageheader search filter table statgrid empty state settings" }],
+  },
+  {
+    title: "Templates",
     items: [
-      { title: "Introduction", href: "docs/introduction", keywords: "overview about" },
-      { title: "Installation", href: "docs/installation", keywords: "setup install npm" },
-      { title: "Design Principles", href: "docs/principles", keywords: "philosophy rules" },
-      { title: "Changelog", href: "docs/changelog", badge: "Updated", keywords: "releases versions" },
+      { title: "AI & Neural Studio", href: "templates/ai", badge: "New", keywords: "ai neural chat assistant streaming model parameters" },
+      { title: "Analytics Dashboard", href: "templates/analytics", badge: "New", keywords: "dashboard kpi metrics charts widgetbox data table" },
+      { title: "Settings Screen", href: "templates/settings", badge: "New", keywords: "preferences vertical tab account security slider alert" },
+      { title: "Billing & Plans", href: "templates/billing", badge: "New", keywords: "subscription payment card invoices pricing coupon" },
+      { title: "Team & People", href: "templates/team", badge: "New", keywords: "members permissions data table filters activity feed" },
     ],
   },
   {
@@ -143,28 +167,14 @@ export const NAV: NavGroup[] = [
     ],
   },
   {
-    title: "Templates",
+    title: "Getting Started",
     items: [
-      { title: "AI & Neural Studio", href: "templates/ai", badge: "New", keywords: "ai neural chat assistant streaming model parameters" },
-      { title: "Analytics Dashboard", href: "templates/analytics", badge: "New", keywords: "dashboard kpi metrics charts widgetbox data table" },
-      { title: "Settings Screen", href: "templates/settings", badge: "New", keywords: "preferences vertical tab account security slider alert" },
-      { title: "Billing & Plans", href: "templates/billing", badge: "New", keywords: "subscription payment card invoices pricing coupon" },
-      { title: "Team & People", href: "templates/team", badge: "New", keywords: "members permissions data table filters activity feed" },
+      { title: "Introduction", href: "docs/introduction", keywords: "overview about" },
+      { title: "Installation", href: "docs/installation", keywords: "setup install npm" },
+      { title: "Design Principles", href: "docs/principles", keywords: "philosophy rules" },
+      { title: "Changelog", href: "docs/changelog", badge: "Updated", keywords: "releases versions" },
     ],
   },
-  {
-    title: "Patterns",
-    items: [{ title: "Product Patterns", href: "patterns", badge: "New", keywords: "pageheader search filter table statgrid empty state settings" }],
-  },
-  {
-    title: "Blocks",
-    items: [{ title: "All Blocks", href: "blocks", badge: "New", keywords: "auth login pricing table dashboard premium" }],
-  },
-  {
-    title: "Components",
-    items: [{ title: "Overview", href: "components", keywords: "all gallery list" }],
-  },
-  ...COMPONENT_GROUPS,
 ];
 
 export const ALL_ITEMS: (NavItem & { group: string })[] = NAV.flatMap((g) =>
