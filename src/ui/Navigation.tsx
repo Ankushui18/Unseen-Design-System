@@ -233,6 +233,8 @@ export function Table<T extends Record<string, unknown>>({
   striped,
   hoverable = true,
   caption,
+  variant = "bordered",
+  density = "comfortable",
   className,
 }: {
   columns: Column<T>[];
@@ -240,10 +242,22 @@ export function Table<T extends Record<string, unknown>>({
   striped?: boolean;
   hoverable?: boolean;
   caption?: ReactNode;
+  variant?: "bordered" | "split" | "flush";
+  density?: "comfortable" | "compact";
   className?: string;
 }) {
+  const thPad = density === "compact" ? "py-1.5" : "py-2.5";
+  const tdPad = density === "compact" ? "py-2" : "py-3";
+  const colDiv = variant === "split" ? "border-r border-separator-secondary last:border-r-0" : "";
   return (
-    <div className={cn("overflow-hidden rounded-14 bg-surface ring-1 ring-border shadow-xs", className)}>
+    <div
+      className={cn(
+        variant === "flush"
+          ? "bg-surface"
+          : "overflow-hidden rounded-14 bg-surface ring-1 ring-border shadow-xs",
+        className,
+      )}
+    >
       <div className="ds-scroll overflow-x-auto">
         <table className="w-full text-left text-paragraph-sm">
           {caption && <caption className="border-b border-separator px-4 py-2.5 text-left text-paragraph-xs text-muted">{caption}</caption>}
@@ -253,7 +267,7 @@ export function Table<T extends Record<string, unknown>>({
                 <th
                   key={c.key}
                   style={{ width: c.width }}
-                  className={cn("px-4 py-2.5 text-subheading-xs text-subtle uppercase", c.align === "right" && "text-right", c.align === "center" && "text-center")}
+                  className={cn("px-4 text-subheading-xs text-subtle uppercase", thPad, colDiv, c.align === "right" && "text-right", c.align === "center" && "text-center")}
                 >
                   {c.header}
                 </th>
@@ -264,7 +278,7 @@ export function Table<T extends Record<string, unknown>>({
             {rows.map((r, i) => (
               <tr key={i} className={cn(striped && i % 2 === 1 && "bg-surface-secondary/60", hoverable && "transition-colors hover:bg-surface-hover")}>
                 {columns.map((c) => (
-                  <td key={c.key} className={cn("px-4 py-3 align-middle text-foreground", c.align === "right" && "text-right", c.align === "center" && "text-center")}>
+                  <td key={c.key} className={cn("px-4 align-middle text-foreground", tdPad, colDiv, c.align === "right" && "text-right", c.align === "center" && "text-center")}>
                     {c.render ? c.render(r) : (r[c.key] as ReactNode)}
                   </td>
                 ))}

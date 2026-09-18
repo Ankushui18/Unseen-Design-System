@@ -7,21 +7,23 @@ import { RiArrowLeftSLine, RiArrowRightSLine, RiCheckLine, RiCheckboxCircleLine,
 
 export function CompactButton({
   variant = "stroke",
+  tone,
   size = "md",
   fullRadius,
   className,
   children,
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "stroke" | "ghost" | "white"; size?: "sm" | "md" | "lg"; fullRadius?: boolean }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "stroke" | "ghost" | "white"; tone?: Tone; size?: "sm" | "md" | "lg"; fullRadius?: boolean }) {
   const s = { sm: "h-5 w-5 [&_svg]:h-3.5 [&_svg]:w-3.5", md: "h-6 w-6 [&_svg]:h-4 [&_svg]:w-4", lg: "h-7 w-7 [&_svg]:h-[18px] [&_svg]:w-[18px]" }[size];
   const v = {
     stroke: "bg-surface text-muted ring-1 ring-inset ring-border shadow-xs hover:bg-surface-hover hover:text-foreground",
     ghost: "text-subtle hover:bg-surface-hover hover:text-foreground",
     white: "bg-surface text-muted shadow-sm hover:text-foreground",
   }[variant];
+  const t = tone ? { accent: "text-accent hover:text-accent hover:ring-accent", default: "", success: "text-success hover:text-success hover:ring-accent", warning: "text-warning hover:text-warning hover:ring-neutral-900", danger: "text-danger hover:text-danger hover:ring-danger" }[tone] : "";
   return (
     <button
-      className={cn("inline-flex shrink-0 items-center justify-center transition-all outline-none focus-visible:shadow-ring-neutral disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)]", fullRadius ? "rounded-full" : "rounded-6", s, v, className)}
+      className={cn("inline-flex shrink-0 items-center justify-center transition-all outline-none focus-visible:shadow-ring-neutral disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)]", fullRadius ? "rounded-full" : "rounded-6", s, v, t, className)}
       {...props}
     >
       {children}
@@ -33,6 +35,7 @@ export function CompactButton({
 
 export function LinkButton({
   variant = "gray",
+  tone,
   size = "md",
   underline,
   className,
@@ -40,20 +43,24 @@ export function LinkButton({
   startContent,
   endContent,
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "gray" | "black" | "primary" | "error"; size?: "sm" | "md"; underline?: boolean; startContent?: ReactNode; endContent?: ReactNode }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "gray" | "black" | "primary" | "error"; tone?: Tone; size?: "sm" | "md" | "lg"; underline?: boolean; startContent?: ReactNode; endContent?: ReactNode }) {
   const v = {
     gray: "text-muted hover:text-foreground",
     black: "text-foreground hover:text-muted",
     primary: "text-accent hover:text-accent-hover",
     error: "text-danger hover:text-danger-hover",
   }[variant];
+  /* tone is the canonical intent axis; it wins over the legacy variant when both are given. */
+  const t = tone ? { accent: "text-accent hover:text-accent-hover", default: "text-muted hover:text-foreground", success: "text-success hover:text-success", warning: "text-warning hover:text-warning", danger: "text-danger hover:text-danger-hover" }[tone] : "";
+  const s = { sm: "text-label-xs [&_svg]:h-4 [&_svg]:w-4", md: "text-label-sm [&_svg]:h-5 [&_svg]:w-5", lg: "text-label-md [&_svg]:h-5 [&_svg]:w-5" }[size];
   return (
     <button
       className={cn(
         "inline-flex items-center gap-1 transition-colors outline-none focus-visible:rounded-6 focus-visible:shadow-ring-neutral disabled:pointer-events-none disabled:text-disabled",
-        size === "sm" ? "text-label-xs [&_svg]:h-4 [&_svg]:w-4" : "text-label-sm [&_svg]:h-5 [&_svg]:w-5",
+        s,
         underline && "underline decoration-current/40 underline-offset-[3px] hover:decoration-current",
         v,
+        t,
         className,
       )}
       {...props}
@@ -91,6 +98,44 @@ const Brand = {
       <path d="M18.2 2H21.5l-7.3 8.4L22.8 22h-6.7l-5.3-6.9L4.7 22H1.4l7.8-8.9L1 2h6.9l4.8 6.3L18.2 2Zm-1.2 18h1.9L7 3.9H5L17 20Z" />
     </svg>
   ),
+  microsoft: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden>
+      <rect x="2" y="2" width="9.4" height="9.4" rx="0.5" />
+      <rect x="12.6" y="2" width="9.4" height="9.4" rx="0.5" />
+      <rect x="2" y="12.6" width="9.4" height="9.4" rx="0.5" />
+      <rect x="12.6" y="12.6" width="9.4" height="9.4" rx="0.5" />
+    </svg>
+  ),
+  linkedin: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden>
+      <circle cx="5" cy="5.2" r="2.1" />
+      <rect x="3.3" y="8.8" width="3.4" height="12" rx="0.4" />
+      <path d="M9.6 8.8h3.2v1.7c.7-1 2-1.9 3.8-1.9 3 0 4.7 1.9 4.7 5.2v7H18.1v-6.5c0-1.6-.6-2.6-1.9-2.6-1.4 0-2.1 1-2.1 2.6v6.5H9.6V8.8z" />
+    </svg>
+  ),
+  gitlab: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden>
+      <path d="M12 21.6 3.5 8.7l3.6 4.8L12 5.7l4.9 7.8 3.6-4.8L12 21.6z" />
+      <path d="M12 21.6V13L3.5 8.7 12 21.6zM12 13V5.7l4.9 7.3L12 13z" opacity="0.55" />
+    </svg>
+  ),
+  bitbucket: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden>
+      <path d="M2.7 3h18.6c.5 0 .9.5.8 1l-1.7 14.3c-.1.6-.6 1.1-1.2 1.1h-4.6c-.5 0-.9-.3-1.1-.7l-1.5-4.1-1.5 4.1c-.2.4-.6.7-1.1.7H4.8c-.6 0-1.1-.5-1.2-1.1L1.9 4c-.1-.5.3-1 .8-1z" />
+    </svg>
+  ),
+  slack: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden>
+      <rect x="7.4" y="2" width="3.2" height="6.4" rx="1.6" />
+      <rect x="7.4" y="5.4" width="6.4" height="3.2" rx="1.6" />
+      <rect x="15.4" y="7.4" width="3.2" height="6.4" rx="1.6" />
+      <rect x="15.4" y="7.4" width="6.4" height="3.2" rx="1.6" />
+      <rect x="13.4" y="15.4" width="3.2" height="6.4" rx="1.6" />
+      <rect x="10.2" y="15.4" width="6.4" height="3.2" rx="1.6" />
+      <rect x="5.4" y="10.2" width="3.2" height="6.4" rx="1.6" />
+      <rect x="2" y="13.4" width="6.4" height="3.2" rx="1.6" />
+    </svg>
+  ),
 } as const;
 
 const brandStyles = {
@@ -98,6 +143,11 @@ const brandStyles = {
   apple: { brand: "bg-black text-white hover:bg-neutral-800", stroke: "" },
   github: { brand: "bg-[#24292f] text-white hover:bg-[#1b1f24]", stroke: "" },
   x: { brand: "bg-black text-white hover:bg-neutral-800", stroke: "" },
+  microsoft: { brand: "bg-neutral-950 text-white hover:bg-neutral-800", stroke: "" },
+  linkedin: { brand: "bg-neutral-950 text-white hover:bg-neutral-800", stroke: "" },
+  gitlab: { brand: "bg-neutral-950 text-white hover:bg-neutral-800", stroke: "" },
+  bitbucket: { brand: "bg-neutral-950 text-white hover:bg-neutral-800", stroke: "" },
+  slack: { brand: "bg-neutral-950 text-white hover:bg-neutral-800", stroke: "" },
 };
 
 export function SocialButton({
@@ -150,6 +200,8 @@ export function StatusBadge({
 export function Tag({
   children,
   variant = "stroke",
+  tone,
+  size = "md",
   onRemove,
   startContent,
   active,
@@ -157,18 +209,24 @@ export function Tag({
 }: {
   children: ReactNode;
   variant?: "stroke" | "gray";
+  tone?: Tone;
+  size?: "sm" | "md" | "lg";
   onRemove?: () => void;
   startContent?: ReactNode;
   active?: boolean;
   className?: string;
 }) {
+  const h = { sm: "h-5 rounded-4 px-1.5 text-[11px]", md: "h-6 rounded-6 px-2 text-label-xs", lg: "h-7 rounded-8 px-2.5 text-label-xs" }[size];
+  /* tone colours the hairline variant; the gray (filled neutral) variant stays neutral. */
+  const t = tone && variant === "stroke" ? { accent: "text-accent ring-accent/30 hover:ring-accent/50", default: "", success: "text-success ring-success/30 hover:ring-success/50", warning: "text-warning ring-warning/30 hover:ring-warning/50", danger: "text-danger ring-danger/30 hover:ring-danger/50" }[tone] : "";
   return (
     <span
       className={cn(
-        "inline-flex h-6 items-center gap-1.5 rounded-6 pl-2 text-label-xs transition-colors",
-        onRemove ? "pr-1" : "pr-2",
-        variant === "stroke" ? "bg-surface text-muted ring-1 ring-inset ring-border hover:bg-surface-hover" : "bg-default text-muted hover:bg-default-hover",
+        "inline-flex items-center gap-1.5 transition-colors",
+        h,
+        variant === "stroke" ? cn("bg-surface ring-1 ring-inset hover:bg-surface-hover", tone ? t : "text-muted ring-border") : "bg-default text-muted hover:bg-default-hover",
         active && "bg-neutral-950 text-white ring-0 hover:bg-neutral-900 dark:bg-neutral-200 dark:text-neutral-950",
+        onRemove && "pr-1",
         className,
       )}
     >
@@ -323,9 +381,14 @@ export function DotStepper({ count, current, onChange, className }: { count: num
 
 /* -------------------------------- Digit Input ------------------------------ */
 
-export function DigitInput({ length = 4, value, onChange, error, className }: { length?: number; value: string; onChange: (v: string) => void; error?: boolean; className?: string }) {
+export function DigitInput({ length = 4, value, onChange, error, size = "md", className }: { length?: number; value: string; onChange: (v: string) => void; error?: boolean; size?: "sm" | "md" | "lg"; className?: string }) {
   const refs = useRef<(HTMLInputElement | null)[]>([]);
   const digits = useMemo(() => Array.from({ length }, (_, i) => value[i] ?? ""), [value, length]);
+  const cell = {
+    sm: "h-10 w-8 max-w-10 rounded-8 text-paragraph-md",
+    md: "h-12 w-10 max-w-14 rounded-10 text-title-h5",
+    lg: "h-14 w-12 max-w-16 rounded-12 text-title-h4",
+  }[size];
   const setAt = (i: number, d: string) => {
     const next = digits.slice();
     next[i] = d;
@@ -356,7 +419,8 @@ export function DigitInput({ length = 4, value, onChange, error, className }: { 
             if (text) { e.preventDefault(); onChange(text); refs.current[Math.min(text.length, length) - 1]?.focus(); }
           }}
           className={cn(
-            "min-w-0 flex-1 h-12 w-10 max-w-14 rounded-10 bg-field text-center text-title-h5 text-foreground shadow-xs ring-1 ring-inset ring-border outline-none transition-all",
+            "min-w-0 flex-1 bg-field text-center text-foreground shadow-xs ring-1 ring-inset ring-border outline-none transition-all",
+            cell,
             "hover:bg-field-hover hover:ring-border-strong focus:bg-field-focus focus:ring-foreground focus:shadow-ring-neutral",
             d && "ring-border-strong",
             error && "ring-danger focus:ring-danger focus:shadow-ring-danger",
@@ -372,8 +436,9 @@ export function DigitInput({ length = 4, value, onChange, error, className }: { 
 const DAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-export function Datepicker({ value, onChange, className }: { value: Date | null; onChange: (d: Date) => void; className?: string }) {
+export function Datepicker({ value, onChange, size = "md", className }: { value: Date | null; onChange: (d: Date) => void; size?: "sm" | "md"; className?: string }) {
   const [view, setView] = useState(() => new Date((value ?? new Date()).getFullYear(), (value ?? new Date()).getMonth(), 1));
+  const dp = size === "sm" ? { box: "max-w-[280px] rounded-12 p-3", day: "h-8 max-w-8 text-paragraph-xs" } : { box: "max-w-[320px] rounded-14 p-4", day: "h-9 max-w-9 text-paragraph-sm" };
   const today = new Date();
   const first = new Date(view.getFullYear(), view.getMonth(), 1);
   const offset = (first.getDay() + 6) % 7;
@@ -386,11 +451,11 @@ export function Datepicker({ value, onChange, className }: { value: Date | null;
   const same = (a: Date | null, y: number, m: number, d: number) => !!a && a.getFullYear() === y && a.getMonth() === m && a.getDate() === d;
 
   return (
-    <div className={cn("w-full max-w-[320px] rounded-14 bg-surface p-4 ring-1 ring-border shadow-sm", className)}>
+    <div className={cn("w-full bg-surface ring-1 ring-border shadow-sm", dp.box, className)}>
       <div className="flex items-center justify-between">
-        <CompactButton variant="stroke" onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))} aria-label="Previous month"><RiArrowLeftSLine /></CompactButton>
-        <p className="text-label-sm text-foreground">{MONTHS[view.getMonth()]} {view.getFullYear()}</p>
-        <CompactButton variant="stroke" onClick={() => setView(new Date(view.getFullYear(), view.getMonth() + 1, 1))} aria-label="Next month"><RiArrowRightSLine /></CompactButton>
+        <CompactButton variant="stroke" size={size === "sm" ? "sm" : "md"} onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))} aria-label="Previous month"><RiArrowLeftSLine /></CompactButton>
+        <p className={cn("text-foreground", size === "sm" ? "text-label-xs" : "text-label-sm")}>{MONTHS[view.getMonth()]} {view.getFullYear()}</p>
+        <CompactButton variant="stroke" size={size === "sm" ? "sm" : "md"} onClick={() => setView(new Date(view.getFullYear(), view.getMonth() + 1, 1))} aria-label="Next month"><RiArrowRightSLine /></CompactButton>
       </div>
       <div className="mt-4 grid grid-cols-7 gap-y-1">
         {DAYS.map((d) => <span key={d} className="py-1 text-center text-subheading-2xs uppercase text-subtle">{d}</span>)}
@@ -404,9 +469,10 @@ export function Datepicker({ value, onChange, className }: { value: Date | null;
               key={i}
               onClick={() => onChange(date)}
               className={cn(
-                "mx-auto flex h-9 w-full max-w-9 items-center justify-center rounded-8 text-paragraph-sm transition-colors",
+                "mx-auto flex w-full items-center justify-center rounded-8 transition-colors",
+                dp.day,
                 c.m !== 0 ? "text-disabled" : "text-foreground hover:bg-surface-hover",
-                isToday && !selected && "ring-1 ring-inset ring-border text-label-sm",
+                isToday && !selected && "ring-1 ring-inset ring-border",
                 selected && "bevel bg-neutral-950 text-white shadow-fancy-neutral hover:bg-neutral-900 dark:bg-neutral-200 dark:text-neutral-950",
               )}
             >
@@ -459,6 +525,7 @@ export function Notification({
   description,
   tone = "default",
   variant = "stroke",
+  size = "md",
   actions,
   onClose,
   className,
@@ -467,6 +534,7 @@ export function Notification({
   description?: ReactNode;
   tone?: Tone;
   variant?: "stroke" | "filled" | "light";
+  size?: "sm" | "md";
   actions?: ReactNode;
   onClose?: () => void;
   className?: string;
@@ -476,11 +544,11 @@ export function Notification({
   const light = { accent: "bg-accent-soft text-accent-soft-foreground", default: "bg-default text-foreground", success: "bg-success-soft text-success-soft-foreground", warning: "bg-warning-soft text-warning-soft-foreground", danger: "bg-danger-soft text-danger-soft-foreground" }[tone];
   const filled = { accent: "bg-accent text-accent-foreground", default: "bg-neutral-950 text-white dark:bg-neutral-200 dark:text-neutral-950", success: "bg-success text-white", warning: "bg-warning text-neutral-950", danger: "bg-danger text-white" }[tone];
   return (
-    <div className={cn("flex w-full max-w-[400px] items-start gap-3 rounded-14 p-4", variant === "stroke" && "bg-surface ring-1 ring-border shadow-lg", variant === "light" && light, variant === "filled" && filled, className)} role="status">
-      <Icon className={cn("mt-px h-5 w-5 shrink-0", variant === "stroke" && color)} />
+    <div className={cn("flex w-full items-start", size === "sm" ? "max-w-[320px] gap-2.5 rounded-12 p-3" : "max-w-[400px] gap-3 rounded-14 p-4", variant === "stroke" && "bg-surface ring-1 ring-border shadow-lg", variant === "light" && light, variant === "filled" && filled, className)} role="status">
+      <Icon className={cn(size === "sm" ? "mt-px h-4 w-4" : "mt-px h-5 w-5", "shrink-0", variant === "stroke" && color)} />
       <div className="min-w-0 flex-1">
         <p className="text-label-sm">{title}</p>
-        {description && <p className={cn("mt-0.5 text-paragraph-sm", variant === "stroke" ? "text-muted" : "opacity-85")}>{description}</p>}
+        {description && <p className={cn("mt-0.5", size === "sm" ? "text-paragraph-xs" : "text-paragraph-sm", variant === "stroke" ? "text-muted" : "opacity-85")}>{description}</p>}
         {actions && <div className="mt-3 flex items-center gap-3">{actions}</div>}
       </div>
       {onClose && (

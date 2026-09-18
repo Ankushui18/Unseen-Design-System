@@ -27,15 +27,18 @@ export function Dropdown({
   entries,
   trigger,
   placement = "bottom-start",
+  size = "md",
   className,
 }: {
   entries: DropdownEntry[];
   trigger: (p: { open: boolean; toggle: () => void }) => ReactNode;
   placement?: "bottom" | "bottom-start" | "bottom-end" | "top";
+  /** Menu width preset */
+  size?: "sm" | "md";
   className?: string;
 }) {
   return (
-    <Popover placement={placement} trigger={trigger} className={cn("w-60 p-0", className)}>
+    <Popover placement={placement} trigger={trigger} className={cn(size === "sm" ? "w-44 p-0" : "w-60 p-0", className)}>
       {(close) => (
         <div className="py-1.5">
           {entries.map((e, i) => {
@@ -154,6 +157,7 @@ export function SelectionCard({
   description,
   icon,
   meta,
+  variant = "card",
   disabled,
   className,
 }: {
@@ -164,23 +168,32 @@ export function SelectionCard({
   description?: ReactNode;
   icon?: ReactNode;
   meta?: ReactNode;
+  variant?: "card" | "inline";
   disabled?: boolean;
   className?: string;
 }) {
+  const card = variant === "card";
   return (
     <label
       className={cn(
-        "group flex cursor-pointer items-start gap-3.5 rounded-14 bg-surface p-4 transition-all",
-        checked ? "shadow-sm ring-2 ring-accent" : "ring-1 ring-border hover:ring-border-strong hover:shadow-xs",
+        "group flex cursor-pointer items-start transition-all",
+        card ? "gap-3.5 rounded-14 bg-surface p-4" : "gap-3 rounded-8 bg-transparent p-2.5",
+        card
+          ? checked
+            ? "shadow-sm ring-2 ring-accent"
+            : "ring-1 ring-border hover:ring-border-strong hover:shadow-xs"
+          : checked
+            ? "bg-accent-soft ring-1 ring-inset ring-accent"
+            : "ring-1 ring-inset ring-transparent hover:bg-surface-hover",
         disabled && "pointer-events-none opacity-[var(--disabled-opacity)]",
         className,
       )}
     >
       <input type={type} className="sr-only" checked={checked} disabled={disabled} onChange={(e) => onChange(e.target.checked)} />
-      {icon && <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-secondary text-foreground ring-1 ring-border [&_svg]:h-5 [&_svg]:w-5">{icon}</span>}
+      {icon && <span className={cn("flex shrink-0 items-center justify-center rounded-full bg-surface-secondary text-foreground ring-1 ring-border", card ? "h-10 w-10 [&_svg]:h-5 [&_svg]:w-5" : "h-8 w-8 [&_svg]:h-4 [&_svg]:w-4")}>{icon}</span>}
       <span className="min-w-0 flex-1">
-        <span className="block text-label-sm text-foreground">{title}</span>
-        {description && <span className="mt-0.5 block text-paragraph-xs text-muted">{description}</span>}
+        <span className={cn("block text-foreground", card ? "text-label-sm" : "text-paragraph-sm")}>{title}</span>
+        {description && <span className={cn("block text-muted", card ? "mt-0.5 text-paragraph-xs" : "mt-px text-paragraph-xs")}>{description}</span>}
       </span>
       {meta && <span className="text-label-sm tabular-nums text-foreground">{meta}</span>}
       <span
@@ -198,9 +211,10 @@ export function SelectionCard({
 
 /* ---------------------------------- Rating --------------------------------- */
 
-export function Rating({ value, onChange, max = 5, size = "md", readOnly, className }: { value: number; onChange?: (v: number) => void; max?: number; size?: "sm" | "md" | "lg"; readOnly?: boolean; className?: string }) {
+export function Rating({ value, onChange, max = 5, size = "md", tone = "default", readOnly, className }: { value: number; onChange?: (v: number) => void; max?: number; size?: "sm" | "md" | "lg"; tone?: "default" | "accent" | "danger"; readOnly?: boolean; className?: string }) {
   const [hover, setHover] = useState(0);
   const px = { sm: 16, md: 20, lg: 28 }[size];
+  const filled = { default: "text-warning", accent: "text-accent", danger: "text-danger" }[tone];
   const shown = hover || value;
   return (
     <div className={cn("inline-flex items-center gap-0.5", className)} onMouseLeave={() => setHover(0)} role={readOnly ? "img" : "radiogroup"} aria-label={`${value} of ${max} stars`}>
@@ -214,7 +228,7 @@ export function Rating({ value, onChange, max = 5, size = "md", readOnly, classN
           className={cn("transition-transform disabled:cursor-default", !readOnly && "hover:scale-110")}
           aria-label={`${i + 1} stars`}
         >
-          <RiStarFill size={px} className={cn("transition-colors", shown >= i + 1 ? "text-warning" : "text-neutral-200 dark:text-neutral-700")} />
+          <RiStarFill size={px} className={cn("transition-colors", shown >= i + 1 ? filled : "text-neutral-200 dark:text-neutral-700")} />
         </button>
       ))}
     </div>
@@ -223,10 +237,10 @@ export function Rating({ value, onChange, max = 5, size = "md", readOnly, classN
 
 /* ------------------------------- Number Input ------------------------------ */
 
-export function NumberInput({ value, onChange, min = -Infinity, max = Infinity, step = 1, label, suffix, size = "md", className }: { value: number; onChange: (v: number) => void; min?: number; max?: number; step?: number; label?: string; suffix?: string; size?: "sm" | "md"; className?: string }) {
+export function NumberInput({ value, onChange, min = -Infinity, max = Infinity, step = 1, label, suffix, size = "md", className }: { value: number; onChange: (v: number) => void; min?: number; max?: number; step?: number; label?: string; suffix?: string; size?: "sm" | "md" | "lg"; className?: string }) {
   const id = useId();
   const clamp = (n: number) => Math.min(max, Math.max(min, n));
-  const h = size === "sm" ? "h-8" : "h-10";
+  const h = { sm: "h-8 rounded-8", md: "h-10 rounded-10", lg: "h-12 rounded-12" }[size];
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       {label && <label htmlFor={id} className="text-label-sm text-foreground">{label}</label>}
@@ -280,13 +294,14 @@ export function TextareaCounter({ label, maxLength = 200, value, onChange, hint,
 
 /* -------------------------------- Toggle Group ----------------------------- */
 
-export function ToggleGroup<T extends string>({ items, value, onChange, multiple, size = "md", className }: { items: { value: T; icon: ReactNode; label?: string }[]; value: T[]; onChange: (v: T[]) => void; multiple?: boolean; size?: "sm" | "md"; className?: string }) {
+export function ToggleGroup<T extends string>({ items, value, onChange, multiple, variant = "filled", size = "md", className }: { items: { value: T; icon: ReactNode; label?: string }[]; value: T[]; onChange: (v: T[]) => void; multiple?: boolean; variant?: "filled" | "outline"; size?: "sm" | "md"; className?: string }) {
   const toggle = (v: T) => {
     if (multiple) onChange(value.includes(v) ? value.filter((x) => x !== v) : [...value, v]);
     else onChange(value.includes(v) ? [] : [v]);
   };
+  const groupCls = variant === "outline" ? "rounded-10 ring-1 ring-inset ring-border" : "rounded-10 bg-surface shadow-fancy-stroke";
   return (
-    <div className={cn("inline-flex items-center rounded-10 bg-surface shadow-fancy-stroke", className)} role="group">
+    <div className={cn("inline-flex items-center", groupCls, className)} role="group">
       {items.map((it, i) => {
         const on = value.includes(it.value);
         return (
@@ -313,17 +328,19 @@ export function ToggleGroup<T extends string>({ items, value, onChange, multiple
 
 /* -------------------------------- Widget Box ------------------------------- */
 
-export function WidgetBox({ icon, title, action, children, footer, className }: { icon?: ReactNode; title: ReactNode; action?: ReactNode; children: ReactNode; footer?: ReactNode; className?: string }) {
+export function WidgetBox({ icon, title, action, children, footer, density = "comfortable", className }: { icon?: ReactNode; title: ReactNode; action?: ReactNode; children: ReactNode; footer?: ReactNode; density?: "comfortable" | "compact"; className?: string }) {
+  const pad = { comfortable: "px-5", compact: "px-4" }[density];
+  const head = { comfortable: "py-4", compact: "py-2.5" }[density];
   return (
-    <section className={cn("flex flex-col rounded-20 bg-surface ring-1 ring-border shadow-xs", className)}>
-      <header className="flex items-center gap-2.5 px-5 py-4">
+    <section className={cn("flex flex-col bg-surface ring-1 ring-border shadow-xs", density === "comfortable" ? "rounded-20" : "rounded-14", className)}>
+      <header className={cn("flex items-center gap-2.5", pad, head)}>
         {icon && <span className="text-muted [&_svg]:h-5 [&_svg]:w-5">{icon}</span>}
         <h3 className="flex-1 text-label-sm text-foreground">{title}</h3>
         {action}
       </header>
       <div className="h-px bg-separator" />
-      <div className="flex-1 px-5 py-4">{children}</div>
-      {footer && <div className="border-t border-separator px-5 py-3">{footer}</div>}
+      <div className={cn("flex-1", pad, { comfortable: "py-4", compact: "py-3" }[density])}>{children}</div>
+      {footer && <div className={cn("border-t border-separator", pad, { comfortable: "py-3", compact: "py-2" }[density])}>{footer}</div>}
     </section>
   );
 }
@@ -389,14 +406,21 @@ export function Timeline({ items, className }: { items: { time: string; title: R
 
 /* -------------------------------- Empty State ------------------------------ */
 
-export function EmptyState({ icon, title, description, actions, className }: { icon: ReactNode; title: ReactNode; description?: ReactNode; actions?: ReactNode; className?: string }) {
+export function EmptyState({ icon, title, description, actions, variant = "default", className }: { icon: ReactNode; title: ReactNode; description?: ReactNode; actions?: ReactNode; variant?: "default" | "minimal" | "cta"; className?: string }) {
+  const wrap = { default: "py-12", minimal: "py-8", cta: "py-14" }[variant];
+  const well = {
+    default: "h-16 w-16 [&_svg]:h-7 [&_svg]:w-7",
+    minimal: "h-12 w-12 [&_svg]:h-5 [&_svg]:w-5",
+    cta: "h-20 w-20 [&_svg]:h-9 [&_svg]:w-9",
+  }[variant];
+  const titleCls = variant === "cta" ? "text-label-lg" : "text-label-md";
   return (
-    <div className={cn("flex flex-col items-center justify-center px-6 py-12 text-center", className)}>
-      <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-surface-secondary text-muted ring-1 ring-border [&_svg]:h-7 [&_svg]:w-7">
-        <span className="absolute -inset-2 rounded-full ring-1 ring-border/50" />
+    <div className={cn("flex flex-col items-center justify-center px-6 text-center", wrap, className)}>
+      <span className={cn("relative flex items-center justify-center rounded-full bg-surface-secondary text-muted ring-1 ring-border", well)}>
+        {variant !== "minimal" && <span className="absolute -inset-2 rounded-full ring-1 ring-border/50" />}
         {icon}
       </span>
-      <p className="mt-5 text-label-md text-foreground">{title}</p>
+      <p className={cn("mt-5 text-foreground", titleCls)}>{title}</p>
       {description && <p className="mt-1 max-w-sm text-paragraph-sm text-muted">{description}</p>}
       {actions && <div className="mt-5 flex flex-wrap items-center justify-center gap-2">{actions}</div>}
     </div>

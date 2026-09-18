@@ -77,6 +77,42 @@ for (const h of navHrefs.filter((x) => x.startsWith("components/"))) if (!previe
 const dupPreview = previewKeys.filter((k, i) => previewKeys.indexOf(k) !== i);
 for (const d of new Set(dupPreview)) warn(join(ROOT, "docs/previews.tsx"), 0, "preview", `duplicate preview key "${d}" (later one wins)`);
 
+/* ------------------------------ docs anatomy (CONVENTIONS.md §5) -------
+ * Every component page (export function XDoc) should follow the canonical
+ * section anatomy: Variants · Sizes · States · … · Accessibility · API · Source.
+ * Core-36 pages must have the API section (with a PropsTable) — blocking.
+ * The full anatomy is reported for all pages and enforced in Phase 2.4. */
+const CORE36 = new Set([
+  "ButtonDoc", "InputDoc", "SelectDoc", "CheckboxDoc", "RadioGroupDoc", "SwitchDoc",
+  "AlertDoc", "BadgeDoc", "TagDoc", "ChipDoc", "StatusBadgeDoc", "AvatarDoc",
+  "CardDoc", "ModalDoc", "DrawerDoc", "DropdownDoc", "MenuDoc", "TooltipDoc",
+  "TabsDoc", "TableDoc", "DataTableDoc", "PaginationDoc", "EmptyStateDoc", "ProgressDoc",
+  "TextareaDoc", "ComboboxDoc", "NumberInputDoc", "DatepickerDoc", "FancyButtonDoc",
+  "CompactButtonDoc", "LinkButtonDoc", "SocialButtonDoc", "BannerDoc", "ToastDoc",
+  "StepperDoc", "SegmentedDoc",
+]);
+for (const f of files) {
+  if (!/pages\/components\/\w+Docs\.tsx$/.test(f)) continue;
+  const src = readFileSync(f, "utf8");
+  const exps = [...src.matchAll(/^export function (\w+Doc)\(/gm)];
+  exps.forEach((m, i) => {
+    const end = exps[i + 1]?.index ?? src.length;
+    const block = src.slice(m.index, end);
+    const sections = [...block.matchAll(/Section title="([^"]*)"/g)].map((s) => s[1]);
+    const has = (re) => sections.some((s) => re.test(s));
+    const name = m[1];
+    const line = src.slice(0, m.index).split("\n").length;
+    const core = CORE36.has(name);
+    if (!has(/^API$/) || !block.includes("PropsTable")) {
+      warn(f, line, core ? "docs-api-core" : "docs-api", `${name} — missing API section with PropsTable${core ? " (core-36)" : ""}`);
+    }
+    if (!has(/usage|composition|in context|examples/i)) warn(f, line, "docs-examples", `${name} — no examples section`);
+    if (!has(/variant|tones?|matrix/i)) warn(f, line, "docs-variants", `${name} — no variants/tones/matrix section`);
+    if (!has(/state/i)) warn(f, line, "docs-states", `${name} — no states section`);
+    if (!has(/access/i)) warn(f, line, "docs-a11y", `${name} — no accessibility section`);
+  });
+}
+
 /* ------------------------------------------------------------ tokens bridge */
 const css = readFileSync(join(ROOT, "index.css"), "utf8");
 
@@ -113,7 +149,7 @@ for (const t of new Set(colorish)) if (!bridged.has(t)) warn(join(ROOT, "index.c
 /* ------------------------------------------------------------------ report */
 const byRule = {};
 for (const p of problems) (byRule[p.rule] ??= []).push(p);
-const order = ["class-contract", "route", "preview", "bridge", "a11y", "type-scale", "weight", "legacy-shadow", "card-border", "raw-color", "raw-hex", "icon-size", "opacity-disabled"];
+const order = ["class-contract", "route", "preview", "bridge", "a11y", "docs-api-core", "docs-api", "docs-examples", "docs-variants", "docs-states", "docs-a11y", "type-scale", "weight", "legacy-shadow", "card-border", "raw-color", "raw-hex", "icon-size", "opacity-disabled"];
 let total = 0;
 for (const r of order) {
   const list = byRule[r];
@@ -124,5 +160,5 @@ for (const r of order) {
   if (list.length > 12) console.log(`  … +${list.length - 12} more`);
 }
 console.log(`\n${files.length} files scanned · nav ${navHrefs.length} · routes ${routeKeys.length} · previews ${previewKeys.length} · ${total} findings`);
-const blocking = problems.filter((p) => ["class-contract", "route", "preview", "bridge", "a11y"].includes(p.rule)).length;
+const blocking = problems.filter((p) => ["class-contract", "route", "preview", "bridge", "a11y", "docs-api-core"].includes(p.rule)).length;
 process.exit(blocking ? 1 : 0);

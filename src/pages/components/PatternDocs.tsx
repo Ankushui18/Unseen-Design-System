@@ -186,7 +186,7 @@ export function ButtonTileDoc() {
   const [sel, setSel] = useState("web");
   return (
     <>
-      <PageHeader eyebrow="Components · Actions" title="Button Tile" description="A large, icon-led selectable tile for onboarding choices and project types." tags={["Selectable", "Badge slot"]} />
+      <PageHeader eyebrow="Components · Actions" title="Button Tile" description="A large, icon-led selectable tile for onboarding choices and project types." tags={["3 variants", "Selectable", "Badge slot"]} />
       <Import names="ButtonTile" />
       <Section title="Usage">
         <Showcase align="stretch" code={`<ButtonTile icon={<RiGlobalLine />} label="Web app" description="Next.js, Remix, Vite" selected={sel === "web"} onClick={() => setSel("web")} />`}>
@@ -197,6 +197,24 @@ export function ButtonTileDoc() {
             <ButtonTile icon={<RiImageLine />} label="Static" description="HTML & assets" disabled />
           </div>
         </Showcase>
+      </Section>
+      <Section title="Variants">
+        <Showcase code={`<ButtonTile variant="solid" icon={<RiCodeLine />} label="Solid tile" description="Filled treatment" />`}>
+          <div className="grid w-full gap-3 sm:grid-cols-3">
+            <ButtonTile variant="soft" icon={<RiGlobalLine />} label="Soft" description="Default surface tile" selected={sel === "soft"} onClick={() => setSel("soft")} />
+            <ButtonTile variant="solid" icon={<RiCodeLine />} label="Solid" description="Filled treatment" selected={sel === "solid"} onClick={() => setSel("solid")} />
+            <ButtonTile variant="outline" icon={<RiFileTextLine />} label="Outline" description="Hairline only" selected={sel === "outline"} onClick={() => setSel("outline")} />
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "icon", type: "ReactNode", required: true, description: "Leading 20px glyph in a round well." },
+          { name: "label", type: "ReactNode", required: true, description: "" },
+          { name: "variant", type: '"soft" | "solid" | "outline"', default: '"soft"', description: "Surface treatment; selected state always wins with the accent ring." },
+          { name: "selected", type: "boolean", default: "false", description: "Checked state; announced via `aria-pressed`." },
+          { name: "badge", type: "ReactNode", description: "Top-right corner slot." },
+        ]} />
       </Section>
     </>
   );
@@ -224,6 +242,14 @@ export function InfoLabelDoc() {
             <InlineMessage tone="success">Domain verified successfully.</InlineMessage>
             <InlineMessage tone="warning">Your trial ends in 3 days.</InlineMessage>
             <InlineMessage tone="danger">Password must include a number.</InlineMessage>
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="Boxed variant" description="boxed lifts the message onto its own surface — use it when the message must be separable from surrounding copy.">
+        <Showcase align="stretch" code={`<InlineMessage tone="warning" variant="boxed">Your trial ends in 3 days.</InlineMessage>`}>
+          <div className="space-y-2">
+            <InlineMessage tone="accent" variant="boxed">A new Unseen version is available.</InlineMessage>
+            <InlineMessage tone="warning" variant="boxed">Your trial ends in 3 days.</InlineMessage>
           </div>
         </Showcase>
       </Section>
@@ -260,7 +286,7 @@ export function ToolbarDoc() {
   const t = (k: string) => setFmt((s) => (s.includes(k) ? s.filter((x) => x !== k) : [...s, k]));
   return (
     <>
-      <PageHeader eyebrow="Components · Actions" title="Toolbar" description="A floating formatting bar with pressed-state buttons and separators." tags={["Floating", "Pressed"]} />
+      <PageHeader eyebrow="Components · Actions" title="Toolbar" description="A floating formatting bar with pressed-state buttons and separators." tags={["2 variants", "Floating", "Pressed"]} />
       <Import names="Toolbar, ToolbarButton, ToolbarSeparator" />
       <Section title="Usage">
         <Showcase code={`<Toolbar>
@@ -281,6 +307,33 @@ export function ToolbarDoc() {
             <ToolbarButton icon={<RiImageLine />} label="Image" disabled />
           </Toolbar>
         </Showcase>
+      </Section>
+      <Section title="Variants">
+        <Showcase code={`<Toolbar variant="floating">
+  <ToolbarButton icon={<RiBold />} label="Bold" active />
+  <ToolbarButton icon={<RiItalic />} label="Italic" />
+</Toolbar>`}>
+          <div className="flex flex-col items-start gap-6">
+            <Toolbar>
+              <ToolbarButton icon={<RiBold />} label="Bold" active />
+              <ToolbarButton icon={<RiItalic />} label="Italic" />
+              <ToolbarSeparator />
+              <ToolbarButton icon={<RiLink />} label="Link" />
+            </Toolbar>
+            <Toolbar variant="floating">
+              <ToolbarButton icon={<RiBold />} label="Bold" active />
+              <ToolbarButton icon={<RiItalic />} label="Italic" />
+              <ToolbarSeparator />
+              <ToolbarButton icon={<RiLink />} label="Link" />
+            </Toolbar>
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "variant", type: '"solid" | "floating"', default: '"solid"', description: "Squared surface bar or rounded elevated overlay." },
+          { name: "children", type: "ReactNode", required: true, description: "ToolbarButton / ToolbarSeparator sequence; role=toolbar." },
+        ]} />
       </Section>
     </>
   );
@@ -375,6 +428,28 @@ export function ComboboxDoc() {
           </div>
         </Showcase>
       </Section>
+      <Section title="Sizes">
+        <Showcase code={`<Combobox size="sm" label="Region" value={v} onChange={setV} items={[…]} />`}>
+          <div className="grid w-full gap-4 sm:grid-cols-3">
+            {(["sm", "md", "lg"] as const).map((s) => (
+              <Combobox key={s} size={s} label={s} value={v} onChange={setV} items={[
+                { value: "use1", label: "us-east-1", description: "N. Virginia", icon: <RiBuildingLine /> },
+                { value: "euw2", label: "eu-west-2", description: "London", icon: <RiBuildingLine /> },
+              ]} />
+            ))}
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "items", type: "{ value: string; label: string; description?: string; icon?: ReactNode }[]", required: true, description: "Options with optional description line and icon." },
+          { name: "value", type: "string | null", required: true, description: "Selected value (controlled); `null` shows the placeholder." },
+          { name: "onChange", type: "(v: string) => void", required: true, description: "" },
+          { name: "placeholder", type: "string", default: '"Select…"', description: "" },
+          { name: "label", type: "string", description: "Field label above the trigger." },
+          { name: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Trigger height — 32, 40 or 48px." },
+        ]} />
+      </Section>
     </>
   );
 }
@@ -382,13 +457,14 @@ export function ComboboxDoc() {
 export function PaymentCardDoc() {
   return (
     <>
-      <PageHeader eyebrow="Components · Data Display" title="Payment Card" description="A stylised card visual for billing screens, in dark, accent and light finishes." tags={["3 finishes"]} />
+      <PageHeader eyebrow="Components · Data Display" title="Payment Card" description="A stylised card visual for billing screens: four card brands in dark, accent and light finishes." tags={["4 brands", "3 finishes"]} />
       <Import names="PaymentCard" />
       <Section title="Usage">
         <Showcase code={`<PaymentCard brand="visa" last4="4242" holder="Sophia Williams" expiry="09/28" />`}>
           <PaymentCard brand="visa" last4="4242" holder="Sophia Williams" expiry="09/28" />
           <PaymentCard brand="mastercard" last4="8210" holder="James Brown" expiry="02/27" variant="accent" />
           <PaymentCard brand="amex" last4="1007" holder="Lena Müller" expiry="11/29" variant="light" />
+          <PaymentCard brand="unionpay" last4="9345" holder="Wei Zhang" expiry="06/28" />
         </Showcase>
       </Section>
       <Section title="In a billing form">

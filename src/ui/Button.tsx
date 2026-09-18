@@ -198,15 +198,19 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
 
 /* ------------------------------ Fancy Button ------------------------------- */
 
-const fancy: Record<Exclude<Tone, "success" | "warning"> | "stroke", string> = {
+const fancy: Record<Tone | "stroke", string> = {
   accent: "btn-accent-fill hover:text-white focus-visible:shadow-ring-accent focus-visible:filter-none",
   default: "btn-neutral-fill text-white hover:text-white focus-visible:shadow-ring-neutral dark:text-neutral-950 dark:hover:text-neutral-950",
-  danger: "bg-red-base text-white shadow-fancy-danger hover:bg-red-dark focus-visible:shadow-ring-danger",
+  success: "bg-green-base text-white shadow-fancy-success hover:bg-green-dark focus-visible:shadow-ring-accent focus-visible:filter-none",
+  warning: "bg-yellow-base text-warning-foreground shadow-fancy-warning hover:bg-yellow-dark focus-visible:shadow-ring-neutral focus-visible:filter-none",
+  danger: "bg-red-base text-white shadow-fancy-danger hover:bg-red-dark focus-visible:shadow-ring-danger focus-visible:filter-none",
   stroke: "bg-surface text-foreground shadow-fancy-stroke hover:bg-surface-secondary focus-visible:shadow-ring-neutral",
 };
 
 export interface FancyButtonProps extends Omit<ButtonProps, "variant" | "tone"> {
-  tone?: "accent" | "default" | "danger" | "stroke";
+  tone?: Tone | "stroke";
+  /** Redeclared (same type as Button) so the size axis is visible on FancyButton itself. */
+  size?: Size;
 }
 
 export const FancyButton = forwardRef<HTMLButtonElement, FancyButtonProps>(function FancyButton(

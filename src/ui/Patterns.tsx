@@ -19,23 +19,28 @@ import { useOnClickOutside } from "../lib/hooks";
 
 /* -------------------------------- Button Tile ------------------------------ */
 
-export function ButtonTile({ icon, label, description, selected, onClick, disabled, badge, className }: { icon: ReactNode; label: ReactNode; description?: ReactNode; selected?: boolean; onClick?: () => void; disabled?: boolean; badge?: ReactNode; className?: string }) {
+export function ButtonTile({ icon, label, description, variant = "soft", selected, onClick, disabled, badge, className }: { icon: ReactNode; label: ReactNode; description?: ReactNode; variant?: "soft" | "solid" | "outline"; selected?: boolean; onClick?: () => void; disabled?: boolean; badge?: ReactNode; className?: string }) {
+  const base = {
+    soft: "bg-surface ring-1 ring-border hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong",
+    solid: "bg-default text-white ring-1 ring-default hover:-translate-y-0.5 hover:shadow-md dark:text-neutral-950",
+    outline: "bg-transparent ring-1 ring-border hover:-translate-y-0.5 hover:bg-surface",
+  }[variant];
   return (
     <button
       onClick={onClick}
       disabled={disabled}
       aria-pressed={selected}
       className={cn(
-        "group relative flex flex-col items-start gap-3 rounded-14 bg-surface p-4 text-left transition duration-200 ease-out outline-none",
-        selected ? "shadow-sm ring-2 ring-accent" : "ring-1 ring-border hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong",
+        "group relative flex flex-col items-start gap-3 rounded-14 p-4 text-left transition duration-200 ease-out outline-none",
+        selected ? "bg-accent text-white shadow-sm ring-2 ring-accent" : base,
         "focus-visible:shadow-ring-neutral disabled:pointer-events-none disabled:bg-surface-secondary disabled:text-disabled",
         className,
       )}
     >
-      <span className={cn("flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-inset transition-colors [&_svg]:h-5 [&_svg]:w-5", selected ? "bg-accent text-white ring-accent" : "bg-surface-secondary text-foreground ring-border")}>{icon}</span>
+      <span className={cn("flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-inset transition-colors [&_svg]:h-5 [&_svg]:w-5", selected ? "bg-accent text-white ring-accent" : variant === "solid" ? "bg-white/10 text-current ring-white/25 dark:bg-black/10" : "bg-surface-secondary text-foreground ring-border")}>{icon}</span>
       <span className="min-w-0">
-        <span className="block text-label-sm text-foreground">{label}</span>
-        {description && <span className="mt-0.5 block text-paragraph-xs text-muted">{description}</span>}
+        <span className={cn("block text-label-sm", variant === "solid" && !selected ? "text-current" : "text-foreground")}>{label}</span>
+        {description && <span className={cn("mt-0.5 block text-paragraph-xs", variant === "solid" && !selected ? "text-white/70 dark:text-neutral-950/60" : "text-muted")}>{description}</span>}
       </span>
       {badge && <span className="absolute top-3 right-3">{badge}</span>}
       {selected && <span className="absolute top-3 right-3 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-white"><RiCheckLine size={12} /></span>}
@@ -58,11 +63,11 @@ export function InfoLabel({ label, value, hint, tone = "default", className }: {
 
 /* ------------------------------ Inline Message ----------------------------- */
 
-export function InlineMessage({ children, tone = "accent", className }: { children: ReactNode; tone?: Tone; className?: string }) {
+export function InlineMessage({ children, tone = "accent", variant = "plain", className }: { children: ReactNode; tone?: Tone; variant?: "plain" | "boxed"; className?: string }) {
   const c = { accent: "text-accent", default: "text-muted", success: "text-green-base", warning: "text-orange-base", danger: "text-red-base" }[tone];
   const Icon = tone === "danger" || tone === "warning" ? RiErrorWarningFill : RiInformationFill;
   return (
-    <p className={cn("inline-flex items-start gap-1.5 text-paragraph-xs", c, className)}>
+    <p className={cn("inline-flex items-start gap-1.5 text-paragraph-xs", c, variant === "boxed" && "rounded-10 bg-surface px-2.5 py-2 ring-1 ring-inset ring-border", className)}>
       <Icon size={16} className="mt-px shrink-0" />
       <span className="text-foreground/80">{children}</span>
     </p>
@@ -95,8 +100,9 @@ export function ListItem({ leading, title, description, trailing, onClick, selec
 
 /* ---------------------------------- Toolbar -------------------------------- */
 
-export function Toolbar({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cn("inline-flex items-center gap-1 rounded-12 bg-surface p-1 shadow-md ring-1 ring-border", className)} role="toolbar">{children}</div>;
+export function Toolbar({ children, variant = "solid", className }: { children: ReactNode; variant?: "solid" | "floating"; className?: string }) {
+  const v = variant === "floating" ? "rounded-full bg-overlay shadow-lg ring-1 ring-border-strong" : "rounded-12 bg-surface shadow-md ring-1 ring-border";
+  return <div className={cn("inline-flex items-center gap-1 p-1", v, className)} role="toolbar">{children}</div>;
 }
 export function ToolbarButton({ icon, label, active, onClick, disabled }: { icon: ReactNode; label: string; active?: boolean; onClick?: () => void; disabled?: boolean }) {
   return (
@@ -208,7 +214,7 @@ export function AlertDialog({ open, onClose, onConfirm, title, description, conf
 
 /* --------------------------------- Combobox -------------------------------- */
 
-export function Combobox<T extends { value: string; label: string; description?: string; icon?: ReactNode }>({ items, value, onChange, placeholder = "Select…", label, size = "md", className }: { items: T[]; value: string | null; onChange: (v: string) => void; placeholder?: string; label?: string; size?: "sm" | "md"; className?: string }) {
+export function Combobox<T extends { value: string; label: string; description?: string; icon?: ReactNode }>({ items, value, onChange, placeholder = "Select…", label, size = "md", className }: { items: T[]; value: string | null; onChange: (v: string) => void; placeholder?: string; label?: string; size?: "sm" | "md" | "lg"; className?: string }) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const [cursor, setCursor] = useState(0);
@@ -217,7 +223,7 @@ export function Combobox<T extends { value: string; label: string; description?:
   const filtered = useMemo(() => items.filter((i) => i.label.toLowerCase().includes(q.toLowerCase())), [items, q]);
   const selected = items.find((i) => i.value === value);
   useEffect(() => setCursor(0), [q]);
-  const h = size === "sm" ? "h-8 rounded-8 px-2.5" : "h-10 rounded-10 px-3";
+  const h = { sm: "h-8 rounded-8 px-2.5", md: "h-10 rounded-10 px-3", lg: "h-12 rounded-12 px-3.5" }[size];
   return (
     <div ref={ref} className={cn("relative flex w-full flex-col gap-1.5", className)}>
       {label && <span className="text-label-sm text-foreground">{label}</span>}
@@ -280,7 +286,7 @@ export function Combobox<T extends { value: string; label: string; description?:
 
 /* -------------------------------- Payment Card ----------------------------- */
 
-export function PaymentCard({ brand = "visa", last4, holder, expiry, variant = "dark", className }: { brand?: "visa" | "mastercard" | "amex"; last4: string; holder: string; expiry: string; variant?: "dark" | "accent" | "light"; className?: string }) {
+export function PaymentCard({ brand = "visa", last4, holder, expiry, variant = "dark", className }: { brand?: "visa" | "mastercard" | "amex" | "unionpay"; last4: string; holder: string; expiry: string; variant?: "dark" | "accent" | "light"; className?: string }) {
   const bg = {
     dark: "bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 text-white",
     accent: "bg-gradient-to-br from-accent-500 via-accent-600 to-accent-800 text-white",
@@ -294,7 +300,7 @@ export function PaymentCard({ brand = "visa", last4, holder, expiry, variant = "
         <div className="flex items-start justify-between">
           <span className="h-8 w-11 rounded-6 bg-gradient-to-br from-yellow-200 to-yellow-500 opacity-90" />
           <span className="text-label-md italic tracking-wide uppercase opacity-90">
-            {brand === "visa" ? "VISA" : brand === "mastercard" ? <span className="inline-flex -space-x-2.5 not-italic"><span className="h-6 w-6 rounded-full bg-red-base/90" /><span className="h-6 w-6 rounded-full bg-yellow-base/90" /></span> : "AMEX"}
+            {brand === "visa" ? "VISA" : brand === "mastercard" ? <span className="inline-flex -space-x-2.5 not-italic"><span className="h-6 w-6 rounded-full bg-red-base/90" /><span className="h-6 w-6 rounded-full bg-yellow-base/90" /></span> : brand === "unionpay" ? <span className="inline-flex items-center gap-0.5 not-italic"><span className="rounded-3 bg-red-base px-1 py-0.5 text-[9px] font-bold text-white">UNION</span><span className="rounded-3 bg-blue-base px-1 py-0.5 text-[9px] font-bold text-white">PAY</span></span> : "AMEX"}
           </span>
         </div>
         <p className="font-mono text-label-lg tracking-[0.18em] tabular-nums">•••• •••• •••• {last4}</p>

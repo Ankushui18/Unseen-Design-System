@@ -87,6 +87,7 @@ export function DropdownDoc() {
           />
           <Dropdown
             placement="bottom"
+            size="sm"
             trigger={({ toggle }) => <Button variant="outline" tone="default" iconOnly aria-label="Row actions" onClick={toggle}><RiMoreLine /></Button>}
             entries={[
               { label: "Edit", icon: <RiEditLine />, shortcut: "E" },
@@ -103,6 +104,7 @@ export function DropdownDoc() {
           { name: "entries", type: "DropdownEntry[]", required: true, description: "Items, checkbox rows, labels, dividers and a user header." },
           { name: "trigger", type: "({ open, toggle }) => ReactNode", required: true, description: "Anchor render prop." },
           { name: "placement", type: '"bottom" | "bottom-start" | "bottom-end" | "top"', default: '"bottom-start"', description: "Alignment relative to the trigger." },
+          { name: "size", type: '"sm" | "md"', default: '"md"', description: "Menu width — 176px or 240px." },
         ]} />
       </Section>
     </>
@@ -188,6 +190,30 @@ export function SelectionCardDoc() {
           </div>
         </Showcase>
       </Section>
+      <Section title="Variants" description="Inline drops the card surface for list-style selection rows; card keeps the full elevated tile.">
+        <Showcase align="stretch" code={`<SelectionCard variant="inline" type="radio" checked={on} onChange={() => {}} title="Monthly billing" />`}>
+          <div className="grid w-full gap-4 sm:grid-cols-2">
+            <div className="rounded-14 ring-1 ring-border">
+              <SelectionCard variant="inline" type="radio" checked={plan === "pro"} onChange={() => setPlan("pro")} title="Monthly billing" description="Cancel anytime" />
+              <SelectionCard variant="inline" type="radio" checked={plan !== "pro"} onChange={() => setPlan("starter")} title="Annual billing" description="2 months free" />
+            </div>
+            <div className="space-y-3">
+              <SelectionCard variant="card" checked={addons.includes("sso")} onChange={() => t("sso")} icon={<RiShieldCheckLine />} title="Single sign-on" description="SAML and OIDC providers" />
+              <SelectionCard variant="card" checked={addons.includes("audit")} onChange={() => t("audit")} icon={<RiFileTextLine />} title="Audit logs" description="90-day retention" />
+            </div>
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "type", type: '"checkbox" | "radio"', default: '"checkbox"', description: "Indicator kind; the native input keeps the matching role." },
+          { name: "checked", type: "boolean", required: true, description: "Controlled state." },
+          { name: "onChange", type: "(checked: boolean) => void", required: true, description: "Fires on toggle." },
+          { name: "variant", type: '"card" | "inline"', default: '"card"', description: "Elevated tile or flat list row." },
+          { name: "icon", type: "ReactNode", description: "Leading glyph in a round well." },
+          { name: "meta", type: "ReactNode", description: "Trailing value, e.g. a price." },
+        ]} />
+      </Section>
     </>
   );
 }
@@ -196,7 +222,7 @@ export function RatingDoc() {
   const [v, setV] = useState(4);
   return (
     <>
-      <PageHeader eyebrow="Components · Forms" title="Rating" description="Star ratings for input and display. Hover previews the value; read-only mode renders without interaction." tags={["3 sizes", "Read only"]} />
+      <PageHeader eyebrow="Components · Forms" title="Rating" description="Star ratings for input and display. Hover previews the value; read-only mode renders without interaction." tags={["3 sizes", "3 tones", "Read only"]} />
       <Import names="Rating" />
       <Section title="Usage">
         <Showcase code={`<Rating value={rating} onChange={setRating} />`}>
@@ -205,10 +231,26 @@ export function RatingDoc() {
           <Rating value={v} onChange={setV} size="lg" />
         </Showcase>
       </Section>
+      <Section title="Tones" description="Default is the classic amber; accent follows your brand; danger marks destructive or failing scores.">
+        <Showcase code={`<Rating value={v} tone="danger" readOnly />`}>
+          <div className="flex items-center gap-2"><Rating value={v} tone="default" readOnly /><span className="font-mono text-[11px] text-subtle">default</span></div>
+          <div className="flex items-center gap-2"><Rating value={v} tone="accent" readOnly /><span className="font-mono text-[11px] text-subtle">accent</span></div>
+          <div className="flex items-center gap-2"><Rating value={v} tone="danger" readOnly /><span className="font-mono text-[11px] text-subtle">danger</span></div>
+        </Showcase>
+      </Section>
       <Section title="Read only">
         <Showcase>
           <div className="flex items-center gap-2"><Rating value={4} readOnly size="sm" /><span className="text-paragraph-sm text-muted">4.0 · 1,284 reviews</span></div>
         </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "value", type: "number", required: true, description: "Current rating." },
+          { name: "onChange", type: "(v: number) => void", description: "Omit for read-only display." },
+          { name: "max", type: "number", default: "5", description: "Star count." },
+          { name: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "16, 20 or 28px stars." },
+          { name: "tone", type: '"default" | "accent" | "danger"', default: '"default"', description: "Filled star colour." },
+        ]} />
       </Section>
     </>
   );
@@ -227,6 +269,7 @@ export function InputsMoreDoc() {
         <Showcase code={`<NumberInput label="Seats" value={n} onChange={setN} min={1} max={50} suffix="seats" />`}>
           <NumberInput label="Seats" value={n} onChange={setN} min={1} max={50} suffix="seats" />
           <NumberInput label="Quantity" value={n} onChange={setN} min={0} size="sm" />
+          <NumberInput label="Budget" value={n} onChange={setN} min={0} max={1000} size="lg" suffix="$" />
         </Showcase>
       </Section>
       <Section title="Search input">
@@ -234,6 +277,8 @@ export function InputsMoreDoc() {
           <div className="grid gap-3 sm:grid-cols-2">
             <SearchInput value={q} onChange={setQ} shortcut="⌘K" />
             <SearchInput value={q} onChange={setQ} size="sm" placeholder="Filter members…" />
+            <SearchInput value={q} onChange={setQ} size="lg" placeholder="Command search…" shortcut="⌘K" />
+            <SearchInput value={q} onChange={setQ} size="lg" disabled placeholder="Search disabled" />
           </div>
         </Showcase>
       </Section>
@@ -259,7 +304,7 @@ export function ToggleGroupDoc() {
   const [align, setAlign] = useState<string[]>(["left"]);
   return (
     <>
-      <PageHeader eyebrow="Components · Actions" title="Toggle Group" description="Pressed-state icon buttons for toolbars. Single-select for exclusive options like alignment; multi-select for formatting." tags={["Single / multiple"]} />
+      <PageHeader eyebrow="Components · Actions" title="Toggle Group" description="Pressed-state icon buttons for toolbars. Single-select for exclusive options like alignment; multi-select for formatting." tags={["2 variants", "Single / multiple"]} />
       <Import names="ToggleGroup" />
       <Section title="Usage">
         <Showcase code={`<ToggleGroup multiple value={fmt} onChange={setFmt} items={[
@@ -270,6 +315,21 @@ export function ToggleGroupDoc() {
           <ToggleGroup value={align} onChange={setAlign} items={[{ value: "left", icon: <RiAlignLeft /> }, { value: "center", icon: <RiAlignCenter /> }, { value: "right", icon: <RiAlignRight /> }]} />
           <ToggleGroup size="sm" value={align} onChange={setAlign} items={[{ value: "left", icon: <RiAlignLeft /> }, { value: "center", icon: <RiAlignCenter /> }, { value: "right", icon: <RiAlignRight /> }]} />
         </Showcase>
+      </Section>
+      <Section title="Variants">
+        <Showcase code={`<ToggleGroup variant="outline" value={align} onChange={setAlign} items={[...]} />`}>
+          <ToggleGroup variant="filled" value={align} onChange={setAlign} items={[{ value: "left", icon: <RiAlignLeft />, label: "Left" }, { value: "center", icon: <RiAlignCenter />, label: "Center" }, { value: "right", icon: <RiAlignRight />, label: "Right" }]} />
+          <ToggleGroup variant="outline" value={align} onChange={setAlign} items={[{ value: "left", icon: <RiAlignLeft />, label: "Left" }, { value: "center", icon: <RiAlignCenter />, label: "Center" }, { value: "right", icon: <RiAlignRight />, label: "Right" }]} />
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "items", type: "{ value: T; icon: ReactNode; label?: string }[]", required: true, description: "label doubles as the accessible name / tooltip." },
+          { name: "value", type: "T[]", required: true, description: "Selected values (controlled)." },
+          { name: "variant", type: '"filled" | "outline"', default: '"filled"', description: "Surface card or hairline group." },
+          { name: "size", type: '"sm" | "md"', default: '"md"', description: "32 or 40px cells." },
+          { name: "multiple", type: "boolean", default: "false", description: "Exclusive selection when omitted." },
+        ]} />
       </Section>
     </>
   );
@@ -299,6 +359,26 @@ export function WidgetBoxDoc() {
             </WidgetBox>
           </div>
         </Showcase>
+      </Section>
+      <Section title="Density" description="Compact tightens header, body and footer padding for dense dashboards.">
+        <Showcase align="stretch" code={`<WidgetBox density="comfortable" icon={<RiDashboardLine />} title="Storage">
+  …
+</WidgetBox>
+<WidgetBox density="compact" icon={<RiDashboardLine />} title="Storage">
+  …
+</WidgetBox>`}>
+          <WidgetBox density="comfortable" icon={<RiDashboardLine />} title="Storage"><p className="text-paragraph-xs text-muted">Comfortable padding — header, body and footer at the standard scale.</p></WidgetBox>
+          <WidgetBox density="compact" icon={<RiDashboardLine />} title="Storage" footer={<p className="text-paragraph-xs text-subtle">Footer slot also tightens</p>}><p className="text-paragraph-xs text-muted">Compact padding — tighter rows for data-heavy dashboards.</p></WidgetBox>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "icon", type: "ReactNode", description: "20px leading icon in the header." },
+          { name: "title", type: "ReactNode", required: true, description: "Header title." },
+          { name: "action", type: "ReactNode", description: "Trailing header action." },
+          { name: "density", type: '"comfortable" | "compact"', default: '"comfortable"', description: "Padding scale for header, body and footer." },
+          { name: "footer", type: "ReactNode", description: "Optional divided footer." },
+        ]} />
       </Section>
     </>
   );
@@ -354,6 +434,24 @@ export function EmptyStateDoc() {
         <Showcase align="stretch" padded={false} code={`<EmptyState icon={<RiInboxLine />} title="No projects yet" description="Create your first project to start deploying." actions={<Button startContent={<RiAddLine />}>New project</Button>} />`}>
           <EmptyState icon={<RiInboxLine />} title="No projects yet" description="Create your first project to start deploying previews and tracking usage." actions={<><Button startContent={<RiAddLine />}>New project</Button><Button variant="outline" tone="default">Import from GitHub</Button></>} />
         </Showcase>
+      </Section>
+      <Section title="Variants" description="Minimal strips the outer ring and shrinks the well for inline panels; cta enlarges the well and title for first-run screens.">
+        <Showcase align="stretch" code={`<EmptyState variant="minimal" icon={<RiInboxLine />} title="No results" description="Try a different search." />
+<EmptyState variant="cta" icon={<RiRocketLine />} title="Launch your first project" description="Unseen builds previews in seconds." actions={<Button startContent={<RiAddLine />}>New project</Button>} />`}>
+          <div className="grid gap-4 md:grid-cols-2">
+            <EmptyState variant="minimal" icon={<RiInboxLine />} title="No results" description="Try a different search or clear the filters." />
+            <EmptyState variant="cta" icon={<RiRocketLine />} title="Launch your first project" description="Unseen builds previews in seconds — start with the starter template." actions={<Button startContent={<RiAddLine />}>New project</Button>} />
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "icon", type: "ReactNode", required: true, description: "28px icon, centred in the soft ring." },
+          { name: "title", type: "ReactNode", required: true, description: "Plain-language statement of what is missing." },
+          { name: "variant", type: '"default" | "minimal" | "cta"', default: '"default"', description: "default: standard well · minimal: smaller, no outer ring · cta: enlarged well and title for first-run screens." },
+          { name: "description", type: "ReactNode", description: "One line of guidance — what the user should do next." },
+          { name: "actions", type: "ReactNode", description: "At most two actions; primary first." },
+        ]} />
       </Section>
     </>
   );

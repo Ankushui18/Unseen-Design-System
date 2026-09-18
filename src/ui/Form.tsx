@@ -56,6 +56,8 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   description?: ReactNode;
   error?: string;
   size?: "sm" | "md" | "lg";
+  /** Label placement: above the field (default) or to its left (horizontal forms). */
+  labelPlacement?: "top" | "left";
   startContent?: ReactNode;
   endContent?: ReactNode;
   /** HeroUI feature: clear button */
@@ -76,6 +78,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     description,
     error,
     size = "md",
+    labelPlacement = "top",
     startContent,
     endContent,
     isClearable,
@@ -100,51 +103,70 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   const inner = fieldSizes[size];
   const heightOnly = inner.split(" ").filter((c) => c.startsWith("h-") || c.startsWith("rounded") || c.startsWith("text-")).join(" ");
   const padGap = inner.split(" ").filter((c) => c.startsWith("px-") || c.startsWith("gap-")).join(" ");
+  const field = (
+    <div
+      className={cn(
+        "group flex w-full min-w-0 divide-x divide-border",
+        fieldShell,
+        error && "ring-red-base hover:ring-red-base focus-within:ring-red-base focus-within:shadow-ring-danger",
+        heightOnly,
+      )}
+    >
+      {prefixAffix && <span className={cn("flex shrink-0 items-center bg-surface text-paragraph-sm text-subtle group-focus-within:text-muted", affixPad)}>{prefixAffix}</span>}
+      <div className={cn("flex h-full min-w-0 flex-1 items-center bg-transparent", padGap)}>
+        {startContent && <span className="flex h-5 w-5 shrink-0 items-center justify-center text-subtle transition-colors group-hover:text-muted group-focus-within:text-muted [&_svg]:h-5 [&_svg]:w-5">{startContent}</span>}
+        <input
+          id={id}
+          ref={ref}
+          value={value}
+          required={required}
+          aria-invalid={!!error || undefined}
+          aria-describedby={error || description ? helperId : undefined}
+          className={cn(
+            "h-full w-full min-w-0 flex-1 bg-transparent text-paragraph-sm text-field-foreground outline-none focus-visible:shadow-none",
+            "placeholder:select-none placeholder:text-field-placeholder placeholder:transition-colors group-hover:placeholder:text-muted group-focus-within:placeholder:text-muted",
+            "disabled:text-disabled disabled:placeholder:text-disabled",
+            className,
+          )}
+          {...props}
+        />
+        {isClearable && onClear && (
+          <button
+            type="button"
+            aria-label="Clear input"
+            onClick={onClear}
+            className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-subtle hover:text-foreground opacity-60 hover:opacity-100 transition-opacity"
+          >
+            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        )}
+        {endContent && <span className="flex shrink-0 items-center justify-center text-subtle [&_svg]:h-5 [&_svg]:w-5">{endContent}</span>}
+      </div>
+      {suffixAffix && <span className={cn("flex shrink-0 items-center bg-surface text-paragraph-sm text-subtle group-focus-within:text-muted", affixPad)}>{suffixAffix}</span>}
+    </div>
+  );
+  if (labelPlacement === "left") {
+    return (
+      <div className={cn("flex w-full min-w-0 items-start gap-3", wrapperClassName)}>
+        {label && (
+          <label htmlFor={id} className="w-32 shrink-0 pt-2 text-label-sm text-foreground">
+            {label}
+            {required && <span className="ml-0.5 text-accent">*</span>}
+          </label>
+        )}
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+          {field}
+          <Helper id={helperId} error={error} description={description} />
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={cn("flex w-full min-w-0 flex-col gap-1.5", wrapperClassName)}>
       {label && <Label htmlFor={id} required={required}>{label}</Label>}
-      <div
-        className={cn(
-          "group flex w-full min-w-0 divide-x divide-border",
-          fieldShell,
-          error && "ring-red-base hover:ring-red-base focus-within:ring-red-base focus-within:shadow-ring-danger",
-          heightOnly,
-        )}
-      >
-        {prefixAffix && <span className={cn("flex shrink-0 items-center bg-surface text-paragraph-sm text-subtle group-focus-within:text-muted", affixPad)}>{prefixAffix}</span>}
-        <div className={cn("flex h-full min-w-0 flex-1 items-center bg-transparent", padGap)}>
-          {startContent && <span className="flex h-5 w-5 shrink-0 items-center justify-center text-subtle transition-colors group-hover:text-muted group-focus-within:text-muted [&_svg]:h-5 [&_svg]:w-5">{startContent}</span>}
-          <input
-            id={id}
-            ref={ref}
-            value={value}
-            required={required}
-            aria-invalid={!!error || undefined}
-            aria-describedby={error || description ? helperId : undefined}
-            className={cn(
-              "h-full w-full min-w-0 flex-1 bg-transparent text-paragraph-sm text-field-foreground outline-none focus-visible:shadow-none",
-              "placeholder:select-none placeholder:text-field-placeholder placeholder:transition-colors group-hover:placeholder:text-muted group-focus-within:placeholder:text-muted",
-              "disabled:text-disabled disabled:placeholder:text-disabled",
-              className,
-            )}
-            {...props}
-          />
-          {isClearable && onClear && (
-            <button
-              type="button"
-              aria-label="Clear input"
-              onClick={onClear}
-              className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-subtle hover:text-foreground opacity-60 hover:opacity-100 transition-opacity"
-            >
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            </button>
-          )}
-          {endContent && <span className="flex shrink-0 items-center justify-center text-subtle [&_svg]:h-5 [&_svg]:w-5">{endContent}</span>}
-        </div>
-        {suffixAffix && <span className={cn("flex shrink-0 items-center bg-surface text-paragraph-sm text-subtle group-focus-within:text-muted", affixPad)}>{suffixAffix}</span>}
-      </div>
+      {field}
       <Helper id={helperId} error={error} description={description} />
     </div>
   );
@@ -156,14 +178,20 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
   label?: string;
   description?: ReactNode;
   error?: string;
+  size?: "sm" | "md" | "lg";
 }
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
-  { label, description, error, className, required, id: providedId, ...props },
+  { label, description, error, size = "md", className, required, id: providedId, ...props },
   ref,
 ) {
   const generatedId = useId();
   const id = providedId ?? generatedId;
+  const ta = {
+    sm: "min-h-16 rounded-8 px-2.5 py-2 text-paragraph-sm",
+    md: "min-h-24 rounded-10 px-3 py-2.5 text-paragraph-sm",
+    lg: "min-h-32 rounded-12 px-3.5 py-3 text-paragraph-md",
+  }[size];
   return (
     <div className="flex w-full flex-col gap-1.5">
       {label && <Label htmlFor={id} required={required}>{label}</Label>}
@@ -172,7 +200,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         ref={ref}
         required={required}
         className={cn(
-          "ds-scroll min-h-24 w-full resize-y rounded-10 px-3 py-2.5 text-paragraph-sm text-field-foreground outline-none",
+          "ds-scroll w-full resize-y text-field-foreground outline-none",
+          ta,
           "placeholder:text-field-placeholder",
           "ring-1 ring-inset ring-border bg-field shadow-xs transition duration-200 ease-out",
           "hover:bg-field-hover hover:shadow-none hover:ring-transparent focus:bg-field-focus focus:ring-foreground focus:shadow-ring-neutral focus:hover:ring-foreground",
@@ -314,6 +343,7 @@ export function RadioGroup<T extends string>({
   name,
   tone = "accent",
   orientation = "vertical",
+  size = "md",
   className,
 }: {
   value: T;
@@ -322,9 +352,11 @@ export function RadioGroup<T extends string>({
   name?: string;
   tone?: Tone;
   orientation?: "vertical" | "horizontal";
+  size?: "sm" | "md" | "lg";
   className?: string;
 }) {
   const gid = useId();
+  const r = { sm: { box: "h-3.5 w-3.5", dot: "h-1 w-1" }, md: { box: "h-[18px] w-[18px]", dot: "h-[7px] w-[7px]" }, lg: { box: "h-5 w-5", dot: "h-2 w-2" } }[size];
   return (
     <div
       role="radiogroup"
@@ -350,8 +382,9 @@ export function RadioGroup<T extends string>({
             />
             <span
               className={cn(
-                "mt-px flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border transition-all duration-150 shadow-xs",
+                "mt-px flex shrink-0 items-center justify-center rounded-full border transition-all duration-150 shadow-xs",
                 "peer-focus-visible:shadow-ring-accent",
+                r.box,
                 active
                   ? cn("bevel", { accent: "border-accent bg-accent", default: "border-foreground bg-foreground", success: "border-success bg-success", warning: "border-warning bg-warning", danger: "border-danger bg-danger" }[tone])
                   : "border-border-strong bg-surface group-hover:bg-surface-hover",
@@ -359,7 +392,8 @@ export function RadioGroup<T extends string>({
             >
               <span
                 className={cn(
-                  "h-[7px] w-[7px] rounded-full bg-white transition-transform duration-150 ease-spring",
+                  "rounded-full bg-white transition-transform duration-150 ease-spring",
+                  r.dot,
                   active ? "scale-100" : "scale-0",
                   tone === "warning" && "bg-neutral-950",
                 )}
@@ -455,6 +489,8 @@ export function Slider({
   label,
   formatValue,
   tone = "accent",
+  orientation = "horizontal",
+  size = "md",
   disabled,
   className,
   "aria-label": ariaLabel,
@@ -467,6 +503,8 @@ export function Slider({
   label?: ReactNode;
   formatValue?: (v: number) => string;
   tone?: Tone;
+  orientation?: "horizontal" | "vertical";
+  size?: "sm" | "md" | "lg";
   disabled?: boolean;
   className?: string;
   /** Accessible name when no visible `label` is rendered. Required by WCAG 4.1.2. */
@@ -475,10 +513,12 @@ export function Slider({
   const id = useId();
   const pct = ((value - min) / (max - min)) * 100;
   const fill = { accent: "var(--accent)", default: "var(--foreground)", success: "var(--success)", warning: "var(--warning)", danger: "var(--danger)" }[tone];
+  const thickness = { sm: 4, md: 6, lg: 8 }[size];
+  const vertical = orientation === "vertical";
   return (
-    <div className={cn("flex w-full flex-col gap-2", disabled && "opacity-[var(--disabled-opacity)]", className)}>
+    <div className={cn(vertical ? "flex flex-row-reverse items-center gap-3" : "flex w-full flex-col gap-2", disabled && "opacity-[var(--disabled-opacity)]", className)}>
       {(label || formatValue) && (
-        <div className="flex items-center justify-between gap-3">
+        <div className={cn("flex items-center gap-3", vertical ? "flex-col" : "justify-between")}>
           {label && <label htmlFor={id} className="text-label-sm text-foreground">{label}</label>}
           {formatValue && (
             <span className="rounded-6 bg-surface-secondary px-1.5 py-0.5 font-mono text-[11px] tabular-nums text-muted">
@@ -488,27 +528,32 @@ export function Slider({
           )}
         </div>
       )}
-      <input
-        id={id}
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        disabled={disabled}
-        aria-label={label ? undefined : ariaLabel}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className="ds-range h-5 w-full cursor-pointer appearance-none bg-transparent outline-none disabled:cursor-not-allowed"
-        style={
-          {
-            background: `linear-gradient(to right, ${fill} 0%, ${fill} ${pct}%, var(--default) ${pct}%, var(--default) 100%)`,
-            color: fill,
-            height: "6px",
-            borderRadius: "99px",
-            accentColor: fill,
-          } as React.CSSProperties
-        }
-      />
+      <div className={cn("relative", vertical ? "flex h-40 items-center justify-center" : "w-full")}>
+        <input
+          id={id}
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          disabled={disabled}
+          aria-label={label ? undefined : ariaLabel}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className={cn("ds-range cursor-pointer appearance-none bg-transparent outline-none disabled:cursor-not-allowed", vertical ? "h-5 w-40 -rotate-90" : "h-5 w-full")}
+          style={
+            {
+              /* The -rotate-90 transform reorients a `to right` fill for vertical
+               * (min at bottom, max at top), so the gradient stays `to right`. */
+              background: `linear-gradient(to right, ${fill} 0%, ${fill} ${pct}%, var(--default) ${pct}%, var(--default) 100%)`,
+              color: fill,
+              height: vertical ? "6px" : `${thickness}px`,
+              width: vertical ? "160px" : undefined,
+              borderRadius: "99px",
+              accentColor: fill,
+            } as React.CSSProperties
+          }
+        />
+      </div>
     </div>
   );
 }
