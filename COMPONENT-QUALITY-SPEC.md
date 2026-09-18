@@ -327,6 +327,7 @@ types → unit → build → design-lint → smoke (106 routes) → axe jsdom (1
 | `npm run quality:check -- --write-baseline audit/quality-baseline.json` | records current scores | after every improvement |
 | `npm run audit:variants` | cells vs `audit/variant-audit-baseline.json` | `npm test` (via `audit:variants`) |
 | `npm run audit:components` | state/a11y/docs matrix | informational + `COMPONENT-AUDIT.md` |
+| `npm run codemod:ref` | components that could take a `ref` but do not — safe rewrite, `--write` to apply | `tests/codemod-ref.test.ts` |
 
 Mechanical checks are static-analysis over source + docs + tests. That means they are **necessary but not sufficient**: they prove structure (an `aria-invalid` exists, a docs section is titled "States"), not taste. Structural honesty is what makes the human review cheap — the reviewer verifies the *look*, not the checklist.
 
@@ -344,6 +345,10 @@ Mechanical checks are static-analysis over source + docs + tests. That means the
 1. Counts in docs/README come from scripts, never from memory (`CONVENTIONS.md` §8.5).
 2. **Headline numbers count only components at or above their tier bar.** Total exports may be larger; the *product* number is the bar-passing number, printed by `quality:report`.
 3. A check that is skipped prints as skipped — silently passing a check that did not run is the only unforgivable bug in the auditor.
+4. **A declaration is not evidence.** `M1.ref` reads source for `ref?:` / `forwardRef`; that proves the prop
+   exists, not that it reaches anything. Where a check can only see structure, pair it with a test that
+   exercises the behaviour (`tests/refs.test.tsx`). Never let a source-shape check stand in for a wire that
+   was never connected.
 
 ---
 

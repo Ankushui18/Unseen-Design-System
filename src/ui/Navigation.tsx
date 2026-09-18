@@ -1,4 +1,4 @@
-import { useId, useState, type ReactNode } from "react";
+import { useId, useState, type ReactNode, type Ref } from "react";
 import { cn } from "../utils/cn";
 import { RiArrowDownSLine, RiArrowLeftDoubleLine, RiArrowLeftSLine, RiArrowRightDoubleLine, RiArrowRightSLine, RiMoreLine } from "@remixicon/react";
 
@@ -7,6 +7,7 @@ import { RiArrowDownSLine, RiArrowLeftDoubleLine, RiArrowLeftSLine, RiArrowRight
 export type TabItem = { key: string; label: ReactNode; icon?: ReactNode; content?: ReactNode; disabled?: boolean; badge?: ReactNode };
 
 export function Tabs({
+  ref,
   items,
   value,
   onChange,
@@ -22,6 +23,7 @@ export function Tabs({
   size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }) {
   const id = useId();
   const pad = { sm: "h-7 px-2.5 text-paragraph-sm", md: "h-9 px-3.5 text-paragraph-sm", lg: "h-11 px-5 text-paragraph-md" }[size];
@@ -34,7 +36,7 @@ export function Tabs({
   }[variant];
 
   return (
-    <div className={cn("flex flex-col gap-4", className)}>
+    <div ref={ref} className={cn("flex flex-col gap-4", className)}>
       <div role="tablist" className={cn("flex items-center overflow-x-auto no-scrollbar", listCls, fullWidth && "w-full")}>
         {items.map((it) => {
           const active = it.key === value;
@@ -86,6 +88,7 @@ export function Tabs({
 /* -------------------------------- Accordion -------------------------------- */
 
 export function Accordion({
+  ref,
   items,
   variant = "bordered",
   multiple,
@@ -95,6 +98,7 @@ export function Accordion({
   variant?: "bordered" | "split" | "flush";
   multiple?: boolean;
   defaultOpen?: string[];
+  ref?: Ref<HTMLDivElement>;
 }) {
   const [open, setOpen] = useState<string[]>(defaultOpen);
   const toggle = (k: string) =>
@@ -107,7 +111,7 @@ export function Accordion({
   }[variant];
 
   return (
-    <div className={wrap}>
+    <div ref={ref} className={wrap}>
       {items.map((it) => {
         const isOpen = open.includes(it.key);
         return (
@@ -139,9 +143,9 @@ export function Accordion({
 
 /* ------------------------------- Breadcrumbs ------------------------------- */
 
-export function Breadcrumbs({ items, className }: { items: { label: ReactNode; href?: string }[]; className?: string }) {
+export function Breadcrumbs({ ref, items, className }: { items: { label: ReactNode; href?: string }[]; className?: string ; ref?: Ref<HTMLElement> }) {
   return (
-    <nav aria-label="Breadcrumb" className={cn("flex items-center gap-1 text-paragraph-sm", className)}>
+    <nav ref={ref} aria-label="Breadcrumb" className={cn("flex items-center gap-1 text-paragraph-sm", className)}>
       {items.map((it, i) => (
         <span key={i} className="flex items-center gap-1">
           {i > 0 && <RiArrowRightSLine className="h-3.5 w-3.5 text-subtle" />}
@@ -161,6 +165,7 @@ export function Breadcrumbs({ items, className }: { items: { label: ReactNode; h
 /* ------------------------------- Pagination -------------------------------- */
 
 export function Pagination({
+  ref,
   page,
   total,
   onChange,
@@ -172,6 +177,7 @@ export function Pagination({
   onChange: (p: number) => void;
   siblings?: number;
   compact?: boolean;
+  ref?: Ref<HTMLElement>;
 }) {
   const pages: (number | "…")[] = [];
   const push = (n: number | "…") => pages.push(n);
@@ -186,7 +192,7 @@ export function Pagination({
   const btn = "inline-flex h-9 min-w-9 items-center justify-center rounded-8 px-2 text-paragraph-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-40";
 
   return (
-    <nav className="flex items-center gap-1" aria-label="Pagination">
+    <nav ref={ref} className="flex items-center gap-1" aria-label="Pagination">
       {!compact && (
         <button className={cn(btn, "text-muted hover:bg-surface-hover hover:text-foreground")} disabled={page === 1} onClick={() => onChange(1)} aria-label="First page">
           <RiArrowLeftDoubleLine className="h-4 w-4" />
@@ -228,6 +234,7 @@ export function Pagination({
 export type Column<T> = { key: keyof T & string; header: ReactNode; align?: "left" | "right" | "center"; render?: (row: T) => ReactNode; width?: string };
 
 export function Table<T extends Record<string, unknown>>({
+  ref,
   columns,
   rows,
   striped,
@@ -245,12 +252,13 @@ export function Table<T extends Record<string, unknown>>({
   variant?: "bordered" | "split" | "flush";
   density?: "comfortable" | "compact";
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }) {
   const thPad = density === "compact" ? "py-1.5" : "py-2.5";
   const tdPad = density === "compact" ? "py-2" : "py-3";
   const colDiv = variant === "split" ? "border-r border-separator-secondary last:border-r-0" : "";
   return (
-    <div
+    <div ref={ref}
       className={cn(
         variant === "flush"
           ? "bg-surface"

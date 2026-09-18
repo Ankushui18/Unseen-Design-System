@@ -1,4 +1,4 @@
-import { forwardRef, cloneElement, isValidElement, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactElement, type ReactNode } from "react";
+import { forwardRef, cloneElement, isValidElement, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactElement, type ReactNode, type Ref } from "react";
 import { cn } from "../utils/cn";
 
 /**
@@ -324,9 +324,9 @@ export const FancyButton = forwardRef<HTMLButtonElement, FancyButtonProps>(funct
   );
 });
 
-export function ButtonGroup({ children, className }: { children: ReactNode; className?: string }) {
+export function ButtonGroup({ ref, children, className }: { children: ReactNode; className?: string ; ref?: Ref<HTMLDivElement> }) {
   return (
-    <div
+    <div ref={ref}
       className={cn(
         "inline-flex items-center rounded-10 shadow-xs ring-1 ring-inset ring-border",
         "[&>*]:rounded-none [&>*]:shadow-none [&>*]:ring-0 [&>*:first-child]:rounded-l-10 [&>*:last-child]:rounded-r-10",

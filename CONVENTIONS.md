@@ -64,7 +64,12 @@ Adding a component to a category inherits the rule. Deviating is allowed only wi
 2. **Actions are polymorphic.** Every action-like component supports `asChild` and/or `href` (R1 components: both).
 3. **Controlled/uncontrolled parity.** Every input-ish component accepts `value` + `onChange` **and** `defaultValue`.
 4. **States are API.** `loading`, `disabled`, `error` (and `empty` for lists) are documented props with defined behavior (aria-busy, disabled semantics, error messaging via `aria-describedby`).
-5. **Refs forward.** `forwardRef` on every public component.
+5. **Refs forward.** Every public component takes `ref` as an ordinary prop and hands it to the element it
+   renders — React 19 does not need `forwardRef`. The prop is typed to the interface of that element
+   (`ref?: Ref<HTMLDivElement>`), never a union or `any`, so a caller cannot pass a ref that resolves to the
+   wrong node. Enforced two ways: `npm run codemod:ref` reports any component that could take a ref and does
+   not (asserted in `tests/codemod-ref.test.ts`), and `tests/refs.test.tsx` mounts a spread of components to
+   prove the ref reaches the component's own root. Declaring the prop is not the same as wiring it.
 6. **`className` last.** Every component merges caller classes via `cn` after its own styles; radius/type tokens registered in `extendTailwindMerge` (existing contract, locked by `tests/cn.test.ts`).
 7. **Data props, not children, for repeated structures.** `items`, `options`, `rows` — children only for free composition (card content, menu slots).
 8. **No new runtime dependencies.** Primitives stay in-house. Exception = deliberate, documented in the roadmap.

@@ -6,7 +6,7 @@
  * Activity Feed · Command Menu · Notification Feed · File Uploader ·
  * Filters · Time Picker · Calendar
  */
-import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
 import { createPortal } from "react-dom";
 import {
   RiArrowDownSLine,
@@ -58,6 +58,7 @@ export type ActivityItem = {
 };
 
 export function ActivityFeed({
+  ref,
   items,
   title = "Recent activity",
   compact = false,
@@ -67,9 +68,10 @@ export function ActivityFeed({
   title?: string;
   compact?: boolean;
   className?: string;
+  ref?: Ref<HTMLElement>;
 }) {
   return (
-    <section className={cn("rounded-20 bg-surface ring-1 ring-border shadow-xs", className)}>
+    <section ref={ref} className={cn("rounded-20 bg-surface ring-1 ring-border shadow-xs", className)}>
       <header className="flex items-center justify-between gap-3 border-b border-separator px-5 py-4">
         <h3 className="text-label-sm text-foreground">{title}</h3>
         <span className="rounded-full bg-default px-2 py-0.5 text-[11px] tabular-nums text-muted">{items.length}</span>
@@ -246,6 +248,7 @@ export type FeedNotification = {
 };
 
 export function NotificationFeed({
+  ref,
   items,
   onRead,
   onReadAll,
@@ -255,10 +258,11 @@ export function NotificationFeed({
   onRead?: (id: number) => void;
   onReadAll?: () => void;
   className?: string;
+  ref?: Ref<HTMLElement>;
 }) {
   const unread = items.filter((i) => !i.read).length;
   return (
-    <section className={cn("flex h-full flex-col overflow-hidden rounded-20 bg-surface ring-1 ring-border shadow-xs", className)}>
+    <section ref={ref} className={cn("flex h-full flex-col overflow-hidden rounded-20 bg-surface ring-1 ring-border shadow-xs", className)}>
       <header className="flex items-center gap-3 border-b border-separator px-5 py-4">
         <RiNotification3Line size={18} className="text-muted" aria-hidden />
         <h3 className="flex-1 text-label-sm text-foreground">Notifications</h3>
@@ -303,6 +307,7 @@ const kindGlyph = (name: string) => {
 };
 
 export function FileUploader({
+  ref,
   files,
   onAdd,
   onRemove,
@@ -316,6 +321,7 @@ export function FileUploader({
   accept?: string;
   max?: number;
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }) {
   const id = useId();
   const [dragging, setDragging] = useState(false);
@@ -327,7 +333,7 @@ export function FileUploader({
   };
 
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
+    <div ref={ref} className={cn("flex flex-col gap-2", className)}>
       <button
         onClick={() => inputRef.current?.click()}
         onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
@@ -635,6 +641,7 @@ function calendarGrid(year: number, month: number) {
 const pad = (n: number) => String(n).padStart(2, "0");
 
 export function Calendar({
+  ref,
   value,
   onChange,
   month: monthProp,
@@ -646,6 +653,7 @@ export function Calendar({
   month?: { year: number; month: number };
   onMonthChange?: (d: Date) => void;
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }) {
   const today = new Date();
   const [view, setView] = useState({ year: (monthProp?.year ?? today.getFullYear()), month: (monthProp?.month ?? today.getMonth()) });
@@ -665,7 +673,7 @@ export function Calendar({
   };
 
   return (
-    <div className={cn("w-72 rounded-20 bg-surface p-4 ring-1 ring-border shadow-lg", className)}>
+    <div ref={ref} className={cn("w-72 rounded-20 bg-surface p-4 ring-1 ring-border shadow-lg", className)}>
       <header className="mb-2 flex items-center justify-between">
         <button onClick={() => shift(-1)} className="rounded-6 p-1.5 text-subtle transition hover:bg-surface-hover hover:text-foreground" aria-label="Previous month"><RiArrowLeftSLine size={18} /></button>
         <p className="text-label-sm text-foreground">{monthName} <span className="text-subtle">{view.year}</span></p>
@@ -725,6 +733,7 @@ export interface AiPromptInputProps {
 }
 
 export function AiPromptInput({
+  ref,
   value,
   onChange,
   onSubmit,
@@ -735,12 +744,12 @@ export function AiPromptInput({
   models = ["Claude 3.5 Sonnet", "GPT-4o", "DeepSeek R1", "Gemini 1.5 Pro"],
   onModelChange,
   className,
-}: AiPromptInputProps) {
+}: AiPromptInputProps & { ref?: Ref<HTMLDivElement> }) {
   const [modelOpen, setModelOpen] = useState(false);
   const [micActive, setMicActive] = useState(false);
 
   return (
-    <div className={cn("w-full rounded-20 bg-surface p-3 ring-1 ring-border shadow-md transition-all focus-within:ring-2 focus-within:ring-accent", className)}>
+    <div ref={ref} className={cn("w-full rounded-20 bg-surface p-3 ring-1 ring-border shadow-md transition-all focus-within:ring-2 focus-within:ring-accent", className)}>
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -847,11 +856,12 @@ export interface CryptoAddressChipProps {
 }
 
 export function CryptoAddressChip({
+  ref,
   address,
   network = "Ethereum",
   explorerUrl = "https://etherscan.io",
   className,
-}: CryptoAddressChipProps) {
+}: CryptoAddressChipProps & { ref?: Ref<HTMLDivElement> }) {
   const [copied, setCopied] = useState(false);
   const truncated = `${address.slice(0, 6)}...${address.slice(-4)}`;
 
@@ -862,7 +872,7 @@ export function CryptoAddressChip({
   };
 
   return (
-    <div className={cn("inline-flex items-center gap-2 rounded-full bg-surface-secondary/80 py-1 pl-2.5 pr-1.5 ring-1 ring-border text-foreground backdrop-blur-sm", className)}>
+    <div ref={ref} className={cn("inline-flex items-center gap-2 rounded-full bg-surface-secondary/80 py-1 pl-2.5 pr-1.5 ring-1 ring-border text-foreground backdrop-blur-sm", className)}>
       <span className="flex h-2 w-2 rounded-full bg-success animate-pulse" />
       <span className="text-paragraph-xs font-medium text-muted">{network}</span>
       <span className="h-3 w-px bg-separator" />
@@ -895,6 +905,7 @@ export function CryptoAddressChip({
 /* ---------------------------- Voice Visualizer ---------------------------- */
 
 export function VoiceVisualizer({
+  ref,
   recording = true,
   duration = "00:18",
   onStop,
@@ -904,9 +915,10 @@ export function VoiceVisualizer({
   duration?: string;
   onStop?: () => void;
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }) {
   return (
-    <div className={cn("flex items-center gap-3 rounded-14 bg-surface p-3 ring-1 ring-border shadow-sm", className)}>
+    <div ref={ref} className={cn("flex items-center gap-3 rounded-14 bg-surface p-3 ring-1 ring-border shadow-sm", className)}>
       <span className="flex h-3 w-3 rounded-full bg-danger animate-ping" />
       <span className="font-mono text-paragraph-xs font-medium text-danger">{duration}</span>
       <div className="flex items-center gap-1 h-6">
@@ -945,6 +957,7 @@ export interface CurrencyAmountInputProps {
 }
 
 export function CurrencyAmountInput({
+  ref,
   amount,
   onAmountChange,
   currency = "USD",
@@ -959,12 +972,12 @@ export function CurrencyAmountInput({
   balance = "$14,820.00",
   onQuickPercent,
   className,
-}: CurrencyAmountInputProps) {
+}: CurrencyAmountInputProps & { ref?: Ref<HTMLDivElement> }) {
   const [open, setOpen] = useState(false);
   const activeCurrency = currencies.find((c) => c.code === currency) ?? currencies[0];
 
   return (
-    <div className={cn("w-full rounded-16 bg-surface p-4 ring-1 ring-border shadow-sm space-y-3", className)}>
+    <div ref={ref} className={cn("w-full rounded-16 bg-surface p-4 ring-1 ring-border shadow-sm space-y-3", className)}>
       <div className="flex items-center justify-between text-paragraph-xs text-muted">
         <span>Amount</span>
         {balance && (

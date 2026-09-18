@@ -14,6 +14,7 @@
     "test:smoke": "node scripts/smoke.mjs",
     "test:a11y": "node scripts/a11y-audit.mjs",
     "audit:components": "node scripts/component-audit.mjs",
+    "codemod:ref": "node scripts/codemod-ref.mjs",
     "quality:report": "node scripts/quality-check.mjs",
     "quality:check": "node scripts/quality-check.mjs --check",
     "quality:ia": "node scripts/quality-check.mjs --ia",

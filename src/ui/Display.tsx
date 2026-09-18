@@ -1,4 +1,4 @@
-import { useState, type HTMLAttributes, type ReactNode } from "react";
+import { useState, type HTMLAttributes, type ReactNode, type Ref } from "react";
 import { cn } from "../utils/cn";
 import type { Tone } from "./Button";
 import { useCopy } from "../lib/hooks";
@@ -23,6 +23,7 @@ const featuredSolid: Record<Tone, string> = {
 };
 
 export function FeaturedIcon({
+  ref,
   icon,
   tone = "accent",
   size = "md",
@@ -34,6 +35,7 @@ export function FeaturedIcon({
   size?: "xs" | "sm" | "md" | "lg";
   variant?: "soft" | "solid" | "gradient";
   className?: string;
+  ref?: Ref<HTMLSpanElement>;
 }) {
   const dims = {
     xs: "h-8 w-8 rounded-8 [&_svg]:h-[18px] [&_svg]:w-[18px]",
@@ -43,7 +45,7 @@ export function FeaturedIcon({
   }[size];
   const treatment = variant === "solid" ? featuredSolid[tone] : variant === "gradient" ? `${tone === "accent" ? "btn-accent-fill" : "btn-neutral-fill"} text-white dark:text-neutral-950` : featuredSoft[tone];
   return (
-    <span className={cn("inline-flex shrink-0 items-center justify-center ring-1 transition-transform duration-200 ease-out-quint", dims, treatment, variant === "soft" && "active:scale-95", className)}>
+    <span ref={ref} className={cn("inline-flex shrink-0 items-center justify-center ring-1 transition-transform duration-200 ease-out-quint", dims, treatment, variant === "soft" && "active:scale-95", className)}>
       {icon}
     </span>
   );
@@ -52,13 +54,14 @@ export function FeaturedIcon({
 /* ---------------------------------- Card ---------------------------------- */
 
 export function Card({
+  ref,
   className,
   children,
   interactive,
   variant = "default",
   elevation = 1,
   ...props
-}: HTMLAttributes<HTMLDivElement> & { interactive?: boolean; variant?: "default" | "bordered" | "elevated"; elevation?: 0 | 1 | 2 | 3 | 4 }) {
+}: HTMLAttributes<HTMLDivElement> & { interactive?: boolean; variant?: "default" | "bordered" | "elevated"; elevation?: 0 | 1 | 2 | 3 | 4 } & { ref?: Ref<HTMLDivElement> }) {
   const shadow = ["", "shadow-xs", "shadow-sm", "shadow-md", "shadow-lg"][elevation];
   const v = {
     default: "ring-1 ring-border",
@@ -66,7 +69,7 @@ export function Card({
     elevated: "ring-1 ring-transparent",
   }[variant];
   return (
-    <div
+    <div ref={ref}
       className={cn(
         "min-w-0 rounded-14 bg-surface text-foreground card-specular-glow",
         v,
@@ -122,6 +125,7 @@ const chipTones: Record<Tone, { solid: string; soft: string; outline: string; do
 };
 
 export function Chip({
+  ref,
   children,
   tone,
   color,
@@ -146,6 +150,7 @@ export function Chip({
   onClose?: () => void;
   startContent?: ReactNode;
   className?: string;
+  ref?: Ref<HTMLSpanElement>;
 }) {
   const c: BadgeColor = color ?? (tone ? toneToColor[tone] : "gray");
   const v: BadgeVariant = variant === "solid" ? "filled" : variant === "soft" ? "lighter" : variant === "outline" ? "stroke" : variant;
@@ -157,7 +162,7 @@ export function Chip({
     lg: "min-h-7 gap-1.5 px-3 py-1 text-label-xs",
   }[size];
   return (
-    <span
+    <span ref={ref}
       className={cn(
         "inline-flex shrink-0 items-center justify-center rounded-6 font-medium normal-case tracking-normal whitespace-nowrap transition-colors duration-150",
         sz,
@@ -183,6 +188,7 @@ export const Badge_ = Chip;
 /* --------------------------------- Badge ---------------------------------- */
 
 export function Badge({
+  ref,
   children,
   content,
   tone = "danger",
@@ -196,6 +202,7 @@ export function Badge({
   placement?: "top-right" | "top-left" | "bottom-right" | "bottom-left";
   size?: "sm" | "md" | "lg";
   dot?: boolean;
+  ref?: Ref<HTMLSpanElement>;
 }) {
   const pos = {
     "top-right": "-top-1 -right-1",
@@ -209,7 +216,7 @@ export function Badge({
     lg: dot ? "h-3.5 w-3.5" : "h-6 min-w-6 px-1.5 text-[11px]",
   }[size];
   return (
-    <span className="relative inline-flex">
+    <span ref={ref} className="relative inline-flex">
       {children}
       <span
         className={cn(
@@ -228,6 +235,7 @@ export function Badge({
 /* --------------------------------- Avatar --------------------------------- */
 
 export function Avatar({
+  ref,
   name,
   src,
   size = "md",
@@ -246,6 +254,7 @@ export function Avatar({
   tone?: Tone;
   status?: "online" | "offline" | "busy";
   className?: string;
+  ref?: Ref<HTMLSpanElement>;
 }) {
   const s = { xs: "h-6 w-6 text-[10px]", sm: "h-8 w-8 text-label-xs", md: "h-10 w-10 text-label-sm", lg: "h-12 w-12 text-label-md", xl: "h-16 w-16 text-label-xl" }[size];
   const sh = { circle: "rounded-full", rounded: "rounded-10", square: "rounded-8" }[square ? "square" : shape];
@@ -256,7 +265,7 @@ export function Avatar({
     .join("")
     .toUpperCase();
   return (
-    <span className="relative inline-flex shrink-0">
+    <span ref={ref} className="relative inline-flex shrink-0">
       <span
         className={cn(
           "inline-flex items-center justify-center overflow-hidden font-medium select-none",
@@ -282,12 +291,12 @@ export function Avatar({
   );
 }
 
-export function AvatarGroup({ items, max = 4, size = "md" }: { items: { name: string; src?: string }[]; max?: number; size?: "xs" | "sm" | "md" | "lg" }) {
+export function AvatarGroup({ ref, items, max = 4, size = "md" }: { items: { name: string; src?: string }[]; max?: number; size?: "xs" | "sm" | "md" | "lg" ; ref?: Ref<HTMLDivElement> }) {
   const shown = items.slice(0, max);
   const rest = items.length - shown.length;
   const tones: Tone[] = ["accent", "success", "warning", "danger", "default"];
   return (
-    <div className="flex items-center -space-x-2">
+    <div ref={ref} className="flex items-center -space-x-2">
       {shown.map((it, i) => (
         <span key={i} className="rounded-full ring-2 ring-background">
           <Avatar {...it} size={size} tone={tones[i % tones.length]} />
@@ -304,6 +313,7 @@ export function AvatarGroup({ items, max = 4, size = "md" }: { items: { name: st
 
 /** AlignUI-style compact grouping: a tighter stack inside a soft capsule. */
 export function AvatarGroupCompact({
+  ref,
   items,
   max = 3,
   size = "md",
@@ -317,12 +327,13 @@ export function AvatarGroupCompact({
   tone?: Tone;
   variant?: "default" | "stroke";
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }) {
   const shown = items.slice(0, max);
   const rest = items.length - shown.length;
   const pad = { xs: "px-1 text-paragraph-xs", sm: "px-1.5 text-paragraph-xs", md: "px-2 text-paragraph-sm", lg: "px-2.5 text-paragraph-sm" }[size];
   return (
-    <div
+    <div ref={ref}
       className={cn(
         "flex w-max items-center rounded-full bg-surface p-0.5 shadow-xs",
         variant === "stroke" && "ring-1 ring-border",
@@ -349,9 +360,9 @@ export interface UserProps extends React.HTMLAttributes<HTMLDivElement> {
   avatarProps?: { src?: string; size?: "xs" | "sm" | "md" | "lg"; tone?: Tone; square?: boolean };
 }
 
-export function User({ name, description, avatarProps, className, ...props }: UserProps) {
+export function User({ ref, name, description, avatarProps, className, ...props }: UserProps & { ref?: Ref<HTMLDivElement> }) {
   return (
-    <div className={cn("inline-flex items-center gap-2.5 text-left", className)} {...props}>
+    <div ref={ref} className={cn("inline-flex items-center gap-2.5 text-left", className)} {...props}>
       <Avatar
         name={name}
         size={avatarProps?.size ?? "sm"}
@@ -369,9 +380,9 @@ export function User({ name, description, avatarProps, className, ...props }: Us
 
 /* ---------------------------------- Kbd ----------------------------------- */
 
-export function Kbd({ children, className }: { children: ReactNode; className?: string }) {
+export function Kbd({ ref, children, className }: { children: ReactNode; className?: string ; ref?: Ref<HTMLElement> }) {
   return (
-    <kbd className={cn("inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-surface px-1.5 font-mono text-[10px] font-medium text-subtle ring-1 ring-border shadow-[0_1px_0_0_var(--border)]", className)}>
+    <kbd ref={ref} className={cn("inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-surface px-1.5 font-mono text-[10px] font-medium text-subtle ring-1 ring-border shadow-[0_1px_0_0_var(--border)]", className)}>
       {children}
     </kbd>
   );
@@ -379,10 +390,10 @@ export function Kbd({ children, className }: { children: ReactNode; className?: 
 
 /* --------------------------------- Snippet -------------------------------- */
 
-export function Snippet({ children, className, symbol = "$" }: { children: string; className?: string; symbol?: string }) {
+export function Snippet({ ref, children, className, symbol = "$" }: { children: string; className?: string; symbol?: string ; ref?: Ref<HTMLDivElement> }) {
   const { copied, copy } = useCopy();
   return (
-    <div className={cn("group flex items-center justify-between gap-4 rounded-10 bg-surface px-3.5 py-2.5 ring-1 ring-border shadow-xs", className)}>
+    <div ref={ref} className={cn("group flex items-center justify-between gap-4 rounded-10 bg-surface px-3.5 py-2.5 ring-1 ring-border shadow-xs", className)}>
       <code className="overflow-x-auto font-mono text-paragraph-sm whitespace-nowrap text-foreground no-scrollbar" tabIndex={0} role="region" aria-label="Command (scrollable)">
         {symbol && <span className="mr-2 select-none text-subtle">{symbol}</span>}
         {children}
@@ -415,9 +426,9 @@ export function Divider({ orientation = "horizontal", label, className }: { orie
 
 /* -------------------------------- Skeleton -------------------------------- */
 
-export function Skeleton({ className }: { className?: string }) {
+export function Skeleton({ ref, className }: { className?: string ; ref?: Ref<HTMLDivElement> }) {
   return (
-    <div
+    <div ref={ref}
       className={cn("animate-shimmer rounded-md bg-surface-secondary", className)}
       style={{
         backgroundImage:
@@ -432,6 +443,7 @@ export function Skeleton({ className }: { className?: string }) {
 /* -------------------------------- Progress -------------------------------- */
 
 export function Progress({
+  ref,
   value,
   tone = "accent",
   size = "md",
@@ -447,11 +459,12 @@ export function Progress({
   showValue?: boolean;
   indeterminate?: boolean;
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }) {
   const h = { sm: "h-1", md: "h-2", lg: "h-3" }[size];
   const bg = { accent: "bg-accent", default: "bg-foreground", success: "bg-success", warning: "bg-warning", danger: "bg-danger" }[tone];
   return (
-    <div className={cn("flex w-full flex-col gap-1.5", className)}>
+    <div ref={ref} className={cn("flex w-full flex-col gap-1.5", className)}>
       {(label || showValue) && (
         <div className="flex items-center justify-between text-paragraph-sm">
           {label && <span className="font-medium text-foreground">{label}</span>}
@@ -468,12 +481,12 @@ export function Progress({
   );
 }
 
-export function CircularProgress({ value = 0, size = 56, stroke = 5, tone = "accent", label }: { value?: number; size?: number; stroke?: number; tone?: Tone; label?: ReactNode }) {
+export function CircularProgress({ ref, value = 0, size = 56, stroke = 5, tone = "accent", label }: { value?: number; size?: number; stroke?: number; tone?: Tone; label?: ReactNode ; ref?: Ref<HTMLDivElement> }) {
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
   const color = { accent: "var(--accent)", default: "var(--foreground)", success: "var(--success)", warning: "var(--warning)", danger: "var(--danger)" }[tone];
   return (
-    <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
+    <div ref={ref} className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--default)" strokeWidth={stroke} />
         <circle
@@ -505,6 +518,7 @@ const alertIcons = {
 };
 
 export function Alert({
+  ref,
   title,
   children,
   tone = "accent",
@@ -522,6 +536,7 @@ export function Alert({
   onClose?: () => void;
   action?: ReactNode;
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }) {
   const Icon = alertIcons[tone];
   const iconColor = { accent: "text-accent", default: "text-muted", success: "text-success", warning: "text-warning", danger: "text-danger" }[tone];
@@ -532,7 +547,7 @@ export function Alert({
   }[variant];
   const pad = size === "sm" ? "gap-2 rounded-10 p-2.5" : "gap-3 rounded-12 p-3.5";
   return (
-    <div className={cn("flex items-start", pad, styles, className)} role="alert">
+    <div ref={ref} className={cn("flex items-start", pad, styles, className)} role="alert">
       <Icon className={cn(size === "sm" ? "mt-px h-4 w-4" : "mt-px h-5 w-5", "shrink-0", variant === "outline" && iconColor)} />
       <div className="flex-1 space-y-0.5">
         {title && <p className="text-label-sm">{title}</p>}
@@ -550,16 +565,16 @@ export function Alert({
 
 /* ---------------------------------- Code ---------------------------------- */
 
-export function Code({ children, tone = "default" }: { children: ReactNode; tone?: Tone }) {
-  return <code className={cn("rounded-6 px-1.5 py-0.5 font-mono text-[0.85em]", chipTones[tone].soft)}>{children}</code>;
+export function Code({ ref, children, tone = "default" }: { children: ReactNode; tone?: Tone ; ref?: Ref<HTMLElement> }) {
+  return <code ref={ref} className={cn("rounded-6 px-1.5 py-0.5 font-mono text-[0.85em]", chipTones[tone].soft)}>{children}</code>;
 }
 
 /* -------------------------------- ScrollShadow ----------------------------- */
 
-export function ScrollShadow({ children, className, maxHeight = 220 }: { children: ReactNode; className?: string; maxHeight?: number }) {
+export function ScrollShadow({ ref, children, className, maxHeight = 220 }: { children: ReactNode; className?: string; maxHeight?: number ; ref?: Ref<HTMLDivElement> }) {
   const [state, setState] = useState({ top: false, bottom: true });
   return (
-    <div className="relative">
+    <div ref={ref} className="relative">
       <div
         className={cn("ds-scroll overflow-y-auto", className)}
         style={{ maxHeight }}

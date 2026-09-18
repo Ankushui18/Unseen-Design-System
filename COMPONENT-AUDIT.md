@@ -10,6 +10,9 @@
 > Docs = matched to a page in `src/docs/nav.ts`.
 
 
+> react-vite-tailwind@0.0.0 audit:components
+> node scripts/component-audit.mjs --md
+
 | Component | File | Dis | Load | Err | Aria | Role | Focus | Keys | Ctrl | Docs |
 |---|---|---|---|---|---|---|---|---|---|---|
 | Spinner | ui/Button.tsx | ✓ | ✓ | · | ✓ | · | ✓ | · | · | ✓ |
