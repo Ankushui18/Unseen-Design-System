@@ -29,14 +29,6 @@ export function GithubIcon({ className }: { className?: string }) {
   return <svg viewBox="0 0 24 24" fill="currentColor" className={className ?? "h-4 w-4"} aria-hidden><path d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z" /></svg>;
 }
 
-export function DiscordIcon({ className }: { className?: string }) {
-  return <svg viewBox="0 0 24 24" fill="currentColor" className={className ?? "h-4 w-4"} aria-hidden><path d="m19.7 4.5-4.2-1.3-.5 1.1a19 19 0 0 0-6 0l-.5-1.1-4.2 1.3C1.6 8.4.8 12.6 1.2 17a17 17 0 0 0 5.1 2.6l1-1.7-1.6-.8.5-.4a14 14 0 0 0 11.6 0l.5.4-1.6.8 1 1.7a17 17 0 0 0 5.1-2.6c.4-4.4-.4-8.6-3.1-12.5ZM8 14.6c-1 0-1.8-1-1.8-2.1s.8-2 1.8-2 1.8.9 1.8 2S9 14.6 8 14.6Zm8 0c-1 0-1.8-1-1.8-2.1s.8-2 1.8-2 1.8.9 1.8 2-.8 2.1-1.8 2.1Z" /></svg>;
-}
-
-export function XIcon({ className }: { className?: string }) {
-  return <svg viewBox="0 0 24 24" fill="currentColor" className={className ?? "h-4 w-4"} aria-hidden><path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.66l-5.21-6.82-5.97 6.82H1.67l7.73-8.84L1.25 2.25h6.83l4.71 6.23 5.45-6.23Zm-1.16 17.52h1.83L7.08 4.13H5.12l11.96 15.64Z" /></svg>;
-}
-
 const MAIN_NAV = [
   { title: "Components", href: "components" },
   { title: "Blocks", href: "blocks" },
@@ -291,6 +283,11 @@ export function Toc({ headings, active }: { headings: { id: string; title: strin
   </aside>;
 }
 
+/* A rail holding one or two links under a large void reads as an unfinished
+   column, not as navigation. Below three sections the page drops the rail and
+   spends the width on its content instead. */
+const RAIL_MIN_SECTIONS = 3;
+
 export function DocsLayout({ route, navigate, children, headings, activeHeading }: { route: string; navigate: (to: string) => void; children: ReactNode; headings: { id: string; title: string }[]; activeHeading: string }) {
   const [mobile, setMobile] = useState(false);
   const [search, setSearch] = useState(false);
@@ -307,7 +304,7 @@ export function DocsLayout({ route, navigate, children, headings, activeHeading 
     <Navbar route={route} navigate={navigate} onOpenSearch={() => setSearch(true)} onOpenMobile={() => setMobile(true)} />
     <CommandPalette open={search} onClose={() => setSearch(false)} navigate={navigate} />
     <MobileNavigation open={mobile} onClose={() => setMobile(false)} route={route} navigate={navigate} />
-    <div className="docs-layout">
+    <div className="docs-layout" data-rail={headings.length >= RAIL_MIN_SECTIONS ? "full" : "none"}>
       <aside className="docs-sidebar ds-scroll"><SidebarNav route={route} navigate={navigate} /></aside>
       <main id="main" tabIndex={-1} className="docs-main">
         <nav className="docs-breadcrumb" aria-label="Breadcrumb"><a href="#/">Home</a><RiArrowRightSLine size={12} /><span>{item?.group ?? "Library"}</span><RiArrowRightSLine size={12} /><span aria-current="page">{item?.title ?? "Overview"}</span></nav>
@@ -318,7 +315,7 @@ export function DocsLayout({ route, navigate, children, headings, activeHeading 
         </nav>}
         <footer className="docs-footer"><span>Unseen Design System</span><a href="#/pricing">Public beta</a></footer>
       </main>
-      <Toc headings={headings} active={activeHeading} />
+      {headings.length >= RAIL_MIN_SECTIONS && <Toc headings={headings} active={activeHeading} />}
     </div>
   </div>;
 }
@@ -343,44 +340,21 @@ export function SiteFooter({ navigate }: { navigate: (to: string) => void }) {
 
   return (
     <footer className="site-footer border-t border-border bg-surface text-left">
-      {/* AlignUI Community Grid */}
+      {/* Where to go next — three real destinations, no invented handles. */}
       <div className="home-container py-12 border-b border-separator">
         <div className="mb-8">
-          <span className="text-[11px] font-mono text-accent uppercase tracking-wider block mb-1">Join our community</span>
+          <span className="text-[11px] font-mono text-accent uppercase tracking-wider block mb-1">Keep going</span>
           <h3 className="text-title-h4 font-medium tracking-tight text-foreground">
-            Connect, learn, and build with fellow engineers.
+            Read the source, follow the changes, ship something.
           </h3>
           <p className="text-paragraph-xs text-muted mt-1">
-            Be part of a growing collective crafting considered, sub-pixel perfect interfaces.
+            Unseen is source-first: every component, block and template is yours to copy, adapt and extend.
           </p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-3">
           <a
-            href="https://x.com/alignui"
-            target="_blank"
-            rel="noreferrer"
-            className="group flex flex-col justify-between p-5 rounded-10 border border-border bg-surface-secondary hover:border-accent hover:shadow-sm transition-all"
-          >
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-8 bg-surface text-foreground group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
-                  <XIcon className="h-4 w-4" />
-                </div>
-                <span className="text-[10px] font-mono text-subtle">@unseen_ui</span>
-              </div>
-              <h4 className="text-label-sm font-medium text-foreground group-hover:text-accent transition-colors">Twitter / X</h4>
-              <p className="text-[11px] text-muted mt-1 leading-relaxed">
-                Stay updated with release notes, micro-interaction breakdowns, and token architectures.
-              </p>
-            </div>
-            <span className="mt-4 inline-flex items-center gap-1 text-[11px] font-medium text-accent">
-              Follow announcements <RiArrowRightLine size={12} />
-            </span>
-          </a>
-
-          <a
-            href="https://github.com/alignui"
+            href="https://github.com/Ankushui18/Unseen-Design-System"
             target="_blank"
             rel="noreferrer"
             className="group flex flex-col justify-between p-5 rounded-10 border border-border bg-surface-secondary hover:border-accent hover:shadow-sm transition-all"
@@ -392,9 +366,9 @@ export function SiteFooter({ navigate }: { navigate: (to: string) => void }) {
                 </div>
                 <span className="text-[10px] font-mono text-subtle">GitHub</span>
               </div>
-              <h4 className="text-label-sm font-medium text-foreground group-hover:text-accent transition-colors">GitHub Repository</h4>
+              <h4 className="text-label-sm font-medium text-foreground group-hover:text-accent transition-colors">Repository</h4>
               <p className="text-[11px] text-muted mt-1 leading-relaxed">
-                Inspect 100% open-source primitives, report issues, and contribute new component patterns.
+                Inspect every primitive, open an issue, or send a pull request against the system itself.
               </p>
             </div>
             <span className="mt-4 inline-flex items-center gap-1 text-[11px] font-medium text-accent">
@@ -402,32 +376,53 @@ export function SiteFooter({ navigate }: { navigate: (to: string) => void }) {
             </span>
           </a>
 
-          <a
-            href="https://discord.gg/alignui"
-            target="_blank"
-            rel="noreferrer"
-            className="group flex flex-col justify-between p-5 rounded-10 border border-border bg-surface-secondary hover:border-accent hover:shadow-sm transition-all"
+          <button
+            type="button"
+            onClick={() => navigate("docs/changelog")}
+            className="group flex flex-col justify-between p-5 rounded-10 border border-border bg-surface-secondary hover:border-accent hover:shadow-sm transition-all text-left"
           >
             <div>
               <div className="flex items-center justify-between mb-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-8 bg-surface text-foreground group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
-                  <DiscordIcon className="h-4 w-4" />
+                  <RiFileCopyLine className="h-4 w-4" />
                 </div>
-                <span className="text-[10px] font-mono text-subtle">Discord</span>
+                <span className="text-[10px] font-mono text-subtle">Changelog</span>
               </div>
-              <h4 className="text-label-sm font-medium text-foreground group-hover:text-accent transition-colors">Discord Community</h4>
+              <h4 className="text-label-sm font-medium text-foreground group-hover:text-accent transition-colors">What changed</h4>
               <p className="text-[11px] text-muted mt-1 leading-relaxed">
-                Ask questions, share design system showcases, and get immediate peer assistance.
+                Every release, every breaking change, with the codemod that carries you across it.
               </p>
             </div>
             <span className="mt-4 inline-flex items-center gap-1 text-[11px] font-medium text-accent">
-              Join Discord server <RiArrowRightLine size={12} />
+              Read the changelog <RiArrowRightLine size={12} />
             </span>
-          </a>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => navigate("docs/installation")}
+            className="group flex flex-col justify-between p-5 rounded-10 border border-border bg-surface-secondary hover:border-accent hover:shadow-sm transition-all text-left"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-8 bg-surface text-foreground group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
+                  <RiRestartLine className="h-4 w-4" />
+                </div>
+                <span className="text-[10px] font-mono text-subtle">Setup</span>
+              </div>
+              <h4 className="text-label-sm font-medium text-foreground group-hover:text-accent transition-colors">Installation</h4>
+              <p className="text-[11px] text-muted mt-1 leading-relaxed">
+                Drop the tokens into an existing React 19 + Tailwind v4 project and copy your first component.
+              </p>
+            </div>
+            <span className="mt-4 inline-flex items-center gap-1 text-[11px] font-medium text-accent">
+              Start building <RiArrowRightLine size={12} />
+            </span>
+          </button>
         </div>
       </div>
 
-      {/* AlignUI Newsletter Banner */}
+      {/* Newsletter */}
       <div className="home-container py-10 border-b border-separator">
         <div className="rounded-14 border border-border bg-surface-secondary p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="max-w-md">

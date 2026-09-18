@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { ThemeProvider } from "./lib/theme";
 import { ToastProvider } from "./ui/Overlay";
 import { useHashRoute, useScrollSpy } from "./lib/hooks";
@@ -50,21 +50,28 @@ function Shell() {
     document.title = title ? `${title} · ${base}` : base;
   }, [route, isHome]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isPublicPage) {
       setHeadings([]);
       return;
     }
-    const id = window.setTimeout(() => {
+    /* Discovered before paint: `Section` renders synchronously, so the page
+       knows whether it can fill the right rail without a layout jump. Pages
+       that gain sections later (lazy widgets) are caught on the next frame. */
+    const collect = () =>
       /* Only real page sections (Section renders an h2) belong in the TOC —
        * an inline widget with an id must not leak its id in as a heading. */
-      const found = Array.from(document.querySelectorAll<HTMLElement>("main section[id]"))
-        .map((el) => ({ el, title: el.querySelector("h2")?.textContent?.trim() }))
-        .filter((x): x is { el: HTMLElement; title: string } => Boolean(x.title))
-        .map(({ el, title }) => ({ id: el.id, title }));
-      setHeadings(found);
-    }, 60);
-    return () => window.clearTimeout(id);
+      Array.from(document.querySelectorAll<HTMLElement>("main section[id]"))
+        .map((el) => ({ id: el.id, title: el.querySelector("h2")?.textContent?.trim() ?? "" }))
+        .filter((x) => x.title);
+    setHeadings(collect());
+    const raf = requestAnimationFrame(() => {
+      setHeadings((prev) => {
+        const next = collect();
+        return prev.length === next.length && prev.every((h, i) => h.id === next[i].id && h.title === next[i].title) ? prev : next;
+      });
+    });
+    return () => cancelAnimationFrame(raf);
   }, [route, isPublicPage]);
 
   if (isPublicPage) {

@@ -25,7 +25,7 @@ export function BlocksPage() {
   return (
     <main id="main" className="blocks-page" tabIndex={-1}>
       <div className="home-container">
-        {/* AlignUI Blueprint Top Ruler */}
+        {/* Blueprint top ruler */}
         <div className="blueprint-ruler-top mb-6 rounded-8 border border-border">
           <span>000</span>
           <span>100</span>

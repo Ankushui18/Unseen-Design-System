@@ -1,6 +1,6 @@
 /**
  * Unseen PRO Components — the premium tier of the system, built to close
- * the gap with AlignUI PRO. Everything here reuses the same token graph as
+ * the deep end of the library. Everything here reuses the same token graph as
  * the base components (no private colours, no hex, no raw Tailwind scales).
  *
  * Activity Feed · Command Menu · Notification Feed · File Uploader ·

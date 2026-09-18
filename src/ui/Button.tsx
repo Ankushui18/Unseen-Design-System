@@ -2,7 +2,7 @@ import { forwardRef, cloneElement, isValidElement, type AnchorHTMLAttributes, ty
 import { cn } from "../utils/cn";
 
 /**
- * Button — matches AlignUI's button contract with full polymorphism (asChild & href support):
+ * Button — the base action, with full polymorphism (asChild & href support):
  *   variant (intent) : accent(primary) | default(neutral) | success | warning | danger(error)
  *   mode             : solid(filled) | outline(stroke) | soft(lighter) | ghost | link
  *   size             : md 40 · sm 36 · xs 32 · xxs 28  (+ lg 48 for marketing)
@@ -15,7 +15,7 @@ export type Size = "xxs" | "xs" | "sm" | "md" | "lg";
 /* ------------------------------ vocabulary law ------------------------------
  * COMPONENT-QUALITY-SPEC.md §3: canonical props (tone/variant/size) are the API
  * of record; the display vocabulary below is human-facing (docs, playground,
- * marketing) and the AlignUI-shaped shorthand is an *alias layer* — ergonomics,
+ * marketing) and the display shorthand is an *alias layer* — ergonomics,
  * never new cells (variant-audit excludes `*Alias` members from cell counting).
  *
  * Precedence (total, documented in the API table, locked by unit tests):
@@ -133,18 +133,18 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   variant?: Variant | IntentAlias;
   /** Canonical intent axis (API of record). */
   tone?: Tone;
-  /** AlignUI-shaped intent shorthand — alias for tone. */
+  /** Display alias for tone. */
   color?: Tone;
-  /** AlignUI-shaped look shorthand — alias for variant (filled | stroke | lighter | ghost). */
+  /** Display alias for variant (filled | stroke | lighter | ghost). */
   mode?: Mode;
   size?: Size;
   loading?: boolean;
-  /** HeroUI alias for loading */
+  /** Display alias for loading */
   isLoading?: boolean;
   iconOnly?: boolean;
-  /** HeroUI alias for iconOnly */
+  /** Display alias for iconOnly */
   isIconOnly?: boolean;
-  /** HeroUI alias for disabled */
+  /** Display alias for disabled */
   isDisabled?: boolean;
   fullWidth?: boolean;
   startContent?: ReactNode;

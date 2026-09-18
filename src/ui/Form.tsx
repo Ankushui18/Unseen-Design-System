@@ -19,7 +19,7 @@ const fieldSizes: Record<"sm" | "md" | "lg", string> = {
   lg: "h-12 gap-2 px-3.5 rounded-12 text-paragraph-md",
 };
 
-/* AlignUI input shell: hairline ring, xs shadow at rest, weak fill on hover, strong ring + double halo on focus */
+/* Input shell: hairline ring, xs shadow at rest, weak fill on hover, strong ring + double halo on focus */
 const fieldShell =
   "relative bg-field text-field-foreground shadow-xs transition duration-[var(--duration-base)] ease-out-quint " +
   "ring-1 ring-inset ring-border " +
@@ -61,10 +61,10 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   labelPlacement?: "top" | "left";
   startContent?: ReactNode;
   endContent?: ReactNode;
-  /** HeroUI feature: clear button */
+  /** Clear button. */
   isClearable?: boolean;
   onClear?: () => void;
-  /** HeroUI alias for required */
+  /** Display alias for required */
   isRequired?: boolean;
   /** Divided prefix section, e.g. "https://" */
   prefixAffix?: ReactNode;

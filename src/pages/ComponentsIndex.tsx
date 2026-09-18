@@ -2,8 +2,6 @@ import { useMemo, useState } from "react";
 import { COMPONENT_GROUPS } from "../docs/nav";
 import { PageHeader } from "../docs/Blocks";
 import { PREVIEWS } from "../docs/previews";
-import { SiteFooter } from "../docs/Shell";
-import { cn } from "../utils/cn";
 import { RiArrowRightLine, RiCloseLine, RiSearchLine } from "@remixicon/react";
 
 export function ComponentsIndex({ navigate }: { navigate: (t: string) => void }) {
@@ -25,20 +23,20 @@ export function ComponentsIndex({ navigate }: { navigate: (t: string) => void })
   }, [q, activeCategory]);
 
   const matchedCount = useMemo(() => groups.reduce((n, g) => n + g.items.length, 0), [groups]);
+  const filtered = Boolean(q.trim()) || activeCategory !== "All";
 
   return (
-    <main id="main" className="components-index-page" tabIndex={-1}>
-      <div className="home-container">
-        <PageHeader
+    <div className="components-index-page">
+      <PageHeader
           eyebrow="Component Library · React 19 & Tailwind v4"
           title="Every component. At real size."
           description="The pieces of a cohesive, accessible interface. Explore working examples, inspect the TypeScript props API, and copy source directly."
           tags={[`${total} documented components`, "100% Free & Open Source", "Zero runtime lock-in"]}
         />
 
-        {/* Category Filters Bar */}
-        <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-separator pb-4">
-          <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter components by category">
+        {/* Filters + search live in one band so the grid starts a single step below the hero. */}
+        <div className="index-toolbar">
+          <div className="index-filters" role="group" aria-label="Filter components by category">
             {categories.map((c) => {
               const isSelected = activeCategory === c;
               const count = c === "All" ? total : COMPONENT_GROUPS.find((g) => g.title === c)?.items.length ?? 0;
@@ -48,29 +46,16 @@ export function ComponentsIndex({ navigate }: { navigate: (t: string) => void })
                   type="button"
                   aria-pressed={isSelected}
                   onClick={() => setActiveCategory(c)}
-                  className={cn(
-                    "flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-medium transition-all",
-                    isSelected
-                      ? "bg-accent text-accent-foreground shadow-xs"
-                      : "bg-surface-secondary text-muted hover:text-foreground hover:bg-surface-hover"
-                  )}
+                  className="index-filter"
                 >
                   <span>{c}</span>
-                  <span
-                    className={cn(
-                      "rounded-full px-1.5 py-0.2 text-[9px] font-mono",
-                      isSelected ? "bg-black/25 text-white" : "bg-surface text-subtle"
-                    )}
-                  >
-                    {count}
-                  </span>
+                  <span className="index-filter-count">{count}</span>
                 </button>
               );
             })}
           </div>
 
-          {/* Search Input */}
-          <div className="relative w-full sm:w-64">
+          <div className="index-search">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted">
               <RiSearchLine size={15} />
             </div>
@@ -81,7 +66,7 @@ export function ComponentsIndex({ navigate }: { navigate: (t: string) => void })
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search components..."
-              className="w-full rounded-10 border border-border bg-surface pl-9 pr-8 py-1.5 text-paragraph-xs text-foreground placeholder:text-muted focus:outline-none focus:ring-1 focus:ring-accent"
+              className="w-full h-9 rounded-10 border border-border bg-surface pl-9 pr-8 text-paragraph-xs text-foreground placeholder:text-muted focus:outline-none focus:ring-1 focus:ring-accent"
             />
             {q && (
               <button
@@ -96,34 +81,28 @@ export function ComponentsIndex({ navigate }: { navigate: (t: string) => void })
           </div>
         </div>
 
-        {/* Results Count Strip */}
-        <div className="py-3 flex items-center justify-between text-[11px] font-mono text-subtle">
-          <span>{matchedCount} {matchedCount === 1 ? "component available" : "components available"}</span>
-          <span>Category: {activeCategory}</span>
-        </div>
-
         {/* Component Groups */}
-        <div className="space-y-12 pb-16">
+        <div className="index-groups pb-16">
           {groups.map((g) => (
-            <section key={g.title} className="component-index-group text-left">
-              <div className="component-index-group-heading flex items-center justify-between border-b border-separator pb-2 mb-4">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-label-md font-medium text-foreground">{g.title}</h2>
-                  <span className="rounded-full bg-surface-secondary px-2 py-0.5 text-[10px] font-mono text-subtle">
-                    {g.items.length}
+            <section key={g.title} className="index-group text-left">
+              <div className="index-group-heading">
+                <h2>{g.title}</h2>
+                <span className="index-group-count">{g.items.length}</span>
+                {filtered && (
+                  <span className="index-result-note" role="status">
+                    {matchedCount} of {total} components
                   </span>
-                </div>
-                <span className="text-[10px] font-mono text-subtle">OKLCH Tokens</span>
+                )}
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="index-grid">
                 {g.items.map((it) => (
                   <article
                     key={it.href}
-                    className="card-specular-glow flex flex-col justify-between overflow-hidden p-4 group"
+                    className="index-card group"
                   >
                     <div
-                      className="component-thumbnail mb-3 flex items-center justify-center min-h-[110px] rounded-8 bg-surface-secondary/60 p-3 ring-1 ring-border/50 transition-colors group-hover:bg-surface-secondary"
+                      className="component-thumbnail"
                       inert
                       aria-hidden="true"
                     >
@@ -132,7 +111,7 @@ export function ComponentsIndex({ navigate }: { navigate: (t: string) => void })
 
                     <a
                       href={`#/${it.href}`}
-                      className="flex items-center justify-between text-label-xs font-medium text-foreground group-hover:text-accent transition-colors pt-1"
+                      className="index-card-link"
                       onClick={(e) => {
                         e.preventDefault();
                         navigate(it.href);
@@ -178,9 +157,7 @@ export function ComponentsIndex({ navigate }: { navigate: (t: string) => void })
               </button>
             </div>
           )}
-        </div>
       </div>
-      <SiteFooter navigate={navigate} />
-    </main>
+    </div>
   );
 }

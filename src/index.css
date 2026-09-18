@@ -97,7 +97,7 @@
   --accent-900: oklch(0.33 calc(var(--accent-c) * 0.6) var(--accent-h));
   --accent-950: oklch(0.24 calc(var(--accent-c) * 0.44) var(--accent-h));
 
-  /* AlignUI-grade bluish neutrals */
+  /* Bluish neutrals — cool enough to sit under an accent, warm enough to read as ink. */
   --neutral-0: #ffffff;
   --neutral-50: #f5f7fa;
   --neutral-100: #f2f5f8;
@@ -171,7 +171,7 @@
   --danger-soft: #ffebec;
   --danger-soft-foreground: #b3101f;
 
-  /* --- 10-colour state palette (AlignUI): dark / base / light / lighter --- */
+  /* --- 10-colour state palette: dark / base / light / lighter --- */
   --gray-dark: #2b303b;    --gray-base: #717784;    --gray-light: #e1e4ea;   --gray-lighter: #f5f7fa;
   --blue-dark: #2547d0;    --blue-base: #335cff;    --blue-light: #c0d5ff;   --blue-lighter: #ebf1ff;
   --orange-dark: #d05e25;  --orange-base: #ff8447;  --orange-light: #ffd5c0; --orange-lighter: #fff3eb;
@@ -191,7 +191,7 @@
   --syn-attr: #2547d0;
   --syn-punct: #717784;
 
-  /* Elevation (AlignUI regular scale + system) */
+  /* Elevation — regular scale plus the system's floating overlays. */
   --shadow-xs: 0 1px 2px 0 rgb(10 13 20 / 0.03);
   --shadow-sm: 0 2px 4px 0 rgb(27 28 29 / 0.04);
   --shadow-md: 0 16px 32px -12px rgb(14 18 27 / 0.1);
@@ -430,7 +430,7 @@
   --color-danger-soft: var(--danger-soft);
   --color-danger-soft-foreground: var(--danger-soft-foreground);
 
-  /* Radii Scale (Strict AlignUI Hierarchy) */
+  /* Radii scale */
   --radius-xs: calc(0.125rem * var(--radius-scale));
   --radius-sm: calc(0.25rem * var(--radius-scale));
   --radius-md: calc(0.375rem * var(--radius-scale));
@@ -630,7 +630,7 @@
   }
 
   /* Ambient brand-lit surface — a soft accent halo bleeding into a panel's
-     edge, the "premium light" cue from Untitled UI / AlignUI hero panels. */
+     edge — a lit top edge on raised panels. */
   .surface-lit { position: relative; isolation: isolate; }
   .surface-lit::before {
     content: "";

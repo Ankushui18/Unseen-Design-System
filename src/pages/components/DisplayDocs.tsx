@@ -345,7 +345,7 @@ export function AvatarDoc() {
           <AvatarGroup items={[{ name: "Ada L" }, { name: "Grace H" }, { name: "Alan T" }, { name: "Kat J" }, { name: "Lin C" }, { name: "Ray B" }]} />
         </Showcase>
       </Section>
-      <Section title="User (HeroUI Compound)" description="Compound component displaying avatar, full name, and description/role in a unified layout.">
+      <Section title="User" description="Compound component displaying avatar, full name, and description/role in a unified layout.">
         <Showcase code={`<User\n  name="Elena Vance"\n  description="Lead Design Technologist"\n  avatarProps={{ tone: "accent", size: "md" }}\n/>\n<User\n  name="Marcus Chen"\n  description="marcus@unseen.design"\n  avatarProps={{ tone: "success", size: "sm" }}\n/>`}>
           <div className="flex flex-col sm:flex-row gap-6">
             <User

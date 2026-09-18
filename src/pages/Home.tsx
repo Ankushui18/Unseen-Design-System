@@ -71,7 +71,7 @@ const COMPONENT_COUNT = COMPONENT_GROUPS.reduce((count, group) => count + group.
 const noop = () => {};
 
 /* -------------------------------------------------------------------------- */
-/*           1. HEROUI & SHADCN/UI INTERACTIVE BENTO MICRO-APPS               */
+/*              1. INTERACTIVE BENTO MICRO-APPS                              */
 /* -------------------------------------------------------------------------- */
 
 function MusicPlayerShowcase() {
@@ -482,7 +482,7 @@ function ProfileShowcaseCard() {
 
       <div className="flex items-center gap-1.5 flex-wrap">
         <Chip size="sm" variant="soft" tone="accent">React 19</Chip>
-        <Chip size="sm" variant="soft" tone="default">HeroUI Parity</Chip>
+        <Chip size="sm" variant="soft" tone="default">Interactive</Chip>
         <Chip size="sm" variant="soft" tone="success">OKLCH</Chip>
       </div>
     </Card>
@@ -732,7 +732,7 @@ function WorkspaceShowcase() {
         </p>
       </div>
 
-      {/* HeroUI / shadcn Style Category Switcher Bar */}
+      {/* Category switcher bar */}
       <div className="flex items-center justify-start sm:justify-center overflow-x-auto pb-2 mb-6 scrollbar-none">
         <div className="inline-flex items-center gap-1.5 rounded-14 border border-border bg-surface/80 p-1.5 backdrop-blur-md shadow-xs">
           {tabs.map((tab) => {
@@ -985,7 +985,7 @@ function HeroEditor() {
 
   return (
     <div className="hero-editor" aria-label="Interactive hero editor">
-      {/* AlignUI Multi-File Tab Bar */}
+      {/* Multi-file tab bar */}
       <div className="flex items-center justify-between border-b border-separator bg-surface-secondary/80 px-2 py-1 overflow-x-auto scrollbar-none">
         <div className="flex items-center gap-1">
           {Object.keys(HERO_SNIPPETS).map((f) => (
@@ -1245,41 +1245,15 @@ function TokenCustomizerSection() {
 
         {/* Live Interactive Specimen Preview Column */}
         <div className="lg:col-span-7">
-          <div className="blueprint-frame">
-            {/* Top Coordinate Ticker */}
-            <div className="blueprint-ruler-x">
-              <span>00</span>
-              <span>100</span>
-              <span>200</span>
-              <span>300</span>
-              <span>400</span>
-              <span>500</span>
-              <span>600</span>
-              <span>700</span>
-            </div>
-
-            {/* Corner Crosshairs */}
-            <span className="blueprint-crosshair top-left">+</span>
-            <span className="blueprint-crosshair top-right">+</span>
-            <span className="blueprint-crosshair bottom-left">+</span>
-            <span className="blueprint-crosshair bottom-right">+</span>
-
-            <div
-              className={cn(
-                "p-8 sm:p-12 transition-colors duration-[var(--duration-slow)] flex items-center justify-center min-h-[460px]",
-                theme === "dark" ? "bg-surface-secondary text-foreground" : "bg-surface text-foreground"
-              )}
-            >
+          <div className={cn("specimen-frame", theme === "dark" && "dark")}>
+            <div className="specimen-stage p-8 sm:p-12 transition-colors duration-[var(--duration-slow)] flex items-center justify-center min-h-[460px] text-foreground">
               {/* Dynamic Styled Card */}
               <div
                 style={{
                   borderRadius: activeRadius.px,
                   boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(125, 125, 125, 0.15)",
                 }}
-                className={cn(
-                  "w-full max-w-sm p-6 space-y-5 transition-all duration-[var(--duration-base)] text-left border border-border",
-                  theme === "dark" ? "bg-surface" : "bg-surface-secondary"
-                )}
+                className="w-full max-w-sm p-6 space-y-5 transition-all duration-[var(--duration-base)] text-left border border-border bg-surface"
               >
                 {/* Header */}
                 <div className="flex items-center justify-between">
@@ -1550,7 +1524,7 @@ function SectorTemplatesSection({ navigate }: { navigate: (to: string) => void }
       </div>
 
       {/* Sector Content Showcase Card */}
-      <div className="blueprint-frame p-6 sm:p-8">
+      <div className="specimen-frame p-6 sm:p-8">
         <div className="grid gap-8 lg:grid-cols-12 items-center">
           <div className="lg:col-span-5 space-y-5 text-left">
             <div className="space-y-2">
@@ -1913,7 +1887,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
 
   return (
     <main id="main" tabIndex={-1} className="home-page relative">
-      {/* AlignUI Ambient Glow & Subtle Grid Layers */}
+      {/* Ambient glow and subtle grid layers */}
       <div className="hero-ambient-mesh" aria-hidden="true" />
       <div className="subtle-grid-pattern absolute inset-0 h-[680px] pointer-events-none" aria-hidden="true" />
 
@@ -1959,15 +1933,15 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
           </span>
         </div>
 
-        {/* High-Impact Master Headline (HeroUI + AlignUI Synthesis) */}
+        {/* Master headline */}
         <h1 className="tracking-tight text-title-h3 sm:text-title-h1 text-foreground font-medium max-w-4xl mx-auto leading-[1.06]">
           Design & Development <span className="text-muted/30 font-light">|</span> <span className="text-gradient">perfectly aligned</span>.
         </h1>
         <p className="mt-5 max-w-2xl mx-auto text-paragraph-md sm:text-paragraph-lg text-muted leading-relaxed">
-          The accessible React 19 component library combining HeroUI's interactive sandbox, shadcn's copy-paste flexibility, and AlignUI's sub-pixel token craft.
+          The accessible React 19 component library: one OKLCH token layer behind every component, block and template — shipped as source you own.
         </p>
 
-        {/* shadcn/ui Interactive Hero Component Switcher */}
+        {/* Interactive hero component switcher */}
         <div className="mt-8 flex flex-col items-center gap-3">
           <div className="inline-flex items-center gap-1 rounded-14 border border-border bg-surface-secondary/70 p-1 backdrop-blur-sm shadow-xs">
             {(["fancy", "solid", "soft", "outline", "ghost"] as const).map((v) => (
@@ -2023,7 +1997,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
           </div>
         </div>
 
-        {/* 4 Pillars Grid (AlignUI Free vs Pro Architecture) */}
+        {/* Four pillars */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-12 text-left">
           <div className="p-4 rounded-10 border border-border bg-surface/70 backdrop-blur-sm card-specular-glow">
             <div className="flex items-center justify-between mb-1.5">
@@ -2067,21 +2041,21 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
         <CoverageStrip />
       </div>
 
-      {/* Live Token Customizer Section (AlignUI Feature Parity) */}
+      {/* Live token customizer */}
       <TokenCustomizerSection />
 
-      {/* Flagship Interactive 6-Tab Workspace Showcase (HeroUI & shadcn Parity) */}
+      {/* Flagship interactive workspace showcase */}
       <div className="home-container relative z-10">
         <WorkspaceShowcase />
       </div>
 
-      {/* Sector Specific SaaS Templates Showcase (AlignUI Feature Parity) */}
+      {/* Sector templates showcase */}
       <SectorTemplatesSection navigate={navigate} />
 
-      {/* Composed Blocks Gallery (AlignUI Feature Parity) */}
+      {/* Composed blocks gallery */}
       <BlocksCatalogSection navigate={navigate} />
 
-      {/* Core Features 9-Grid (AlignUI Feature Parity) */}
+      {/* Core features */}
       <CoreFeaturesSection />
 
       {/* Full Component Library Directory */}
@@ -2198,7 +2172,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
         </div>
       </section>
 
-      {/* FAQ Section with AlignUI Categories */}
+      {/* FAQ */}
       <section className="home-section home-faq-section">
         <div className="home-container home-faq-grid">
           <div>
@@ -2215,7 +2189,7 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
                 items={[
                   { key: "tailwind", title: "Which version of Tailwind CSS is used?", content: "Unseen is built natively on Tailwind CSS v4, utilizing CSS-first @theme variable mappings for zero-runtime styling overhead." },
                   { key: "react", title: "Which version of React is supported?", content: "Built for React 19 and modern TypeScript. Compatible with Next.js App Router, Remix, Vite, Astro, and React Server Components." },
-                  { key: "npm", title: "Does Unseen require an npm runtime dependency?", content: "No. Unseen follows a copy-paste first architecture (like shadcn/ui and AlignUI). You copy only the components you need with zero dependency bloat." },
+                  { key: "npm", title: "Does Unseen require an npm runtime dependency?", content: "No. Unseen follows a copy-paste first architecture (copy-paste first). You copy only the components you need with zero dependency bloat." },
                   { key: "unique", title: "What sets Unseen apart from other component kits?", content: "Mathematically balanced OKLCH color spaces, 12-cardinal popover placements, built-in design-lint test suites, and sub-pixel tactile specular shaders." },
                 ]}
               />

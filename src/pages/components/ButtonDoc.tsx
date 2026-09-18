@@ -108,7 +108,7 @@ function ButtonPlayground() {
             onChange={(v) => { setVocab(v); update({ vocab: v === "canonical" ? undefined : v }); }} />
           <p className="text-paragraph-xs text-subtle">
             Same component, both vocabularies. Canonical is the API of record; the alias form is
-            AlignUI-shaped shorthand resolved by one mapping table (spec §3).
+            Display shorthand resolved by one mapping table (spec §3).
           </p>
         </>
       }
@@ -126,7 +126,7 @@ export function ButtonPage() {
       <PageHeader
         eyebrow="Components · Actions"
         title="Button"
-        description="The base action. Five intents, five modes, five sizes and six states — with one canonical vocabulary and an AlignUI-shaped alias layer on top of it. Regular buttons are flat; Fancy Button is the bevelled marketing CTA."
+        description="The base action. Five intents, five modes, five sizes and six states — with one canonical vocabulary and a display-alias layer on top of it. Regular buttons are flat; Fancy Button is the bevelled marketing CTA."
         tags={["5 intents · 5 modes", "XS 28 → XL 48", "icon · icon-only", "loading & disabled"]}
       />
       <Import names="Button" />
@@ -273,7 +273,7 @@ export function ButtonPage() {
           rows={[
             { name: "tone", type: '"accent" | "default" | "success" | "warning" | "danger"', default: '"accent"', description: "Canonical intent. Display: Primary · Secondary · Success · Warning · Destructive." },
             { name: "variant", type: '"solid" | "soft" | "outline" | "ghost" | "link" | IntentAlias', default: '"solid"', description: "Canonical mode, and also accepts the intent shorthand (primary, destructive, …). Display: Filled · Lighter · Stroke · Ghost · Link." },
-            { name: "mode", type: '"filled" | "stroke" | "lighter" | "ghost"', description: "AlignUI-shaped alias for the mode axis. Wins over a shorthand passed to variant; loses to variant itself." },
+            { name: "mode", type: '"filled" | "stroke" | "lighter" | "ghost"', description: "Display alias for the mode axis. Wins over a shorthand passed to variant; loses to variant itself." },
             { name: "color", type: "Tone", description: "Alias for tone (kept for compatibility). Precedence: tone → color → shorthand inside variant." },
             { name: "size", type: '"xxs" | "xs" | "sm" | "md" | "lg"', default: '"md"', description: "28 · 32 · 36 · 40 · 48px. Display: XS · SM · MD · LG · XL." },
             { name: "startContent / endContent", type: "ReactNode", description: "20px icon slots, pulled in by −4px with a 12px gap." },

@@ -311,7 +311,7 @@ export function AvatarGroup({ ref, items, max = 4, size = "md" }: { items: { nam
   );
 }
 
-/** AlignUI-style compact grouping: a tighter stack inside a soft capsule. */
+/** Compact grouping: a tighter stack inside a soft capsule. */
 export function AvatarGroupCompact({
   ref,
   items,

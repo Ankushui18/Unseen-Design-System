@@ -899,7 +899,7 @@ export function OpacityPage() {
         tags={["--disabled-opacity: 0.5", "fixed stack order", "no z-fighting"]}
       />
 
-      <Section title="Disabled state" description="AlignUI-style disabling: a weak fill and disabled text, not a 50% ghost. <code>--disabled-opacity: 0.5</code> exists for the few elements that genuinely fade (icons inside disabled controls) — design-lint blocks opacity-only disabling on buttons and fields.">
+      <Section title="Disabled state" description="Unseen disabling: a weak fill and disabled text, not a 50% ghost. <code>--disabled-opacity: 0.5</code> exists for the few elements that genuinely fade (icons inside disabled controls) — design-lint blocks opacity-only disabling on buttons and fields.">
         <Showcase align="stretch">
           <div className="flex flex-wrap items-center gap-3">
             <Button>Enabled</Button>

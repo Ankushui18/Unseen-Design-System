@@ -50,6 +50,9 @@
 }
 
 .docs-layout { max-width: 1540px; margin: auto; padding: 0 32px; display: grid; grid-template-columns: 240px minmax(0, 1fr) 190px; column-gap: 48px; align-items: start; }
+/* Pages without enough sections for a table of contents drop the rail and spend
+   the width on the page itself (see DocsLayout). */
+.docs-layout[data-rail="none"] { grid-template-columns: 240px minmax(0, 1fr); }
 .docs-sidebar { position: sticky; top: var(--header-height); height: calc(100dvh - var(--header-height)); overflow-y: auto; padding: 24px 16px 48px 0; border-right: 1px solid var(--separator-secondary); }
 .sidebar-search { display: flex; align-items: center; gap: 8px; height: 34px; margin-bottom: 18px; padding: 0 9px; color: var(--subtle); border: 1px solid var(--border); border-radius: 7px; background: var(--field); }
 .sidebar-search input { width: 100%; min-width: 0; height: 100%; font-size: 12px; outline: none; background: none; color: var(--foreground); }
@@ -123,6 +126,14 @@
 .mobile-primary a { display: flex; justify-content: space-between; align-items: center; padding: 10px; font-size: 14px; font-weight: 500; }
 
 .showcase { border: 1px solid var(--border); border-radius: 14px; background: var(--surface); min-width: 0; box-shadow: var(--shadow-sm); overflow: hidden; }
+/* One canvas language: specimen canvases are dotted, large stage canvases are
+   plain, and both are recessed under their toolbar so a preview reads as a
+   surface rather than as page background. */
+.showcase-preview, .playground-stage, .component-thumbnail, .directory-tile-stage, .specimen-stage { background-image: radial-gradient(circle at center, color-mix(in oklab, var(--border-strong) 45%, transparent) 1px, transparent 1px); background-size: 18px 18px; }
+.showcase-preview, .playground-stage, .block-stage, .component-thumbnail, .directory-tile-stage, .specimen-stage { box-shadow: inset 0 1px 2px -1px color-mix(in oklab, var(--backdrop) 60%, transparent); }
+/* The homepage token customizer uses the same recessed canvas, and the frame
+   carries .dark itself so the Theme switch is a real theme, not a label. */
+.specimen-stage { background-color: var(--background-secondary); border-radius: inherit; }
 .showcase-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 12px; min-height: 50px; padding: 8px 14px; border-bottom: 1px solid var(--border); background: var(--surface); border-radius: 14px 14px 0 0; }
 .preview-tabs { display: inline-flex; gap: 4px; align-items: center; background: var(--surface-secondary); padding: 3px; border-radius: 8px; }
 .preview-tabs > button { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 5px 12px; font-size: 12px; font-weight: 500; color: var(--muted); border-radius: 6px; transition: all var(--duration-fast); }
@@ -135,7 +146,7 @@
 .viewport-switcher button { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 24px; border-radius: 6px; color: var(--muted); transition: background var(--duration-fast), color var(--duration-fast); }
 .viewport-switcher button:hover { color: var(--foreground); }
 .viewport-switcher button[aria-pressed="true"] { background: var(--surface); color: var(--foreground); box-shadow: var(--shadow-xs); }
-.showcase-preview { padding: 32px 20px; min-height: 220px; display: flex; align-items: center; justify-content: center; background-color: var(--background-secondary); background-image: radial-gradient(circle at center, color-mix(in oklab, var(--border-strong) 30%, transparent) 1px, transparent 1px); background-size: 16px 16px; border-radius: inherit; position: relative; min-width: 0; overflow: hidden; }
+.showcase-preview { padding: 32px 20px; min-height: 220px; display: flex; align-items: center; justify-content: center; background-color: var(--background-secondary); border-radius: inherit; position: relative; min-width: 0; overflow: hidden; }
 .showcase-preview::before { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: radial-gradient(80% 55% at 50% 0%, color-mix(in oklab, var(--accent) 5%, transparent), transparent 70%); }
 .showcase[data-has-code] .showcase-preview { border-radius: 0 0 14px 14px; }
 .showcase-preview.center { align-items: center; justify-content: center; }
@@ -210,9 +221,8 @@
 @media (prefers-reduced-motion: reduce) { .page-enter, .command-dialog, .mobile-nav-panel { animation: none; } }
 
 /* -----------------------------------------------------------
-   ALIGNUI-PARITY VISUAL PASS
-   Tighter rhythm, bigger headings, more breathing room,
-   consistent component density, professional code panels.
+   SURFACE PASS — density, rhythm, and canvas treatment for the
+   documentation shell and the marketing pages.
    ----------------------------------------------------------- */
 
 /* Hero — punchier, fewer words */
@@ -258,7 +268,7 @@
 .directory-tile { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 11px; background: var(--surface); overflow: hidden; transition: border-color var(--duration-fast), box-shadow var(--duration-fast), transform var(--duration-fast); }
 .directory-tile:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
 .directory-tile-stage { position: relative; display: flex; align-items: center; justify-content: center; min-height: 120px; padding: 16px; background: var(--background-secondary); border-bottom: 1px solid var(--border); }
-.directory-tile-stage::before { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(circle, color-mix(in oklab, var(--accent) 7%, transparent) 1px, transparent 1px); background-size: 18px 18px; }
+
 .directory-tile-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity var(--duration-base); background: radial-gradient(70% 90% at 50% 100%, color-mix(in oklab, var(--accent-soft) 80%, transparent), transparent 70%); }
 .directory-tile:hover .directory-tile-stage::after { opacity: 1; }
 .directory-tile-stage > * { position: relative; z-index: 1; }
@@ -270,10 +280,6 @@
 
 /* Workspace showcase — tighter grid */
 .workspace-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding: 28px; }
-
-/* Component index — more generous card rhythm */
-.component-index-grid { gap: 22px; }
-.component-thumbnail { height: 180px; padding: 24px; }
 
 /* Block collection — wider grid, cleaner headers */
 .block-collection-grid { gap: 28px; padding-bottom: 72px; }
@@ -305,8 +311,8 @@
   .home-hero h1 { letter-spacing: -2.5px; }
   .home-tagline { font-size: 24px; }
   .workspace-grid { grid-template-columns: 1fr; padding: 20px; gap: 20px; }
-  .component-index-grid { gap: 16px; }
-  .component-thumbnail { height: 160px; }
+  .index-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .component-thumbnail { height: 132px; }
   .visual-language-grid { grid-template-columns: 1fr; }
   .visual-language-panel { min-height: auto; padding: 16px; }
   .visual-language-items { gap: 10px; }
@@ -400,7 +406,7 @@
 .home-page { outline: none; }
 .home-container { width: min(1380px, calc(100% - 64px)); margin-inline: auto; }
 .home-hero { position: relative; isolation: isolate; padding: 60px 24px 44px; text-align: center; }
-/* Ambient accent glow behind the headline — the AlignUI "lit surface" cue. */
+/* Ambient accent glow behind the headline — the lit-surface cue. */
 .home-hero::before { content: ""; position: absolute; inset: -20% -10% auto; height: 460px; z-index: -1; pointer-events: none;
   background:
     radial-gradient(50% 60% at 50% 0%, color-mix(in oklab, var(--accent-soft) 80%, transparent) 0%, transparent 72%),
@@ -738,25 +744,34 @@
 .collection-empty { padding: 80px 20px; border: 1px dashed var(--border); border-radius: 12px; margin-bottom: 64px; }
 .block-stage { min-height: 220px; }
 .block-example .showcase-preview { min-height: 260px; }
-.component-index-filter { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 0 0 28px; }
-.component-index-filter > div { max-width: 320px; }
-.component-index-filter > span { font-family: var(--font-mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
-.component-index-group { margin-bottom: 38px; }
-.component-index-group-heading { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; }
-.component-index-group-heading h2 { font-size: 17px; line-height: 25px; font-weight: 500; letter-spacing: -.4px; }
-.component-index-group-heading span { color: var(--muted); font-size: 11px; }
-.component-index-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-.component-index-item { border: 1px solid var(--border); border-radius: 14px; position: relative; overflow: hidden; min-width: 0; background: var(--surface); box-shadow: var(--shadow-xs); transition: all var(--duration-base) ease; }
-.component-index-item:hover { border-color: var(--border-strong); box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.component-thumbnail { height: 190px; padding: 24px; display: flex; align-items: center; justify-content: center; background-color: var(--background-secondary); background-image: radial-gradient(circle at center, color-mix(in oklab, var(--border-strong) 25%, transparent) 1px, transparent 1px); background-size: 16px 16px; overflow: hidden; position: relative; }
+/* Library overview — one toolbar, one grid rhythm. */
+.components-index-page { outline: none; }
+.index-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px 20px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+.index-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.index-filter { display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 11px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: 12px; font-weight: 500; transition: color var(--duration-fast), background var(--duration-fast), border-color var(--duration-fast); }
+.index-filter:hover { color: var(--foreground); border-color: var(--border-strong); }
+.index-filter[aria-pressed="true"] { color: var(--accent-foreground); background: var(--accent); border-color: var(--accent); }
+.index-filter-count { font-family: var(--font-mono); font-size: 10px; font-variant-numeric: tabular-nums; color: var(--subtle); }
+.index-filter[aria-pressed="true"] .index-filter-count { color: var(--accent-foreground); } /* AA: a tinted count drops under 4.5 on the accent fill */
+.index-search { position: relative; width: 240px; max-width: 100%; }
+.index-groups { padding-top: 34px; }
+.index-group + .index-group { margin-top: 46px; }
+.index-group-heading { display: flex; align-items: baseline; gap: 10px; padding-bottom: 12px; margin-bottom: 18px; border-bottom: 1px solid var(--separator-secondary); }
+.index-group-heading h2 { font-size: 17px; line-height: 25px; font-weight: 500; letter-spacing: -.4px; }
+.index-group-count { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+.index-result-note { margin-left: auto; font-size: 11px; color: var(--subtle); }
+.index-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 16px; }
+.index-card { position: relative; display: flex; flex-direction: column; padding: 12px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow-xs); transition: border-color var(--duration-fast), box-shadow var(--duration-fast), transform var(--duration-fast); }
+.index-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+.component-thumbnail { height: 148px; padding: 20px; display: flex; align-items: center; justify-content: center; background-color: var(--background-secondary); border-radius: 10px; overflow: hidden; position: relative; }
 .component-thumbnail > div { pointer-events: none; max-width: 100%; }
 .component-thumbnail > div > .flex { flex-wrap: wrap; justify-content: center; }
 .component-thumbnail > div > * { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; }
-.component-index-link { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-top: 1px solid var(--border); font-size: 13px; font-weight: 550; background: var(--surface); }
-.component-index-link::after { position: absolute; content: ""; inset: 0; }
-.component-index-link svg { color: var(--subtle); transition: transform var(--duration-fast), color var(--duration-fast); }
-.component-index-item:hover .component-index-link svg { transform: translateX(3px); color: var(--accent); }
-.component-index-link:hover { color: var(--accent); }
+.index-card-link { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 4px 2px; font-size: 13px; font-weight: 550; color: var(--foreground); }
+.index-card-link::after { content: ""; position: absolute; inset: 0; } /* the whole card is the target */
+.index-card-link svg { color: var(--subtle); transition: transform var(--duration-fast), color var(--duration-fast); }
+.index-card:hover .index-card-link svg { transform: translateX(2px); color: var(--accent); }
+.index-card:hover .index-card-link { color: var(--accent); }
 .beta-page-heading { max-width: 620px; margin: auto; text-align: center; padding: 62px 0 45px; }
 .beta-page-label { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); }
 .beta-page-heading h1 { font-size: 48px; line-height: 1.2; letter-spacing: -1.9px; font-weight: 550; margin-top: 20px; }
@@ -799,9 +814,8 @@
   .collection-results-label > span:last-child { font-size: 10px; }
   .block-collection-grid { grid-template-columns: 1fr; }
   .block-collection-cell.is-wide { grid-column: auto; }
-  .component-index-grid { grid-template-columns: 1fr; }
-  .component-index-filter { align-items: flex-start; flex-direction: column; gap: 12px; }
-  .component-index-filter > div { max-width: 100%; }
+  .index-toolbar { align-items: stretch; }
+  .index-search { width: 100%; }
   .beta-page-heading h1 { font-size: 35px; }
   .beta-page-heading { padding-top: 40px; }
   .home-container { width: calc(100% - 40px); }
@@ -883,179 +897,17 @@
   .hero-editor-filename { display: none; }
   .directory-tabs button { flex: 1 1 auto; justify-content: center; }
 }
-/* -------------------------------------------------------------------------- */
-/*                 ALIGNUI BLUEPRINT & STUDIO POLISH STYLES                  */
-/* -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+   Specimen frames — the neutral card the marketing pages put a live preview in.
+   -------------------------------------------------------------------------- */
 
-.blueprint-frame {
+.specimen-frame {
   position: relative;
   border: 1px solid var(--border);
-  border-radius: var(--radius-14);
+  border-radius: 14px;
   background: var(--surface);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
-}
-
-.blueprint-ruler-x {
-  display: flex;
-  justify-content: space-between;
-  padding: 4px 12px;
-  border-bottom: 1px solid var(--separator-secondary);
-  background: var(--surface-secondary);
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--muted);
-  user-select: none;
-}
-
-.blueprint-crosshair {
-  position: absolute;
-  width: 11px;
-  height: 11px;
-  color: var(--muted);
-  opacity: 0.4;
-  pointer-events: none;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.blueprint-crosshair.top-left { top: 4px; left: 4px; }
-.blueprint-crosshair.top-right { top: 4px; right: 4px; }
-.blueprint-crosshair.bottom-left { bottom: 4px; left: 4px; }
-.blueprint-crosshair.bottom-right { bottom: 4px; right: 4px; }
-
-.token-swatch-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  border-radius: var(--radius-10);
-  border: 1px solid var(--border);
-  background: var(--surface);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--foreground);
-  transition: all var(--duration-fast) ease;
-  cursor: pointer;
-}
-
-.token-swatch-btn:hover {
-  border-color: var(--border-strong);
-  background: var(--surface-hover);
-}
-
-.token-swatch-btn[data-active="true"] {
-  border-color: var(--accent);
-  background: var(--accent-alpha-10);
-  color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent);
-}
-
-.sector-card-thumbnail {
-  position: relative;
-  border-radius: var(--radius-10);
-  border: 1px solid var(--border);
-  background: var(--surface-secondary);
-  overflow: hidden;
-  transition: all var(--duration-base) ease;
-}
-
-.sector-card-thumbnail:hover {
-  border-color: var(--border-strong);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-
-/* -------------------------------------------------------------------------- */
-/*                 ALIGNUI CAD & BLUEPRINT ENHANCEMENTS                      */
-/* -------------------------------------------------------------------------- */
-
-.blueprint-ruler-container {
-  position: relative;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-14);
-  background: var(--surface);
-  overflow: hidden;
-}
-
-.blueprint-ruler-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 4px 16px;
-  background: var(--surface-secondary);
-  border-bottom: 1px solid var(--separator-secondary);
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--subtle);
-  user-select: none;
-  letter-spacing: 0.05em;
-}
-
-.blueprint-corner-cross {
-  position: absolute;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--muted);
-  opacity: 0.5;
-  pointer-events: none;
-  line-height: 1;
-}
-
-.blueprint-corner-cross.tl { top: 6px; left: 6px; }
-.blueprint-corner-cross.tr { top: 6px; right: 6px; }
-.blueprint-corner-cross.bl { bottom: 6px; left: 6px; }
-.blueprint-corner-cross.br { bottom: 6px; right: 6px; }
-
-.subtle-dot-matrix {
-  background-image: radial-gradient(var(--border-strong) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
-
-.card-specular-glow {
-  position: relative;
-  border-radius: var(--radius-14);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
-  transition: all var(--duration-base) cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.card-specular-glow:hover {
-  border-color: var(--border-strong);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
-}
-
-
-/* -------------------------------------------------------------------------- */
-/*             HEROUI + SHADCN + ALIGNUI SYNTHESIS STYLES                     */
-/* -------------------------------------------------------------------------- */
-
-.hero-gradient-text {
-  background: linear-gradient(135deg, var(--foreground) 0%, var(--accent) 50%, var(--foreground) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.bento-card-interactive {
-  position: relative;
-  border-radius: var(--radius-14);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
-  transition: all var(--duration-base) cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
-}
-
-.bento-card-interactive:hover {
-  border-color: var(--border-strong);
-  box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
-  transform: translateY(-2px);
 }
 
 .home-page { overflow-x: clip; }  /* decorative meshes must never create horizontal scroll */
