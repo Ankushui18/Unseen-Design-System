@@ -1,7 +1,7 @@
 {
   "at": "2026-09-18",
   "total": 117,
-  "mean": 61.3,
+  "mean": 69.7,
   "components": {
     "ui/Button.tsx::Spinner": {
       "score": 71.4,
@@ -20,7 +20,7 @@
       "file": "ui/Button.tsx"
     },
     "ui/Button.tsx::FancyButton": {
-      "score": 73.1,
+      "score": 76.9,
       "grade": "C",
       "tier": "A",
       "cells": 30,
@@ -36,7 +36,7 @@
       "file": "ui/Button.tsx"
     },
     "ui/Display.tsx::FeaturedIcon": {
-      "score": 50,
+      "score": 62.5,
       "grade": "D",
       "tier": "A",
       "cells": 60,
@@ -44,7 +44,7 @@
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::Card": {
-      "score": 66.7,
+      "score": 77.8,
       "grade": "C",
       "tier": "A",
       "cells": 3,
@@ -52,23 +52,23 @@
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::CardHeader": {
-      "score": 61.5,
-      "grade": "D",
+      "score": 69.2,
+      "grade": "C",
       "tier": "B",
       "cells": 0,
       "name": "CardHeader",
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::CardBody": {
-      "score": 61.5,
-      "grade": "D",
+      "score": 69.2,
+      "grade": "C",
       "tier": "B",
       "cells": 0,
       "name": "CardBody",
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::CardFooter": {
-      "score": 71.4,
+      "score": 78.6,
       "grade": "C",
       "tier": "B",
       "cells": 0,
@@ -76,23 +76,23 @@
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::Chip": {
-      "score": 73.7,
-      "grade": "C",
+      "score": 84.2,
+      "grade": "B",
       "tier": "A",
       "cells": 210,
       "name": "Chip",
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::Badge": {
-      "score": 61.1,
-      "grade": "D",
+      "score": 66.7,
+      "grade": "C",
       "tier": "A",
       "cells": 60,
       "name": "Badge",
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::Badge#2": {
-      "score": 66.7,
+      "score": 72.2,
       "grade": "C",
       "tier": "A",
       "cells": 60,
@@ -100,7 +100,7 @@
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::Avatar": {
-      "score": 66.7,
+      "score": 72.2,
       "grade": "C",
       "tier": "A",
       "cells": 225,
@@ -108,7 +108,7 @@
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::AvatarGroup": {
-      "score": 68.8,
+      "score": 75,
       "grade": "C",
       "tier": "B",
       "cells": 4,
@@ -116,7 +116,7 @@
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::AvatarGroupCompact": {
-      "score": 81.3,
+      "score": 87.5,
       "grade": "B",
       "tier": "B",
       "cells": 40,
@@ -124,15 +124,15 @@
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::User": {
-      "score": 64.3,
-      "grade": "D",
+      "score": 71.4,
+      "grade": "C",
       "tier": "B",
       "cells": 20,
       "name": "User",
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::Kbd": {
-      "score": 57.1,
+      "score": 64.3,
       "grade": "D",
       "tier": "A",
       "cells": 0,
@@ -140,7 +140,7 @@
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::Snippet": {
-      "score": 71.4,
+      "score": 85.7,
       "grade": "C",
       "tier": "B",
       "cells": 0,
@@ -148,79 +148,79 @@
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::Divider": {
-      "score": 64.3,
-      "grade": "D",
+      "score": 71.4,
+      "grade": "C",
       "tier": "B",
       "cells": 2,
       "name": "Divider",
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::Skeleton": {
-      "score": 53.3,
-      "grade": "D",
+      "score": 66.7,
+      "grade": "C",
       "tier": "B",
       "cells": 0,
       "name": "Skeleton",
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::Progress": {
-      "score": 63.2,
-      "grade": "D",
+      "score": 73.7,
+      "grade": "C",
       "tier": "A",
       "cells": 15,
       "name": "Progress",
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::CircularProgress": {
-      "score": 58.8,
-      "grade": "D",
+      "score": 70.6,
+      "grade": "C",
       "tier": "B",
       "cells": 5,
       "name": "CircularProgress",
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::Alert": {
-      "score": 61.1,
-      "grade": "D",
+      "score": 72.2,
+      "grade": "C",
       "tier": "A",
       "cells": 30,
       "name": "Alert",
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::Code": {
-      "score": 64.3,
-      "grade": "D",
+      "score": 71.4,
+      "grade": "C",
       "tier": "B",
       "cells": 5,
       "name": "Code",
       "file": "ui/Display.tsx"
     },
     "ui/Display.tsx::ScrollShadow": {
-      "score": 64.3,
-      "grade": "D",
+      "score": 78.6,
+      "grade": "C",
       "tier": "B",
       "cells": 0,
       "name": "ScrollShadow",
       "file": "ui/Display.tsx"
     },
     "ui/Extra.tsx::CompactButton": {
-      "score": 64,
-      "grade": "D",
+      "score": 72,
+      "grade": "C",
       "tier": "A",
       "cells": 45,
       "name": "CompactButton",
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::LinkButton": {
-      "score": 57.7,
-      "grade": "D",
+      "score": 65.4,
+      "grade": "C",
       "tier": "A",
       "cells": 60,
       "name": "LinkButton",
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::SocialButton": {
-      "score": 70.8,
+      "score": 79.2,
       "grade": "C",
       "tier": "B",
       "cells": 54,
@@ -228,7 +228,7 @@
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::StatusBadge": {
-      "score": 76.5,
+      "score": 82.4,
       "grade": "C",
       "tier": "B",
       "cells": 20,
@@ -236,7 +236,7 @@
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::Tag": {
-      "score": 72.2,
+      "score": 83.3,
       "grade": "C",
       "tier": "B",
       "cells": 30,
@@ -244,39 +244,39 @@
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::SegmentedControl": {
-      "score": 55.6,
-      "grade": "D",
+      "score": 66.7,
+      "grade": "C",
       "tier": "B",
       "cells": 2,
       "name": "SegmentedControl",
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::HorizontalStepper": {
-      "score": 71.4,
-      "grade": "C",
+      "score": 85.7,
+      "grade": "B",
       "tier": "C",
       "cells": 0,
       "name": "HorizontalStepper",
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::VerticalStepper": {
-      "score": 71.4,
-      "grade": "C",
+      "score": 85.7,
+      "grade": "B",
       "tier": "C",
       "cells": 0,
       "name": "VerticalStepper",
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::DotStepper": {
-      "score": 60,
-      "grade": "D",
+      "score": 80,
+      "grade": "B",
       "tier": "C",
       "cells": 0,
       "name": "DotStepper",
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::DigitInput": {
-      "score": 70.8,
+      "score": 79.2,
       "grade": "C",
       "tier": "B",
       "cells": 3,
@@ -284,7 +284,7 @@
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::Datepicker": {
-      "score": 66.7,
+      "score": 75,
       "grade": "C",
       "tier": "B",
       "cells": 2,
@@ -292,23 +292,23 @@
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::FileFormatIcon": {
-      "score": 58.3,
-      "grade": "D",
+      "score": 66.7,
+      "grade": "C",
       "tier": "B",
       "cells": 0,
       "name": "FileFormatIcon",
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::Notification": {
-      "score": 58.8,
-      "grade": "D",
+      "score": 70.6,
+      "grade": "C",
       "tier": "B",
       "cells": 30,
       "name": "Notification",
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::Banner": {
-      "score": 66.7,
+      "score": 73.3,
       "grade": "C",
       "tier": "B",
       "cells": 15,
@@ -316,7 +316,7 @@
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::Label": {
-      "score": 43.8,
+      "score": 56.3,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -324,7 +324,7 @@
       "file": "ui/Extra.tsx"
     },
     "ui/Extra.tsx::Hint": {
-      "score": 77.8,
+      "score": 88.9,
       "grade": "C",
       "tier": "C",
       "cells": 3,
@@ -332,7 +332,7 @@
       "file": "ui/Extra.tsx"
     },
     "ui/Form.tsx::Input": {
-      "score": 69.2,
+      "score": 73.1,
       "grade": "C",
       "tier": "A",
       "cells": 3,
@@ -340,7 +340,7 @@
       "file": "ui/Form.tsx"
     },
     "ui/Form.tsx::Textarea": {
-      "score": 65.4,
+      "score": 69.2,
       "grade": "C",
       "tier": "A",
       "cells": 3,
@@ -356,7 +356,7 @@
       "file": "ui/Form.tsx"
     },
     "ui/Form.tsx::Checkbox": {
-      "score": 65.4,
+      "score": 73.1,
       "grade": "C",
       "tier": "A",
       "cells": 15,
@@ -364,7 +364,7 @@
       "file": "ui/Form.tsx"
     },
     "ui/Form.tsx::RadioGroup": {
-      "score": 72,
+      "score": 76,
       "grade": "C",
       "tier": "B",
       "cells": 30,
@@ -372,15 +372,15 @@
       "file": "ui/Form.tsx"
     },
     "ui/Form.tsx::Switch": {
-      "score": 59.3,
-      "grade": "D",
+      "score": 66.7,
+      "grade": "C",
       "tier": "A",
       "cells": 15,
       "name": "Switch",
       "file": "ui/Form.tsx"
     },
     "ui/Form.tsx::Slider": {
-      "score": 70.8,
+      "score": 75,
       "grade": "C",
       "tier": "B",
       "cells": 30,
@@ -388,7 +388,7 @@
       "file": "ui/Form.tsx"
     },
     "ui/More.tsx::Dropdown": {
-      "score": 45.8,
+      "score": 54.2,
       "grade": "D",
       "tier": "A",
       "cells": 8,
@@ -396,7 +396,7 @@
       "file": "ui/More.tsx"
     },
     "ui/More.tsx::VerticalTabMenu": {
-      "score": 33.3,
+      "score": 46.7,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -404,15 +404,15 @@
       "file": "ui/More.tsx"
     },
     "ui/More.tsx::ContentDivider": {
-      "score": 61.5,
-      "grade": "D",
+      "score": 69.2,
+      "grade": "C",
       "tier": "B",
       "cells": 4,
       "name": "ContentDivider",
       "file": "ui/More.tsx"
     },
     "ui/More.tsx::SelectionCard": {
-      "score": 56,
+      "score": 62.5,
       "grade": "D",
       "tier": "B",
       "cells": 2,
@@ -420,31 +420,31 @@
       "file": "ui/More.tsx"
     },
     "ui/More.tsx::Rating": {
-      "score": 60,
-      "grade": "D",
+      "score": 68,
+      "grade": "C",
       "tier": "B",
       "cells": 9,
       "name": "Rating",
       "file": "ui/More.tsx"
     },
     "ui/More.tsx::NumberInput": {
-      "score": 63.2,
-      "grade": "D",
+      "score": 73.7,
+      "grade": "C",
       "tier": "C",
       "cells": 3,
       "name": "NumberInput",
       "file": "ui/More.tsx"
     },
     "ui/More.tsx::SearchInput": {
-      "score": 63.2,
-      "grade": "D",
+      "score": 78.9,
+      "grade": "C",
       "tier": "C",
       "cells": 3,
       "name": "SearchInput",
       "file": "ui/More.tsx"
     },
     "ui/More.tsx::TextareaCounter": {
-      "score": 50,
+      "score": 61.1,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -452,7 +452,7 @@
       "file": "ui/More.tsx"
     },
     "ui/More.tsx::ToggleGroup": {
-      "score": 53.8,
+      "score": 61.5,
       "grade": "D",
       "tier": "B",
       "cells": 4,
@@ -460,15 +460,15 @@
       "file": "ui/More.tsx"
     },
     "ui/More.tsx::WidgetBox": {
-      "score": 76.5,
-      "grade": "C",
+      "score": 82.4,
+      "grade": "B",
       "tier": "B",
       "cells": 2,
       "name": "WidgetBox",
       "file": "ui/More.tsx"
     },
     "ui/More.tsx::ColorPicker": {
-      "score": 45.5,
+      "score": 54.5,
       "grade": "D",
       "tier": "B",
       "cells": 0,
@@ -476,15 +476,15 @@
       "file": "ui/More.tsx"
     },
     "ui/More.tsx::Timeline": {
-      "score": 57.1,
-      "grade": "D",
+      "score": 66.7,
+      "grade": "C",
       "tier": "B",
       "cells": 5,
       "name": "Timeline",
       "file": "ui/More.tsx"
     },
     "ui/More.tsx::EmptyState": {
-      "score": 66.7,
+      "score": 71.4,
       "grade": "C",
       "tier": "B",
       "cells": 3,
@@ -492,23 +492,23 @@
       "file": "ui/More.tsx"
     },
     "ui/More.tsx::SelectTrigger": {
-      "score": 64.7,
-      "grade": "D",
+      "score": 76.5,
+      "grade": "C",
       "tier": "C",
       "cells": 3,
       "name": "SelectTrigger",
       "file": "ui/More.tsx"
     },
     "ui/Navigation.tsx::Tabs": {
-      "score": 75,
-      "grade": "C",
+      "score": 80,
+      "grade": "B",
       "tier": "A",
       "cells": 12,
       "name": "Tabs",
       "file": "ui/Navigation.tsx"
     },
     "ui/Navigation.tsx::Accordion": {
-      "score": 81.3,
+      "score": 87.5,
       "grade": "B",
       "tier": "B",
       "cells": 3,
@@ -516,15 +516,15 @@
       "file": "ui/Navigation.tsx"
     },
     "ui/Navigation.tsx::Breadcrumbs": {
-      "score": 64.3,
-      "grade": "D",
+      "score": 71.4,
+      "grade": "C",
       "tier": "B",
       "cells": 0,
       "name": "Breadcrumbs",
       "file": "ui/Navigation.tsx"
     },
     "ui/Navigation.tsx::Pagination": {
-      "score": 73.3,
+      "score": 80,
       "grade": "C",
       "tier": "B",
       "cells": 0,
@@ -532,7 +532,7 @@
       "file": "ui/Navigation.tsx"
     },
     "ui/Navigation.tsx::Table": {
-      "score": 66.7,
+      "score": 70.8,
       "grade": "C",
       "tier": "A",
       "cells": 6,
@@ -548,7 +548,7 @@
       "file": "ui/Overlay.tsx"
     },
     "ui/Overlay.tsx::Drawer": {
-      "score": 69.6,
+      "score": 73.9,
       "grade": "C",
       "tier": "B",
       "cells": 9,
@@ -556,7 +556,7 @@
       "file": "ui/Overlay.tsx"
     },
     "ui/Overlay.tsx::Tooltip": {
-      "score": 65.2,
+      "score": 69.6,
       "grade": "C",
       "tier": "B",
       "cells": 4,
@@ -564,7 +564,7 @@
       "file": "ui/Overlay.tsx"
     },
     "ui/Overlay.tsx::Popover": {
-      "score": 66.7,
+      "score": 71.4,
       "grade": "C",
       "tier": "B",
       "cells": 0,
@@ -572,15 +572,15 @@
       "file": "ui/Overlay.tsx"
     },
     "ui/Overlay.tsx::MenuItem": {
-      "score": 66.7,
-      "grade": "C",
+      "score": 86.7,
+      "grade": "B",
       "tier": "C",
       "cells": 2,
       "name": "MenuItem",
       "file": "ui/Overlay.tsx"
     },
     "ui/Overlay.tsx::MenuSeparator": {
-      "score": 23.1,
+      "score": 30.8,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -588,7 +588,7 @@
       "file": "ui/Overlay.tsx"
     },
     "ui/Overlay.tsx::MenuLabel": {
-      "score": 37.5,
+      "score": 43.8,
       "grade": "D",
       "tier": "C",
       "cells": 5,
@@ -596,15 +596,15 @@
       "file": "ui/Overlay.tsx"
     },
     "ui/Overlay.tsx::ToastProvider": {
-      "score": 61.9,
-      "grade": "D",
+      "score": 66.7,
+      "grade": "C",
       "tier": "B",
       "cells": 4,
       "name": "ToastProvider",
       "file": "ui/Overlay.tsx"
     },
     "ui/Patterns.tsx::ButtonTile": {
-      "score": 65.2,
+      "score": 73.9,
       "grade": "C",
       "tier": "B",
       "cells": 3,
@@ -612,7 +612,7 @@
       "file": "ui/Patterns.tsx"
     },
     "ui/Patterns.tsx::InfoLabel": {
-      "score": 54.5,
+      "score": 59.1,
       "grade": "D",
       "tier": "B",
       "cells": 5,
@@ -620,23 +620,23 @@
       "file": "ui/Patterns.tsx"
     },
     "ui/Patterns.tsx::InlineMessage": {
-      "score": 87.5,
-      "grade": "B",
+      "score": 100,
+      "grade": "A",
       "tier": "C",
       "cells": 10,
       "name": "InlineMessage",
       "file": "ui/Patterns.tsx"
     },
     "ui/Patterns.tsx::ListItem": {
-      "score": 55,
-      "grade": "D",
+      "score": 65,
+      "grade": "C",
       "tier": "B",
       "cells": 0,
       "name": "ListItem",
       "file": "ui/Patterns.tsx"
     },
     "ui/Patterns.tsx::Toolbar": {
-      "score": 65.2,
+      "score": 69.6,
       "grade": "C",
       "tier": "B",
       "cells": 2,
@@ -644,7 +644,7 @@
       "file": "ui/Patterns.tsx"
     },
     "ui/Patterns.tsx::ToolbarButton": {
-      "score": 50,
+      "score": 62.5,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -652,7 +652,7 @@
       "file": "ui/Patterns.tsx"
     },
     "ui/Patterns.tsx::ToolbarSeparator": {
-      "score": 33.3,
+      "score": 40,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -660,7 +660,7 @@
       "file": "ui/Patterns.tsx"
     },
     "ui/Patterns.tsx::HoverCard": {
-      "score": 52.6,
+      "score": 57.9,
       "grade": "D",
       "tier": "B",
       "cells": 0,
@@ -668,7 +668,7 @@
       "file": "ui/Patterns.tsx"
     },
     "ui/Patterns.tsx::ProfileHoverCard": {
-      "score": 38.5,
+      "score": 46.2,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -676,7 +676,7 @@
       "file": "ui/Patterns.tsx"
     },
     "ui/Patterns.tsx::ChatInput": {
-      "score": 54.5,
+      "score": 63.6,
       "grade": "D",
       "tier": "B",
       "cells": 0,
@@ -692,7 +692,7 @@
       "file": "ui/Patterns.tsx"
     },
     "ui/Patterns.tsx::Combobox": {
-      "score": 70.8,
+      "score": 75,
       "grade": "C",
       "tier": "B",
       "cells": 3,
@@ -700,7 +700,7 @@
       "file": "ui/Patterns.tsx"
     },
     "ui/Patterns.tsx::PaymentCard": {
-      "score": 68.8,
+      "score": 75,
       "grade": "C",
       "tier": "B",
       "cells": 12,
@@ -708,15 +708,15 @@
       "file": "ui/Patterns.tsx"
     },
     "ui/Patterns.tsx::Well": {
-      "score": 62.5,
-      "grade": "D",
+      "score": 68.8,
+      "grade": "C",
       "tier": "B",
       "cells": 3,
       "name": "Well",
       "file": "ui/Patterns.tsx"
     },
     "ui/Pro.tsx::ActivityFeed": {
-      "score": 57.9,
+      "score": 63.2,
       "grade": "D",
       "tier": "B",
       "cells": 0,
@@ -724,7 +724,7 @@
       "file": "ui/Pro.tsx"
     },
     "ui/Pro.tsx::CommandMenu": {
-      "score": 57.1,
+      "score": 61.9,
       "grade": "D",
       "tier": "B",
       "cells": 0,
@@ -732,23 +732,23 @@
       "file": "ui/Pro.tsx"
     },
     "ui/Pro.tsx::NotificationFeed": {
-      "score": 55,
-      "grade": "D",
+      "score": 65,
+      "grade": "C",
       "tier": "B",
       "cells": 0,
       "name": "NotificationFeed",
       "file": "ui/Pro.tsx"
     },
     "ui/Pro.tsx::FileUploader": {
-      "score": 59.1,
-      "grade": "D",
+      "score": 68.2,
+      "grade": "C",
       "tier": "B",
       "cells": 0,
       "name": "FileUploader",
       "file": "ui/Pro.tsx"
     },
     "ui/Pro.tsx::Filters": {
-      "score": 75,
+      "score": 81.3,
       "grade": "C",
       "tier": "B",
       "cells": 0,
@@ -756,7 +756,7 @@
       "file": "ui/Pro.tsx"
     },
     "ui/Pro.tsx::TimePicker": {
-      "score": 47.8,
+      "score": 52.2,
       "grade": "D",
       "tier": "B",
       "cells": 0,
@@ -764,7 +764,7 @@
       "file": "ui/Pro.tsx"
     },
     "ui/Pro.tsx::Calendar": {
-      "score": 50,
+      "score": 59.1,
       "grade": "D",
       "tier": "B",
       "cells": 0,
@@ -772,7 +772,7 @@
       "file": "ui/Pro.tsx"
     },
     "ui/Pro.tsx::AiPromptInput": {
-      "score": 54.5,
+      "score": 63.6,
       "grade": "D",
       "tier": "B",
       "cells": 0,
@@ -780,23 +780,23 @@
       "file": "ui/Pro.tsx"
     },
     "ui/Pro.tsx::CryptoAddressChip": {
-      "score": 66.7,
-      "grade": "C",
+      "score": 80,
+      "grade": "B",
       "tier": "B",
       "cells": 0,
       "name": "CryptoAddressChip",
       "file": "ui/Pro.tsx"
     },
     "ui/Pro.tsx::VoiceVisualizer": {
-      "score": 76.9,
-      "grade": "C",
+      "score": 92.3,
+      "grade": "A",
       "tier": "B",
       "cells": 0,
       "name": "VoiceVisualizer",
       "file": "ui/Pro.tsx"
     },
     "ui/Pro.tsx::CurrencyAmountInput": {
-      "score": 54.5,
+      "score": 63.6,
       "grade": "D",
       "tier": "B",
       "cells": 0,
@@ -804,7 +804,7 @@
       "file": "ui/Pro.tsx"
     },
     "ui/ProductPatterns.tsx::PageHeader": {
-      "score": 50,
+      "score": 62.5,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -812,7 +812,7 @@
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::SearchBar": {
-      "score": 50,
+      "score": 62.5,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -820,15 +820,15 @@
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::FilterBar": {
-      "score": 62.5,
-      "grade": "D",
+      "score": 75,
+      "grade": "C",
       "tier": "C",
       "cells": 0,
       "name": "FilterBar",
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::FilterChip": {
-      "score": 44.4,
+      "score": 55.6,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -836,7 +836,7 @@
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::SortMenu": {
-      "score": 35.7,
+      "score": 42.9,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -844,7 +844,7 @@
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::DataTable": {
-      "score": 60,
+      "score": 64,
       "grade": "D",
       "tier": "A",
       "cells": 2,
@@ -852,7 +852,7 @@
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::DataCard": {
-      "score": 44.4,
+      "score": 55.6,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -860,23 +860,23 @@
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::ActivityItem": {
-      "score": 62.5,
-      "grade": "D",
+      "score": 75,
+      "grade": "C",
       "tier": "C",
       "cells": 10,
       "name": "ActivityItem",
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::SettingsSection": {
-      "score": 57.1,
-      "grade": "D",
+      "score": 71.4,
+      "grade": "C",
       "tier": "C",
       "cells": 0,
       "name": "SettingsSection",
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::EmptyState": {
-      "score": 52.4,
+      "score": 57.1,
       "grade": "D",
       "tier": "B",
       "cells": 3,
@@ -884,15 +884,15 @@
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::LoadingState": {
-      "score": 57.1,
-      "grade": "D",
+      "score": 71.4,
+      "grade": "C",
       "tier": "C",
       "cells": 0,
       "name": "LoadingState",
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::ErrorState": {
-      "score": 66.7,
+      "score": 75,
       "grade": "C",
       "tier": "B",
       "cells": 0,
@@ -900,7 +900,7 @@
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::StatGrid": {
-      "score": 35.7,
+      "score": 42.9,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -908,7 +908,7 @@
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::CardGrid": {
-      "score": 35.7,
+      "score": 42.9,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -916,7 +916,7 @@
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::SettingsToggle": {
-      "score": 50,
+      "score": 62.5,
       "grade": "D",
       "tier": "C",
       "cells": 0,
@@ -924,16 +924,16 @@
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::CopyField": {
-      "score": 85.7,
-      "grade": "B",
+      "score": 100,
+      "grade": "A",
       "tier": "C",
       "cells": 0,
       "name": "CopyField",
       "file": "ui/ProductPatterns.tsx"
     },
     "ui/ProductPatterns.tsx::SideNavItem": {
-      "score": 57.1,
-      "grade": "D",
+      "score": 71.4,
+      "grade": "C",
       "tier": "C",
       "cells": 0,
       "name": "SideNavItem",

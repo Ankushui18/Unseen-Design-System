@@ -200,7 +200,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   const isLink = variant === "link";
   const buttonClasses = cn(
     "group relative inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap outline-none",
-    "transition duration-[var(--duration-base)] ease-out active:translate-y-px motion-reduce:transition-none font-medium",
+    "transition duration-[var(--duration-base)] ease-out-quint active:translate-y-px motion-reduce:transition-none font-medium",
     !isLink && "disabled:pointer-events-none disabled:bg-surface-secondary disabled:text-disabled disabled:shadow-none disabled:ring-transparent",
     isLink && "disabled:pointer-events-none disabled:text-disabled",
     isLink ? "h-auto gap-1 p-0 text-label-sm" : iconOnly ? iconOnlySizes[size] : sizes[size],
@@ -277,7 +277,7 @@ export const FancyButton = forwardRef<HTMLButtonElement, FancyButtonProps>(funct
   ref,
 ) {
   const fancyClasses = cn(
-    "relative inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap outline-none transition duration-200 ease-out active:translate-y-px font-medium",
+    "relative inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap outline-none transition duration-[var(--duration-base)] ease-out-quint active:translate-y-px font-medium",
     "disabled:pointer-events-none disabled:bg-surface-secondary disabled:text-disabled disabled:shadow-none disabled:before:hidden",
     iconOnly ? iconOnlySizes[size] : sizes[size],
     fancy[tone],

@@ -147,10 +147,10 @@ export function Drawer({
           width: side === "bottom" ? undefined : Math.min(width ?? drawerSizes[size], typeof window !== "undefined" ? window.innerWidth - 32 : width ?? drawerSizes[size]),
           animation:
             side === "bottom"
-              ? "slide-up .3s var(--ease-out-quint) both"
+              ? "slide-up var(--duration-slow) var(--ease-out-quint) both"
               : side === "left"
-                ? "slide-in-left .3s var(--ease-out-quint) both"
-                : "slide-in-right .3s var(--ease-out-quint) both",
+                ? "slide-in-left var(--duration-slow) var(--ease-out-quint) both"
+                : "slide-in-right var(--duration-slow) var(--ease-out-quint) both",
         }}
       >
         <div className="flex items-center justify-between gap-4 border-b border-separator p-4">

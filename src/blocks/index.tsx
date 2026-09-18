@@ -65,9 +65,9 @@ export function StatsBlock({ compact }: { compact?: boolean }) {
   return (
     <div className="grid w-full min-w-0 gap-4" style={{ gridTemplateColumns: compact ? "1fr" : "repeat(auto-fit, minmax(min(180px, 100%), 1fr))" }}>
       {stats.map((s) => (
-        <Card key={s.label} className="group min-w-0 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong sm:p-5">
+        <Card key={s.label} className="group min-w-0 p-4 transition-all duration-[var(--duration-base)] hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong sm:p-5">
           <div className="flex items-start justify-between">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-surface-secondary ring-1 ring-border transition-colors duration-200 group-hover:bg-accent-soft group-hover:text-accent group-hover:ring-accent/30 sm:h-10 sm:w-10">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-surface-secondary ring-1 ring-border transition-colors duration-[var(--duration-base)] group-hover:bg-accent-soft group-hover:text-accent group-hover:ring-accent/30 sm:h-10 sm:w-10">
               <s.icon className="h-5 w-5" />
             </span>
             <CompactButton variant="ghost" aria-label={`${s.label} options`}><RiMoreLine /></CompactButton>
@@ -244,7 +244,7 @@ export function PricingBlock() {
           <Card
             key={p.name}
             className={cn(
-              "relative flex flex-col p-6 transition-all duration-200",
+              "relative flex flex-col p-6 transition-all duration-[var(--duration-base)]",
               p.popular ? "border-glow surface-lit shadow-lg ring-1 ring-accent/30" : "hover:shadow-md hover:ring-border-strong"
             )}
           >

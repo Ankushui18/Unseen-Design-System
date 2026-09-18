@@ -40,7 +40,7 @@ export function Tabs({
       <div role="tablist" className={cn("flex items-center overflow-x-auto no-scrollbar", listCls, fullWidth && "w-full")}>
         {items.map((it) => {
           const active = it.key === value;
-          const base = cn("relative inline-flex shrink-0 items-center justify-center gap-2 font-medium transition-all duration-200 ease-out-quint whitespace-nowrap", pad, fullWidth && "flex-1", it.disabled && "pointer-events-none opacity-[var(--disabled-opacity)]");
+          const base = cn("relative inline-flex shrink-0 items-center justify-center gap-2 font-medium transition-all duration-[var(--duration-base)] ease-out-quint whitespace-nowrap", pad, fullWidth && "flex-1", it.disabled && "pointer-events-none opacity-[var(--disabled-opacity)]");
           const styles = {
             solid: cn("rounded-8", active ? "bg-surface text-foreground shadow-toggle ring-1 ring-border/60" : "text-muted hover:text-foreground"),
             segment: cn("rounded-8", active ? "bg-surface text-foreground shadow-toggle" : "text-muted hover:text-foreground"),
@@ -127,9 +127,9 @@ export function Accordion({
                 <span className="block text-paragraph-sm font-medium text-foreground">{it.title}</span>
                 {it.subtitle && <span className="block text-paragraph-xs text-muted">{it.subtitle}</span>}
               </span>
-              <RiArrowDownSLine className={cn("h-4 w-4 shrink-0 text-subtle transition-transform duration-300 ease-out-quint", isOpen && "rotate-180")} />
+              <RiArrowDownSLine className={cn("h-4 w-4 shrink-0 text-subtle transition-transform duration-[var(--duration-slow)] ease-out-quint", isOpen && "rotate-180")} />
             </button>
-            <div className="grid transition-[grid-template-rows] duration-300 ease-out-quint" style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}>
+            <div className="grid transition-[grid-template-rows] duration-[var(--duration-slow)] ease-out-quint" style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}>
               <div className="overflow-hidden">
                 <div className="px-4 pb-4 text-paragraph-sm text-muted">{it.content}</div>
               </div>
@@ -189,7 +189,7 @@ export function Pagination({
   if (end < total - 1) push("…");
   if (total > 1) push(total);
 
-  const btn = "inline-flex h-9 min-w-9 items-center justify-center rounded-8 px-2 text-paragraph-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-40";
+  const btn = "inline-flex h-9 min-w-9 items-center justify-center rounded-8 px-2 text-paragraph-sm font-medium transition-all duration-[var(--duration-fast)] disabled:pointer-events-none disabled:opacity-40";
 
   return (
     <nav ref={ref} className="flex items-center gap-1" aria-label="Pagination">

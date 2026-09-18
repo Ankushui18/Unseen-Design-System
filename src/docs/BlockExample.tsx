@@ -87,13 +87,13 @@ export function BlockExample({ block }: { block: BlockDef }) {
           <div className="block-stage flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 overflow-hidden">
             {viewport === "desktop" ? (
               <div
-                className="w-full min-w-0 transition-all duration-300"
+                className="w-full min-w-0 transition-all duration-[var(--duration-slow)]"
                 style={{ maxWidth: block.width ? `${block.width}px` : "100%" }}
               >
                 <Fragment key={revision}>{block.render()}</Fragment>
               </div>
             ) : viewport === "tablet" ? (
-              <div className="w-full max-w-[768px] mx-auto rounded-16 border border-border/80 bg-surface shadow-xl overflow-hidden transition-all duration-300 ring-1 ring-black/5 dark:ring-white/10">
+              <div className="w-full max-w-[768px] mx-auto rounded-16 border border-border/80 bg-surface shadow-xl overflow-hidden transition-all duration-[var(--duration-slow)] ring-1 ring-black/5 dark:ring-white/10">
                 <div className="flex items-center justify-between border-b border-separator/80 bg-surface-secondary/70 px-4 py-2 text-[10px] font-mono text-subtle select-none">
                   <div className="flex items-center gap-1.5">
                     <span className="h-2 w-2 rounded-full bg-border-strong" />
@@ -102,12 +102,12 @@ export function BlockExample({ block }: { block: BlockDef }) {
                   <span className="font-medium text-foreground/80">768 × 1024 · Tablet Viewport</span>
                   <span className="text-[9px] uppercase tracking-wider">100%</span>
                 </div>
-                <div className="w-full min-w-0 transition-all duration-200 overflow-x-auto p-4 sm:p-6">
+                <div className="w-full min-w-0 transition-all duration-[var(--duration-base)] overflow-x-auto p-4 sm:p-6">
                   <Fragment key={revision}>{block.render()}</Fragment>
                 </div>
               </div>
             ) : (
-              <div className="w-full max-w-[390px] mx-auto rounded-20 border border-border/80 bg-surface shadow-2xl overflow-hidden transition-all duration-300 ring-1 ring-black/10 dark:ring-white/10">
+              <div className="w-full max-w-[390px] mx-auto rounded-20 border border-border/80 bg-surface shadow-2xl overflow-hidden transition-all duration-[var(--duration-slow)] ring-1 ring-black/10 dark:ring-white/10">
                 <div className="flex items-center justify-between border-b border-separator/80 bg-surface-secondary/70 px-3.5 py-2 text-[10px] font-mono text-subtle select-none">
                   <span className="text-[10px] font-medium text-foreground/90">9:41</span>
                   <div className="h-3 w-16 rounded-full bg-foreground/20" />
@@ -115,7 +115,7 @@ export function BlockExample({ block }: { block: BlockDef }) {
                     <span className="font-medium text-foreground/80">390px</span>
                   </div>
                 </div>
-                <div className="w-full min-w-0 transition-all duration-200 overflow-x-auto p-3.5 sm:p-4">
+                <div className="w-full min-w-0 transition-all duration-[var(--duration-base)] overflow-x-auto p-3.5 sm:p-4">
                   <Fragment key={revision}>{block.render()}</Fragment>
                 </div>
               </div>

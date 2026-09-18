@@ -609,7 +609,7 @@ export const PREVIEWS: Record<string, () => ReactNode> = {
     <div className="w-full max-w-[190px] rounded-10 border border-border bg-surface p-2 shadow-xs text-left">
       <div className="flex items-center justify-between mb-1.5">
         <span className="flex items-center gap-1 text-[9px] font-mono text-danger">
-          <span className="h-1.5 w-1.5 rounded-full bg-danger animate-pulse" />00:24
+          <span className="h-1.5 w-1.5 rounded-full bg-danger animate-pulse-soft" />00:24
         </span>
         <span className="text-[9px] font-mono text-subtle">Live Audio</span>
       </div>

@@ -235,7 +235,26 @@ function gradeComponent(row) {
   add("M4", "theme-parity", /dark:/.test(w) || (!darkLiteral && tokenHits >= tokenFloor), "dark parity (dark: or token-driven)");
   add("M4", "geometry", !/\b(h|w|size|gap|p[xytrbl]?|m[xytrbl]?|top|left|right|bottom)-\[/.test(chunk), "geometry from scale (no arbitrary brackets)");
   const animates = /animate-|transition/.test(chunk);
-  add("M4", "motion", !animates || /motion-(reduce|safe)|animate-(spin-slow|fade-in|pop-in|slide-up)|duration-\(--/.test(chunk), "motion token / reduced-motion", animates);
+  /* Motion must come from the system's own scale (Foundations → Motion):
+     durations from --duration-*, easings from --ease-*, animations from
+     --animate-*. Stock Tailwind numbers and curves are the smell, and the
+     reduced-motion guarantee is enforced once, globally, in design-lint. */
+  const DURATIONS = new Set(["instant", "fast", "base", "slow", "slower"]);
+  const EASINGS = new Set(["out-quint", "spring", "in-out", "linear"]);
+  const ANIMATIONS = new Set(["fade-in", "pop-in", "slide-up", "slide-down", "slide-in-right", "slide-in-left", "indeterminate", "shimmer", "marquee", "spin-slow", "pulse-soft", "ping-soft"]);
+  /* Two shapes matter, and they nest: the arbitrary-value form carries its own
+     parentheses (`duration-[var(--duration-base)]`), so a naive
+     stop-at-`)` capture truncates it and reports a false regression. */
+  const motionUtils = chunk.match(/(?<![\w-])(?:duration-\[var\(--duration-[a-z]+\)\]|duration-[^\s"'`,;)]+|ease-[a-z-]+|animate-[a-z-]+)/g) ?? [];
+  const motionVars = chunk.match(/var\(--duration-([a-z]+)\)/g) ?? [];
+  const offScale = [
+    ...motionUtils.filter((u) =>
+      /^duration-/.test(u) ? !/^duration-\[var\(--duration-(instant|fast|base|slow|slower)\)\]$/.test(u)
+        : /^ease-/.test(u) ? !EASINGS.has(u.slice(5))
+          : !ANIMATIONS.has(u.slice(8))),
+    ...motionVars.filter((v) => !DURATIONS.has(v.match(/--duration-([a-z]+)/)[1])),
+  ];
+  add("M4", "motion", !animates || offScale.length === 0, offScale.length ? `off-scale motion: ${[...new Set(offScale)].join(", ")}` : "motion on scale", animates);
 
   /* --- M5 accessibility --- */
   add("M5", "aria", /aria-/.test(w), "aria-* contract", a11yRelevant);

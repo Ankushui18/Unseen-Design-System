@@ -263,7 +263,7 @@ export function FeaturesBlock() {
       </div>
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {features.map((f) => (
-          <Card key={f.title} className="group border-glow p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+          <Card key={f.title} className="group border-glow p-6 transition-all duration-[var(--duration-base)] hover:-translate-y-1 hover:shadow-md">
             <FeaturedIcon icon={<f.icon size={20} />} tone="accent" variant="soft" size="md" />
             <h3 className="mt-4 text-label-md text-foreground">{f.title}</h3>
             <p className="mt-1.5 text-paragraph-sm text-muted">{f.description}</p>
@@ -517,7 +517,7 @@ export function HowItWorksBlock() {
             elevation={step === s.num ? 3 : 1}
             onClick={() => setStep(s.num)}
             className={cn(
-              "cursor-pointer p-6 transition-all duration-200 text-left border-glow",
+              "cursor-pointer p-6 transition-all duration-[var(--duration-base)] text-left border-glow",
               step === s.num ? "ring-2 ring-accent" : "hover:ring-border-strong"
             )}
           >

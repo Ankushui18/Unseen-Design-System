@@ -45,7 +45,7 @@ export function FeaturedIcon({
   }[size];
   const treatment = variant === "solid" ? featuredSolid[tone] : variant === "gradient" ? `${tone === "accent" ? "btn-accent-fill" : "btn-neutral-fill"} text-white dark:text-neutral-950` : featuredSoft[tone];
   return (
-    <span ref={ref} className={cn("inline-flex shrink-0 items-center justify-center ring-1 transition-transform duration-200 ease-out-quint", dims, treatment, variant === "soft" && "active:scale-95", className)}>
+    <span ref={ref} className={cn("inline-flex shrink-0 items-center justify-center ring-1 transition-transform duration-[var(--duration-base)] ease-out-quint", dims, treatment, variant === "soft" && "active:scale-95", className)}>
       {icon}
     </span>
   );
@@ -75,7 +75,7 @@ export function Card({
         v,
         variant !== "bordered" && shadow,
         interactive &&
-          "cursor-pointer transition-[box-shadow,transform] duration-200 ease-out-quint hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong",
+          "cursor-pointer transition-[box-shadow,transform] duration-[var(--duration-base)] ease-out-quint hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong",
         className,
       )}
       {...props}
@@ -164,7 +164,7 @@ export function Chip({
   return (
     <span ref={ref}
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-6 font-medium normal-case tracking-normal whitespace-nowrap transition-colors duration-150",
+        "inline-flex shrink-0 items-center justify-center rounded-6 font-medium normal-case tracking-normal whitespace-nowrap transition-colors duration-[var(--duration-fast)]",
         sz,
         square && "aspect-square px-1",
         disabled ? "bg-transparent text-disabled ring-1 ring-inset ring-border" : treatment,
@@ -474,7 +474,7 @@ export function Progress({
       <div className={cn("w-full overflow-hidden rounded-full bg-default", h)}>
         <div
           className={cn("h-full rounded-full", bg, indeterminate && "w-1/4 animate-indeterminate")}
-          style={indeterminate ? undefined : { width: `${Math.min(100, Math.max(0, value ?? 0))}%`, transition: "width .5s var(--ease-out-quint)" }}
+          style={indeterminate ? undefined : { width: `${Math.min(100, Math.max(0, value ?? 0))}%`, transition: "width var(--duration-slower) var(--ease-out-quint)" }}
         />
       </div>
     </div>
@@ -499,7 +499,7 @@ export function CircularProgress({ ref, value = 0, size = 56, stroke = 5, tone =
           strokeLinecap="round"
           strokeDasharray={c}
           strokeDashoffset={c - (c * Math.min(100, Math.max(0, value))) / 100}
-          className="transition-[stroke-dashoffset] duration-500 ease-out-quint"
+          className="transition-[stroke-dashoffset] duration-[var(--duration-slower)] ease-out-quint"
         />
       </svg>
       <span className="absolute font-mono text-[11px] font-medium tabular-nums">{label ?? `${Math.round(value)}%`}</span>

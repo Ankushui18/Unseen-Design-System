@@ -106,7 +106,7 @@ function MusicPlayerShowcase() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="relative flex h-12 w-12 items-center justify-center rounded-10 bg-gradient-to-tr from-accent to-accent-300 text-white shadow-sm ring-1 ring-white/20">
-            <RiDiscLine size={24} className={cn("transition-transform duration-700", playing && "animate-spin")} />
+            <RiDiscLine size={24} className={cn("transition-transform duration-[var(--duration-slower)]", playing && "animate-spin-slow")} />
           </div>
           <div>
             <h4 className="text-label-sm font-medium text-foreground">Solitude in Bloom</h4>
@@ -135,7 +135,7 @@ function MusicPlayerShowcase() {
             setProgress(Math.round((clickX / rect.width) * 100));
           }}
         >
-          <div className="h-full bg-accent transition-all duration-150" style={{ width: `${progress}%` }} />
+          <div className="h-full bg-accent transition-all duration-[var(--duration-fast)]" style={{ width: `${progress}%` }} />
         </div>
         <div className="flex items-center justify-between text-[11px] font-mono text-subtle">
           <span>{Math.floor((progress * 2.1) / 60)}:{String(Math.floor((progress * 2.1) % 60)).padStart(2, "0")}</span>
@@ -394,13 +394,13 @@ function AiPromptShowcase() {
         </div>
         <div className="flex items-center gap-1.5 font-mono text-[11px] text-subtle">
           <span>{tokensUsed} tkn</span>
-          <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
+          <span className="h-2 w-2 rounded-full bg-success animate-pulse-soft" />
         </div>
       </div>
 
       <div className="relative rounded-10 bg-surface-secondary/70 p-3 min-h-[72px] text-paragraph-xs text-foreground leading-relaxed">
         {response}
-        {streaming && <span className="inline-block h-3 w-1.5 ml-1 bg-accent animate-pulse" />}
+        {streaming && <span className="inline-block h-3 w-1.5 ml-1 bg-accent animate-pulse-soft" />}
       </div>
 
       <div className="flex items-center gap-2">
@@ -744,7 +744,7 @@ function WorkspaceShowcase() {
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "flex items-center gap-2 rounded-10 px-3.5 py-2 text-label-xs font-medium transition-all duration-150 whitespace-nowrap",
+                  "flex items-center gap-2 rounded-10 px-3.5 py-2 text-label-xs font-medium transition-all duration-[var(--duration-fast)] whitespace-nowrap",
                   isActive
                     ? "bg-accent text-accent-foreground shadow-xs"
                     : "text-muted hover:text-foreground hover:bg-surface-secondary"
@@ -769,7 +769,7 @@ function WorkspaceShowcase() {
       </div>
 
       {/* Tab Panels */}
-      <div className="transition-all duration-300">
+      <div className="transition-all duration-[var(--duration-slow)]">
         {activeTab === "mosaic" && (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <MusicPlayerShowcase />
@@ -1266,7 +1266,7 @@ function TokenCustomizerSection() {
 
             <div
               className={cn(
-                "p-8 sm:p-12 transition-colors duration-300 flex items-center justify-center min-h-[460px]",
+                "p-8 sm:p-12 transition-colors duration-[var(--duration-slow)] flex items-center justify-center min-h-[460px]",
                 theme === "dark" ? "bg-surface-secondary text-foreground" : "bg-surface text-foreground"
               )}
             >
@@ -1277,7 +1277,7 @@ function TokenCustomizerSection() {
                   boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(125, 125, 125, 0.15)",
                 }}
                 className={cn(
-                  "w-full max-w-sm p-6 space-y-5 transition-all duration-200 text-left border border-border",
+                  "w-full max-w-sm p-6 space-y-5 transition-all duration-[var(--duration-base)] text-left border border-border",
                   theme === "dark" ? "bg-surface" : "bg-surface-secondary"
                 )}
               >
@@ -1783,7 +1783,7 @@ function BlocksCatalogSection({ navigate }: { navigate: (to: string) => void }) 
                 e.preventDefault();
                 navigate("blocks");
               }}
-              className="group flex flex-col justify-between rounded-10 border border-border bg-surface p-4 transition-all duration-200 hover:-translate-y-1 hover:border-accent hover:shadow-md text-left"
+              className="group flex flex-col justify-between rounded-10 border border-border bg-surface p-4 transition-all duration-[var(--duration-base)] hover:-translate-y-1 hover:border-accent hover:shadow-md text-left"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">

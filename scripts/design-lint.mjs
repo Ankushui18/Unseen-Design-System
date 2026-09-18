@@ -143,6 +143,14 @@ for (const f of files) {
 /* ------------------------------------------------------------ tokens bridge */
 const css = readFileSync(join(ROOT, "index.css"), "utf8");
 
+/* Reduced motion is a system guarantee, not a per-component chore: one rule in
+   index.css neutralises every animation and transition in the app. If that
+   block is removed, nothing else in the pipeline notices — every component
+   still passes its own checks. So it is a lint rule. */
+if (!/@media\s*\(prefers-reduced-motion:\s*reduce\)/.test(css)) {
+  warn(join(ROOT, "index.css"), 0, "reduced-motion", "No prefers-reduced-motion block — motion must degrade for users who ask it to");
+}
+
 // Exercise the real merger: a regex scan cannot detect classes removed at runtime.
 try {
   const mergerPath = join(ROOT, "utils/cn.ts");
@@ -170,13 +178,13 @@ try {
 
 const semantic = [...css.matchAll(/^\s+--([a-z0-9-]+):/gm)].map((m) => m[1]);
 const bridged = new Set([...css.matchAll(/--color-([a-z0-9-]+):\s*var\(--([a-z0-9-]+)\)/g)].map((m) => m[2]));
-const colorish = semantic.filter((t) => /^(background|surface|foreground|muted|subtle|disabled|link|overlay|segment|backdrop|border|separator|field|accent|default|success|warning|danger|gray|blue|orange|red|green|yellow|purple|sky|pink|teal)(-|$)/.test(t) && !/^accent-(h|c)$/.test(t) && !/^(disabled-opacity|border-width)$/.test(t));
+const colorish = semantic.filter((t) => /^(background|surface|foreground|muted|subtle|disabled|link|overlay|segment|backdrop|border|separator|field|accent|default|success|warning|danger|gray|blue|orange|red|green|yellow|purple|sky|pink|teal)(-|$)/.test(t) && !/^accent-(h|c)$/.test(t) && !/^(disabled-opacity|border-width)$/.test(t) && !/^default-transition-/.test(t)); /* Tailwind theme keys, not palette */
 for (const t of new Set(colorish)) if (!bridged.has(t)) warn(join(ROOT, "index.css"), 0, "bridge", `semantic token --${t} is not exposed to Tailwind via @theme inline`);
 
 /* ------------------------------------------------------------------ report */
 const byRule = {};
 for (const p of problems) (byRule[p.rule] ??= []).push(p);
-const order = ["class-contract", "route", "preview", "bridge", "a11y", "font-cdn", "weight-css", "docs-api-core", "docs-api", "docs-examples", "docs-variants", "docs-states", "docs-a11y", "type-scale", "weight", "legacy-shadow", "card-border", "raw-color", "raw-hex", "icon-size", "opacity-disabled"];
+const order = ["class-contract", "route", "preview", "bridge", "a11y", "font-cdn", "weight-css", "docs-api-core", "docs-api", "docs-examples", "docs-variants", "docs-states", "docs-a11y", "reduced-motion", "type-scale", "weight", "legacy-shadow", "card-border", "raw-color", "raw-hex", "icon-size", "opacity-disabled"];
 let total = 0;
 for (const r of order) {
   const list = byRule[r];
@@ -187,5 +195,5 @@ for (const r of order) {
   if (list.length > 12) console.log(`  … +${list.length - 12} more`);
 }
 console.log(`\n${files.length} files scanned · nav ${navHrefs.length} · routes ${routeKeys.length} · previews ${previewKeys.length} · ${total} findings`);
-const blocking = problems.filter((p) => ["class-contract", "route", "preview", "bridge", "a11y", "font-cdn", "weight-css", "docs-api-core"].includes(p.rule)).length;
+const blocking = problems.filter((p) => ["class-contract", "route", "preview", "bridge", "a11y", "font-cdn", "weight-css", "reduced-motion", "docs-api-core"].includes(p.rule)).length;
 process.exit(blocking ? 1 : 0);

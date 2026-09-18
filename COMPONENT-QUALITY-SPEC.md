@@ -44,7 +44,7 @@ M6 Documentation ───┘
 | **M1** | Contract | Is the API predictable, composable and future-proof? | static (source) + unit tests |
 | **M2** | Variant | Are the meaningful combinations real, distinct and counted? | `variant-audit` + docs matrix render |
 | **M3** | State | Does every state exist, and does it behave (not just look)? | `component-audit` + unit tests + axe |
-| **M4** | Visual | Is it built from Unseen's geometry, tokens and motion — in both themes? | `design-lint` + browser axe (contrast) + visual baselines |
+| **M4** | Visual | Is it built from Unseen's geometry, tokens and motion — in both themes? | `design-lint` + browser axe (contrast) + motion-scale check + visual baselines |
 | **M5** | Accessibility | Can everyone operate it? | axe (jsdom + real browser) + unit keyboard tests |
 | **M6** | Documentation | Can a stranger copy it into a product in under a minute? | docs page (source-checked anatomy) + playground |
 
@@ -236,7 +236,7 @@ The interaction model is borrowed. **The appearance is not.** AlignUI is calm-ne
 | **Elevation** | Five steps: `shadow-xs · sm · md · lg · xl`, each with a dark-mode counterpart. Cards are hairline `ring-1 ring-border`, not borders + shadow. Rings for focus (`shadow-ring-accent/neutral/danger`). | `shadow-e1..e5` (legacy), stacked shadows invented per-component, `border border-border bg-surface` card pattern. |
 | **Spacing** | 4px base; component internals from the size scale's padding; section rhythm consistent across docs and blocks. | One-off margins to "make it look right", padding that changes between sizes without a rule. |
 | **Icons** | One family (Remix Icon), 16 / 20 / 24 px. Action icons are 20px, pulled in by `-mx-1` with a 12px gap. | Mixed icon sets, 12px icons (except the documented badge/tag glyph), icons as the only label without an accessible name. |
-| **Motion** | Token-driven only: `--duration-fast/base/slow` (0.15/0.22/0.30s) with `--ease-out-quint` / `--ease-spring`; named animations `fade-in`, `pop-in`, `slide-up`. Everything respects `prefers-reduced-motion`. | Ad-hoc `transition-all duration-500`, bounce for its own sake, motion that gates comprehension. |
+| **Motion** | Token-driven only, on a five-step scale: `--duration-instant` 75ms · `fast` 150ms · `base` 220ms · `slow` 300ms · `slower` 400ms (nothing exceeds 400ms); easings `--ease-out-quint`, `--ease-spring`, `--ease-in-out`; named animations only (`fade-in`, `pop-in`, `slide-up`, `slide-down`, `slide-in-*`, `indeterminate`, `shimmer`, `marquee`, `spin-slow`, `pulse-soft`, `ping-soft`). Bare `transition-*` utilities inherit the scale (`--default-transition-duration/timing-function`), and `prefers-reduced-motion` is honoured **once, globally** (`index.css`), guarded by a blocking design-lint rule — reduced motion is a property of the system, not a per-component chore. | Stock Tailwind values (`duration-500`, `ease-out`, `animate-pulse`), ad-hoc transition strings with hand-written seconds, motion that gates comprehension. |
 | **Dark mode** | Every component is designed in dark *first-class*: token-driven or explicit `dark:` classes; shadows and rings re-tuned, not reused; no washed-out greys. | Dark mode as an afterthought, `opacity` tricks to fake depth, contrast that passes in light and fails in dark. |
 
 **Budgets (hard):**
@@ -328,6 +328,7 @@ types → unit → build → design-lint → smoke (106 routes) → axe jsdom (1
 | `npm run audit:variants` | cells vs `audit/variant-audit-baseline.json` | `npm test` (via `audit:variants`) |
 | `npm run audit:components` | state/a11y/docs matrix | informational + `COMPONENT-AUDIT.md` |
 | `npm run codemod:ref` | components that could take a `ref` but do not — safe rewrite, `--write` to apply | `tests/codemod-ref.test.ts` |
+| `npm run codemod:motion` | stock motion values (Tailwind durations/easings/animations, hand-written seconds in CSS) — dry run lists them, `--write` maps them onto the scale | `tests/motion-scale.test.ts` + `tests-browser/motion.spec.ts` |
 
 Mechanical checks are static-analysis over source + docs + tests. That means they are **necessary but not sufficient**: they prove structure (an `aria-invalid` exists, a docs section is titled "States"), not taste. Structural honesty is what makes the human review cheap — the reviewer verifies the *look*, not the checklist.
 

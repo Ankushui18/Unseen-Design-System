@@ -810,7 +810,7 @@ export function AiPromptInput({
             onClick={() => setMicActive(!micActive)}
             className={cn(
               "flex h-8 w-8 items-center justify-center rounded-8 transition",
-              micActive ? "bg-danger-soft text-danger animate-pulse" : "text-subtle hover:bg-surface-hover hover:text-foreground"
+              micActive ? "bg-danger-soft text-danger animate-pulse-soft" : "text-subtle hover:bg-surface-hover hover:text-foreground"
             )}
             title={micActive ? "Stop dictation" : "Voice dictation"}
             aria-label="Voice dictation"
@@ -873,7 +873,7 @@ export function CryptoAddressChip({
 
   return (
     <div ref={ref} className={cn("inline-flex items-center gap-2 rounded-full bg-surface-secondary/80 py-1 pl-2.5 pr-1.5 ring-1 ring-border text-foreground backdrop-blur-sm", className)}>
-      <span className="flex h-2 w-2 rounded-full bg-success animate-pulse" />
+      <span className="flex h-2 w-2 rounded-full bg-success animate-pulse-soft" />
       <span className="text-paragraph-xs font-medium text-muted">{network}</span>
       <span className="h-3 w-px bg-separator" />
       <span className="font-mono text-paragraph-xs font-medium text-foreground tracking-wide">{truncated}</span>
@@ -919,14 +919,14 @@ export function VoiceVisualizer({
 }) {
   return (
     <div ref={ref} className={cn("flex items-center gap-3 rounded-14 bg-surface p-3 ring-1 ring-border shadow-sm", className)}>
-      <span className="flex h-3 w-3 rounded-full bg-danger animate-ping" />
+      <span className="flex h-3 w-3 rounded-full bg-danger animate-ping-soft" />
       <span className="font-mono text-paragraph-xs font-medium text-danger">{duration}</span>
       <div className="flex items-center gap-1 h-6">
         {[18, 28, 40, 16, 32, 48, 24, 38, 52, 20, 36, 14].map((h, i) => (
           <span
             key={i}
             style={{ height: recording ? `${h}%` : "20%" }}
-            className="w-1 rounded-full bg-accent transition-all duration-150"
+            className="w-1 rounded-full bg-accent transition-all duration-[var(--duration-fast)]"
           />
         ))}
       </div>

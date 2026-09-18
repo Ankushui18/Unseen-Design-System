@@ -1488,7 +1488,7 @@ export function AiAssistantTemplate() {
       {/* Studio Top Control Strip */}
       <div className="border-b border-separator bg-surface-secondary/70 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-subtle">
         <div className="flex items-center gap-2">
-          <span className="flex h-2 w-2 rounded-full bg-success animate-pulse" />
+          <span className="flex h-2 w-2 rounded-full bg-success animate-pulse-soft" />
           <span className="text-foreground font-medium">Neural Enclave Active</span>
           <span className="text-subtle">•</span>
           <span className="rounded bg-surface px-1.5 py-0.5 text-[10px] text-accent ring-1 ring-border">{selectedModel}</span>
@@ -1624,8 +1624,8 @@ export function AiAssistantTemplate() {
               </div>
             ))}
             {streaming && (
-              <div className="p-4 rounded-14 bg-surface-secondary border border-border text-foreground max-w-[80%] rounded-bl-none animate-pulse flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-accent animate-ping" />
+              <div className="p-4 rounded-14 bg-surface-secondary border border-border text-foreground max-w-[80%] rounded-bl-none animate-pulse-soft flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-accent animate-ping-soft" />
                 <span className="text-[11px] font-mono text-muted">Streaming tokens from {selectedModel}...</span>
               </div>
             )}
@@ -1777,7 +1777,7 @@ export function TemplatesOverviewPage({ navigate }: { navigate: (t: string) => v
           {TEMPLATE_CARDS.map((t) => (
             <Card
               key={t.key}
-              className="border-glow p-6 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+              className="border-glow p-6 flex flex-col justify-between transition-all duration-[var(--duration-base)] hover:-translate-y-1 hover:shadow-lg"
             >
               <div>
                 <div className="flex items-center justify-between">

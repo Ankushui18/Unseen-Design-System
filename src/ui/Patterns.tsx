@@ -31,7 +31,7 @@ export function ButtonTile({ ref, icon, label, description, variant = "soft", se
       disabled={disabled}
       aria-pressed={selected}
       className={cn(
-        "group relative flex flex-col items-start gap-3 rounded-14 p-4 text-left transition duration-200 ease-out outline-none",
+        "group relative flex flex-col items-start gap-3 rounded-14 p-4 text-left transition duration-[var(--duration-base)] ease-out-quint outline-none",
         selected ? "bg-accent text-white shadow-sm ring-2 ring-accent" : base,
         "focus-visible:shadow-ring-neutral disabled:pointer-events-none disabled:bg-surface-secondary disabled:text-disabled",
         className,
@@ -232,7 +232,7 @@ export function Combobox<T extends { value: string; label: string; description?:
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-haspopup="listbox"
-        className={cn("flex w-full items-center gap-2 bg-field text-left shadow-xs ring-1 ring-inset ring-border transition duration-200 hover:bg-field-hover hover:shadow-none outline-none focus-visible:ring-foreground focus-visible:shadow-ring-neutral", open && "ring-foreground shadow-ring-neutral", h)}
+        className={cn("flex w-full items-center gap-2 bg-field text-left shadow-xs ring-1 ring-inset ring-border transition duration-[var(--duration-base)] hover:bg-field-hover hover:shadow-none outline-none focus-visible:ring-foreground focus-visible:shadow-ring-neutral", open && "ring-foreground shadow-ring-neutral", h)}
       >
         {selected?.icon && <span className="text-muted [&_svg]:h-5 [&_svg]:w-5">{selected.icon}</span>}
         <span className={cn("flex-1 truncate text-paragraph-sm", selected ? "text-foreground" : "text-field-placeholder")}>{selected?.label ?? placeholder}</span>

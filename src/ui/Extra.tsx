@@ -275,7 +275,7 @@ export function SegmentedControl<T extends string>({
     <div ref={ref} role="tablist" className={cn("relative inline-flex items-center rounded-10 bg-surface-secondary p-1 ring-1 ring-inset ring-border", fullWidth && "flex w-full", className)}>
       {ind && (
         <span
-          className="absolute top-1 bottom-1 rounded-8 bg-surface shadow-toggle ring-1 ring-border/60 transition-all duration-300 ease-out-quint"
+          className="absolute top-1 bottom-1 rounded-8 bg-surface shadow-toggle ring-1 ring-border/60 transition-all duration-[var(--duration-slow)] ease-out-quint"
           style={{ left: ind.left, width: ind.width }}
         />
       )}
@@ -378,7 +378,7 @@ export function DotStepper({ ref, count, current, onChange, className }: { count
           role="tab"
           aria-selected={i === current}
           onClick={() => onChange?.(i)}
-          className={cn("h-1.5 rounded-full transition-all duration-300 ease-out-quint", i === current ? "w-6 bg-foreground" : "w-1.5 bg-neutral-300 hover:bg-neutral-400 dark:bg-neutral-700")}
+          className={cn("h-1.5 rounded-full transition-all duration-[var(--duration-slow)] ease-out-quint", i === current ? "w-6 bg-foreground" : "w-1.5 bg-neutral-300 hover:bg-neutral-400 dark:bg-neutral-700")}
           aria-label={`Step ${i + 1}`}
         />
       ))}
