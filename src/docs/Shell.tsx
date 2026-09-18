@@ -482,7 +482,7 @@ export function SiteFooter({ navigate }: { navigate: (to: string) => void }) {
         </div>
         <div className="footer-bottom mt-6 border-t border-separator pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] text-subtle">
           <span>Unseen Design System · Built for React 19 & Tailwind CSS v4</span>
-          <span className="flex items-center gap-1.5"><span className="beta-status-dot" /> Free to explore during the public beta</span>
+          <span className="flex items-center gap-1.5"><span className="beta-status-dot" /> MIT licensed · free to explore during beta</span>
         </div>
       </div>
 

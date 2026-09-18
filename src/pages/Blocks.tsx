@@ -29,7 +29,7 @@ export function BlocksPage() {
           eyebrow="Composed Blocks · React 19 & Tailwind CSS v4"
           title="Start with a pattern. Make it your own."
           description={`${BLOCKS.length} production-grade composed patterns built exclusively from Unseen primitives. Inspect the code, interact with the preview, and copy straight into your app.`}
-          tags={[`${BLOCKS.length} Composed Blocks`, "Zero runtime lock-in", "Full source, per block"]}
+          tags={[`${BLOCKS.length} Composed Blocks`, "Zero runtime lock-in", "MIT licensed"]}
         />
 
         {/* Category Filters & Search Bar */}

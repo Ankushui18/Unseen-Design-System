@@ -732,7 +732,7 @@ const FAQ_CODE = [
   {
     key: "license",
     title: "Can I use it in commercial work?",
-    content: "Everything on this site is free to explore, read and copy during the public beta, and the repository states its licensing position in the README. Before you ship it in a product, check that file — this page deliberately makes no claim it cannot point at.",
+    content: "Yes. The repository is MIT licensed (see LICENSE at the root), which permits commercial use, modification and redistribution provided the copyright notice is kept. The bundled fonts are covered separately by the SIL Open Font License in src/fonts.",
   },
 ];
 

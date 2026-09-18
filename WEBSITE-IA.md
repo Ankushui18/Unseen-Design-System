@@ -334,7 +334,7 @@ AlignUI's credibility partly comes from code/Figma alignment. Unseen's version, 
 - The homepage may say "117 components" only when the scorecard backs it; the quality proof is the matrices, not the number.
 - "Accessible" is only claimed with the receipt: axe on all routes × both themes, keyboard contracts, and a link to how it is enforced.
 - Comparisons to other systems are banned in copy; parity tables (like `ALIGNUI-PARITY-2026-09-17.md`) live in the repo, not on the site. A competitor's name must not appear in the product at all — `tests-browser/surface.spec.ts` scans the shipped copy for them.
-- **A licence is stated only where one exists.** The repository has no `LICENSE` file, so the site says "free to explore during the public beta" and points at `README.md` → *Licensing* for the real position. If the owner adds a licence, both move together.
+- **A licence is stated only where one exists.** The repository is MIT licensed (`LICENSE`), so the site names MIT. The pairing is mechanical: the `licence-claim` rule in `scripts/design-lint.mjs` fails the build if copy names a licence the repository does not hold, or names an identifier that disagrees with `package.json`. Remove `LICENSE` and eight findings appear across `Shell`, `Blocks`, `ComponentsIndex`, `GettingStarted`, `Pricing` and `Home`.
 - **No empty chrome.** An editor pane, preview frame or canvas that can render empty must not be shipped in that state. The hero editor had a blank pane and was rebuilt.
 
 ---

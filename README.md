@@ -97,22 +97,20 @@ npm run quality:ia                # validate the WEBSITE-IA taxonomy (no orphans
 
 ## Licensing
 
-**There is no `LICENSE` file in this repository yet, so no licence is granted.**
-Everything in it is published so you can read, run and evaluate the system, and the
-repository is public — but "public" is not "licensed". Until a licence is added,
-treat the code as all-rights-reserved and do not ship it in a product.
+**MIT** — see [`LICENSE`](./LICENSE). Use the components in commercial products,
+modify them, redistribute them; keep the copyright notice. The MIT grant cannot
+be withdrawn from versions already published under it.
 
-To make the site's former claim true, the owner only has to pick one:
+Bundled third-party assets keep their own terms, and `LICENSE` says so: the
+typefaces in `src/fonts/` are SIL OFL 1.1 (`src/fonts/LICENSE-OFL.txt`), and the
+components import `@remixicon/react` (Apache-2.0), `clsx`, `tailwind-merge` and
+`react-live` (all MIT) from `node_modules` rather than redistributing them.
 
-1. **MIT** (or Apache-2.0) — add the licence text as `LICENSE`, put the chosen
-   identifier in `package.json` (`"license": "MIT"`), replace this section with a
-   one-line statement, and the copy in `src/pages/GettingStarted.tsx` can go back
-   to naming the licence.
-2. **Source-available / evaluation only** — keep this section, and the site keeps
-   saying "free to explore during the public beta".
-
-The site does not state a licence until then: `GettingStarted` links here instead,
-and the homepage FAQ says the same thing in one sentence.
+The site states this licence because the repository grants it: a `licence-claim`
+rule in `scripts/design-lint.mjs` fails the build if any page names a licence the
+repository does not hold, or names an identifier that disagrees with
+`package.json`. (Before that rule the site claimed MIT for months with no
+`LICENSE` file in the repository.)
 
 ## Status & roadmap
 

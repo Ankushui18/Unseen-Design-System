@@ -31,7 +31,7 @@ export function ComponentsIndex({ navigate }: { navigate: (t: string) => void })
           eyebrow="Component Library · React 19 & Tailwind v4"
           title="Every component. At real size."
           description="The pieces of a cohesive, accessible interface. Explore working examples, inspect the TypeScript props API, and copy source directly."
-          tags={[`${total} documented components`, "Free to explore in beta", "Zero runtime lock-in"]}
+          tags={[`${total} documented components`, "MIT licensed", "Zero runtime lock-in"]}
         />
 
         {/* Filters + search live in one band so the grid starts a single step below the hero. */}

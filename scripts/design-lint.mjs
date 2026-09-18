@@ -2,7 +2,7 @@
  * Aperture design-lint — enforces the design-system contract statically.
  * Run: node scripts/design-lint.mjs
  */
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import ts from "typescript";
 
@@ -80,6 +80,30 @@ for (const f of cssFiles) {
     for (const m of src.matchAll(r.re)) {
       const line = src.slice(0, m.index).split("\n").length;
       warn(f, line, r.id, r.msg);
+    }
+  }
+}
+
+/* ------------------------------------------------- licence claim ↔ licence */
+/* The site claimed MIT for months while the repository had no LICENSE file, so
+ * the claim was simply untrue. This pairs the two: copy may only name a licence
+ * the repository actually grants, and the identifier must match package.json. */
+const LICENSE_NAMES = /\b(MIT|Apache-2\.0|BSD-3-Clause|BSD-2-Clause|GPL-3\.0|ISC)\b/g;
+const hasLicense = existsSync(join(ROOT, "../LICENSE"));
+const declared = JSON.parse(readFileSync(join(ROOT, "../package.json"), "utf8")).license ?? null;
+if (hasLicense && declared) {
+  const text = readFileSync(join(ROOT, "../LICENSE"), "utf8");
+  if (!text.includes(declared.includes("MIT") ? "MIT License" : declared)) {
+    warn("LICENSE", 0, "licence-claim", `LICENSE does not contain the identifier package.json declares ("${declared}")`);
+  }
+}
+for (const f of files) {
+  const src = readFileSync(f, "utf8");
+  for (const m of src.matchAll(LICENSE_NAMES)) {
+    if (!hasLicense) {
+      warn(f, src.slice(0, m.index).split("\n").length, "licence-claim", `names the ${m[1]} licence but the repository has no LICENSE file`);
+    } else if (declared && m[1] !== declared) {
+      warn(f, src.slice(0, m.index).split("\n").length, "licence-claim", `names ${m[1]} but package.json declares ${declared}`);
     }
   }
 }
@@ -184,9 +208,13 @@ for (const t of new Set(colorish)) if (!bridged.has(t)) warn(join(ROOT, "index.c
 /* ------------------------------------------------------------------ report */
 const byRule = {};
 for (const p of problems) (byRule[p.rule] ??= []).push(p);
-const order = ["class-contract", "route", "preview", "bridge", "a11y", "font-cdn", "weight-css", "docs-api-core", "docs-api", "docs-examples", "docs-variants", "docs-states", "docs-a11y", "reduced-motion", "type-scale", "weight", "legacy-shadow", "card-border", "raw-color", "raw-hex", "icon-size", "opacity-disabled"];
+const order = ["class-contract", "route", "preview", "bridge", "a11y", "font-cdn", "licence-claim", "weight-css", "docs-api-core", "docs-api", "docs-examples", "docs-variants", "docs-states", "docs-a11y", "reduced-motion", "type-scale", "weight", "legacy-shadow", "card-border", "raw-color", "raw-hex", "icon-size", "opacity-disabled"];
+/* Every rule that fired prints. A rule missing from `order` used to be counted
+   by the exit code while printing nothing — a failing build with an empty
+   explanation. Unknown rules are appended, never dropped. */
+const printed = [...order, ...Object.keys(byRule).filter((r) => !order.includes(r))];
 let total = 0;
-for (const r of order) {
+for (const r of printed) {
   const list = byRule[r];
   if (!list) continue;
   total += list.length;
@@ -195,5 +223,5 @@ for (const r of order) {
   if (list.length > 12) console.log(`  … +${list.length - 12} more`);
 }
 console.log(`\n${files.length} files scanned · nav ${navHrefs.length} · routes ${routeKeys.length} · previews ${previewKeys.length} · ${total} findings`);
-const blocking = problems.filter((p) => ["class-contract", "route", "preview", "bridge", "a11y", "font-cdn", "weight-css", "reduced-motion", "docs-api-core"].includes(p.rule)).length;
+const blocking = problems.filter((p) => ["class-contract", "route", "preview", "bridge", "a11y", "font-cdn", "weight-css", "reduced-motion", "docs-api-core", "licence-claim"].includes(p.rule)).length;
 process.exit(blocking ? 1 : 0);
