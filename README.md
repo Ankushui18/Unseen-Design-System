@@ -79,6 +79,8 @@ scripts/
 
 ## Status & roadmap
 
+- **Product roadmap (v2 platform: variants, blocks, widgets, templates, Figma, packaging):** `UNSEEN-V2-ROADMAP.md`.
+- **Binding conventions (variant matrix, API, naming, a11y, docs anatomy, new-component definition of done):** `CONVENTIONS.md`.
 - Component coverage vs AlignUI free base: **63/63** — see `ALIGNUI-PARITY-2026-09-17.md`.
 - Phased engineering plan (tests, playground, packaging, ecosystem): **`UNSEEN-ROADMAP-2026-09-17.md`**.
 - Live component matrix with per-component state/a11y/docs coverage: `COMPONENT-AUDIT.md`.
