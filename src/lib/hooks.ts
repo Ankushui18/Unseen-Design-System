@@ -137,9 +137,12 @@ export function useOnClickOutside<T extends HTMLElement>(
 }
 
 export function useHashRoute() {
+  /* Query params ride inside the hash (`#/components/button?tone=accent`) so the
+   * playground can be deep-linked (WEBSITE-IA.md §5.4). They are stripped from
+   * the route, so every existing URL keeps resolving. */
   const get = () => {
     const h = window.location.hash.replace(/^#\/?/, "");
-    return h || "";
+    return h.split("?")[0] || "";
   };
   const [route, setRoute] = useState(get);
 
@@ -193,4 +196,35 @@ export function useScrollSpy(ids: string[], offset = 120) {
     return () => window.removeEventListener("scroll", onScroll);
   }, [ids.join("|"), offset]);
   return active;
+}
+
+/**
+ * Read/write the query params carried in the hash (`#/components/button?tone=accent`)
+ * without navigating and without a scroll jump — the playground's deep-link layer
+ * (WEBSITE-IA.md §5.4). Unknown params are ignored by consumers; defaults should
+ * be omitted by the caller so a clean URL stays short.
+ */
+export function useHashParams() {
+  const read = () => new URLSearchParams(window.location.hash.split("?")[1] ?? "");
+  const [params, setParams] = useState(read);
+
+  useEffect(() => {
+    const onHash = () => setParams(read());
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  const update = useCallback((next: Record<string, string | undefined>) => {
+    const merged = read();
+    for (const [key, value] of Object.entries(next)) {
+      if (value === undefined || value === "") merged.delete(key);
+      else merged.set(key, value);
+    }
+    const query = merged.toString();
+    const path = window.location.hash.split("?")[0] || "#/";
+    window.history.replaceState(null, "", query ? `${path}?${query}` : path);
+    setParams(new URLSearchParams(merged));
+  }, []);
+
+  return [params, update] as const;
 }

@@ -21,8 +21,9 @@ import {
   RiUnderline,
   RiWalletLine,
 } from "@remixicon/react";
-import { OptionPicker, PageHeader, Import, PropsTable, Section, Showcase } from "../../docs/Blocks";
-import { Button, FancyButton } from "../../ui/Button";
+import { Button } from "../../ui/Button";
+import { PageHeader, Import, PropsTable, Section, Showcase } from "../../docs/Blocks";
+
 import { Avatar, Chip, FeaturedIcon, type BadgeColor, type BadgeVariant } from "../../ui/Display";
 import { Input } from "../../ui/Form";
 import { LinkButton, StatusBadge } from "../../ui/Extra";
@@ -90,61 +91,6 @@ export function FeaturedIconDoc() {
 }
 
 /* --------------------------- Button (AlignUI spec) -------------------------- */
-
-export function ButtonSpecDoc() {
-  const [mode, setMode] = useState<"solid" | "outline" | "soft" | "ghost">("solid");
-  const [size, setSize] = useState<"md" | "sm" | "xs" | "xxs">("md");
-  return (
-    <>
-      <PageHeader eyebrow="Components · Actions" title="Button" description="The base action. Four modes — filled, stroke, lighter and ghost — across five intents and four sizes. Regular buttons are flat; use Fancy Button for bevelled marketing CTAs." tags={["40 / 36 / 32 / 28", "4 modes", "Double focus ring"]} />
-      <Import names="Button, FancyButton, ButtonGroup" />
-      <Section title="Playground">
-        <Showcase
-          controls={<><OptionPicker label="Mode" value={mode} options={["solid", "outline", "soft", "ghost"] as const} onChange={setMode} /><OptionPicker label="Size" value={size} options={["md", "sm", "xs", "xxs"] as const} onChange={setSize} /></>}
-          code={`<Button variant="${mode}" tone="accent" size="${size}">Button</Button>`}
-        >
-          {(["accent", "default", "danger"] as const).map((t) => (
-            <Button key={t} variant={mode} tone={t} size={size} startContent={<RiRocketLine />} className="capitalize">{t === "accent" ? "Primary" : t === "default" ? "Neutral" : "Error"}</Button>
-          ))}
-          <Button variant={mode} tone="default" size={size} iconOnly aria-label="Icon"><RiRocketLine /></Button>
-          <Button variant={mode} tone="default" size={size} disabled>Disabled</Button>
-        </Showcase>
-      </Section>
-      <Section title="Matrix" description="Every intent × mode pair. Stroke neutral carries the xs shadow; hovering removes it and flips to the weak fill.">
-        <Showcase align="stretch">
-          <div className="grid gap-3">
-            {(["solid", "outline", "soft", "ghost"] as const).map((m) => (
-              <div key={m} className="flex flex-wrap items-center gap-2">
-                <span className="w-16 font-mono text-[11px] text-subtle">{m === "solid" ? "filled" : m === "outline" ? "stroke" : m === "soft" ? "lighter" : m}</span>
-                {(["accent", "default", "success", "warning", "danger"] as const).map((t) => <Button key={t} variant={m} tone={t} size="sm" className="capitalize">{t}</Button>)}
-              </div>
-            ))}
-          </div>
-        </Showcase>
-      </Section>
-      <Section title="Fancy Button" description="Bevel highlight, 1px ring shadow and a soft drop. Reserved for the single most important CTA on a marketing surface.">
-        <Showcase code={`<FancyButton>Get all-access</FancyButton>
-<FancyButton tone="default">Neutral</FancyButton>
-<FancyButton tone="stroke">Stroke</FancyButton>`}>
-          <FancyButton>Get all-access</FancyButton>
-          <FancyButton tone="default">Neutral</FancyButton>
-          <FancyButton tone="danger">Delete</FancyButton>
-          <FancyButton tone="stroke">Stroke</FancyButton>
-          <FancyButton tone="default" iconOnly aria-label="Launch"><RiRocketLine /></FancyButton>
-        </Showcase>
-      </Section>
-      <Section title="API">
-        <PropsTable rows={[
-          { name: "variant", type: '"solid" | "outline" | "soft" | "ghost" | "link"', default: '"solid"', description: "Mode. Maps to AlignUI filled / stroke / lighter / ghost." },
-          { name: "tone", type: '"accent" | "default" | "success" | "warning" | "danger"', default: '"accent"', description: "Intent colour." },
-          { name: "size", type: '"md" | "sm" | "xs" | "xxs" | "lg"', default: '"md"', description: "40 · 36 · 32 · 28 · 48px." },
-          { name: "startContent / endContent", type: "ReactNode", description: "20px icon slots, pulled in by −4px." },
-          { name: "loading", type: "boolean", default: "false", description: "Swaps the leading slot for a spinner." },
-        ]} />
-      </Section>
-    </>
-  );
-}
 
 /* ------------------------------ Badge (10 colours) -------------------------- */
 

@@ -70,6 +70,24 @@ scripts/
   component-audit.mjs  the component matrix generator
 ```
 
+## The quality bar (v2)
+
+Two documents define what "done" means, and one gate enforces it:
+
+- **`COMPONENT-QUALITY-SPEC.md`** — the graded bar: six matrices (contract, variants, states, visual, accessibility, documentation), tiers, scoring, definition of done, anti-patterns.
+- **`WEBSITE-IA.md`** — the website as a product: route table, 8-category taxonomy (80 components mapped), page templates, the playground contract, deep links.
+- **`QUALITY-SCORECARD.md`** — generated grades, tiers and the debt ledger.
+
+```bash
+npm run quality:report            # per-component score, grade, tier, failing checks
+npm run quality:report -- --md    # regenerate QUALITY-SCORECARD.md
+npm run quality:check             # ratchet vs audit/quality-baseline.json (runs in npm test)
+npm run quality:check -- --strict # tier bar: fail any component below its tier minimum
+npm run quality:ia                # validate the WEBSITE-IA taxonomy (no orphans, no empty categories)
+```
+
+**How the bar works in practice:** every component is graded A–D and assigned a tier (Tier A flagship · B core · C specialist). `npm test` enforces the **ratchet** — no score may drop — and new components enter at the Tier A bar. Remediation is tracked as generated debt, never as a hand-written list. The reference implementation is `Button` (`src/ui/Button.tsx` + `src/pages/components/ButtonDoc.tsx`): the canonical/alias vocabulary layer, the full matrix, and the inline playground with deep-linkable state.
+
 ## Architecture contracts (short version)
 
 - **Tokens first.** Components only consume semantic tokens; raw color/px values are lint errors.
@@ -79,6 +97,8 @@ scripts/
 
 ## Status & roadmap
 
+- **Component quality bar (grades, tiers, matrices, DoD):** `COMPONENT-QUALITY-SPEC.md` — enforced by `npm run quality:check`.
+- **Website information architecture (routes, taxonomy, page templates, playground):** `WEBSITE-IA.md`.
 - **Product roadmap (v2 platform: variants, blocks, widgets, templates, Figma, packaging):** `UNSEEN-V2-ROADMAP.md`.
 - **Binding conventions (variant matrix, API, naming, a11y, docs anatomy, new-component definition of done):** `CONVENTIONS.md`.
 - Component coverage vs AlignUI free base: **63/63** — see `ALIGNUI-PARITY-2026-09-17.md`.

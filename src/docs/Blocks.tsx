@@ -355,11 +355,14 @@ export function OptionPicker<T extends string>({
   value,
   options,
   onChange,
+  labels,
 }: {
   label: string;
   value: T;
   options: readonly T[];
   onChange: (v: T) => void;
+  /** Display vocabulary (COMPONENT-QUALITY-SPEC.md §3.2) — falls back to the raw value. */
+  labels?: Partial<Record<T, string>>;
 }) {
   return (
     <div>
@@ -374,7 +377,7 @@ export function OptionPicker<T extends string>({
               value === o ? "bg-surface text-foreground shadow-toggle ring-1 ring-border/60" : "text-muted hover:text-foreground",
             )}
           >
-            {o}
+            {labels?.[o] ?? o}
           </button>
         ))}
       </div>

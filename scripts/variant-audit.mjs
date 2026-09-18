@@ -9,6 +9,11 @@
  * status/brand/orientation); states (loading/disabled/error) are measured
  * separately by component-audit and are NOT variants.
  *
+ * Alias law (COMPONENT-QUALITY-SPEC.md §3.3): a union member whose type name
+ * ends in `Alias` (e.g. `variant?: Variant | IntentAlias`) is ergonomics, not a
+ * cell. Alias members are recorded per component in `aliases` and excluded from
+ * the cell product, so shorthand can never inflate the count.
+ *
  * For each `export function X` / `export const X` in src/ui it:
  *   - resolves string-literal unions in the component's prop sections,
  *     including: file-level `export type Axis = "a" | "b"` referenced from a
@@ -115,9 +120,13 @@ const rows = [];
 for (const file of files) {
   const src = sources[file];
 
-  /* section boundaries at every export */
+  /* section boundaries at every export. Only *capitalised* function/const
+   * exports are components (CONVENTIONS.md §3); lower-case exports are helpers
+   * and must never create a row or contribute cells. */
   const bounds = [];
   for (const m of src.matchAll(/\nexport\s+(function|const|interface|type)\s+([A-Za-z0-9_]+)/g)) {
+    const isHelperFn = (m[1] === "function" || m[1] === "const") && !/^[A-Z]/.test(m[2]);
+    if (isHelperFn) continue;
     bounds.push({ at: m.index, kind: m[1], name: m[2] });
   }
 
@@ -128,6 +137,7 @@ for (const file of files) {
     const end = bounds[i + 1]?.at ?? src.length;
     const section = src.slice(b.at, end);
     const found = {};
+    const foundAliases = {};
     /* prop-name then a union of string literals and/or identifiers,
      * or the special form `keyof typeof Record` */
     const re = /(^|[\s,{(])\b([a-z][A-Za-z0-9]*)\??:\s*((?:keyof\s+typeof\s+[A-Za-z_$][\w$]*)|(?:"[^"]+"|[A-Za-z_$][\w$]*)(?:\s*\|\s*(?:"[^"]+"|[A-Za-z_$][\w$]*))*)/g;
@@ -146,6 +156,7 @@ for (const file of files) {
         let ok = true;
         for (const t of tokens) {
           if (t.startsWith('"')) vals.add(t.slice(1, -1));
+          else if (/Alias$/.test(t)) (foundAliases[propName] ??= []).push(t);
           else {
             const a = resolveAlias(file, t);
             if (!a) { ok = false; break; }
@@ -158,7 +169,7 @@ for (const file of files) {
       if (axis === "status" && values.filter((v) => STATUS_VALUES.has(v)).length < 2) continue;
       if (!found[axis] || values.length > found[axis]) found[axis] = values.length;
     }
-    return found;
+    return { axes: found, aliases: foundAliases };
   });
 
   /* attribute sections to components */
@@ -171,11 +182,18 @@ for (const file of files) {
   const merge = (row, props) => {
     for (const [axis, n] of Object.entries(props)) row.axes[axis] = Math.max(row.axes[axis] ?? 0, n);
   };
+  const mergeAliases = (row, aliases) => {
+    for (const [prop, types] of Object.entries(aliases)) {
+      row.aliases = row.aliases ?? {};
+      row.aliases[prop] = [...new Set([...(row.aliases[prop] ?? []), ...types])];
+    }
+  };
   bounds.forEach((b, i) => {
-    const props = propsForSection[i];
+    const { axes: props, aliases: propAliases } = propsForSection[i];
     if (Object.keys(props).length === 0) return;
     if (isCompKind(b.kind)) {
       merge(get(b.name), props);
+      mergeAliases(get(b.name), propAliases);
       return;
     }
     /* interface/type sections: attribute only when clearly the component's
@@ -186,8 +204,8 @@ for (const file of files) {
     const next = bounds.slice(i + 1).find((x) => isCompKind(x.kind));
     if (!next) return;
     const base = b.name.endsWith("Props") ? b.name.slice(0, -5) : b.name;
-    if (b.name.endsWith("Props") && compNames.has(base)) merge(get(base), props);
-    else if (b.name === "Props" || base === next.name) merge(get(next.name), props);
+    if (b.name.endsWith("Props") && compNames.has(base)) { merge(get(base), props); mergeAliases(get(base), propAliases); }
+    else if (b.name === "Props" || base === next.name) { merge(get(next.name), props); mergeAliases(get(next.name), propAliases); }
   });
 
   for (const row of acc.values()) {
@@ -238,4 +256,9 @@ const col = (s, w) => String(s).padEnd(w);
 console.log(col("Component", 24) + col("File", 22) + col("Axes", 34) + "Cells");
 console.log("-".repeat(84));
 for (const r of rows) console.log(col(r.name, 24) + col(r.file, 22) + col(axesOf(r), 34) + r.cells);
+const aliased = rows.filter((r) => r.aliases && Object.keys(r.aliases).length);
+if (aliased.length) {
+  console.log("\nAlias layer (ergonomics, not counted as cells — QUALITY-SPEC §3.3):");
+  for (const r of aliased) console.log("  " + col(r.name, 24) + Object.entries(r.aliases).map(([p, t]) => `${p}: ${t.join("|")}`).join(", "));
+}
 console.log(`\n${rows.length} components · ${withAxes} with axes · **${total} meaningful variant cells**`);

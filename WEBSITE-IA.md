@@ -1,0 +1,532 @@
+# The Unseen Website — Information Architecture & Product Spec
+
+> **What this is.** The website specified as a product: what pages exist, in what order, what each one must contain for a developer to *find, understand, and copy* a component in under a minute. This is the companion to `COMPONENT-QUALITY-SPEC.md` — that document sets the bar for what gets published here; this one sets the bar for how it is published.
+>
+> **The thesis.** Unseen's biggest opportunity is not more components; it is that the **website itself becomes a product**. The interaction model is borrowed deliberately from AlignUI (live examples, copyable code, category navigation, playground, light/dark, blocks, Figma parity). The **visual language is not** — it is Unseen's tokens, geometry and motion, per `COMPONENT-QUALITY-SPEC.md` §6.
+
+**Current state (verified, not remembered):**
+
+| Thing | Today | Source of truth |
+|---|---|---|
+| Routes | **106** (82 component, 13 foundation, 5 template, 4 docs, 5 root) | `npm run lint:design` |
+| Nav items | 105, in 9 groups (6 component groups including a **PRO** group of 11) | `src/docs/nav.ts` |
+| Blocks | 33 registered, `category` in 8 values | `src/blocks/index.tsx` |
+| Templates | 5 (`ai`, `analytics`, `settings`, `billing`, `team`) | `src/pages/Templates.tsx` |
+| Search | Command palette (`Cmd/Ctrl-K`), nav-title + keyword matching | `src/docs/Shell.tsx` |
+| Preview chrome | Preview/Code tabs, viewport switcher (desktop/768/390), canvas light/dark, reset, copy | `src/docs/Blocks.tsx` → `Showcase` |
+| Live editing | `react-live` on the homepage hero only | `src/pages/Home.tsx` |
+
+**What is missing** (this document's job): a component taxonomy that is *topics*, not *commercial tiers*; a **playground on every Tier A page** (the component and the first page now exist — `src/docs/Playground.tsx`, `#/components/button`); **deep-linkable state** (built for Button, needs wider adoption); per-block routes; a Layout/Utilities home for the structural primitives; a Figma bridge page; and a nav that shows the same order to every visitor. The taxonomy is codified in `audit/ia-taxonomy.json` and validated by `npm run quality:report -- --ia`.
+
+---
+
+## 1. Principles
+
+1. **Discovery → comprehension → copy.** Every page has exactly one job: get a working, correct snippet into the visitor's editor. Copy buttons are the primary conversion event of the site.
+2. **Show the quality, don't count it.** Counts are receipts, not pitches (§9). A page that leads with "117 components" is a weaker page than one showing five flawless matrices.
+3. **The interaction model is borrowed; the look is ours.** Live preview, code tab, copy, controls, blocks, templates, Figma parity — borrowed. Type, colour, geometry, elevation, motion — Unseen's, and identical to what ships in `src/ui`.
+4. **The site is the reference implementation.** Every docs page is built from `src/ui` components and tokens — no bespoke docs widgets that contradict the system. If the site needs a nicer control, the control gets built in `src/ui` first (`CONVENTIONS.md` §6, block rule).
+5. **Nothing load-bearing lives in prose.** States, axes, props and counts come from the code, or from a script that reads the code.
+6. **One canonical URL per thing.** Everything else is a redirect. Deep links are permanent (§2.3).
+
+---
+
+## 2. Sitemap & URL contracts
+
+```
+/                                   Home
+├── /components                     Index: all 8 categories, filterable, searchable
+│   └── /components/{slug}          80 component pages  (the killer feature — §4.4)
+├── /blocks                         Index: 33 blocks, category filters, deep links
+│   └── /blocks/{key}               One page per block (pattern anatomy + source)
+├── /templates                      Index: 5 templates
+│   └── /templates/{key}            One page per template
+├── /foundations                    Index
+│   └── /foundations/{topic}        13 topics (color, type, spacing, sizing, elevation,
+│                                   borders, opacity, motion, breakpoints, icons,
+│                                   accessibility, tokens, themes)
+├── /playground                     Standalone: full-bleed playground, shareable state
+├── /figma                          Figma/code parity: naming, tokens, variants, kits
+├── /patterns                       Compositions (existing) — reframed as Blocks §7 "Patterns"
+├── /docs/introduction · /installation · /principles · /changelog
+└── /pricing                        Marketing (exists; out of scope for the docs IA)
+```
+
+### 2.1 URL rules
+
+| Rule | Detail |
+|---|---|
+| Shape | lower-case, kebab-case, no verbs, no nesting deeper than 2 segments |
+| Component | `/components/{component-slug}` — one page per **public component**; sub-parts live on the parent page (`CardBody` → `/components/card`) |
+| Anchors | Every docs section is addressable: `/components/button#variants`, `#sizes`, `#states`, `#accessibility`, `#api`, `#source` — generated from the section titles in `COMPONENT-QUALITY-SPEC.md` §8 |
+| Playground state | Deep-linkable query params (§5.4): `?variant=primary&mode=filled&size=lg&theme=dark&viewport=390` |
+| Search | `?q=` on `/components` for shareable filtered views |
+| No orphans | Every component route appears in `src/docs/nav.ts` **and** is reachable from `/components`; a route without a nav entry fails `design-lint` (already enforced) |
+
+### 2.2 Two pages that must die (found by this audit)
+
+| Route | Problem | Action |
+|---|---|---|
+| `components/badge-spec` | duplicate of `components/badge` | alias → `/components/badge`, delete the page, keep the URL as a redirect |
+| `components/badge-overlay` | duplicate of `components/badge` | same |
+
+Registered in `audit/ia-taxonomy.json` → `legacyRoutes`, so the redirect table is code, not memory.
+
+### 2.3 Redirect policy
+
+- Renames get a permanent redirect in the router + an entry in `legacyRoutes`; a docs URL that 404s is a broken contract.
+- Blocks/templates gain deep links *before* they are linked from anywhere else, so no link is ever born broken.
+- The `?` state of a playground is optional decoration: the page must be fully usable when the params are stripped (share links degrade gracefully).
+
+---
+
+## 3. Navigation taxonomy
+
+### 3.1 The problem with today's nav
+
+`PRO` is a **price tier presented as a topic**. It sorts 11 unrelated components (an AI prompt input, a crypto address chip, a calendar) above `Actions`, so the first thing a visitor learns is the paywall, not the system. Meanwhile `Feedback & Overlays` mixes two different mental models in one column, and the structural primitives (`Widget Box`, `Well`, `Content Divider`) sit inside `Data Display`.
+
+### 3.2 The target taxonomy — 8 categories, 80 components, a perfect partition
+
+| # | Category | Count | Mental model |
+|---|---|---|---|
+| 1 | **Actions** | 9 | Things users press |
+| 2 | **Forms** | 21 | Everything that captures input — including AI, money and time |
+| 3 | **Data Display** | 19 | Surfaces that present state, identity and numbers |
+| 4 | **Navigation** | 8 | Moving between places, views and steps |
+| 5 | **Feedback** | 6 | Telling the user what happened, inline and transient |
+| 6 | **Overlay** | 9 | Content layered above the page, with focus management |
+| 7 | **Layout** | 3 | Structure, rhythm, containers |
+| 8 | **Utilities** | 5 | Small helpers: code, keys, media |
+
+Verified: **80 of 80** currently-routed components map to exactly one category (`audit/ia-taxonomy.json`; `npm run quality:report -- --ia` re-checks it and fails on orphans).
+
+Rules that follow from this:
+
+1. **Commercial tiers are badges, not categories.** `PRO` becomes a badge (`Pro`) on the component page, block card and template card. Same components, no separate shelf. The existing 11 PRO components are redistributed in §3.3.
+2. **One category per component.** Multi-purpose components get **capability tags** (`AI`, `Data`, `Finance`, `Media`) rendered in the index — not a second category. Tags are filterable; categories are fixed.
+3. **A new category needs ≥5 members** and a distinct mental model. Otherwise it is a tag.
+4. **Order is stable and identical for everyone.** Categories sort by the order above; inside a category, components sort by usage (blocks/templates first) so the page leads with what people actually reach for.
+
+### 3.3 What moved (the PRO dissolution)
+
+| Component | Was | Becomes |
+|---|---|---|
+| AI Prompt Input, Chat Input | PRO / Forms | **Forms** (tag: AI) |
+| Currency Amount Input | PRO | **Forms** (tag: Finance) |
+| File Uploader | PRO | **Forms** |
+| Time Picker, Calendar | PRO | **Forms** (Date & time) |
+| Crypto Address Chip | PRO | **Data Display** (tag: Finance) |
+| Activity Feed, Notification Feed | PRO | **Data Display** |
+| Command Menu | PRO | **Overlay** |
+| Voice Visualizer | PRO | **Utilities** (tag: Media) |
+| Filters | PRO | **Utilities** |
+| Widget Box, Well, Content Divider | Data Display | **Layout** |
+
+### 3.4 Sidebar anatomy
+
+```
+[ Brand ]  [ Search ⌘K ]                      ← nav search filters the tree instantly
+  Components                                  ← section: 8 category groups
+    ▸ Actions            9
+    ▸ Forms             21
+    ▸ Data Display      19
+    ▸ Navigation         8
+    ▸ Feedback           6
+    ▸ Overlay            9
+    ▸ Layout             3
+    ▸ Utilities          5
+  Blocks                                      ← 33, grouped by block category
+  Templates                                   ← 5
+  Foundations                                 ← 13 topics
+  Docs                                        ← introduction · installation · principles · changelog
+  Playground · Figma                          ← the two product surfaces (§5, §8)
+```
+
+Behavior that must hold: the currently open category stays expanded across navigation; the active item is marked with `aria-current`; the sidebar is keyboard-navigable (arrows within a group, Enter to open); on mobile it is a slide-over that traps focus and returns it (`CONVENTIONS.md` §4). **Badges**: `New` (added in the last two releases), `Updated`, `Pro` (tier), `Beta` (API may change). Every badge is documented in `/docs/changelog`.
+
+---
+
+## 4. Page templates
+
+### 4.1 Home — "a design-system product", not a landing page
+
+Order (top to bottom), with the rule for each:
+
+1. **Hero** — the name, one sentence of positioning, two actions (`Explore components` primary, `Get started` secondary), and a one-line stack strip (`React · Tailwind · TypeScript · Accessible`).
+2. **Live component** — a real, editable example (email/password card, as in the current hero) with `react-live`: edit the code, the preview updates. This is the single strongest proof of quality; it must render something genuinely useful, not a toy.
+3. **Capability strip** — counts as *receipts*: `117 components · 33 blocks · 5 templates · TypeScript · dark mode · responsive · accessible`. Print them from the registries (`COMPONENT-QUALITY-SPEC.md` §9.4), never hard-coded, and head-line only the bar-passing count.
+4. **Quality proof** — the matrices themselves: a live `Button` intent × mode grid, a states row, a dark/light split. Show, don't assert.
+5. **Foundations proof** — tokens, accent generator, radius scale, dark mode toggle (the customizer popover already exists — surface it here).
+6. **Blocks & templates** — 3–4 real compositions, each linking to its own page.
+7. **Accessibility & quality** — the gate, stated as facts: axe on all routes in both themes, keyboard contracts, the quality bar with a link to the scorecard.
+8. **Figma parity** — one visual, linking to `/figma`.
+9. **FAQ + footer.**
+
+Unchanged rule: the homepage never becomes a second docs site. It proves quality in one scroll and hands off to `/components`.
+
+### 4.2 Components index — `/components`
+
+- Above the fold: search (`?q=`, matches name, keyword, tag and prop name), category chips (8), a light/dark toggle that switches **all** previews, and a density control (1/2/3 columns).
+- Each card: live preview (not a screenshot), name, one-line description, tags, `Pro` badge if applicable, and a `Copy import` action on hover/focus.
+- Grouped by category, in the fixed order of §3.2; empty search states are real empty states with suggestions.
+
+### 4.3 Blocks & templates indexes
+
+- **Blocks**: 33 entries, category filters (`Authentication`, `Dashboard`, `Forms`, `Marketing`, `Feedback`, `Navigation`, `Social`, `Templates`), preview at real size, `Pro` badge, and — the fix — **each block gets its own route** `/blocks/{key}` with: preview (responsive), the exact components it uses (linked), the source (copyable), and accessibility notes.
+- **Templates**: `/templates/{key}` with a full-page preview, a responsive frame (desktop/tablet/mobile), the component manifest, and the "make it yours" section (which tokens to change).
+
+### 4.4 The component page — the killer feature
+
+The section order is normative (`COMPONENT-QUALITY-SPEC.md` §8) and the tier decides depth. The page's shape:
+
+```
+Components / Actions                                     ← breadcrumb = category
+Button                                          [Pro] [Copy import]
+The base action. Five intents, five modes, five sizes, six states.
+[5 intents] [5 modes] [5 sizes] [used in 12 blocks]       ← capability tags
+
+┌─ Playground ────────────────────────────────────────────────────────────┐
+│  [ live preview ]                          [Preview | Code]  [⌘] [⟳] [⧉] │
+│  ▸ Variant [Primary ▾]  Mode [Filled ▾]  Size [LG ▾]  Icon [None ▾]     │
+│  ▸ Content [Continue ▾]  State [Default ▾]  [ dark canvas ] [ 390px ]   │
+└─────────────────────────────────────────────────────────────────────────┘
+    ↑ controls ↔ code stay in sync; the code tab is editable; copy = the code below
+
+Variants        full 5 × 5 intent × mode matrix, every cell labelled
+Sizes           XS·SM·MD·LG·XL at real size, with px
+States          default · hover · focus · active · disabled · loading
+With icons      text · leading · trailing · both · icon-only (aria-label shown)
+Composition     2–3 real assemblies (form submit row, destructive confirm, …)
+Accessibility   keyboard table, announced state, focus behaviour
+API             props table incl. aliases + precedence; controlled/uncontrolled example
+Source          full source + copy
+```
+
+Additional requirements: every section header is an anchor (`#variants`); the page is axe-clean in both themes; the "used in" list is computed from the block registry (so it cannot lie); a "Related" strip links neighbours in the same category.
+
+### 4.5 Foundations pages
+
+Unchanged structure, one requirement added: **every token table is generated from `src/index.css`** (the tokens exporter already exists — `npm run tokens:export`), and each foundation page ends with "which components use this" links, turning theory into navigation.
+
+### 4.6 Docs pages
+
+`Introduction` (what this is + the 60-second tour), `Installation` (package + copy-paste paths, prerequisites, framework notes), `Principles`, `Changelog` (drives the `New`/`Updated` badges). Installation is the funnel: it must show the real import line and a first working example per framework.
+
+---
+
+## 5. The playground
+
+The playground is the highest-value missing surface: it turns "there is a component" into "I have configured the component I want."
+
+### 5.1 Two forms, one implementation
+
+| Form | Where | Purpose |
+|---|---|---|
+| **Inline playground** | Every Phase-A component page, section 3 | Configure and copy without leaving the page |
+| **Full playground** | `/playground` (route) | Larger canvas, all controls, saved/shared state, no docs chrome |
+
+Both are the same component (`<Playground/>`), differing only in available width and control set.
+
+> **Reference implementation (built):** `src/docs/Playground.tsx` — controlled by the page, driven by `react-live`, with viewport switcher, canvas theme, reset, copy (including the import lines) and a readable error surface. First adopter: `src/pages/components/ButtonDoc.tsx` (`#/components/button`), whose state is mirrored into the hash (`useHashParams`, `src/lib/hooks.ts`). Copy this pattern for every Tier A page.
+
+### 5.2 Layout
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Button                                      [Copy] [Open]   │
+├─────────────────────────────────────────────────────────────┤
+│                    [ Continue → ]                           │
+├───────────────────────┬─────────────────────────────────────┤
+│ Controls              │ Code                                │
+│ Variant [ Primary ▾ ] │ <Button variant="primary"           │
+│ Mode    [ Filled  ▾ ] │   mode="filled" size="lg"           │
+│ Size    [ LG      ▾ ] │   endContent={<RiArrowRightLine/>}> │
+│ Icon    [ Trailing ▾] │   Continue                          │
+│ State   [ Default ▾ ] │ </Button>                           │
+│                       │ [ Copy ]                            │
+└───────────────────────┴─────────────────────────────────────┘
+```
+
+### 5.3 Behavior contract
+
+1. **Controls ↔ code are one state.** No control may exist that the code cannot express, and no code the controls cannot reach (the inline playground is a *subset* of the API, never a different API).
+2. **Code is editable.** Editing the code re-renders the preview; the controls reset to the closest matching state (or show an "edited" chip with a reset). `react-live` is already a dependency.
+3. **Copy copies exactly what is shown** — canonical vocabulary (`tone`/`variant`), never the display vocabulary, never a truncated snippet.
+4. **Reset** returns to the component's documented default cell.
+5. **Toggling to Code** must not lose control state; toggling back must not lose edits.
+6. **Error handling**: invalid edited code shows a readable error in place of the preview (`LiveError`), never a blank canvas or a console-only failure.
+7. **Performance**: the preview renders only when visible (idle-mount), and edits are not persisted to storage beyond the session.
+8. **No network**: the playground never fetches; everything compiles locally.
+
+### 5.4 Deep-linkable state (shareability)
+
+- State serialises to the query string: `?variant=primary&mode=filled&size=lg&icon=trailing&state=loading&theme=dark&viewport=390`.
+- Canonical values only; unknown params are dropped silently; defaults are omitted so a "clean" URL stays short.
+- A share affordance copies the URL; the receiver sees the identical configuration.
+- The page works with all params stripped (§2.3).
+
+### 5.5 The playground's own accessibility
+
+The playground is a component in the dock: toolbar buttons have accessible names, the controls are real labelled form fields, the code editor is reachable and labelled (`aria-label="Edit the component code"` as on the homepage today), viewport/theme toggles are `aria-pressed`, and the preview region is not a live region (it must not spam screen readers on every keystroke). Toolbar and controls are keyboard-complete: `Tab` in order, `Enter/Space` to act, `Esc` to reset a field where applicable.
+
+---
+
+## 6. Search & discovery
+
+Existing: `Cmd/Ctrl-K` palette with keyboard navigation, `aria-autocomplete`, `role="listbox"`, empty state, and `aria-activedescendant` management (`src/docs/Shell.tsx`). Required upgrades:
+
+| Requirement | Detail |
+|---|---|
+| Index sources | Nav titles + keywords, component names, **prop names** (`mode`, `tone`), block/template titles, foundation topics |
+| Ranking | Exact name > name prefix > keyword > prop > description; ties broken by category order (§3.2) |
+| Result anatomy | Name, category, badge, and the matched field highlighted; `Enter` navigates, `Cmd+Enter` opens in a new tab |
+| Synonyms | `filled/stroke/lighter/ghost` → the same results as `solid/outline/soft/ghost` (display vocabulary is searchable) |
+| Recents | Last 5 visited pages, session-scoped, shown with an empty query |
+| No-result state | "No results for _x_" + the three most likely categories + a link to `/components` |
+| Keyboard | `↑↓`, `Enter`, `Esc`, `Home/End`; focus is trapped while open and returned to the trigger on close |
+| Site search parity | The `/components` index search uses the same ranker as the palette — one implementation |
+
+---
+
+## 7. Responsive, theme and quality budgets (the site itself)
+
+| Budget | Requirement | Gate |
+|---|---|---|
+| Reflow | No horizontal overflow 320 → 1600px; 200%-zoom equivalent usable | `tests-browser/responsive.spec.ts` |
+| Dark mode | Every docs page correct in dark **and** light, including previews (canvas toggle), code blocks, and the sidebar | browser axe per theme |
+| Contrast | AA in both themes, including code-block token colours and canvas chrome | browser axe (contrast rule) |
+| Motion | Docs and previews respect `prefers-reduced-motion` | token rule + manual |
+| Accessibility | axe-clean on every route, both themes; skip-link; focus visible on every control | `npm test` + `test:browser` |
+| Visual stability | Baselines for 29 core surfaces × 2 themes; new Tier A pages add baselines | `tests-browser/visual.spec.ts` |
+| Performance | Docs route JS stays flat as components grow (per-page previews, no global heavy deps); the palette and playground are code-split | roadmap Phase 2 |
+| Content | No hard-coded counts, no screenshot-only examples, no lorem | `design-lint` + review |
+
+---
+
+## 8. The Figma bridge — `/figma`
+
+AlignUI's credibility partly comes from code/Figma alignment. Unseen's version, scoped to what is verifiable:
+
+1. **Naming parity is the contract**: a component's Figma name = its React export (`Button` = `Button`), a variant axis = the prop name (`tone`, `variant`, `size`), a variant value = the canonical value (`accent`, `solid`, `md`). `CONVENTIONS.md` §3 already states this; `/figma` publishes the table.
+2. **Token parity**: `npm run tokens:export` produces the token file(s); the page documents the export, its shape, and how to re-run it when tokens change.
+3. **Parity table**: every component → Figma component name → status (`none` / `base` / `variants` / `complete`). Generated from a registry field, so it is honest; a component without a Figma counterpart says so.
+4. **Kit structure**: Foundations (tokens), Components (with variant properties mirroring the axes), Patterns (blocks), Templates.
+5. **No promises in prose**: no "100% parity" claims — the table is the claim.
+
+---
+
+## 9. Home-page copy rules and honest numbers
+
+- Counts are **generated**: components, blocks, templates and routes are printed from the registries at build time; `COMPONENT-QUALITY-SPEC.md` §9.4 governs which number is head-lined (bar-passing, not total exports).
+- The homepage may say "117 components" only when the scorecard backs it; the quality proof is the matrices, not the number.
+- "Accessible" is only claimed with the receipt: axe on all routes × both themes, keyboard contracts, and a link to how it is enforced.
+- Comparisons to other systems are banned in copy; parity tables (like `ALIGNUI-PARITY-2026-09-17.md`) live in the repo, not on the site.
+
+---
+
+## 10. Definition of done for a website change
+
+- [ ] Route registered in `src/pages/registry.tsx` **and** `src/docs/nav.ts` with keywords; no orphan routes either way (`design-lint` route rule)
+- [ ] Every component on the page comes from `src/ui`; every colour/space/type value from a token
+- [ ] Preview is live and responsive (320 / 768 / 1440) — screenshots are not acceptable
+- [ ] Every code sample is copyable, runnable as written, and uses canonical vocabulary
+- [ ] Light and dark verified; axe-clean in both
+- [ ] Keyboard-only pass on any new interactive chrome (playground, palette, index filters)
+- [ ] Deep links work with params stripped and with params set
+- [ ] Counts on the page come from registries/scripts
+- [ ] `npm test` green; baseline refrozen if a Tier A surface changed
+- [ ] If the page is a new core surface, add it to `tests-browser/visual.spec.ts`
+- [ ] One page component per route, with a **globally unique export name** — duplicate doc export names are reported by `npm run quality:report` (they would otherwise grade the wrong page)
+
+---
+
+## 11. Metrics that define site success
+
+| Metric | Target | How it is measured today |
+|---|---|---|
+| Time-to-copy on a component page | < 60s from landing | manual study (scripted: sections present, playground above the fold, copy affordance per code block) |
+| Pages with a real playground | 100% of Tier A, then Tier B | `quality:report` (playground check per component) |
+| Deep-linkable blocks | 33/33 | block registry routes |
+| Orphan routes | 0 | `design-lint` + `quality:report -- --ia` |
+| Category coverage | 8/8 non-empty, 80/80 mapped | `audit/ia-taxonomy.json` |
+| Site accessibility | 0 axe violations, all routes, both themes | `npm test` + `test:browser` |
+| Content drift | 0 hard-coded counts | `design-lint` review rule |
+
+---
+
+## 12. Sprint mapping (who owns what)
+
+| Sprint | Scope | Repo artifacts |
+|---|---|---|
+| **1 — Component quality** | Audit, normalise APIs/variants/sizes/states, dark mode, keyboard, missing states | `COMPONENT-QUALITY-SPEC.md`, `QUALITY-SCORECARD.md`, `audit/quality-baseline.json` (ratchet) |
+| **2 — Component website** | Nav taxonomy (§3), search (§6), component page anatomy with playground (§4.4, §5), copy buttons, API tables, responsive preview, light/dark | `src/docs/nav.ts`, `src/docs/Playground.tsx`, `src/pages/components/**`, `audit/ia-taxonomy.json` |
+| **3 — Blocks** | Per-block routes, categories, anatomy pages, component manifests | `src/blocks/index.tsx`, `/blocks/{key}` |
+| **4 — Templates** | Template pages, responsive frames, "make it yours" token recipes | `src/pages/Templates.tsx`, `/templates/{key}` |
+| **5 — Figma + ecosystem** | Parity table, token export docs, kit structure, CLI/package, installation docs | `/figma`, `npm run tokens:export`, packaging roadmap |
+
+---
+
+## Appendix A — Component → category map (generated)
+
+> Generated from `audit/ia-taxonomy.json`; validated by `npm run quality:report -- --ia` (fails on orphans or unmapped components).
+
+### Actions — Things users press. Intent × mode × size × icon content. _(9)_
+
+| Component | Route | Pro |
+|---|---|---|
+| Button | `components/button` | · |
+| Fancy Button | `components/fancy-button` | · |
+| Button Tile | `components/button-tile` | · |
+| Toolbar | `components/toolbar` | · |
+| Compact Button | `components/compact-button` | · |
+| Link Button | `components/link-button` | · |
+| Social Button | `components/social-button` | · |
+| Button Group | `components/button-group` | · |
+| Toggle Group | `components/toggle-group` | · |
+
+### Forms — Everything that captures input, including AI, money and time. _(21)_
+
+| Component | Route | Pro |
+|---|---|---|
+| AI Prompt Input | `components/ai-prompt-input` | Pro |
+| Currency Amount Input | `components/currency-amount-input` | Pro |
+| File Uploader | `components/file-uploader` | Pro |
+| Time Picker | `components/time-picker` | Pro |
+| Calendar | `components/calendar` | Pro |
+| Input | `components/input` | · |
+| Textarea | `components/textarea` | · |
+| Select | `components/select` | · |
+| Checkbox | `components/checkbox` | · |
+| Radio Group | `components/radio-group` | · |
+| Switch | `components/switch` | · |
+| Slider | `components/slider` | · |
+| Digit Input | `components/digit-input` | · |
+| Datepicker | `components/datepicker` | · |
+| Label & Hint | `components/label-hint` | · |
+| Checkbox & Radio Card | `components/selection-card` | · |
+| Number, Search & Counter | `components/inputs-more` | · |
+| Rating | `components/rating` | · |
+| Color Picker | `components/color-picker` | · |
+| Combobox | `components/combobox` | · |
+| Chat Input | `components/chat-input` | · |
+
+### Data Display — Surfaces that present state, identity and numbers. _(19)_
+
+| Component | Route | Pro |
+|---|---|---|
+| Crypto Address Chip | `components/crypto-address-chip` | Pro |
+| Activity Feed | `components/activity-feed` | Pro |
+| Notification Feed | `components/notification-feed` | Pro |
+| Card | `components/card` | · |
+| Featured Icon | `components/featured-icon` | · |
+| Table | `components/table` | · |
+| Data Table | `components/data-table` | · |
+| Avatar | `components/avatar` | · |
+| Avatar Group | `components/avatar-group` | · |
+| Chip | `components/chip` | · |
+| Status Badge | `components/status-badge` | · |
+| Tag | `components/tag` | · |
+| Badge | `components/badge` | · |
+| Info Label & Message | `components/info-label` | · |
+| List Item | `components/list-item` | · |
+| Payment Card | `components/payment-card` | · |
+| Progress | `components/progress` | · |
+| Skeleton | `components/skeleton` | · |
+| Timeline | `components/timeline` | · |
+
+### Navigation — Moving between places, views and steps. _(8)_
+
+| Component | Route | Pro |
+|---|---|---|
+| Tabs | `components/tabs` | · |
+| Tab Menu Horizontal | `components/tab-menu-horizontal` | · |
+| Segmented Control | `components/segmented-control` | · |
+| Stepper | `components/stepper` | · |
+| Tab Menu Vertical | `components/tab-menu-vertical` | · |
+| Accordion | `components/accordion` | · |
+| Breadcrumbs | `components/breadcrumbs` | · |
+| Pagination | `components/pagination` | · |
+
+### Feedback — Telling the user what happened, inline and transient. _(6)_
+
+| Component | Route | Pro |
+|---|---|---|
+| Alert | `components/alert` | · |
+| Notification | `components/notification` | · |
+| Banner | `components/banner` | · |
+| Toast | `components/toast` | · |
+| Empty State | `components/empty-state` | · |
+| Spinner | `components/spinner` | · |
+
+### Overlay — Content layered above the page, with focus management. _(9)_
+
+| Component | Route | Pro |
+|---|---|---|
+| Command Menu | `components/command-menu` | Pro |
+| Modal | `components/modal` | · |
+| Alert Dialog | `components/alert-dialog` | · |
+| Hover Card | `components/hover-card` | · |
+| Drawer | `components/drawer` | · |
+| Tooltip | `components/tooltip` | · |
+| Popover | `components/popover` | · |
+| Dropdown | `components/dropdown` | · |
+| Menu | `components/menu` | · |
+
+### Layout — Structure, rhythm and containers. Small today, load-bearing forever. _(3)_
+
+| Component | Route | Pro |
+|---|---|---|
+| Well | `components/well` | · |
+| Widget Box | `components/widget-box` | · |
+| Content Divider | `components/content-divider` | · |
+
+### Utilities — Small helpers that make other components usable: code, keys, media. _(5)_
+
+| Component | Route | Pro |
+|---|---|---|
+| Voice Visualizer | `components/voice-visualizer` | Pro |
+| Filters | `components/filters` | Pro |
+| Snippet | `components/snippet` | · |
+| Keyboard Key | `components/kbd` | · |
+| File Format Icon | `components/file-format-icon` | · |
+
+## Appendix B — Route inventory and migration
+
+| Route | Kind | Status | Action |
+|---|---|---|---|
+| `/` | home | exists | rebuild per §4.1 |
+| `/components` | index | exists | add category grouping, tags, `?q=`, dark toggle |
+| `/components/{slug}` (80) | component pages | exists | add playground + full anatomy per `COMPONENT-QUALITY-SPEC.md` §8 |
+| `/components/badge-spec`, `/components/badge-overlay` | legacy duplicates | exists | redirect → `/components/badge` |
+| `/blocks` | index | exists | add per-block deep links + Pro badges |
+| `/blocks/{key}` (33) | block pages | **missing** | build |
+| `/templates` + `/templates/{key}` | templates | exists (5) | add component manifests |
+| `/foundations/{topic}` (13) | foundations | exists | generate tables from tokens; add "used by" links |
+| `/playground` | playground | **missing** | build (§5) |
+| `/figma` | bridge | **missing** | build (§8) |
+| `/patterns` | compositions | exists | reframe as Blocks → Patterns |
+| `/pricing`, `/docs/*` | marketing / docs | exists | unchanged (installation is the funnel) |
+
+## Appendix C — IA defects found in this audit
+
+1. **`PRO` is a nav category** (11 components) — a price tier occupying the first shelf; dissolves into §3.3.
+2. **`Feedback & Overlays` is two mental models in one group** — split into Feedback (6) and Overlay (9).
+3. **Structural primitives buried in `Data Display`** — `Widget Box`, `Well`, `Content Divider` move to Layout.
+4. **Two duplicate Badge routes** (`badge-spec`, `badge-overlay`) — redirect and delete.
+5. **33 blocks, zero deep links** — the highest-traffic content on the site is not addressable or shareable.
+6. **No Layout/Utilities categories** — 3 and 5 components respectively have no home matching their purpose.
+7. **Playground exists on the homepage only** — the strongest interaction in the codebase is not applied where users need it (per-component configuration).
+8. **No Figma page** — naming parity is documented in `CONVENTIONS.md` §3 but invisible to visitors.
+9. **Counts are hard-coded in places** (e.g. `76+ Components` in homepage copy vs 117 exports) — must come from registries (§9).
+
+## Appendix D — Related documents
+
+| Document | Role |
+|---|---|
+| `COMPONENT-QUALITY-SPEC.md` | The bar components must clear before they appear on these pages |
+| `CONVENTIONS.md` | System rules (axes, naming, a11y, docs anatomy, new-component checklist) |
+| `QUALITY-SCORECARD.md` | Generated grades + debt ledger |
+| `COMPONENT-AUDIT.md` | Generated state/a11y/docs matrix |
+| `audit/ia-taxonomy.json` | Machine-readable taxonomy (categories, members, legacy routes, Pro badges) |
+| `UNSEEN-V2-ROADMAP.md` / `UNSEEN-ROADMAP-2026-09-17.md` | Plan and phased engineering roadmap |

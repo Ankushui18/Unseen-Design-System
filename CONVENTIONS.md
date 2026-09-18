@@ -24,6 +24,15 @@ Every component declares **axes** as typed prop unions. A cell = one combination
 
 **One name per axis across the system.** `color` may alias `tone` and `isLoading` may alias `loading` (HeroUI ergonomics, as in `Button`) — aliases are the *only* way to diverge.
 
+**The vocabulary law (`COMPONENT-QUALITY-SPEC.md` §3).** Canonical props are the API of record. Human-facing display names (Primary/Filled/XS) exist only in docs and playground. AlignUI-shaped shorthand is allowed **only** through a declared alias layer:
+
+- alias types are exported and named `*Alias` (e.g. `IntentAlias`) — the suffix is what makes `variant-audit` exclude them, because **aliases are ergonomics, not cells**;
+- one mapping table per axis, defined once in the component's module, unit-tested, never duplicated in docs;
+- precedence is total: canonical prop → alias prop → shorthand inside `variant`;
+- aliases are additive forever and never change rendered output (assert class-identical output in tests).
+
+Reference implementation: `src/ui/Button.tsx` + `tests/button-vocabulary.test.tsx`.
+
 ### 1.2 Required axes by category (R1–R8)
 
 | Rule | Category | Required axes | Minimum |
@@ -45,6 +54,7 @@ Adding a component to a category inherits the rule. Deviating is allowed only wi
 2. **No hover-as-variant.** States are never counted or rendered as matrix cells; they live in the state section.
 3. **New axis ⇒ new cell coverage.** Adding `size="xl"` to Button means documenting 5×5 cells at that size.
 4. **Aliased unions stay exported.** `export type Tone = …` from the defining module (Button), imported elsewhere — one definition per axis value set.
+5. **Aliases are not cells.** A `*Alias` union member is excluded from the cell product by `variant-audit` and reported separately (`aliases` in `--json`).
 
 ---
 
@@ -150,6 +160,7 @@ A component merges only when **all** of these are true:
 - [ ] Visual baseline (light + dark) added to the Playwright suite
 - [ ] Smoke + axe green on the new route (the gate does this automatically)
 - [ ] If it's an action: `asChild`/`href` work (test the rendered element)
+- [ ] `npm run quality:report` grades it **A** (new components always enter at the Tier A bar; `--strict` is the gate)
 
 ---
 
@@ -160,3 +171,4 @@ A component merges only when **all** of these are true:
 3. New value in code (color, size, radius, type) ⇒ it's a token in `src/index.css` first, component second.
 4. New component/block/widget ⇒ registry + audit + docs + test in the same PR series.
 5. Counts in docs/README come from the scripts, never from memory.
+6. **Quality is a ratchet** (`COMPONENT-QUALITY-SPEC.md` §2.2): `npm test` runs `quality:check`, which fails if any component's score drops below `audit/quality-baseline.json`. Improvements refreeze the baseline in the same PR; regressions never merge.

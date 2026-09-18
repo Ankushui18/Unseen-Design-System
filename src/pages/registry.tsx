@@ -62,10 +62,10 @@ import {
   TeamTemplatePage,
   TemplatesOverviewPage,
 } from "./Templates";
+import { ButtonPage } from "./components/ButtonDoc";
 import {
   AlertDialogDoc,
   BadgeSpecDoc,
-  ButtonSpecDoc,
   ButtonTileDoc,
   ChatInputDoc,
   ComboboxDoc,
@@ -204,7 +204,7 @@ export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> 
   "components/notification": () => <NotificationDoc />,
   "components/banner": () => <BannerDoc />,
 
-  "components/button": () => <ButtonSpecDoc />,
+  "components/button": () => <ButtonPage />,
   "components/button-group": () => <ButtonGroupDoc />,
   "components/input": () => <InputDoc />,
   "components/textarea": () => <TextareaDoc />,

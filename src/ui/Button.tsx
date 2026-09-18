@@ -12,6 +12,60 @@ export type Variant = "solid" | "soft" | "outline" | "ghost" | "link";
 export type Tone = "accent" | "default" | "success" | "warning" | "danger";
 export type Size = "xxs" | "xs" | "sm" | "md" | "lg";
 
+/* ------------------------------ vocabulary law ------------------------------
+ * COMPONENT-QUALITY-SPEC.md §3: canonical props (tone/variant/size) are the API
+ * of record; the display vocabulary below is human-facing (docs, playground,
+ * marketing) and the AlignUI-shaped shorthand is an *alias layer* — ergonomics,
+ * never new cells (variant-audit excludes `*Alias` members from cell counting).
+ *
+ * Precedence (total, documented in the API table, locked by unit tests):
+ *   1. canonical prop              tone / variant / size
+ *   2. explicit alias prop         mode  (look)
+ *   3. shorthand inside `variant`  "primary" | "destructive" | … (intents)
+ * Values are disjoint (`primary` can only be an intent, `solid` only a look),
+ * so resolution is unambiguous and aliases never change rendered output.
+ * -------------------------------------------------------------------------- */
+export type IntentAlias = "primary" | "secondary" | "neutral" | "destructive" | "success" | "warning";
+export type Mode = "filled" | "stroke" | "lighter" | "ghost";
+
+/** Display labels for the canonical intents (docs/playground only). */
+export const toneLabels: Record<Tone, string> = {
+  accent: "Primary", default: "Secondary", success: "Success", warning: "Warning", danger: "Destructive",
+};
+/** Display labels for the canonical looks (docs/playground only). */
+export const variantLabels: Record<Variant, string> = {
+  solid: "Filled", soft: "Lighter", outline: "Stroke", ghost: "Ghost", link: "Link",
+};
+/** Display labels for the canonical sizes (docs/playground only). 1:1 relabel, spec §3.2. */
+export const sizeLabels: Record<Size, string> = { xxs: "XS", xs: "SM", sm: "MD", md: "LG", lg: "XL" };
+export const sizePixels: Record<Size, number> = { xxs: 28, xs: 32, sm: 36, md: 40, lg: 48 };
+
+const intentAliases: Record<IntentAlias, Tone> = {
+  primary: "accent", secondary: "default", neutral: "default",
+  destructive: "danger", success: "success", warning: "warning",
+};
+const modeAliases: Record<Mode, Variant> = {
+  filled: "solid", stroke: "outline", lighter: "soft", ghost: "ghost",
+};
+const isIntentAlias = (v: unknown): v is IntentAlias => typeof v === "string" && v in intentAliases;
+const isModeAlias = (v: unknown): v is Mode => typeof v === "string" && v in modeAliases;
+
+/**
+ * Resolve the public vocabulary to the canonical pair. Exported so docs, tests
+ * and future action components share one definition (never re-implement this).
+ */
+export function resolveButtonVocabulary(input: {
+  tone?: Tone; color?: Tone; variant?: Variant | IntentAlias; mode?: Mode; size?: Size;
+}): { tone: Tone; variant: Variant; size: Size } {
+  const { tone, color, variant, mode, size } = input;
+  const intent: Tone =
+    tone ?? color ?? (isIntentAlias(variant) ? intentAliases[variant] : undefined) ?? "accent";
+  /* precedence (spec §3.3): canonical prop → alias prop → shorthand inside variant */
+  const look: Variant =
+    variant && !isIntentAlias(variant) ? variant : isModeAlias(mode) ? modeAliases[mode] : "solid";
+  return { tone: intent, variant: look, size: size ?? "md" };
+}
+
 const sizes: Record<Size, string> = {
   xxs: "h-7 gap-2.5 rounded-8 px-2 text-label-sm",
   xs: "h-8 gap-2.5 rounded-8 px-2.5 text-label-sm",
@@ -75,10 +129,14 @@ const link: Record<Tone, string> = {
 const map = { solid, soft, outline, ghost, link };
 
 export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "prefix" | "color"> {
-  variant?: Variant;
+  /** Canonical look axis: solid | soft | outline | ghost | link. Also accepts intent shorthands (primary, destructive, …) — see resolveButtonVocabulary. */
+  variant?: Variant | IntentAlias;
+  /** Canonical intent axis (API of record). */
   tone?: Tone;
-  /** HeroUI alias for tone */
+  /** AlignUI-shaped intent shorthand — alias for tone. */
   color?: Tone;
+  /** AlignUI-shaped look shorthand — alias for variant (filled | stroke | lighter | ghost). */
+  mode?: Mode;
   size?: Size;
   loading?: boolean;
   /** HeroUI alias for loading */
@@ -111,10 +169,11 @@ const Icon = ({ children }: { children: ReactNode }) => (
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   {
     className,
-    variant = "solid",
-    tone: baseTone,
+    variant: variantProp,
+    tone: toneProp,
     color,
-    size = "md",
+    mode,
+    size: sizeProp,
     loading: baseLoading = false,
     isLoading,
     iconOnly: baseIconOnly = false,
@@ -134,14 +193,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   },
   ref,
 ) {
-  const tone = color ?? baseTone ?? "accent";
+  const { tone, variant, size } = resolveButtonVocabulary({ tone: toneProp, color, variant: variantProp, mode, size: sizeProp });
   const loading = isLoading ?? baseLoading;
   const iconOnly = isIconOnly ?? baseIconOnly;
   const disabled = isDisabled ?? baseDisabled;
   const isLink = variant === "link";
   const buttonClasses = cn(
     "group relative inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap outline-none",
-    "transition duration-200 ease-out active:translate-y-px font-medium",
+    "transition duration-[var(--duration-base)] ease-out active:translate-y-px motion-reduce:transition-none font-medium",
     !isLink && "disabled:pointer-events-none disabled:bg-surface-secondary disabled:text-disabled disabled:shadow-none disabled:ring-transparent",
     isLink && "disabled:pointer-events-none disabled:text-disabled",
     isLink ? "h-auto gap-1 p-0 text-label-sm" : iconOnly ? iconOnlySizes[size] : sizes[size],

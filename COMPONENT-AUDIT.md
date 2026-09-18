@@ -9,6 +9,7 @@
 > free and legitimately show "·") · Ctrl = controlled API (onChange/onValueChange) ·
 > Docs = matched to a page in `src/docs/nav.ts`.
 
+
 | Component | File | Dis | Load | Err | Aria | Role | Focus | Keys | Ctrl | Docs |
 |---|---|---|---|---|---|---|---|---|---|---|
 | Spinner | ui/Button.tsx | ✓ | ✓ | · | ✓ | · | ✓ | · | · | ✓ |
@@ -25,26 +26,26 @@
 | Badge | ui/Display.tsx | ✓ | ✓ | · | ✓ | · | · | · | · | ✓ |
 | Avatar | ui/Display.tsx | ✓ | ✓ | · | ✓ | · | · | · | · | ✓ |
 | AvatarGroup | ui/Display.tsx | ✓ | ✓ | · | ✓ | · | · | · | · | ✓ |
-| AvatarGroupCompact | ui/Display.tsx | ✓ | ✓ | · | ✓ | · | · | · | · | ✓ |
-| User | ui/Display.tsx | · | ✓ | · | ✓ | · | · | · | · | ✓ |
-| Kbd | ui/Display.tsx | · | ✓ | · | ✓ | · | · | · | · | ✓ |
-| Snippet | ui/Display.tsx | · | ✓ | · | ✓ | · | · | · | · | ✓ |
-| Divider | ui/Display.tsx | · | · | · | ✓ | · | · | · | · | ✓ |
-| Skeleton | ui/Display.tsx | · | · | · | ✓ | · | · | · | · | ✓ |
-| Progress | ui/Display.tsx | · | · | · | ✓ | · | · | · | · | ✓ |
+| AvatarGroupCompact | ui/Display.tsx | · | ✓ | · | ✓ | ✓ | · | · | · | ✓ |
+| User | ui/Display.tsx | · | ✓ | · | ✓ | ✓ | · | · | · | ✓ |
+| Kbd | ui/Display.tsx | · | ✓ | · | ✓ | ✓ | · | · | · | ✓ |
+| Snippet | ui/Display.tsx | · | ✓ | · | ✓ | ✓ | · | · | · | ✓ |
+| Divider | ui/Display.tsx | · | · | · | ✓ | ✓ | · | · | · | ✓ |
+| Skeleton | ui/Display.tsx | · | · | · | ✓ | ✓ | · | · | · | ✓ |
+| Progress | ui/Display.tsx | · | · | · | ✓ | ✓ | · | · | · | ✓ |
 | CircularProgress | ui/Display.tsx | · | · | · | ✓ | ✓ | · | · | · | ✓ |
 | Alert | ui/Display.tsx | · | · | · | ✓ | ✓ | · | · | · | ✓ |
 | Code | ui/Display.tsx | · | · | · | ✓ | ✓ | · | · | · | ✓ |
 | ScrollShadow | ui/Display.tsx | · | · | · | ✓ | ✓ | · | · | · | · |
 | CompactButton | ui/Extra.tsx | ✓ | · | ✓ | ✓ | · | ✓ | · | · | ✓ |
 | LinkButton | ui/Extra.tsx | ✓ | · | ✓ | ✓ | · | ✓ | · | · | ✓ |
-| SocialButton | ui/Extra.tsx | ✓ | · | ✓ | ✓ | · | ✓ | · | · | ✓ |
-| StatusBadge | ui/Extra.tsx | ✓ | · | · | ✓ | ✓ | ✓ | · | · | ✓ |
+| SocialButton | ui/Extra.tsx | ✓ | · | · | ✓ | · | ✓ | · | · | ✓ |
+| StatusBadge | ui/Extra.tsx | ✓ | · | · | ✓ | · | ✓ | · | · | ✓ |
 | Tag | ui/Extra.tsx | ✓ | · | · | ✓ | ✓ | ✓ | · | · | ✓ |
 | SegmentedControl | ui/Extra.tsx | ✓ | · | · | ✓ | ✓ | ✓ | · | ✓ | ✓ |
 | HorizontalStepper | ui/Extra.tsx | ✓ | · | ✓ | ✓ | ✓ | · | · | · | ✓ |
-| VerticalStepper | ui/Extra.tsx | ✓ | · | ✓ | ✓ | ✓ | · | ✓ | · | ✓ |
-| DotStepper | ui/Extra.tsx | ✓ | · | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| VerticalStepper | ui/Extra.tsx | ✓ | · | ✓ | ✓ | ✓ | · | · | · | ✓ |
+| DotStepper | ui/Extra.tsx | ✓ | · | ✓ | ✓ | ✓ | · | ✓ | ✓ | ✓ |
 | DigitInput | ui/Extra.tsx | ✓ | · | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | Datepicker | ui/Extra.tsx | ✓ | · | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | FileFormatIcon | ui/Extra.tsx | ✓ | · | · | ✓ | ✓ | · | · | · | ✓ |
@@ -70,7 +71,7 @@
 | ToggleGroup | ui/More.tsx | ✓ | · | · | ✓ | ✓ | · | · | ✓ | ✓ |
 | WidgetBox | ui/More.tsx | · | · | · | ✓ | ✓ | · | · | · | ✓ |
 | ColorPicker | ui/More.tsx | · | · | · | ✓ | ✓ | · | · | ✓ | ✓ |
-| Timeline | ui/More.tsx | · | · | · | ✓ | ✓ | ✓ | · | · | ✓ |
+| Timeline | ui/More.tsx | · | · | · | ✓ | · | · | · | · | ✓ |
 | EmptyState | ui/More.tsx | · | · | · | ✓ | · | ✓ | · | · | ✓ |
 | SelectTrigger | ui/More.tsx | · | · | · | ✓ | · | ✓ | · | · | ✓ |
 | Tabs | ui/Navigation.tsx | ✓ | · | · | ✓ | ✓ | · | ✓ | ✓ | ✓ |
@@ -99,7 +100,7 @@
 | AlertDialog | ui/Patterns.tsx | ✓ | · | · | ✓ | · | ✓ | ✓ | · | ✓ |
 | Combobox | ui/Patterns.tsx | ✓ | · | · | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | PaymentCard | ui/Patterns.tsx | · | · | · | ✓ | ✓ | ✓ | ✓ | · | ✓ |
-| Well | ui/Patterns.tsx | · | · | · | ✓ | ✓ | · | ✓ | · | ✓ |
+| Well | ui/Patterns.tsx | · | · | · | ✓ | ✓ | · | · | · | ✓ |
 | ActivityFeed | ui/Pro.tsx | · | · | · | ✓ | ✓ | · | · | · | ✓ |
 | CommandMenu | ui/Pro.tsx | · | · | · | ✓ | ✓ | · | ✓ | ✓ | ✓ |
 | NotificationFeed | ui/Pro.tsx | ✓ | · | ✓ | ✓ | ✓ | · | ✓ | · | ✓ |
