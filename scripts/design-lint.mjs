@@ -8,10 +8,12 @@ import ts from "typescript";
 
 const ROOT = new URL("../src/", import.meta.url).pathname;
 const files = [];
+const cssFiles = [];
 (function walk(d) {
   for (const f of readdirSync(d)) {
     const p = join(d, f);
     if (statSync(p).isDirectory()) walk(p);
+    else if (/\.css$/.test(f)) cssFiles.push(p);
     else if (/\.(tsx|ts)$/.test(f)) files.push(p);
   }
 })(ROOT);
@@ -62,6 +64,31 @@ for (const f of files) {
       warn(f, line, "a11y", `iconOnly <${m[1]}> without aria-label`);
     }
   }
+}
+
+/* ---------------------------------------------------------- css contracts */
+/* The design contract applies to our own chrome too: the docs site is the
+ * reference implementation, so it gets the same type rules as the components.
+ * (Before this rule the chrome used 19 off-scale weights the system bans.) */
+const CSS_RULES = [
+  { id: "weight-css", re: /font-weight:\s*(600|650|700|800|900)\b/g, msg: "Off-scale weight in CSS — the system is 400 (paragraph) and 500 (label/title)" },
+];
+for (const f of cssFiles) {
+  const src = readFileSync(f, "utf8");
+  const lines = src.split("\n");
+  for (const r of CSS_RULES) {
+    for (const m of src.matchAll(r.re)) {
+      const line = src.slice(0, m.index).split("\n").length;
+      warn(f, line, r.id, r.msg);
+    }
+  }
+}
+
+/* No runtime font lock-in: the system ships its own typeface (spec §6), so the
+ * entry document must never depend on a third-party font CDN. */
+const shell = readFileSync(new URL("../index.html", import.meta.url).pathname, "utf8");
+if (/fonts\.(googleapis|gstatic)\.com/.test(shell)) {
+  warn(new URL("../index.html", import.meta.url).pathname, 0, "font-cdn", "Third-party font CDN — self-host the typeface in src/fonts (spec §6)");
 }
 
 /* ---------------------------------------------- routes ↔ nav ↔ previews */
@@ -149,7 +176,7 @@ for (const t of new Set(colorish)) if (!bridged.has(t)) warn(join(ROOT, "index.c
 /* ------------------------------------------------------------------ report */
 const byRule = {};
 for (const p of problems) (byRule[p.rule] ??= []).push(p);
-const order = ["class-contract", "route", "preview", "bridge", "a11y", "docs-api-core", "docs-api", "docs-examples", "docs-variants", "docs-states", "docs-a11y", "type-scale", "weight", "legacy-shadow", "card-border", "raw-color", "raw-hex", "icon-size", "opacity-disabled"];
+const order = ["class-contract", "route", "preview", "bridge", "a11y", "font-cdn", "weight-css", "docs-api-core", "docs-api", "docs-examples", "docs-variants", "docs-states", "docs-a11y", "type-scale", "weight", "legacy-shadow", "card-border", "raw-color", "raw-hex", "icon-size", "opacity-disabled"];
 let total = 0;
 for (const r of order) {
   const list = byRule[r];
@@ -160,5 +187,5 @@ for (const r of order) {
   if (list.length > 12) console.log(`  … +${list.length - 12} more`);
 }
 console.log(`\n${files.length} files scanned · nav ${navHrefs.length} · routes ${routeKeys.length} · previews ${previewKeys.length} · ${total} findings`);
-const blocking = problems.filter((p) => ["class-contract", "route", "preview", "bridge", "a11y", "docs-api-core"].includes(p.rule)).length;
+const blocking = problems.filter((p) => ["class-contract", "route", "preview", "bridge", "a11y", "font-cdn", "weight-css", "docs-api-core"].includes(p.rule)).length;
 process.exit(blocking ? 1 : 0);

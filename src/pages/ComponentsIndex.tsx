@@ -29,18 +29,6 @@ export function ComponentsIndex({ navigate }: { navigate: (t: string) => void })
   return (
     <main id="main" className="components-index-page" tabIndex={-1}>
       <div className="home-container">
-        {/* AlignUI Blueprint Top Ruler */}
-        <div className="blueprint-ruler-top mb-6 rounded-8 border border-border">
-          <span>000</span>
-          <span>100</span>
-          <span>200</span>
-          <span>300</span>
-          <span>400</span>
-          <span>500</span>
-          <span>600</span>
-          <span>700</span>
-        </div>
-
         <PageHeader
           eyebrow="Component Library · React 19 & Tailwind v4"
           title="Every component. At real size."
