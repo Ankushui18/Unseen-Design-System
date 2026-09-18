@@ -79,7 +79,12 @@ export function CommandPalette({ open, onClose, navigate }: { open: boolean; onC
 
 export function SidebarNav({ route, navigate, onNavigate }: { route: string; navigate: (t: string) => void; onNavigate?: () => void }) {
   const [q, setQ] = useState("");
-  const groups = NAV.map((g) => ({ ...g, items: g.items.filter((i) => `${g.title} ${i.title}`.toLowerCase().includes(q.toLowerCase())) })).filter((g) => g.items.length);
+  /* "Library overview" above is this group's only destination, so rendering
+     both would put two active rows on /components. The group stays in NAV for
+     the command palette and prev/next; the sidebar shows it once. */
+  const groups = NAV.filter((g) => !(g.items.length === 1 && g.items[0].href === "components"))
+    .map((g) => ({ ...g, items: g.items.filter((i) => `${g.title} ${i.title}`.toLowerCase().includes(q.toLowerCase())) }))
+    .filter((g) => g.items.length);
   return <>
     <label className="sidebar-search"><RiSearchLine size={15} /><input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Filter navigation..." aria-label="Filter navigation" /></label>
     <nav aria-label="Documentation" className="sidebar-nav">
