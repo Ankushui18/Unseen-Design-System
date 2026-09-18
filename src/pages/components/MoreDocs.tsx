@@ -87,6 +87,7 @@ export function DropdownDoc() {
           />
           <Dropdown
             placement="bottom"
+            size="sm"
             trigger={({ toggle }) => <Button variant="outline" tone="default" iconOnly aria-label="Row actions" onClick={toggle}><RiMoreLine /></Button>}
             entries={[
               { label: "Edit", icon: <RiEditLine />, shortcut: "E" },
@@ -103,6 +104,7 @@ export function DropdownDoc() {
           { name: "entries", type: "DropdownEntry[]", required: true, description: "Items, checkbox rows, labels, dividers and a user header." },
           { name: "trigger", type: "({ open, toggle }) => ReactNode", required: true, description: "Anchor render prop." },
           { name: "placement", type: '"bottom" | "bottom-start" | "bottom-end" | "top"', default: '"bottom-start"', description: "Alignment relative to the trigger." },
+          { name: "size", type: '"sm" | "md"', default: '"md"', description: "Menu width — 176px or 240px." },
         ]} />
       </Section>
     </>
@@ -259,7 +261,7 @@ export function ToggleGroupDoc() {
   const [align, setAlign] = useState<string[]>(["left"]);
   return (
     <>
-      <PageHeader eyebrow="Components · Actions" title="Toggle Group" description="Pressed-state icon buttons for toolbars. Single-select for exclusive options like alignment; multi-select for formatting." tags={["Single / multiple"]} />
+      <PageHeader eyebrow="Components · Actions" title="Toggle Group" description="Pressed-state icon buttons for toolbars. Single-select for exclusive options like alignment; multi-select for formatting." tags={["2 variants", "Single / multiple"]} />
       <Import names="ToggleGroup" />
       <Section title="Usage">
         <Showcase code={`<ToggleGroup multiple value={fmt} onChange={setFmt} items={[
@@ -270,6 +272,21 @@ export function ToggleGroupDoc() {
           <ToggleGroup value={align} onChange={setAlign} items={[{ value: "left", icon: <RiAlignLeft /> }, { value: "center", icon: <RiAlignCenter /> }, { value: "right", icon: <RiAlignRight /> }]} />
           <ToggleGroup size="sm" value={align} onChange={setAlign} items={[{ value: "left", icon: <RiAlignLeft /> }, { value: "center", icon: <RiAlignCenter /> }, { value: "right", icon: <RiAlignRight /> }]} />
         </Showcase>
+      </Section>
+      <Section title="Variants">
+        <Showcase code={`<ToggleGroup variant="outline" value={align} onChange={setAlign} items={[...]} />`}>
+          <ToggleGroup variant="filled" value={align} onChange={setAlign} items={[{ value: "left", icon: <RiAlignLeft />, label: "Left" }, { value: "center", icon: <RiAlignCenter />, label: "Center" }, { value: "right", icon: <RiAlignRight />, label: "Right" }]} />
+          <ToggleGroup variant="outline" value={align} onChange={setAlign} items={[{ value: "left", icon: <RiAlignLeft />, label: "Left" }, { value: "center", icon: <RiAlignCenter />, label: "Center" }, { value: "right", icon: <RiAlignRight />, label: "Right" }]} />
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "items", type: "{ value: T; icon: ReactNode; label?: string }[]", required: true, description: "label doubles as the accessible name / tooltip." },
+          { name: "value", type: "T[]", required: true, description: "Selected values (controlled)." },
+          { name: "variant", type: '"filled" | "outline"', default: '"filled"', description: "Surface card or hairline group." },
+          { name: "size", type: '"sm" | "md"', default: '"md"', description: "32 or 40px cells." },
+          { name: "multiple", type: "boolean", default: "false", description: "Exclusive selection when omitted." },
+        ]} />
       </Section>
     </>
   );

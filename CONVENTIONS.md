@@ -18,7 +18,7 @@ Every component declares **axes** as typed prop unions. A cell = one combination
 | Mode / look | `variant` | `solid · soft · outline · ghost · link` (actions); `default · stroke · …` (others) |
 | Size | `size` | from the **size scale**: `xxs · xs · sm · md · lg` (actions), `sm · md · lg` (forms/containers) |
 | Shape | `shape` | `circle · rounded · square` (avatars etc.) |
-| Placement | `placement` | `top · bottom · left · right` (+ `*-start`/`*-end`) |
+| Placement | `placement` | `top · bottom · left · right` (+ `*-start`/`*-end`) — `side` aliases it on edge overlays (Drawer) |
 | Density | `density` | `comfortable · compact` |
 | State (not an axis) | — | `loading · disabled · error · empty` — props, measured separately |
 

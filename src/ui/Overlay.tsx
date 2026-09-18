@@ -97,6 +97,8 @@ export function Modal({
 
 /* --------------------------------- Drawer --------------------------------- */
 
+const drawerSizes = { sm: 320, md: 400, lg: 560 } as const;
+
 export function Drawer({
   open,
   onClose,
@@ -104,7 +106,8 @@ export function Drawer({
   children,
   footer,
   side = "right",
-  width = 400,
+  size = "md",
+  width,
 }: {
   open: boolean;
   onClose: () => void;
@@ -112,6 +115,8 @@ export function Drawer({
   children?: ReactNode;
   footer?: ReactNode;
   side?: "left" | "right" | "bottom";
+  /** Width preset; explicit `width` in px wins when given. */
+  size?: "sm" | "md" | "lg";
   width?: number;
 }) {
   const dialog = useRef<HTMLDivElement>(null);
@@ -138,7 +143,7 @@ export function Drawer({
         tabIndex={-1}
         className={cn("absolute flex flex-col border-border bg-overlay shadow-xl", posCls)}
         style={{
-          width: side === "bottom" ? undefined : Math.min(width, typeof window !== "undefined" ? window.innerWidth - 32 : width),
+          width: side === "bottom" ? undefined : Math.min(width ?? drawerSizes[size], typeof window !== "undefined" ? window.innerWidth - 32 : width ?? drawerSizes[size]),
           animation:
             side === "bottom"
               ? "slide-up .3s var(--ease-out-quint) both"
@@ -364,7 +369,7 @@ const ToastContext = createContext<ToastCtx | null>(null);
 
 const toastIcon = { accent: RiInformationLine, default: RiInformationLine, success: RiCheckboxCircleLine, warning: RiErrorWarningLine, danger: RiCloseCircleLine };
 
-export function ToastProvider({ children }: { children: ReactNode }) {
+export function ToastProvider({ children, placement = "bottom-right" }: { children: ReactNode; placement?: "top-right" | "top-center" | "bottom-right" | "bottom-center" }) {
   const [items, setItems] = useState<ToastItem[]>([]);
 
   const push = useCallback<ToastCtx["push"]>((t) => {
@@ -381,7 +386,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       {typeof document !== "undefined" &&
         createPortal(
-          <div className="pointer-events-none fixed right-4 bottom-4 z-[200] flex w-[min(360px,calc(100vw-2rem))] flex-col gap-2">
+          <div className={cn("pointer-events-none fixed z-[200] flex w-[min(360px,calc(100vw-2rem))] flex-col gap-2", { "bottom-right": "right-4 bottom-4", "bottom-center": "left-1/2 bottom-4 -translate-x-1/2", "top-right": "right-4 top-4", "top-center": "left-1/2 top-4 -translate-x-1/2" }[placement])}>
             {items.map((t) => {
               const Icon = toastIcon[t.tone];
               const accentColor = {
@@ -392,7 +397,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 danger: "text-danger",
               }[t.tone];
               return (
-                <div key={t.id} className="animate-slide-up pointer-events-auto flex items-start gap-3 rounded-14 bg-overlay p-3.5 shadow-lg ring-1 ring-border">
+                <div key={t.id} className={cn("pointer-events-auto flex items-start gap-3 rounded-14 bg-overlay p-3.5 shadow-lg ring-1 ring-border", placement.startsWith("top") ? "animate-slide-down" : "animate-slide-up")}>
                   <Icon className={cn("mt-0.5 h-4.5 w-4.5 shrink-0", accentColor)} />
                   <div className="flex-1 space-y-0.5">
                     <p className="text-paragraph-sm leading-tight font-medium text-foreground">{t.title}</p>

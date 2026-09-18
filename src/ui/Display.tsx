@@ -491,6 +491,7 @@ export function Alert({
   children,
   tone = "accent",
   variant = "soft",
+  size = "md",
   onClose,
   action,
   className,
@@ -499,6 +500,7 @@ export function Alert({
   children?: ReactNode;
   tone?: Tone;
   variant?: "soft" | "outline" | "solid";
+  size?: "sm" | "md";
   onClose?: () => void;
   action?: ReactNode;
   className?: string;
@@ -510,9 +512,10 @@ export function Alert({
     outline: "bg-surface text-foreground ring-1 ring-border shadow-sm",
     solid: chipTones[tone].solid,
   }[variant];
+  const pad = size === "sm" ? "gap-2 rounded-10 p-2.5" : "gap-3 rounded-12 p-3.5";
   return (
-    <div className={cn("flex items-start gap-3 rounded-12 p-3.5", styles, className)} role="alert">
-      <Icon className={cn("mt-px h-5 w-5 shrink-0", variant === "outline" && iconColor)} />
+    <div className={cn("flex items-start", pad, styles, className)} role="alert">
+      <Icon className={cn(size === "sm" ? "mt-px h-4 w-4" : "mt-px h-5 w-5", "shrink-0", variant === "outline" && iconColor)} />
       <div className="flex-1 space-y-0.5">
         {title && <p className="text-label-sm">{title}</p>}
         {children && <div className={cn("text-paragraph-sm", variant === "solid" ? "opacity-90" : variant === "outline" ? "text-muted" : "")}>{children}</div>}

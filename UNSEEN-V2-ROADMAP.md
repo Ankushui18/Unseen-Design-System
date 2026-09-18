@@ -97,17 +97,17 @@ Current axes are read from the actual source (`src/ui/*.tsx`); required axes com
 | Component | Current axes (verified) | Target axes | Cells | Action | Priority |
 |---|---|---|---|---|---|
 | Button | mode 5 (solid/soft/outline/ghost/link) × intent 5 × size 5 (xxs–lg) + iconOnly + asChild/href + loading | Already at target | 125 | Docs matrix page (all 125 cells rendered); add `xl` only if marketing needs it | P2a |
-| FancyButton | tone 4 (accent/default/danger/stroke) + loading + iconOnly | intent 5 × size 3 | 15 | Unify tone→intent (5); add sizes | P2a |
-| CompactButton | variant 3 (stroke/ghost/white) × size 3 + fullRadius | intent 5 × size 3 | 15 | Replace `white` with intent axis; keep fullRadius | P2a |
-| LinkButton | variant 4 (gray/black/primary/error) × size 2 + underline | intent 5 × size 3 | 15 | Unify to intent axis | P2a |
-| SocialButton | brand 4 (google/apple/github/+1) × mode 2 (brand/stroke) × size 3 + iconOnly | brand 8–10 × mode 2 × size 3 | 48–60 | Add gitlab/bitbucket/slack/linkedin; document | P2b |
-| ButtonTile | single style + selected state | variant 3 (soft/solid/outline) × size 3 | 9 | Add variant axis | P2b |
-| Toolbar | single | variant 2 (solid/floating) × size 2 | 4 | Add axes | P2c |
+| FancyButton | tone 6 (accent/default/success/warning/danger/stroke) × size 5 (xxs–lg) ✅ | intent 6 × size 5 | 30 | ~~Unify tone→intent; add sizes~~ **Done (wave 1)** — success/warning bevels with dedicated `--shadow-fancy-*` | done |
+| CompactButton | variant 3 (stroke/ghost/white) × tone 5 (optional) × size 3 + fullRadius ✅ | variant 3 × intent 5 × size 3 | 45 | ~~Add intent axis~~ **Done (wave 1)** — `tone` added; `white` kept (3×5×3 = 45 > 15 target) | done |
+| LinkButton | tone 5 (canonical) + legacy variant 4 × size 3 + underline ✅ | intent 5 × size 3 | 60 | ~~Unify to intent axis~~ **Done (wave 1)** — `tone` wins over legacy `variant`; size lg added | done |
+| SocialButton | brand 9 (google/apple/github/x/microsoft/linkedin/gitlab/bitbucket/slack) × mode 2 × size 3 + iconOnly ✅ | brand 8–10 × mode 2 × size 3 | 54 | ~~Add brands~~ **Done (wave 1)** — 5 new monochrome marks; 4 originals keep brand colors | done |
+| ButtonTile | variant 3 (soft/solid/outline) + selected + badge ✅ | variant 3 | 3 | ~~Add variant axis~~ **Done (wave 1)** — single size is intentional (documented) | done |
+| Toolbar | variant 2 (solid/floating) ✅ | variant 2 | 2 | ~~Add axes~~ **Done (wave 1)** | done |
 | ButtonGroup | container (no axes — correct) | — | 0 | Document composition | P2c |
-| ToggleGroup | size 2 + multiple | size 3 × variant 2 (filled/outline) | 6 | Add axes | P2b |
+| ToggleGroup | size 2 × variant 2 (filled/outline) + multiple ✅ | size 2 × variant 2 | 4 | ~~Add axes~~ **Done (wave 1)** | done |
 | Spinner | single (correct) | — | 0 | — | — |
 
-**Actions subtotal: ≈ 242 cells** (Button alone = 125).
+**Actions subtotal: 323 cells measured** (Button 125, LinkButton 60, SocialButton 54, CompactButton 45, FancyButton 30, ToggleGroup 4, ButtonTile 3, Toolbar 2).
 
 ### 4.2 Forms 〔required: R2 — size 3 (sm/md/lg) × state 5 (default/focus/disabled/error/loading) × label; R3 for selection controls〕
 
@@ -187,21 +187,21 @@ Current axes are read from the actual source (`src/ui/*.tsx`); required axes com
 
 | Component | Current axes | Target axes | Cells | Action | Priority |
 |---|---|---|---|---|---|
-| Alert | variant 3 (soft/outline/solid) + tone | tone 5 × variant 3 × size 2 | 30 | Full tones × size | P2a |
+| Alert | tone 5 × variant 3 (soft/outline/solid) × size 2 ✅ | tone 5 × variant 3 × size 2 | 30 | ~~Full tones × size~~ **Done (wave 1)** | done |
 | Banner | tone 5 × variant 3 (filled/light/stroke) | + size 2 | 30 | Size axis | P2a |
-| Notification | tone + closable | tone 5 × variant 2 × size 2 | 20 | Axes | P2b |
-| Toast (provider) | provider-based | placement 4 × tone 5 | 20 | Placement + tone matrix | P2b |
+| Notification | tone 5 × variant 3 (stroke/filled/light) × size 2 ✅ | tone 5 × variant 3 × size 2 | 30 | ~~Axes~~ **Done (wave 1)** — actual variant axis is 3, not 2 (30 > 20 target) | done |
+| Toast (provider) | placement 4 (provider) ✅ · tone 5 on `push()` | placement 4 × tone 5 | 4 (placement counted; tone lives on `push(options)`) | ~~Placement + tone matrix~~ **Done (wave 1)** — provider `placement`, tone per push | done |
 | Tooltip | placement 4 + arrow | — | 4 | Already at target | — |
 | Modal | size 5 (sm–full) × placement 2 | — | 10 | Already at target | — |
-| Drawer | placement 4 | placement 4 × size 3 | 12 | Size axis | P2b |
+| Drawer | side 3 × size 3 (sm 320 / md 400 / lg 560) + explicit `width` ✅ | side 3 × size 3 | 9 | ~~Size axis~~ **Done (wave 1)** | done |
 | AlertDialog | tone 3 (danger/accent/default) | tone 3 | 3 | Already fine | — |
 | Popover | placement 4 | — | 4 | Already at target | — |
-| Dropdown | placement 4 | + size 2 (menu width) | 8 | Size axis | P2b |
+| Dropdown | placement 4 × size 2 (176/240px menu) ✅ | placement 4 × size 2 | 8 | ~~Size axis~~ **Done (wave 1)** | done |
 | Menu (Item/Separator/Label) | composition | variant (default/divided) | 2 | Document | P2c |
 | HoverCard / ProfileHoverCard | single | — | 2 | Document | P2c |
 | SelectTrigger | size 3 | — | 3 | Already fine | — |
 
-**Feedback subtotal: ≈ 148 cells.**
+**Feedback subtotal: 115 cells measured** (Alert 30, Notification 30, Banner 15, Modal 10, Drawer 9, Dropdown 8, ToastProvider 4, Tooltip 4, AlertDialog 3, MenuItem 2 — Banner `size` axis still open, P2a).
 
 ### 4.6 PRO / AI / fintech + product patterns 〔required: R2/R8 as applicable〕
 
@@ -236,7 +236,7 @@ Current axes are read from the actual source (`src/ui/*.tsx`); required axes com
 | PRO / product patterns | 37 |
 | **Total** | **≈ 1,249 core cells** |
 
-Measured **baseline today: 853** (the system is further along than this plan initially assumed — Chip, Avatar, FeaturedIcon and the Badge/StatusBadge families already carry most of their cells). The gap to close in Phase 2 is therefore mostly **missing axes** (form `size` scales, Tag intent, Alert size, Drawer/Toast axes, Tabs orientation, Stepper size) plus **documenting cells that already exist**. The **1,000+** milestone is crossed in Phase 2 wave 1 alone; state matrix coverage is measured separately (target: 100% of interactive components on disabled/focus; ≥90% on loading/error where meaningful).
+Measured **baseline: 853** (2026-09-18, before Phase 2 — the system is further along than this plan initially assumed: Chip, Avatar, FeaturedIcon and the Badge/StatusBadge families already carry most of their cells). **✅ The 1,000+ milestone was crossed in Phase 2 wave 1: measured 1,051 cells** (Actions + Feedback depth — Fancy/Compact/Link/Social/Tile/Toolbar/ToggleGroup axes, Alert/Notification/Drawer/Dropdown/Toast axes). Remaining gap: mostly **missing axes** (Banner `size`, form `size` scales, Tag intent, Tabs orientation, Stepper size) plus **documenting cells that already exist**. State matrix coverage is measured separately (target: 100% of interactive components on disabled/focus; ≥90% on loading/error where meaningful).
 
 ### 4.8 Core-36 (Phase 2 first wave, in order)
 

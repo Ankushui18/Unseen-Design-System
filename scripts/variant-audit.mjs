@@ -35,11 +35,11 @@ const BASELINE = argv.includes("--baseline") ? argv[argv.indexOf("--baseline") +
 const WRITE_BASELINE = argv.includes("--write-baseline") ? argv[argv.indexOf("--write-baseline") + 1] : null;
 
 /* Canonical axis prop names (CONVENTIONS.md §1.1). Aliases map to the
- * canonical name: color→intent, mode/look→variant. */
+ * canonical name: color→intent, mode/look→variant, side→placement (edge overlays). */
 const AXIS = {
   tone: "intent", color: "intent",
   variant: "variant", mode: "variant", look: "variant", appearance: "variant",
-  size: "size", shape: "shape", placement: "placement", density: "density",
+  size: "size", shape: "shape", placement: "placement", side: "placement", density: "density",
   status: "status", brand: "brand", orientation: "orientation",
 };
 

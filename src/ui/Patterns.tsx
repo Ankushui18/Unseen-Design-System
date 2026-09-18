@@ -19,23 +19,28 @@ import { useOnClickOutside } from "../lib/hooks";
 
 /* -------------------------------- Button Tile ------------------------------ */
 
-export function ButtonTile({ icon, label, description, selected, onClick, disabled, badge, className }: { icon: ReactNode; label: ReactNode; description?: ReactNode; selected?: boolean; onClick?: () => void; disabled?: boolean; badge?: ReactNode; className?: string }) {
+export function ButtonTile({ icon, label, description, variant = "soft", selected, onClick, disabled, badge, className }: { icon: ReactNode; label: ReactNode; description?: ReactNode; variant?: "soft" | "solid" | "outline"; selected?: boolean; onClick?: () => void; disabled?: boolean; badge?: ReactNode; className?: string }) {
+  const base = {
+    soft: "bg-surface ring-1 ring-border hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong",
+    solid: "bg-default text-white ring-1 ring-default hover:-translate-y-0.5 hover:shadow-md dark:text-neutral-950",
+    outline: "bg-transparent ring-1 ring-border hover:-translate-y-0.5 hover:bg-surface",
+  }[variant];
   return (
     <button
       onClick={onClick}
       disabled={disabled}
       aria-pressed={selected}
       className={cn(
-        "group relative flex flex-col items-start gap-3 rounded-14 bg-surface p-4 text-left transition duration-200 ease-out outline-none",
-        selected ? "shadow-sm ring-2 ring-accent" : "ring-1 ring-border hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong",
+        "group relative flex flex-col items-start gap-3 rounded-14 p-4 text-left transition duration-200 ease-out outline-none",
+        selected ? "bg-accent text-white shadow-sm ring-2 ring-accent" : base,
         "focus-visible:shadow-ring-neutral disabled:pointer-events-none disabled:bg-surface-secondary disabled:text-disabled",
         className,
       )}
     >
-      <span className={cn("flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-inset transition-colors [&_svg]:h-5 [&_svg]:w-5", selected ? "bg-accent text-white ring-accent" : "bg-surface-secondary text-foreground ring-border")}>{icon}</span>
+      <span className={cn("flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-inset transition-colors [&_svg]:h-5 [&_svg]:w-5", selected ? "bg-accent text-white ring-accent" : variant === "solid" ? "bg-white/10 text-current ring-white/25 dark:bg-black/10" : "bg-surface-secondary text-foreground ring-border")}>{icon}</span>
       <span className="min-w-0">
-        <span className="block text-label-sm text-foreground">{label}</span>
-        {description && <span className="mt-0.5 block text-paragraph-xs text-muted">{description}</span>}
+        <span className={cn("block text-label-sm", variant === "solid" && !selected ? "text-current" : "text-foreground")}>{label}</span>
+        {description && <span className={cn("mt-0.5 block text-paragraph-xs", variant === "solid" && !selected ? "text-white/70 dark:text-neutral-950/60" : "text-muted")}>{description}</span>}
       </span>
       {badge && <span className="absolute top-3 right-3">{badge}</span>}
       {selected && <span className="absolute top-3 right-3 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-white"><RiCheckLine size={12} /></span>}
@@ -95,8 +100,9 @@ export function ListItem({ leading, title, description, trailing, onClick, selec
 
 /* ---------------------------------- Toolbar -------------------------------- */
 
-export function Toolbar({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cn("inline-flex items-center gap-1 rounded-12 bg-surface p-1 shadow-md ring-1 ring-border", className)} role="toolbar">{children}</div>;
+export function Toolbar({ children, variant = "solid", className }: { children: ReactNode; variant?: "solid" | "floating"; className?: string }) {
+  const v = variant === "floating" ? "rounded-full bg-overlay shadow-lg ring-1 ring-border-strong" : "rounded-12 bg-surface shadow-md ring-1 ring-border";
+  return <div className={cn("inline-flex items-center gap-1 p-1", v, className)} role="toolbar">{children}</div>;
 }
 export function ToolbarButton({ icon, label, active, onClick, disabled }: { icon: ReactNode; label: string; active?: boolean; onClick?: () => void; disabled?: boolean }) {
   return (

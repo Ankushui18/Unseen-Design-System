@@ -307,10 +307,11 @@ export function ModalDoc() {
 
 export function DrawerDoc() {
   const [side, setSide] = useState<"left" | "right" | "bottom">("right");
-  const [open, setOpen] = useState(false);
+  const [openU, setOpenU] = useState(false);
+  const [sizeCfg, setSizeCfg] = useState<"sm" | "md" | "lg" | null>(null);
   return (
     <>
-      <PageHeader eyebrow="Components · Overlays" title="Drawer" description="A panel that slides in from an edge for secondary tasks: filters, details, settings. Keeps the underlying context visible." tags={["3 edges", "Focus trap", "Scrollable"]} />
+      <PageHeader eyebrow="Components · Overlays" title="Drawer" description="A panel that slides in from an edge for secondary tasks: filters, details, settings. Keeps the underlying context visible." tags={["3 edges", "3 sizes", "Focus trap", "Scrollable"]} />
       <Import names="Drawer" />
       <Section title="Usage">
         <Showcase
@@ -319,13 +320,42 @@ export function DrawerDoc() {
   …
 </Drawer>`}
         >
-          <Button onClick={() => setOpen(true)}>Open {side} drawer</Button>
+          <Button onClick={() => setOpenU(true)}>Open {side} drawer</Button>
           <Drawer
-            open={open}
-            onClose={() => setOpen(false)}
+            open={openU}
+            onClose={() => setOpenU(false)}
             side={side}
+            size="md"
             title="Filters"
-            footer={<><Button variant="ghost" tone="default" onClick={() => setOpen(false)}>Reset</Button><Button onClick={() => setOpen(false)}>Apply</Button></>}
+            footer={<><Button variant="ghost" tone="default" onClick={() => setOpenU(false)}>Reset</Button><Button onClick={() => setOpenU(false)}>Apply</Button></>}
+          >
+            <div className="space-y-4">
+              <Input label="Search" placeholder="Filter by name…" />
+              <Switch checked onChange={() => {}} label="Only active" />
+              <Switch checked={false} onChange={() => {}} label="Include archived" />
+              <Divider label="Advanced" />
+              <Input label="Created after" type="date" />
+              <p className="text-paragraph-xs">Filters persist per workspace and apply to every saved view.</p>
+            </div>
+          </Drawer>
+        </Showcase>
+      </Section>
+      <Section title="Sizes">
+        <Showcase code={`<Drawer open={open} onClose={close} size="lg" title="Details">
+  …
+</Drawer>`}>
+          <div className="flex gap-2">
+            {([["sm", 320], ["md", 400], ["lg", 560]] as const).map(([s, w]) => (
+              <Button key={s} variant="outline" tone="default" onClick={() => setSizeCfg(s)}>{s} · {w}px</Button>
+            ))}
+          </div>
+          <Drawer
+            open={sizeCfg !== null}
+            onClose={() => setSizeCfg(null)}
+            side="right"
+            size={sizeCfg ?? "md"}
+            title="Filters"
+            footer={<><Button variant="ghost" tone="default" onClick={() => setSizeCfg(null)}>Reset</Button><Button onClick={() => setSizeCfg(null)}>Apply</Button></>}
           >
             <div className="space-y-4">
               <Input label="Search" placeholder="Filter by name…" />
@@ -343,7 +373,8 @@ export function DrawerDoc() {
           { name: "open", type: "boolean", required: true, description: "Controls visibility." },
           { name: "onClose", type: "() => void", required: true, description: "Fires on backdrop click, Escape and close button." },
           { name: "side", type: '"left" | "right" | "bottom"', default: '"right"', description: "Edge the panel slides from." },
-          { name: "width", type: "number", default: "400", description: "Panel width in pixels for left/right." },
+          { name: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Width preset — 320, 400 or 560px for left/right." },
+          { name: "width", type: "number", description: "Explicit width in pixels; wins over `size`." },
           { name: "footer", type: "ReactNode", description: "Pinned action row." },
         ]} />
       </Section>
@@ -605,7 +636,7 @@ export function ToastDoc() {
   const { push } = useToast();
   return (
     <>
-      <PageHeader eyebrow="Components · Feedback" title="Toast" description="A transient confirmation that does not interrupt the flow. Toasts stack, auto-dismiss and never carry information the user must read." tags={["Auto dismiss", "Stacked", "Portal"]} />
+      <PageHeader eyebrow="Components · Feedback" title="Toast" description="A transient confirmation that does not interrupt the flow. Toasts stack, auto-dismiss and never carry information the user must read." tags={["4 placements", "Auto dismiss", "Stacked", "Portal"]} />
       <Import names="ToastProvider, useToast" />
       <Section title="Usage">
         <Showcase code={`const { push } = useToast();
@@ -622,10 +653,21 @@ push({
           <Button variant="outline" tone="default" onClick={() => { ["One", "Two", "Three"].forEach((n, i) => setTimeout(() => push({ title: `Event ${n}`, tone: "default" }), i * 260)); }}>Stack three</Button>
         </Showcase>
       </Section>
+      <Section title="Placement" description="The provider anchors the stack to one of four corners or edges; top placements animate downward.">
+        <Snippet symbol="">{`<ToastProvider placement="top-right">
+  <App />
+</ToastProvider>`}</Snippet>
+      </Section>
       <Section title="Setup" description="Mount the provider once, near the root of your tree.">
         <Snippet symbol="">{`<ToastProvider><App /></ToastProvider>`}</Snippet>
       </Section>
       <Section title="API">
+        <PropsTable
+          title="ToastProvider"
+          rows={[
+            { name: "placement", type: '"top-right" | "top-center" | "bottom-right" | "bottom-center"', default: '"bottom-right"', description: "Where the stack anchors." },
+          ]}
+        />
         <PropsTable
           title="push(options)"
           rows={[

@@ -186,7 +186,7 @@ export function ButtonTileDoc() {
   const [sel, setSel] = useState("web");
   return (
     <>
-      <PageHeader eyebrow="Components · Actions" title="Button Tile" description="A large, icon-led selectable tile for onboarding choices and project types." tags={["Selectable", "Badge slot"]} />
+      <PageHeader eyebrow="Components · Actions" title="Button Tile" description="A large, icon-led selectable tile for onboarding choices and project types." tags={["3 variants", "Selectable", "Badge slot"]} />
       <Import names="ButtonTile" />
       <Section title="Usage">
         <Showcase align="stretch" code={`<ButtonTile icon={<RiGlobalLine />} label="Web app" description="Next.js, Remix, Vite" selected={sel === "web"} onClick={() => setSel("web")} />`}>
@@ -197,6 +197,24 @@ export function ButtonTileDoc() {
             <ButtonTile icon={<RiImageLine />} label="Static" description="HTML & assets" disabled />
           </div>
         </Showcase>
+      </Section>
+      <Section title="Variants">
+        <Showcase code={`<ButtonTile variant="solid" icon={<RiCodeLine />} label="Solid tile" description="Filled treatment" />`}>
+          <div className="grid w-full gap-3 sm:grid-cols-3">
+            <ButtonTile variant="soft" icon={<RiGlobalLine />} label="Soft" description="Default surface tile" selected={sel === "soft"} onClick={() => setSel("soft")} />
+            <ButtonTile variant="solid" icon={<RiCodeLine />} label="Solid" description="Filled treatment" selected={sel === "solid"} onClick={() => setSel("solid")} />
+            <ButtonTile variant="outline" icon={<RiFileTextLine />} label="Outline" description="Hairline only" selected={sel === "outline"} onClick={() => setSel("outline")} />
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "icon", type: "ReactNode", required: true, description: "Leading 20px glyph in a round well." },
+          { name: "label", type: "ReactNode", required: true, description: "" },
+          { name: "variant", type: '"soft" | "solid" | "outline"', default: '"soft"', description: "Surface treatment; selected state always wins with the accent ring." },
+          { name: "selected", type: "boolean", default: "false", description: "Checked state; announced via `aria-pressed`." },
+          { name: "badge", type: "ReactNode", description: "Top-right corner slot." },
+        ]} />
       </Section>
     </>
   );
@@ -260,7 +278,7 @@ export function ToolbarDoc() {
   const t = (k: string) => setFmt((s) => (s.includes(k) ? s.filter((x) => x !== k) : [...s, k]));
   return (
     <>
-      <PageHeader eyebrow="Components · Actions" title="Toolbar" description="A floating formatting bar with pressed-state buttons and separators." tags={["Floating", "Pressed"]} />
+      <PageHeader eyebrow="Components · Actions" title="Toolbar" description="A floating formatting bar with pressed-state buttons and separators." tags={["2 variants", "Floating", "Pressed"]} />
       <Import names="Toolbar, ToolbarButton, ToolbarSeparator" />
       <Section title="Usage">
         <Showcase code={`<Toolbar>
@@ -281,6 +299,33 @@ export function ToolbarDoc() {
             <ToolbarButton icon={<RiImageLine />} label="Image" disabled />
           </Toolbar>
         </Showcase>
+      </Section>
+      <Section title="Variants">
+        <Showcase code={`<Toolbar variant="floating">
+  <ToolbarButton icon={<RiBold />} label="Bold" active />
+  <ToolbarButton icon={<RiItalic />} label="Italic" />
+</Toolbar>`}>
+          <div className="flex flex-col items-start gap-6">
+            <Toolbar>
+              <ToolbarButton icon={<RiBold />} label="Bold" active />
+              <ToolbarButton icon={<RiItalic />} label="Italic" />
+              <ToolbarSeparator />
+              <ToolbarButton icon={<RiLink />} label="Link" />
+            </Toolbar>
+            <Toolbar variant="floating">
+              <ToolbarButton icon={<RiBold />} label="Bold" active />
+              <ToolbarButton icon={<RiItalic />} label="Italic" />
+              <ToolbarSeparator />
+              <ToolbarButton icon={<RiLink />} label="Link" />
+            </Toolbar>
+          </div>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "variant", type: '"solid" | "floating"', default: '"solid"', description: "Squared surface bar or rounded elevated overlay." },
+          { name: "children", type: "ReactNode", required: true, description: "ToolbarButton / ToolbarSeparator sequence; role=toolbar." },
+        ]} />
       </Section>
     </>
   );

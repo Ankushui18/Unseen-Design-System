@@ -691,7 +691,7 @@ export function AlertDoc() {
   const [open, setOpen] = useState(true);
   return (
     <>
-      <PageHeader eyebrow="Components · Feedback" title="Alert" description="A persistent, inline message about the state of a page or a region. For transient confirmations use a Toast instead." tags={["3 variants", "Dismissible", "Action slot"]} />
+      <PageHeader eyebrow="Components · Feedback" title="Alert" description="A persistent, inline message about the state of a page or a region. For transient confirmations use a Toast instead." tags={["3 variants", "2 sizes", "Dismissible", "Action slot"]} />
       <Import names="Alert" />
       <Section title="Tones">
         <Showcase align="stretch" code={`<Alert tone="success" title="Deployment complete">
@@ -714,6 +714,14 @@ export function AlertDoc() {
           </div>
         </Showcase>
       </Section>
+      <Section title="Sizes">
+        <Showcase align="stretch" code={`<Alert tone="success" size="sm" title="Saved">Your changes are live.</Alert>`}>
+          <div className="w-full space-y-3">
+            <Alert tone="success" title="Saved">Your changes are live in the production workspace.</Alert>
+            <Alert tone="success" size="sm" title="Saved">Your changes are live.</Alert>
+          </div>
+        </Showcase>
+      </Section>
       <Section title="Actions & dismissal">
         <Showcase align="stretch">
           <div className="w-full space-y-3">
@@ -730,6 +738,7 @@ export function AlertDoc() {
         <PropsTable rows={[
           { name: "tone", type: "Tone", default: '"accent"', description: "Semantic intent and icon." },
           { name: "variant", type: '"soft" | "outline" | "solid"', default: '"soft"', description: "Fill treatment." },
+          { name: "size", type: '"sm" | "md"', default: '"md"', description: "Padding and icon scale; sm for dense regions." },
           { name: "title", type: "ReactNode", description: "Bold heading line." },
           { name: "action", type: "ReactNode", description: "Action slot rendered under the body." },
           { name: "onClose", type: "() => void", description: "Renders a dismiss button." },

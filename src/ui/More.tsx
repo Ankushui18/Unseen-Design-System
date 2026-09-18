@@ -27,15 +27,18 @@ export function Dropdown({
   entries,
   trigger,
   placement = "bottom-start",
+  size = "md",
   className,
 }: {
   entries: DropdownEntry[];
   trigger: (p: { open: boolean; toggle: () => void }) => ReactNode;
   placement?: "bottom" | "bottom-start" | "bottom-end" | "top";
+  /** Menu width preset */
+  size?: "sm" | "md";
   className?: string;
 }) {
   return (
-    <Popover placement={placement} trigger={trigger} className={cn("w-60 p-0", className)}>
+    <Popover placement={placement} trigger={trigger} className={cn(size === "sm" ? "w-44 p-0" : "w-60 p-0", className)}>
       {(close) => (
         <div className="py-1.5">
           {entries.map((e, i) => {
@@ -280,13 +283,14 @@ export function TextareaCounter({ label, maxLength = 200, value, onChange, hint,
 
 /* -------------------------------- Toggle Group ----------------------------- */
 
-export function ToggleGroup<T extends string>({ items, value, onChange, multiple, size = "md", className }: { items: { value: T; icon: ReactNode; label?: string }[]; value: T[]; onChange: (v: T[]) => void; multiple?: boolean; size?: "sm" | "md"; className?: string }) {
+export function ToggleGroup<T extends string>({ items, value, onChange, multiple, variant = "filled", size = "md", className }: { items: { value: T; icon: ReactNode; label?: string }[]; value: T[]; onChange: (v: T[]) => void; multiple?: boolean; variant?: "filled" | "outline"; size?: "sm" | "md"; className?: string }) {
   const toggle = (v: T) => {
     if (multiple) onChange(value.includes(v) ? value.filter((x) => x !== v) : [...value, v]);
     else onChange(value.includes(v) ? [] : [v]);
   };
+  const groupCls = variant === "outline" ? "rounded-10 ring-1 ring-inset ring-border" : "rounded-10 bg-surface shadow-fancy-stroke";
   return (
-    <div className={cn("inline-flex items-center rounded-10 bg-surface shadow-fancy-stroke", className)} role="group">
+    <div className={cn("inline-flex items-center", groupCls, className)} role="group">
       {items.map((it, i) => {
         const on = value.includes(it.value);
         return (
