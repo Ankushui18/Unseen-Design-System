@@ -1,6 +1,6 @@
 # Unseen Design System
 
-A production-grade React 19 + Tailwind CSS 4 design system: **117 components**, live theming (OKLCH accent generator, radius scale, light/dark), 20+ blocks and templates, and a docs site with gated quality checks — type safety, design-token linting, smoke rendering and full **axe-core WCAG 2.1 A/AA accessibility audits across all 101 routes**.
+A production-grade React 19 + Tailwind CSS 4 design system: **117 components**, live theming (OKLCH accent generator, radius scale, light/dark), 20+ blocks and templates, and a docs site with gated quality checks — type safety, design-token linting, smoke rendering and full **axe-core WCAG 2.1 A/AA accessibility audits across all 106 routes**.
 
 ## Quick start
 
@@ -22,7 +22,7 @@ npm test           # the full gate — see below
 | Build | `npm run build` | Production bundle compiles |
 | Design lint | `npm run lint:design` | The design contract: semantic tokens only (no raw hex/palette), the custom type scale, elevation tokens, nav/routes/previews parity, real `cn` merge behavior |
 | Smoke | `npm run test:smoke` | Every route renders from the production bundle in jsdom — no crashes, no empty pages, heading present, plus label/alt heuristics |
-| Accessibility | `npm run test:a11y` | `axe-core` WCAG 2.1 A/AA on all 101 routes; critical/serious violations fail. `--strict` fails on any impact |
+| Accessibility | `npm run test:a11y` | `axe-core` WCAG 2.1 A/AA on all 106 routes; critical/serious violations fail. `--strict` fails on any impact |
 
 Useful extras:
 
@@ -41,7 +41,7 @@ Playwright suites in `tests-browser/` against the production build:
 
 | Suite | Coverage |
 |---|---|
-| `a11y` | `axe-core` WCAG 2.1 A/AA **with the color-contrast rule** (impossible in jsdom) on all 101 routes × light/dark — 202 tests |
+| `a11y` | `axe-core` WCAG 2.1 A/AA **with the color-contrast rule** (impossible in jsdom) on all 106 routes × light/dark — 212 tests |
 | `responsive` | No horizontal overflow at 320→1600px on layout-critical routes (WCAG 1.4.10 reflow) + the 200%-zoom-equivalent viewport (1.4.4) |
 | `visual` | Pixel-diff screenshots of 29 core surfaces × both themes against committed baselines (`tests-browser/visual.spec.ts-snapshots/`) |
 

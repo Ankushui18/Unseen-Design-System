@@ -2,11 +2,11 @@ import { useMemo, useState } from "react";
 import { Callout, Grid, PageHeader, PropsTable, Section, Showcase } from "../docs/Blocks";
 import { CodeBlock } from "../docs/CodeBlock";
 import { Button } from "../ui/Button";
-import { Card, Chip, Code, Divider, Kbd, Snippet } from "../ui/Display";
+import { Avatar, Card, Chip, Code, Divider, Kbd, Snippet } from "../ui/Display";
 import { Input, Slider, Switch } from "../ui/Form";
 import { Table } from "../ui/Navigation";
 import { useCopy } from "../lib/hooks";
-import { useTheme } from "../lib/theme";
+import { ACCENT_PRESETS, RADIUS_PRESETS, useTheme } from "../lib/theme";
 import { cn } from "../utils/cn";
 import { RiAccessibilityLine, RiArrowRightSLine, RiAttachmentLine, RiBookmarkLine, RiCalendarLine, RiChat3Line, RiCheckLine, RiCloudLine, RiDeleteBinLine, RiDownloadLine, RiEyeLine, RiFileCopyLine, RiFilterLine, RiFlashlightLine, RiFolderLine, RiHeartLine, RiHome5Line, RiImageLine, RiLockLine, RiMailLine, RiNotification3Line, RiSearchLine, RiSettings3Line, RiShareLine, RiStackLine, RiStarLine, RiUserLine } from "@remixicon/react";
 
@@ -740,6 +740,382 @@ export function TokensPage() {
             { name: "Bridge", type: "@theme inline { --color-*: var(--*) }", description: "Exposes semantic tokens as Tailwind utilities. Generated, do not edit by hand." },
           ]}
         />
+      </Section>
+    </>
+  );
+}
+
+/* ---------------------------------- SIZING --------------------------------- */
+
+const CONTROL_HEIGHTS: [string, string, string][] = [
+  ["xxs", "h-7", "28px — dense toolbars, table row actions"],
+  ["xs", "h-8", "32px — compact controls, embedded UI"],
+  ["sm", "h-9", "36px — secondary actions, forms in dense layouts"],
+  ["md", "h-10", "40px — the default"],
+  ["lg", "h-12", "48px — primary actions in marketing / onboarding"],
+];
+
+export function SizingPage() {
+  return (
+    <>
+      <PageHeader
+        eyebrow="Foundations"
+        title="Sizing"
+        description="Components come in a fixed size ladder, not a continuum. Five control heights, three icon sizes and one header height — that is the entire vocabulary, and every component in the system draws from it."
+        tags={["5 control heights", "3 icon sizes", "96px chrome"]}
+      />
+
+      <Section title="Control heights" description="The same ladder is used by Button, Input, Select, Switch and friends. A control is either on the ladder or it is a documentation bug.">
+        <div className="overflow-hidden rounded-2xl bg-surface ring-1 ring-border shadow-xs">
+          {CONTROL_HEIGHTS.map(([name, h, note], i) => (
+            <div key={name} className={cn("flex flex-wrap items-center gap-5 px-5 py-3", i > 0 && "border-t border-separator-secondary")}>
+              <code className="w-10 font-mono text-paragraph-xs text-accent">{name}</code>
+              <span className={cn("inline-flex w-40 items-center justify-center rounded-lg bg-surface-secondary px-3 font-medium ring-1 ring-inset ring-border", h)}>
+                {name}
+              </span>
+              <span className="text-paragraph-xs text-muted">{note}</span>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="Icon sizes" description="Icons are 16 / 20 / 24px. 12px exists only inside small badge/tag glyphs and is an explicit exception, not a scale step.">
+        <div className="grid gap-4 sm:grid-cols-3">
+          {([
+            ["16px", "h-4 w-4", "Label rows, list items"],
+            ["20px", "h-5 w-5", "Inside md controls (the default pairing)"],
+            ["24px", "h-6 w-6", "Empty states, feature icons"],
+          ] as const).map(([px, cls, use]) => (
+            <Card key={px} className="flex items-center gap-3 p-4">
+              <RiStarLine className={cn(cls, "text-accent")} />
+              <div>
+                <p className="font-mono text-paragraph-xs text-foreground">{px}</p>
+                <p className="text-paragraph-xs text-muted">{use}</p>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="Avatars & media" description="The avatar ladder runs xs → xl; groups clip to a max and render the remainder as a count chip.">
+        <Showcase align="stretch">
+          <div className="flex items-end gap-4">
+            {(["xs", "sm", "md", "lg", "xl"] as const).map((s) => (
+              <div key={s} className="flex flex-col items-center gap-1.5">
+                <Avatar name={`Size ${s}`} size={s} />
+                <code className="font-mono text-paragraph-xs text-subtle">{s}</code>
+              </div>
+            ))}
+          </div>
+        </Showcase>
+      </Section>
+
+      <Section title="Chrome" description="Layout-level dimensions live in tokens, not in components.">
+        <Table
+          columns={[
+            { key: "token", header: "Token", render: (r) => <code className="font-mono text-paragraph-xs text-accent">{r.token}</code> },
+            { key: "value", header: "Value", render: (r) => <span className="font-mono text-paragraph-xs">{r.value}</span> },
+            { key: "use", header: "Used by" },
+          ]}
+          rows={[
+            { token: "--header-height", value: "96px", use: "Docs shell, template topbars" },
+            { token: "--border-width", value: "1px", use: "Every hairline in the system" },
+            { token: "--spacing", value: "0.25rem", use: "Tailwind spacing base (4px unit)" },
+          ]}
+        />
+      </Section>
+    </>
+  );
+}
+
+/* --------------------------------- BORDERS --------------------------------- */
+
+export function BordersPage() {
+  return (
+    <>
+      <PageHeader
+        eyebrow="Foundations"
+        title="Borders"
+        description="Unseen frames everything with a 1px hairline — rendered as an inset ring, not a border. The difference is intentional: rings never shift layout and they layer cleanly with shadows and focus states."
+        tags={["1px hairline", "ring, not border", "separator tokens"]}
+      />
+
+      <Section title="Tokens" description="Two strengths for frames, two tones for dividers. Every value below is the full set — there is no border color outside of it.">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <Swatch token="--border" className="bg-surface" />
+          <Swatch token="--border-strong" className="bg-surface" />
+          <Swatch token="--separator" className="bg-surface" />
+          <Swatch token="--separator-secondary" className="bg-surface" />
+        </div>
+      </Section>
+
+      <Section title="The hairline rules" description="design-lint enforces these mechanically — a card that uses `border border-border` will fail the gate.">
+        <Grid cols={2}>
+          <Card>
+            <p className="text-label-sm">Outer frames</p>
+            <p className="mt-0.5 mb-3 text-paragraph-xs text-muted">Cards, fields, tables: <code className="font-mono text-accent">ring-1 ring-inset ring-border</code>. Hover raises to the strong border, never a second line.</p>
+            <div className="rounded-xl bg-surface-secondary p-4 ring-1 ring-inset ring-border transition-shadow hover:ring-border-strong">
+              <div className="rounded-lg bg-surface p-3 ring-1 ring-inset ring-border">Resting card</div>
+            </div>
+          </Card>
+          <Card>
+            <p className="text-label-sm">Inner dividers</p>
+            <p className="mt-0.5 mb-3 text-paragraph-xs text-muted">List rows and section separators: <code className="font-mono text-accent">border-separator-secondary</code>; structural breaks: <code className="font-mono text-accent">--separator</code> via the Divider component.</p>
+            <div className="divide-y divide-separator-secondary rounded-lg bg-surface p-3 text-paragraph-xs ring-1 ring-inset ring-border">
+              <div className="py-2">Row one — secondary divider</div>
+              <div className="py-2">Row two — secondary divider</div>
+              <div className="flex items-center gap-2 py-2">
+                <Divider className="min-w-6" /> Structural
+                <Divider className="min-w-6" />
+              </div>
+            </div>
+          </Card>
+        </Grid>
+      </Section>
+
+      <Section title="Premium hairlines" description="For hover-lift cards, a gradient hairline replaces the flat ring: accent-tinted at 135°, falling back to the standard border. One utility, token-driven.">
+        <Showcase align="stretch">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="rounded-xl bg-surface p-5 ring-1 ring-inset ring-border">Flat hairline</div>
+            <div className="border-glow rounded-xl bg-surface p-5">Gradient hairline</div>
+            <div className="surface-lit rounded-xl bg-surface p-5 ring-1 ring-inset ring-border">Brand-lit surface</div>
+          </div>
+        </Showcase>
+      </Section>
+    </>
+  );
+}
+
+/* ------------------------------ OPACITY & Z-INDEX -------------------------- */
+
+export function OpacityPage() {
+  return (
+    <>
+      <PageHeader
+        eyebrow="Foundations"
+        title="Opacity & Z-index"
+        description="Opacity is reserved for state, not decoration, and stacking follows one fixed order. Both are small, explicit systems — anything else is a review flag."
+        tags={["--disabled-opacity: 0.5", "fixed stack order", "no z-fighting"]}
+      />
+
+      <Section title="Disabled state" description="AlignUI-style disabling: a weak fill and disabled text, not a 50% ghost. <code>--disabled-opacity: 0.5</code> exists for the few elements that genuinely fade (icons inside disabled controls) — design-lint blocks opacity-only disabling on buttons and fields.">
+        <Showcase align="stretch">
+          <div className="flex flex-wrap items-center gap-3">
+            <Button>Enabled</Button>
+            <Button disabled>Disabled</Button>
+            <Button tone="success">Confirmed</Button>
+            <Button tone="success" disabled>Confirmed (disabled)</Button>
+            <Chip disabled>Chip (disabled)</Chip>
+          </div>
+        </Showcase>
+      </Section>
+
+      <Section title="Surface opacity" description="Where translucency is deliberate, it is tokenized: backdrop veils, bevel highlights and scrollbar chrome.">
+        <Table
+          columns={[
+            { key: "where", header: "Where" },
+            { key: "light", header: "Light", render: (r) => <span className="font-mono text-paragraph-xs">{r.light}</span> },
+            { key: "dark", header: "Dark", render: (r) => <span className="font-mono text-paragraph-xs">{r.dark}</span> },
+            { key: "why", header: "Why" },
+          ]}
+          rows={[
+            { where: "Modal / drawer backdrop", light: "rgb(14 18 27 / 0.32)", dark: "rgb(0 0 0 / 0.6)", why: "Focus shift without hiding the page" },
+            { where: "Bevel highlight (buttons, fills)", light: "white 0.20 → 0.28 on hover", dark: "raised to 0.9 on neutral fill", why: "The “physical” top edge" },
+            { where: "Scrollbar thumb", light: "border colour", dark: "border colour", why: "Thin, unobtrusive, token-matched" },
+            { where: "Skeleton shimmer", light: "accent 8–12% wash", dark: "surface-secondary wash", why: "Perceptible, never distracting" },
+          ]}
+        />
+      </Section>
+
+      <Section title="Stacking order" description="One fixed order, applied at the layer — not with escalating z-50s. If two layers fight, the fix is structure (portals, isolation), not a bigger number.">
+        <div className="overflow-hidden rounded-2xl bg-surface ring-1 ring-border shadow-xs">
+          {[
+            ["10", "Content", "Cards, tables, inline blocks"],
+            ["20", "Sticky chrome", "Sticky table headers, floating toolbars"],
+            ["30", "Popovers", "Dropdowns, menus, tooltips, hover cards"],
+            ["40", "Overlays", "Modal, drawer, command menu"],
+            ["50", "System", "Toast, global progress"],
+          ].map(([z, layer, use], i) => (
+            <div key={layer} className={cn("flex items-center gap-5 px-5 py-2.5", i > 0 && "border-t border-separator-secondary")}>
+              <code className="w-8 font-mono text-paragraph-xs text-accent">z-{z}</code>
+              <span className="w-36 text-label-sm">{layer}</span>
+              <span className="text-paragraph-xs text-muted">{use}</span>
+            </div>
+          ))}
+        </div>
+      </Section>
+    </>
+  );
+}
+
+/* -------------------------------- BREAKPOINTS ------------------------------ */
+
+export function BreakpointsPage() {
+  return (
+    <>
+      <PageHeader
+        eyebrow="Foundations"
+        title="Breakpoints & Responsive"
+        description="Mobile-first on Tailwind’s standard ladder, with the guarantee that comes with it: no horizontal overflow at any width from 320px to 1600px, and nothing that depends on a single breakpoint to hold together. The guarantee is enforced in the browser suite, not hoped for."
+        tags={["mobile-first", "320 → 1600px", "WCAG 1.4.10 / 1.4.4"]}
+      />
+
+      <Section title="The ladder" description="Standard Tailwind v4 breakpoints. Layouts are built mobile-first: the base styles are the narrow view, and each breakpoint only adds capacity.">
+        <Table
+          columns={[
+            { key: "name", header: "Token", render: (r) => <code className="font-mono text-paragraph-xs text-accent">{r.name}</code> },
+            { key: "min", header: "Min width", render: (r) => <span className="font-mono text-paragraph-xs">{r.min}</span> },
+            { key: "shift", header: "What changes" },
+          ]}
+          rows={[
+            { name: "base", min: "0px", shift: "Single column; nav collapses to a drawer; tables scroll in a container" },
+            { name: "sm", min: "640px", shift: "Two-up card grids; inline action rows" },
+            { name: "md", min: "768px", shift: "Sidebar appears (docs, templates); 3-up grids" },
+            { name: "lg", min: "1024px", shift: "Full docs shell: sidebar + content + TOC rail" },
+            { name: "xl", min: "1280px", shift: "Max content width reached; extra table columns reveal" },
+            { name: "2xl", min: "1536px", shift: "4-up grids; wide tables" },
+          ]}
+        />
+      </Section>
+
+      <Section title="Guaranteed behaviour" description="These are the invariants every route and block must hold — the visual and responsive suites exist to prove them.">
+        <Grid cols={2}>
+          {[
+            ["No horizontal overflow", "At 320, 375, 768, 1024 and 1440px, no route scrolls horizontally. Long content (tables, code) scrolls inside its own container (ds-scroll), never the page."],
+            ["200% zoom", "At the 200%-zoom-equivalent viewport nothing reflows into overlap — the WCAG 1.4.4 check runs at the scaled viewport."],
+            ["Navigation degrades", "The sidebar becomes a drawer below md; the topbar condenses; ⌘K and theme controls stay reachable."],
+            ["Motion respects preference", "prefers-reduced-motion collapses every animation to 0.01ms — one rule in the base layer, all components inherit it."],
+          ].map(([t, d]) => (
+            <Card key={t} className="p-4">
+              <p className="text-label-sm">{t}</p>
+              <p className="mt-1 text-paragraph-xs text-muted">{d}</p>
+            </Card>
+          ))}
+        </Grid>
+      </Section>
+
+      <Section title="The gate" description="Run it the same way CI does — it builds the production bundle first, then drives a real browser.">
+        <CodeBlock code={`npm run test:browser            # a11y (incl. contrast) + responsive + visual
+npm run test:browser -- responsive   # reflow suite only`} filename="shell" />
+      </Section>
+    </>
+  );
+}
+
+/* ---------------------------------- THEMES --------------------------------- */
+
+export function ThemesPage() {
+  const { mode, accentH, accentC, radiusScale, set, toggleMode, reset } = useTheme();
+  return (
+    <>
+      <PageHeader
+        eyebrow="Foundations"
+        title="Themes"
+        description="A theme in Unseen is two numbers and a scale: an OKLCH hue + chroma pair that regenerates the entire accent ramp, a radius multiplier, and one of two appearances. That is the whole input space — and it is the same input space Figma sees, because tokens export from this system, not from a Figma file."
+        tags={["OKLCH brand engine", "5 radius presets", "tokens.json export"]}
+      />
+
+      <Section title="Brand engine" description="Pick a preset or slide the hue/chroma. Every accent surface in the page — buttons, links, focus rings, this header — updates from the two variables.">
+        <Showcase align="stretch">
+          <div className="space-y-5">
+            <div className="flex flex-wrap gap-2">
+              {ACCENT_PRESETS.map((p) => (
+                <button
+                  key={p.name}
+                  onClick={() => set({ accentH: p.h, accentC: p.c })}
+                  className={cn(
+                    "h-8 w-8 rounded-full ring-2 ring-offset-2 ring-offset-surface transition-transform hover:scale-110",
+                    p.h === accentH && p.c === accentC ? "ring-foreground" : "ring-transparent",
+                  )}
+                  style={{ background: `oklch(0.62 ${p.c} ${p.h})` }}
+                  aria-label={`Accent preset ${p.name}`}
+                />
+              ))}
+              <Button variant="ghost" size="sm" onClick={reset}>Reset</Button>
+            </div>
+            <div className="flex gap-1.5">
+              {RAMP.map((i) => (
+                <div key={i} className="h-10 flex-1 rounded-md" style={{ background: `var(--accent-${i})` }} title={`--accent-${i}`} />
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button>Solid</Button>
+              <Button variant="soft">Soft</Button>
+              <Button variant="outline">Outline</Button>
+              <Chip tone="accent">Chip</Chip>
+              <a href="#/foundations/themes" className="text-paragraph-sm text-accent underline-offset-4 hover:underline">Accent link</a>
+            </div>
+          </div>
+        </Showcase>
+      </Section>
+
+      <Section title="Radius, density & appearance" description="The radius scale is one multiplier over the whole radius ladder (presets 0 → 2.25). Density and appearance round out the theme.">
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Card className="p-4">
+            <p className="text-label-sm">Radius</p>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {RADIUS_PRESETS.map((r) => (
+                <button
+                  key={r.name}
+                  onClick={() => set({ radiusScale: r.value })}
+                  className={cn(
+                    "rounded-lg px-2.5 py-1.5 text-paragraph-xs font-medium ring-1 ring-inset transition-colors",
+                    r.value === radiusScale ? "bg-accent-soft text-accent-soft-foreground ring-accent" : "bg-surface-secondary text-muted ring-border hover:text-foreground",
+                  )}
+                >
+                  {r.name}
+                </button>
+              ))}
+            </div>
+          </Card>
+          <Card className="p-4">
+            <p className="text-label-sm">Appearance</p>
+            <div className="mt-3 flex gap-1.5">
+              {(["light", "dark"] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => (m === mode ? undefined : toggleMode())}
+                  className={cn(
+                    "flex-1 rounded-lg px-2.5 py-1.5 text-paragraph-xs font-medium capitalize ring-1 ring-inset transition-colors",
+                    mode === m ? "bg-accent-soft text-accent-soft-foreground ring-accent" : "bg-surface-secondary text-muted ring-border hover:text-foreground",
+                  )}
+                >
+                  {m}
+                </button>
+              ))}
+            </div>
+          </Card>
+          <Card className="p-4">
+            <p className="text-label-sm">Disabled opacity</p>
+            <p className="mt-3 font-mono text-paragraph-xs text-muted">--disabled-opacity: 0.5</p>
+            <p className="mt-1 text-paragraph-xs text-subtle">State opacity is fixed; theming is colour, shape and mode.</p>
+          </Card>
+        </div>
+      </Section>
+
+      <Section title="Export — the Figma bridge" description="Tokens are the source of truth, so they export — they are never re-entered in Figma. The export is deterministic and diff-checked, which is what makes a Figma library stay honest.">
+        <Grid cols={2}>
+          <Card className="p-4">
+            <p className="text-label-sm">What exports</p>
+            <ul className="mt-2 space-y-1.5 text-paragraph-xs text-muted">
+              <li>• <code className="font-mono text-accent">tokens/tokens.json</code> — design-tokens 2.0: primitive + semantic (light/dark modes) colours, palette, type scale, radius, shadows, motion, sizing, brand config.</li>
+              <li>• <code className="font-mono text-accent">tokens/figma-variables.csv</code> — 103 variables for manual Figma import.</li>
+              <li>• Accent ramp evaluated at the current H/C, so Figma shows real values.</li>
+            </ul>
+          </Card>
+          <Card className="p-4">
+            <p className="text-label-sm">The pipeline</p>
+            <CodeBlock code={`npm run tokens:export   # regenerate from src/index.css
+npm run tokens:check    # CI: fail if tokens drift
+# Figma: import tokens.json via Tokens Studio
+#   → light/dark semantic pairs become variable modes`} filename="shell" />
+          </Card>
+        </Grid>
+        <div className="mt-4">
+          <Callout tone="accent" title="Next: Theme Studio v2">
+            A full generator with live component previews, CSS / Tailwind / JSON exports and shareable preset URLs — roadmap, Track B.
+          </Callout>
+        </div>
       </Section>
     </>
   );

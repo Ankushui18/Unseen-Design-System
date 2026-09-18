@@ -39,8 +39,13 @@ import {
 } from "./components/NavDocs";
 import {
   AccessibilityPage,
+  BordersPage,
+  BreakpointsPage,
   ColorPage,
   MotionPage,
+  OpacityPage,
+  SizingPage,
+  ThemesPage,
   TokensPage,
   TypographyPage,
 } from "./Foundations";
@@ -127,11 +132,16 @@ export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> 
   "foundations/color": () => <ColorPage />,
   "foundations/typography": () => <TypographyPage />,
   "foundations/spacing": () => <SpacingPage />,
+  "foundations/sizing": () => <SizingPage />,
   "foundations/elevation": () => <ElevationPage />,
+  "foundations/borders": () => <BordersPage />,
+  "foundations/opacity": () => <OpacityPage />,
   "foundations/motion": () => <MotionPage />,
+  "foundations/breakpoints": () => <BreakpointsPage />,
   "foundations/icons": () => <RemixIconsPage />,
   "foundations/accessibility": () => <AccessibilityPage />,
   "foundations/tokens": () => <TokensPage />,
+  "foundations/themes": () => <ThemesPage />,
 
   patterns: () => <PatternsPage />,
   pricing: (nav) => <PricingPage navigate={nav} />,
