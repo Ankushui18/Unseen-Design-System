@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { LiveEditor, LiveError, LivePreview, LiveProvider } from "react-live";
 import {
   RiCheckLine,
@@ -35,6 +35,7 @@ export function Playground({
   scope,
   controls,
   imports,
+  onReset,
   title = "Playground",
   description,
   className,
@@ -48,6 +49,11 @@ export function Playground({
   controls?: ReactNode;
   /** Import lines prepended on copy (the editor itself stays runnable JSX). */
   imports?: string;
+  /**
+   * Return the example to its documented default cell (IA §5.3.4). The page owns
+   * the axis state, so it owns the reset; edits are always discarded.
+   */
+  onReset?: () => void;
   title?: string;
   description?: ReactNode;
   className?: string;
@@ -56,6 +62,20 @@ export function Playground({
   const [viewport, setViewport] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [resetKey, setResetKey] = useState(0);
   const { copy, copied } = useCopy();
+  const editorHost = useRef<HTMLDivElement>(null);
+
+  /* react-live's LiveEditor forwards only className/style to a contentEditable
+   * <pre> and drops every ARIA prop, so the editable region would otherwise have
+   * no accessible name (IA §5.5). Label it on the node that is actually editable.
+   * Re-runs when the provider remounts the editor (code / reset). */
+  useEffect(() => {
+    const node = editorHost.current?.querySelector<HTMLElement>("[contenteditable]");
+    if (!node) return;
+    node.setAttribute("role", "textbox");
+    node.setAttribute("aria-multiline", "true");
+    node.setAttribute("aria-label", `Edit the ${title} example code`);
+    node.setAttribute("aria-describedby", "playground-editor-hint");
+  }, [title, code, resetKey]);
 
   const viewports = useMemo(
     () => [
@@ -68,16 +88,10 @@ export function Playground({
   const active = viewports.find((v) => v.key === viewport)!;
 
   return (
-    <section
-      id={id}
-      className={cn("playground", className)}
-      aria-labelledby={id ? `${id}-title` : undefined}
-    >
+    <section id={id} className={cn("playground", className)} aria-label={title}>
       <header className="playground-toolbar">
         <div className="playground-heading">
-          <h3 id={id ? `${id}-title` : undefined} className="text-label-sm">
-            {title}
-          </h3>
+          <span className="text-label-sm">{title}</span>
           {description && <p className="text-paragraph-xs text-muted">{description}</p>}
         </div>
 
@@ -110,8 +124,8 @@ export function Playground({
             type="button"
             className="playground-icon-button"
             aria-label="Reset example"
-            title="Reset example"
-            onClick={() => setResetKey((k) => k + 1)}
+            title="Reset example (back to the default example)"
+            onClick={() => { onReset?.(); setResetKey((k) => k + 1); }}
           >
             <RiRestartLine size={14} aria-hidden />
           </button>
@@ -145,7 +159,10 @@ export function Playground({
             <div className="playground-preview" role="region" aria-label="Component preview" tabIndex={-1}>
               <LivePreview />
             </div>
-            <LiveError className="playground-error" />
+            {/* LiveError spreads props onto a <pre> and has no role by default:
+                without one a compile error is silent for screen readers. Polite,
+                not assertive — the user is mid-edit, not blocked (§7.2.5). */}
+            <LiveError className="playground-error" role="status" aria-live="polite" />
           </div>
         </div>
 
@@ -157,12 +174,17 @@ export function Playground({
           )}
           <div className="playground-code">
             <div className="playground-code-header">
-              <span className="font-mono text-paragraph-xs text-muted">Example.tsx</span>
-              <span className="text-paragraph-xs text-subtle">
+              {/* The code panel is a permanently dark surface: it uses explicit
+                  dark-surface colours (the .code-panel convention), never light-theme
+                  text tokens — those fail AA on #141922. */}
+              <span className="font-mono text-paragraph-xs">Example.tsx</span>
+              <span id="playground-editor-hint" className="text-paragraph-xs">
                 {imports ? "editable · copy includes imports" : "editable — the preview follows your keystrokes"}
               </span>
             </div>
-            <LiveEditor className="playground-editor" aria-label={`Edit the ${title} example code`} />
+            <div ref={editorHost}>
+              <LiveEditor className="playground-editor" />
+            </div>
           </div>
         </div>
       </LiveProvider>

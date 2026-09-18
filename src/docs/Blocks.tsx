@@ -356,6 +356,7 @@ export function OptionPicker<T extends string>({
   options,
   onChange,
   labels,
+  wrap = false,
 }: {
   label: string;
   value: T;
@@ -363,14 +364,23 @@ export function OptionPicker<T extends string>({
   onChange: (v: T) => void;
   /** Display vocabulary (COMPONENT-QUALITY-SPEC.md §3.2) — falls back to the raw value. */
   labels?: Partial<Record<T, string>>;
+  /** Wrap instead of scrolling — use inside narrow columns (playground controls). */
+  wrap?: boolean;
 }) {
   return (
     <div>
       <ControlLabel>{label}</ControlLabel>
-      <div className="inline-flex max-w-full items-center gap-0.5 overflow-x-auto rounded-10 bg-surface-secondary p-1 ring-1 ring-inset ring-border no-scrollbar">
+      <div
+        className={cn(
+          "flex max-w-full items-center gap-0.5 rounded-10 bg-surface-secondary p-1 ring-1 ring-inset ring-border no-scrollbar",
+          wrap ? "flex-wrap" : "inline-flex overflow-x-auto",
+        )}
+      >
         {options.map((o) => (
           <button
             key={o}
+            type="button"
+            aria-pressed={value === o}
             onClick={() => onChange(o)}
             className={cn(
               "rounded-md px-2.5 py-1 text-paragraph-xs font-medium capitalize transition-colors",

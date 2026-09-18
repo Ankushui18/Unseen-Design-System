@@ -56,10 +56,12 @@ function Shell() {
       return;
     }
     const id = window.setTimeout(() => {
-      const found = Array.from(document.querySelectorAll<HTMLElement>("main section[id]")).map((el) => ({
-        id: el.id,
-        title: el.querySelector("h2")?.textContent?.trim() ?? el.id,
-      }));
+      /* Only real page sections (Section renders an h2) belong in the TOC —
+       * an inline widget with an id must not leak its id in as a heading. */
+      const found = Array.from(document.querySelectorAll<HTMLElement>("main section[id]"))
+        .map((el) => ({ el, title: el.querySelector("h2")?.textContent?.trim() }))
+        .filter((x): x is { el: HTMLElement; title: string } => Boolean(x.title))
+        .map(({ el, title }) => ({ id: el.id, title }));
       setHeadings(found);
     }, 60);
     return () => window.clearTimeout(id);

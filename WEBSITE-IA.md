@@ -268,7 +268,11 @@ Both are the same component (`<Playground/>`), differing only in available width
 
 ### 5.5 The playground's own accessibility
 
-The playground is a component in the dock: toolbar buttons have accessible names, the controls are real labelled form fields, the code editor is reachable and labelled (`aria-label="Edit the component code"` as on the homepage today), viewport/theme toggles are `aria-pressed`, and the preview region is not a live region (it must not spam screen readers on every keystroke). Toolbar and controls are keyboard-complete: `Tab` in order, `Enter/Space` to act, `Esc` to reset a field where applicable.
+The playground is a component in the dock: toolbar buttons have accessible names, the controls are real labelled form fields, viewport/theme toggles and **every option control expose their selected state** (`aria-pressed` — `OptionPicker` does this for the whole docs site), the preview region is **not** a live region (it must not spam screen readers on every keystroke), and the code editor is a labelled multiline text field.
+
+> **Editor labelling note:** `react-live`'s `LiveEditor` forwards only `className`/`style` to a `contentEditable <pre>` and drops ARIA props, and `use-editable` listens for keydown/keyup/paste (not `input`). `src/docs/Playground.tsx` therefore labels the editable node itself (`role="textbox"`, `aria-multiline`, accessible name) in an effect. If the editor is ever swapped, that shim goes with it; `tests-browser/playground.spec.ts` locks the behaviour.
+
+Toolbar and controls are keyboard-complete: `Tab` in order, `Enter/Space` to act, `Esc` to reset a field where applicable.
 
 ---
 

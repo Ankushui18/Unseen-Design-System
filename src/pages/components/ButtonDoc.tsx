@@ -78,10 +78,14 @@ function ButtonPlayground() {
 
   return (
     <Playground
-      id="playground"
+      id="playground-live"
       code={code}
       scope={{ Button, RiArrowRightLine }}
       imports={`import { Button } from "@unseen/ui";\nimport { RiArrowRightLine } from "@remixicon/react";`}
+      onReset={() => {
+        setTone("accent"); setMode("filled"); setSize("md"); setIcon("trailing"); setState("default"); setVocab("canonical"); setLabel("Continue");
+        update({ tone: undefined, mode: undefined, size: undefined, icon: undefined, state: undefined, vocab: undefined });
+      }}
       description="Controls and code are one state — change a control, edit the code, copy what you see. This link is deep-linkable."
       controls={
         <>
@@ -89,17 +93,17 @@ function ButtonPlayground() {
             <ControlLabel>Label</ControlLabel>
             <Input size="sm" aria-label="Button label" value={label} onChange={(e) => setLabel(e.target.value)} />
           </div>
-          <OptionPicker label="Tone / intent" value={tone} options={TONES} labels={toneLabels}
+          <OptionPicker wrap label="Tone / intent" value={tone} options={TONES} labels={toneLabels}
             onChange={(v) => { setTone(v); update({ tone: v === "accent" ? undefined : v }); }} />
-          <OptionPicker label="Variant / mode" value={mode} options={MODES} labels={modeLabels}
+          <OptionPicker wrap label="Variant / mode" value={mode} options={MODES} labels={modeLabels}
             onChange={(v) => { setMode(v); update({ mode: v === "filled" ? undefined : v }); }} />
-          <OptionPicker label="Size" value={size} options={SIZES} labels={sizeLabels}
+          <OptionPicker wrap label="Size" value={size} options={SIZES} labels={sizeLabels}
             onChange={(v) => { setSize(v); update({ size: v === "md" ? undefined : v }); }} />
-          <OptionPicker label="Content" value={icon} options={ICONS}
+          <OptionPicker wrap label="Content" value={icon} options={ICONS}
             onChange={(v) => { setIcon(v); update({ icon: v === "trailing" ? undefined : v }); }} />
-          <OptionPicker label="State" value={state} options={STATES}
+          <OptionPicker wrap label="State" value={state} options={STATES}
             onChange={(v) => { setState(v); update({ state: v === "default" ? undefined : v }); }} />
-          <OptionPicker label="Vocabulary" value={vocab} options={VOCABS}
+          <OptionPicker wrap label="Vocabulary" value={vocab} options={VOCABS}
             labels={{ canonical: "tone + variant", alias: "variant + mode" }}
             onChange={(v) => { setVocab(v); update({ vocab: v === "canonical" ? undefined : v }); }} />
           <p className="text-paragraph-xs text-subtle">
