@@ -355,6 +355,14 @@ export function EmptyStateDoc() {
           <EmptyState icon={<RiInboxLine />} title="No projects yet" description="Create your first project to start deploying previews and tracking usage." actions={<><Button startContent={<RiAddLine />}>New project</Button><Button variant="outline" tone="default">Import from GitHub</Button></>} />
         </Showcase>
       </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "icon", type: "ReactNode", required: true, description: "28px icon, centred in the soft ring." },
+          { name: "title", type: "ReactNode", required: true, description: "Plain-language statement of what is missing." },
+          { name: "description", type: "ReactNode", description: "One line of guidance — what the user should do next." },
+          { name: "actions", type: "ReactNode", description: "At most two actions; primary first." },
+        ]} />
+      </Section>
     </>
   );
 }

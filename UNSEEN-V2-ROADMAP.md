@@ -65,8 +65,8 @@ Everything later depends on being *measurable*. Nothing in this phase ships pixe
 |---|---|---|---|
 | 1.1 | **`CONVENTIONS.md`** — variant-matrix axes, API style, naming, a11y, docs-page anatomy, block/widget conventions, new-component checklist | Committed; referenced by README + audit scripts | **Done (this pass)** |
 | 1.2 | ~~**`scripts/variant-audit.mjs`**~~ ✅ **landed (this pass)** — per component: declared axis unions (incl. type aliases, mixed unions, `keyof typeof` records) → implemented cell count | `npm run audit:variants` (table/JSON/md); **baseline 853** committed in `audit/variant-audit-baseline.json`; fails on regression | done |
-| 1.3 | **Docs-anatomy lint** — each component page must contain the §9 section set (Variants / Sizes / States / … / Accessibility / API); extend `scripts/design-lint.mjs` | Lint fails on missing sections; 100% of core-30 pages conform | M |
-| 1.4 | **`tokens.json` export** — script deriving Style-Dictionary/Tokens-Studio-compatible JSON from `src/index.css` CSS variables (primitives + semantic + component layers) | `npm run tokens:export` → valid JSON; diff-clean on CI; first input to Figma (Phase 6) | M |
+| 1.3 | ~~**Docs-anatomy lint**~~ ✅ **landed (this pass)** — `docs-anatomy` rule in `scripts/design-lint.mjs`: every `XDoc` page checked for API (+PropsTable) / examples / variants / states / accessibility sections. **Core-36 API section is blocking** (`docs-api-core`); the rest is reported and enforced in 2.4. Fixed in the same pass: added the missing `API` + `PropsTable` sections (real props, verified against source) to the 11 core-36 pages that lacked them — FancyButton, LinkButton, SocialButton, StatusBadge, Tag, SegmentedControl, Stepper, Datepicker, Banner, EmptyState, Combobox | Lint green: 0 `docs-api-core`; 24 non-blocking `docs-api` + full-anatomy report for the long tail | done |
+| 1.4 | ~~**`tokens.json` export**~~ ✅ **landed (this pass)** — `scripts/tokens-export.mjs` derives a deterministic design-tokens-2.0 set from `src/index.css`: primitives (accent ramp evaluated at default H/C), semantic light/dark (Figma variable modes), 10-colour palette, syntax, type scale (20 styles), radius scale, shadows + elevation + focus rings (Figma shadow objects where flattenable), motion, sizing, opacity, brand config | `npm run tokens:export` → `tokens/tokens.json` (41.8 kB) + `tokens/figma-variables.csv` (103 variables); `npm run tokens:check` fails on drift (verified); first input to Figma (Phase 6) | done |
 | 1.5 | **Foundations completion** — add pages: Sizing, Borders, Opacity & Z-index, Breakpoints & Responsive, Themes (→13 total) | Each page renders from real token values, light+dark, gated in smoke/a11y | M |
 | 1.6 | **Type-scale & density tokens audit** — verify the custom type scale + add `--density-*` multiplier for compact/comfortable (used by Phase 2+) | design-lint passes; density tokens consumed by ≥10 components | S |
 
@@ -495,8 +495,8 @@ One dashboard, five scripts (all under `npm run`):
 
 1. Land `CONVENTIONS.md` (done) + this roadmap (done) + README pointers (done).
 2. `scripts/variant-audit.mjs` (done — baseline 853 committed in `audit/variant-audit-baseline.json`; `npm run audit:variants` fails on regression). Remaining: fold into the `npm test` chain once Phase 2 starts moving numbers.
-3. Design-lint: docs-anatomy section check; run on core-36, fix what fails.
-4. `tokens.json` export script + first diff-clean run.
+3. ~~Design-lint: docs-anatomy section check; run on core-36, fix what fails.~~ ✅ done (core-36 API sections now enforced + fixed).
+4. ~~`tokens.json` export script + first diff-clean run.~~ ✅ done (`npm run tokens:export` / `tokens:check`, committed in `tokens/`).
 5. Foundations pages: Sizing · Borders · Opacity & Z-index · Breakpoints · Themes.
 6. Density tokens (`--density-*`) wired into DataTable/ActivityItem/SettingsSection as the reference consumers.
 

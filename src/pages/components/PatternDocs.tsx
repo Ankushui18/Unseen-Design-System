@@ -375,6 +375,16 @@ export function ComboboxDoc() {
           </div>
         </Showcase>
       </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "items", type: "{ value: string; label: string; description?: string; icon?: ReactNode }[]", required: true, description: "Options with optional description line and icon." },
+          { name: "value", type: "string | null", required: true, description: "Selected value (controlled); `null` shows the placeholder." },
+          { name: "onChange", type: "(v: string) => void", required: true, description: "" },
+          { name: "placeholder", type: "string", default: '"Select…"', description: "" },
+          { name: "label", type: "string", description: "Field label above the trigger." },
+          { name: "size", type: '"sm" | "md"', default: '"md"', description: "" },
+        ]} />
+      </Section>
     </>
   );
 }

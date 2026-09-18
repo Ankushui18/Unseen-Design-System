@@ -60,6 +60,16 @@ export function FancyButtonDoc() {
           </ul>
         </Card>
       </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "tone", type: '"accent" | "default" | "danger" | "stroke"', default: '"accent"', description: "Bevel-filled treatments; `stroke` is the etched outline look." },
+          { name: "size", type: '"xxs" | "xs" | "sm" | "md" | "lg"', default: '"md"', description: "Same height ladder as Button." },
+          { name: "loading", type: "boolean", default: "false", description: "Spinner in place of the content." },
+          { name: "iconOnly", type: "boolean", default: "false", description: "Square icon button — give it an accessible name." },
+          { name: "startContent / endContent", type: "ReactNode", description: "Icon slot before / after the label." },
+          { name: "asChild / href", type: "boolean / string", description: "Inherits the rest of the Button contract: renders as the child element or an anchor, styles merged." },
+        ]} />
+      </Section>
     </>
   );
 }
@@ -122,6 +132,14 @@ export function LinkButtonDoc() {
           </div>
         </Showcase>
       </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "variant", type: '"gray" | "black" | "primary" | "error"', description: "Text colour intent; hover shifts the tone." },
+          { name: "size", type: '"sm" | "md"', default: '"md"', description: "Icon size follows (16 / 20px)." },
+          { name: "underline", type: "boolean", default: "false", description: "Persistent underline for inline anchors." },
+          { name: "startContent / endContent", type: "ReactNode", description: "Leading / trailing icon." },
+        ]} />
+      </Section>
     </>
   );
 }
@@ -148,6 +166,14 @@ export function SocialButtonDoc() {
           </div>
         </Showcase>
       </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "brand", type: '"google" | "apple" | "github" | "x"', required: true, description: "Brand mark and brand fill." },
+          { name: "mode", type: '"brand" | "stroke"', default: '"brand"', description: "Brand-colour fill or neutral outline." },
+          { name: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "" },
+          { name: "iconOnly", type: "boolean", default: "false", description: "Mark-only square button; labelled “Continue with <brand>” automatically." },
+        ]} />
+      </Section>
     </>
   );
 }
@@ -166,6 +192,13 @@ export function StatusBadgeDoc() {
         <Showcase>
           {(["completed", "pending", "failed", "disabled", "info"] as const).map((s) => <StatusBadge key={s} status={s} variant="light" className="capitalize">{s}</StatusBadge>)}
         </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "status", type: '"completed" | "pending" | "failed" | "disabled" | "info"', default: '"completed"', description: "Dot colour, and the tinted fill in the `light` variant." },
+          { name: "variant", type: '"stroke" | "light"', default: '"stroke"', description: "Hairline outline or tinted soft fill." },
+          { name: "size", type: '"sm" | "md"', default: '"md"', description: "" },
+        ]} />
       </Section>
     </>
   );
@@ -196,6 +229,14 @@ export function TagDoc() {
           <Tag startContent={<RiStarLine />}>Starred</Tag>
           <Tag startContent={<RiNotification3Line />} variant="gray">Subscribed</Tag>
         </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "variant", type: '"stroke" | "gray"', default: '"stroke"', description: "Hairline outline or filled neutral." },
+          { name: "onRemove", type: "() => void", description: "Adds the × remove action." },
+          { name: "startContent", type: "ReactNode", description: "Leading 14px icon." },
+          { name: "active", type: "boolean", default: "false", description: "Selected / pressed tag state." },
+        ]} />
       </Section>
     </>
   );
@@ -232,6 +273,15 @@ export function SegmentedDoc() {
           </div>
         </Showcase>
       </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "value", type: "T", required: true, description: "Selected item value (controlled)." },
+          { name: "onChange", type: "(v: T) => void", required: true, description: "" },
+          { name: "items", type: "{ value: T; label?: ReactNode; icon?: ReactNode; disabled?: boolean }[]", required: true, description: "Label or icon per item." },
+          { name: "size", type: '"sm" | "md"', default: '"md"', description: "" },
+          { name: "fullWidth", type: "boolean", default: "false", description: "Stretches the items to fill the container." },
+        ]} />
+      </Section>
     </>
   );
 }
@@ -265,6 +315,13 @@ export function StepperDoc() {
         <Showcase code={`<DotStepper count={5} current={index} onChange={setIndex} />`}>
           <DotStepper count={5} current={dot} onChange={setDot} />
         </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "steps", type: "{ title: string; description?: string }[]", required: true, description: "Horizontal / Vertical Stepper only." },
+          { name: "current", type: "number", required: true, description: "Active step index (0-based); completed steps render with the check state." },
+          { name: "count / onChange", type: "number / (i: number) => void", description: "DotStepper only — interactive pagination dots." },
+        ]} />
       </Section>
     </>
   );
@@ -311,6 +368,12 @@ export function DatepickerDoc() {
         <Showcase>
           <Input label="Start date" readOnly value={d ? d.toLocaleDateString() : ""} startContent={<RiCalendarLine />} wrapperClassName="w-60" />
         </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "value", type: "Date | null", required: true, description: "Selected date (controlled)." },
+          { name: "onChange", type: "(d: Date) => void", required: true, description: "Fires when a day cell is chosen." },
+        ]} />
       </Section>
     </>
   );
@@ -386,6 +449,14 @@ export function BannerDoc() {
             <Banner tone="default" variant="stroke" action={<LinkButton variant="primary" size="sm" startContent={<RiFileCopyLine />}>Copy link</LinkButton>}>Share this page with your team.</Banner>
           </div>
         </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "tone", type: "Tone", default: '"accent"', description: "Intent colour + matching icon." },
+          { name: "variant", type: '"filled" | "light" | "stroke"', default: '"filled"', description: "Solid fill, tinted surface or hairline outline." },
+          { name: "action", type: "ReactNode", description: "Trailing action — usually a small Button or LinkButton." },
+          { name: "onClose", type: "() => void", description: "Adds the dismiss × control." },
+        ]} />
       </Section>
     </>
   );
