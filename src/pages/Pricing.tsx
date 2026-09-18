@@ -15,7 +15,7 @@ export function PricingPage({ navigate }: { navigate: (to: string) => void }) {
       </div>
       <section className="beta-page-faq"><h2>No surprises.</h2><Accordion variant="flush" items={[
         { key: "price", title: "Is there a payment or sign-up requirement?", content: "No. Every component, source example, and block currently included in this preview is accessible without payment or account creation." },
-        { key: "future", title: "Will Unseen become paid?", content: "The core components will always remain 100% free and open-source under the MIT license. Pro block expansions and sectoral flows are included free during the public beta." },
+        { key: "future", title: "Will Unseen become paid?", content: "Nothing here costs anything during the public beta. If the project adds paid tiers later, they would be additions alongside the free base — and the licensing position will be stated in the repository README, not invented on this page." },
         { key: "included", title: "Are templates and Figma assets included?", content: "Yes! 5 full sectoral templates (AI, HR, Finance, Marketing, Crypto) and OKLCH token foundations are available to inspect and copy." },
         { key: "feedback", title: "How can I report an issue?", content: "Use Leave feedback in the footer to create a local issue report. You can download it and share it with the team. The preview does not send reports or email addresses to a server." },
       ]} /></section>

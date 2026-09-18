@@ -165,6 +165,14 @@ Order (top to bottom), with the rule for each:
 
 Unchanged rule: the homepage never becomes a second docs site. It proves quality in one scroll and hands off to `/components`.
 
+**Build status (this pass).** Built in the order above, with two deviations, both deliberate:
+
+- **Band 8 (Figma parity) is deferred with its route.** `/figma` does not exist yet (§8), and a homepage band linking nowhere would be the same class of claim this pass removed. The band lands with the route.
+- **Bands 4 and 5 are live, not illustrative.** The quality proof renders the real `Button` (5 intents × 5 modes = 25 cells, plus states and sizes) and the foundations proof drives `useTheme()` — the same state the header popover writes — so the accent, radius and mode controls re-theme the page rather than a sandboxed mock.
+- Bands 1–3, 6, 7 and 9 shipped as specified: hero, editable example, capability strip (printed from the registries), blocks/templates (from `BLOCKS` and `TEMPLATE_CARDS`), the quality receipts, and the FAQ.
+
+**What the page must never do again.** This pass removed, and `tests-browser/surface.spec.ts` now guards against: a competitor's tagline as the headline (with its name in the document title), an invented "trusted by 2,400+" social-proof pile, fabricated per-sector metrics with two sectors pointing at the wrong template, a block gallery that stated counts it did not have and pointed every card at the same route, an empty editor pane, a second duplicate theme customiser, a "Zero deps" claim next to a package.json with six runtime dependencies, and an MIT grant the repository does not make.
+
 ### 4.2 Components index — `/components`
 
 - Above the fold: search (`?q=`, matches name, keyword, tag and prop name), category chips (8), a light/dark toggle that switches **all** previews, and a density control (1/2/3 columns).
@@ -325,7 +333,9 @@ AlignUI's credibility partly comes from code/Figma alignment. Unseen's version, 
 - Counts are **generated**: components, blocks, templates and routes are printed from the registries at build time; `COMPONENT-QUALITY-SPEC.md` §9.4 governs which number is head-lined (bar-passing, not total exports).
 - The homepage may say "117 components" only when the scorecard backs it; the quality proof is the matrices, not the number.
 - "Accessible" is only claimed with the receipt: axe on all routes × both themes, keyboard contracts, and a link to how it is enforced.
-- Comparisons to other systems are banned in copy; parity tables (like `ALIGNUI-PARITY-2026-09-17.md`) live in the repo, not on the site.
+- Comparisons to other systems are banned in copy; parity tables (like `ALIGNUI-PARITY-2026-09-17.md`) live in the repo, not on the site. A competitor's name must not appear in the product at all — `tests-browser/surface.spec.ts` scans the shipped copy for them.
+- **A licence is stated only where one exists.** The repository has no `LICENSE` file, so the site says "free to explore during the public beta" and points at `README.md` → *Licensing* for the real position. If the owner adds a licence, both move together.
+- **No empty chrome.** An editor pane, preview frame or canvas that can render empty must not be shipped in that state. The hero editor had a blank pane and was rebuilt.
 
 ---
 

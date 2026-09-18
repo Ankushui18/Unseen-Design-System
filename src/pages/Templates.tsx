@@ -317,7 +317,7 @@ export function AnalyticsDashboardTemplate() {
         </aside>
 
         {/* Right Main Dashboard Workspace */}
-        <main className="flex-1 p-5 sm:p-8 space-y-6 min-w-0 bg-surface">
+        <div className="flex-1 p-5 sm:p-8 space-y-6 min-w-0 bg-surface">
           {/* Top Welcome Header & Actions */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-separator pb-6">
             <div>
@@ -563,7 +563,7 @@ export function AnalyticsDashboardTemplate() {
               />
             </div>
           </Card>
-        </main>
+        </div>
       </div>
     </div>
   );
@@ -612,7 +612,7 @@ export function SettingsScreenTemplate() {
         <p className="mt-1 text-paragraph-sm text-muted">Manage your team profile and account preferences here.</p>
       </div>
 
-      {/* Horizontal Sub-Navigation Tabs (Untitled UI Style) */}
+      {/* Horizontal sub-navigation tabs (settings anatomy) */}
       <div className="flex gap-1 overflow-x-auto border-b border-separator pb-px no-scrollbar">
         {navTabs.map((t) => (
           <button
@@ -1248,7 +1248,7 @@ export function AnalyticsDashboard() {
         </aside>
 
         {/* Main Dashboard Canvas */}
-        <main className="flex-1 p-6 space-y-6">
+        <div className="flex-1 p-6 space-y-6">
           {/* KPI Metrics */}
           <div className="grid gap-4 sm:grid-cols-3">
             <Card className="p-5">
@@ -1328,7 +1328,7 @@ export function AnalyticsTemplatePage() {
       <PageHeader
         eyebrow="Template"
         title="Analytics Dashboard"
-        description="A full-featured Untitled UI-grade dashboard blueprint featuring a vertical sidebar, metric cards with SVG sparklines, multi-series performance charts, and customer transaction tables."
+        description="A full application screen: vertical sidebar navigation, metric cards with SVG sparklines, multi-series performance charts, and a customer transaction ledger — composed only from Unseen primitives."
         tags={["Dashboard 01", "SidebarNav", "DataTable", "Sparklines", "AreaChart"]}
       />
       <Showcase code={ANALYTICS_CODE} allowViewport align="stretch">
@@ -1576,7 +1576,7 @@ export function AiAssistantTemplate() {
         </aside>
 
         {/* Right Chat Stream Canvas */}
-        <main className="lg:col-span-8 flex flex-col justify-between p-5 sm:p-6 bg-surface">
+        <div className="lg:col-span-8 flex flex-col justify-between p-5 sm:p-6 bg-surface">
           {/* Message Thread */}
           <div className="space-y-4 max-h-[480px] overflow-y-auto pr-1" role="log" aria-label="Conversation" tabIndex={0}>
             {messages.map((msg) => (
@@ -1672,7 +1672,7 @@ export function AiAssistantTemplate() {
               </div>
             </div>
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );
@@ -1711,7 +1711,7 @@ export function AiTemplatePage() {
 /*                         TEMPLATES OVERVIEW PAGE                            */
 /* ========================================================================== */
 
-const TEMPLATE_CARDS = [
+export const TEMPLATE_CARDS = [
   {
     key: "ai",
     title: "AI & Neural Assistant",
@@ -1760,7 +1760,7 @@ export function TemplatesOverviewPage({ navigate }: { navigate: (t: string) => v
       <div className="home-container">
         <header className="collection-heading page-enter">
           <div>
-            <p>Untitled UI-grade templates.</p>
+            <p>Five application screens, end to end.</p>
             <h1>Production Screens.<br />Built with Unseen.</h1>
           </div>
           <div>

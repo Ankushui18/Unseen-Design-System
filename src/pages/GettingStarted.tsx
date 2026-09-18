@@ -10,7 +10,7 @@ export function IntroductionPage({ navigate }: { navigate: (t: string) => void }
         eyebrow="Getting Started"
         title="Introduction"
         description="Unseen is a source-first React design-system preview. Explore the components, inspect their code, and tune the shared tokens to suit your product. Everything in the beta is free to evaluate."
-        tags={["React 19", "Tailwind CSS v4", "TypeScript", "MIT"]}
+        tags={["React 19", "Tailwind CSS v4", "TypeScript", "See README for licensing"]}
       />
 
       <Section title="What you get">

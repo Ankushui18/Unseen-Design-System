@@ -42,7 +42,7 @@ function Shell() {
   useEffect(() => {
     const base = "Unseen Design System";
     if (isHome) {
-      document.title = `${base} | Design & Development perfectly aligned`;
+      document.title = `${base} | A design system that shows its work`;
       return;
     }
     const staticTitles: Record<string, string> = { blocks: "Blocks", pricing: "Pricing", patterns: "Patterns", templates: "Templates" };

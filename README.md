@@ -95,6 +95,25 @@ npm run quality:ia                # validate the WEBSITE-IA taxonomy (no orphans
 - **States are API.** Disabled/loading/error/focus support is part of a component's public contract, measured mechanically by the audit.
 - **Accessibility is gated, not aspirational.** axe runs on every route in `npm test`; the current state is **0 violations**, and it stays that way.
 
+## Licensing
+
+**There is no `LICENSE` file in this repository yet, so no licence is granted.**
+Everything in it is published so you can read, run and evaluate the system, and the
+repository is public — but "public" is not "licensed". Until a licence is added,
+treat the code as all-rights-reserved and do not ship it in a product.
+
+To make the site's former claim true, the owner only has to pick one:
+
+1. **MIT** (or Apache-2.0) — add the licence text as `LICENSE`, put the chosen
+   identifier in `package.json` (`"license": "MIT"`), replace this section with a
+   one-line statement, and the copy in `src/pages/GettingStarted.tsx` can go back
+   to naming the licence.
+2. **Source-available / evaluation only** — keep this section, and the site keeps
+   saying "free to explore during the public beta".
+
+The site does not state a licence until then: `GettingStarted` links here instead,
+and the homepage FAQ says the same thing in one sentence.
+
 ## Status & roadmap
 
 - **Component quality bar (grades, tiers, matrices, DoD):** `COMPONENT-QUALITY-SPEC.md` — enforced by `npm run quality:check`.
