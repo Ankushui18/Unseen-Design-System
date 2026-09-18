@@ -55,15 +55,22 @@ export function Card({
   className,
   children,
   interactive,
+  variant = "default",
   elevation = 1,
   ...props
-}: HTMLAttributes<HTMLDivElement> & { interactive?: boolean; elevation?: 0 | 1 | 2 | 3 | 4 }) {
+}: HTMLAttributes<HTMLDivElement> & { interactive?: boolean; variant?: "default" | "bordered" | "elevated"; elevation?: 0 | 1 | 2 | 3 | 4 }) {
   const shadow = ["", "shadow-xs", "shadow-sm", "shadow-md", "shadow-lg"][elevation];
+  const v = {
+    default: "ring-1 ring-border",
+    bordered: "ring-1 ring-border-strong",
+    elevated: "ring-1 ring-transparent",
+  }[variant];
   return (
     <div
       className={cn(
-        "min-w-0 rounded-14 bg-surface text-foreground ring-1 ring-border card-specular-glow",
-        shadow,
+        "min-w-0 rounded-14 bg-surface text-foreground card-specular-glow",
+        v,
+        variant !== "bordered" && shadow,
         interactive &&
           "cursor-pointer transition-[box-shadow,transform] duration-200 ease-out-quint hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong",
         className,
@@ -180,12 +187,14 @@ export function Badge({
   content,
   tone = "danger",
   placement = "top-right",
+  size = "md",
   dot,
 }: {
   children: ReactNode;
   content?: ReactNode;
   tone?: Tone;
   placement?: "top-right" | "top-left" | "bottom-right" | "bottom-left";
+  size?: "sm" | "md" | "lg";
   dot?: boolean;
 }) {
   const pos = {
@@ -194,13 +203,18 @@ export function Badge({
     "bottom-right": "-bottom-1 -right-1",
     "bottom-left": "-bottom-1 -left-1",
   }[placement];
+  const dim = {
+    sm: dot ? "h-2.5 w-2.5" : "h-4 min-w-4 px-1 text-[9px]",
+    md: dot ? "h-3 w-3" : "h-5 min-w-5 px-1 text-[10px]",
+    lg: dot ? "h-3.5 w-3.5" : "h-6 min-w-6 px-1.5 text-[11px]",
+  }[size];
   return (
     <span className="relative inline-flex">
       {children}
       <span
         className={cn(
           "absolute z-10 flex items-center justify-center rounded-full border-2 border-background font-medium tabular-nums",
-          dot ? "h-3 w-3" : "h-5 min-w-5 px-1 text-[10px]",
+          dim,
           chipTones[tone].solid,
           pos,
         )}
@@ -217,6 +231,7 @@ export function Avatar({
   name,
   src,
   size = "md",
+  shape = "circle",
   square,
   tone = "default",
   status,
@@ -225,12 +240,15 @@ export function Avatar({
   name?: string;
   src?: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
+  shape?: "circle" | "rounded" | "square";
+  /** Alias for shape="square" (kept for compatibility). */
   square?: boolean;
   tone?: Tone;
   status?: "online" | "offline" | "busy";
   className?: string;
 }) {
   const s = { xs: "h-6 w-6 text-[10px]", sm: "h-8 w-8 text-label-xs", md: "h-10 w-10 text-label-sm", lg: "h-12 w-12 text-label-md", xl: "h-16 w-16 text-label-xl" }[size];
+  const sh = { circle: "rounded-full", rounded: "rounded-10", square: "rounded-8" }[square ? "square" : shape];
   const initials = (name ?? "")
     .split(" ")
     .map((w) => w[0])
@@ -242,7 +260,7 @@ export function Avatar({
       <span
         className={cn(
           "inline-flex items-center justify-center overflow-hidden font-medium select-none",
-          square ? "rounded-8" : "rounded-full",
+          sh,
           s,
           chipTones[tone].soft,
           className,

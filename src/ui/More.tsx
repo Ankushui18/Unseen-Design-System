@@ -328,17 +328,19 @@ export function ToggleGroup<T extends string>({ items, value, onChange, multiple
 
 /* -------------------------------- Widget Box ------------------------------- */
 
-export function WidgetBox({ icon, title, action, children, footer, className }: { icon?: ReactNode; title: ReactNode; action?: ReactNode; children: ReactNode; footer?: ReactNode; className?: string }) {
+export function WidgetBox({ icon, title, action, children, footer, density = "comfortable", className }: { icon?: ReactNode; title: ReactNode; action?: ReactNode; children: ReactNode; footer?: ReactNode; density?: "comfortable" | "compact"; className?: string }) {
+  const pad = { comfortable: "px-5", compact: "px-4" }[density];
+  const head = { comfortable: "py-4", compact: "py-2.5" }[density];
   return (
-    <section className={cn("flex flex-col rounded-20 bg-surface ring-1 ring-border shadow-xs", className)}>
-      <header className="flex items-center gap-2.5 px-5 py-4">
+    <section className={cn("flex flex-col bg-surface ring-1 ring-border shadow-xs", density === "comfortable" ? "rounded-20" : "rounded-14", className)}>
+      <header className={cn("flex items-center gap-2.5", pad, head)}>
         {icon && <span className="text-muted [&_svg]:h-5 [&_svg]:w-5">{icon}</span>}
         <h3 className="flex-1 text-label-sm text-foreground">{title}</h3>
         {action}
       </header>
       <div className="h-px bg-separator" />
-      <div className="flex-1 px-5 py-4">{children}</div>
-      {footer && <div className="border-t border-separator px-5 py-3">{footer}</div>}
+      <div className={cn("flex-1", pad, { comfortable: "py-4", compact: "py-3" }[density])}>{children}</div>
+      {footer && <div className={cn("border-t border-separator", pad, { comfortable: "py-3", compact: "py-2" }[density])}>{footer}</div>}
     </section>
   );
 }
@@ -404,14 +406,21 @@ export function Timeline({ items, className }: { items: { time: string; title: R
 
 /* -------------------------------- Empty State ------------------------------ */
 
-export function EmptyState({ icon, title, description, actions, className }: { icon: ReactNode; title: ReactNode; description?: ReactNode; actions?: ReactNode; className?: string }) {
+export function EmptyState({ icon, title, description, actions, variant = "default", className }: { icon: ReactNode; title: ReactNode; description?: ReactNode; actions?: ReactNode; variant?: "default" | "minimal" | "cta"; className?: string }) {
+  const wrap = { default: "py-12", minimal: "py-8", cta: "py-14" }[variant];
+  const well = {
+    default: "h-16 w-16 [&_svg]:h-7 [&_svg]:w-7",
+    minimal: "h-12 w-12 [&_svg]:h-5 [&_svg]:w-5",
+    cta: "h-20 w-20 [&_svg]:h-9 [&_svg]:w-9",
+  }[variant];
+  const titleCls = variant === "cta" ? "text-label-lg" : "text-label-md";
   return (
-    <div className={cn("flex flex-col items-center justify-center px-6 py-12 text-center", className)}>
-      <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-surface-secondary text-muted ring-1 ring-border [&_svg]:h-7 [&_svg]:w-7">
-        <span className="absolute -inset-2 rounded-full ring-1 ring-border/50" />
+    <div className={cn("flex flex-col items-center justify-center px-6 text-center", wrap, className)}>
+      <span className={cn("relative flex items-center justify-center rounded-full bg-surface-secondary text-muted ring-1 ring-border", well)}>
+        {variant !== "minimal" && <span className="absolute -inset-2 rounded-full ring-1 ring-border/50" />}
         {icon}
       </span>
-      <p className="mt-5 text-label-md text-foreground">{title}</p>
+      <p className={cn("mt-5 text-foreground", titleCls)}>{title}</p>
       {description && <p className="mt-1 max-w-sm text-paragraph-sm text-muted">{description}</p>}
       {actions && <div className="mt-5 flex flex-wrap items-center justify-center gap-2">{actions}</div>}
     </div>

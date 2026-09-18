@@ -63,11 +63,11 @@ export function InfoLabel({ label, value, hint, tone = "default", className }: {
 
 /* ------------------------------ Inline Message ----------------------------- */
 
-export function InlineMessage({ children, tone = "accent", className }: { children: ReactNode; tone?: Tone; className?: string }) {
+export function InlineMessage({ children, tone = "accent", variant = "plain", className }: { children: ReactNode; tone?: Tone; variant?: "plain" | "boxed"; className?: string }) {
   const c = { accent: "text-accent", default: "text-muted", success: "text-green-base", warning: "text-orange-base", danger: "text-red-base" }[tone];
   const Icon = tone === "danger" || tone === "warning" ? RiErrorWarningFill : RiInformationFill;
   return (
-    <p className={cn("inline-flex items-start gap-1.5 text-paragraph-xs", c, className)}>
+    <p className={cn("inline-flex items-start gap-1.5 text-paragraph-xs", c, variant === "boxed" && "rounded-10 bg-surface px-2.5 py-2 ring-1 ring-inset ring-border", className)}>
       <Icon size={16} className="mt-px shrink-0" />
       <span className="text-foreground/80">{children}</span>
     </p>
@@ -286,7 +286,7 @@ export function Combobox<T extends { value: string; label: string; description?:
 
 /* -------------------------------- Payment Card ----------------------------- */
 
-export function PaymentCard({ brand = "visa", last4, holder, expiry, variant = "dark", className }: { brand?: "visa" | "mastercard" | "amex"; last4: string; holder: string; expiry: string; variant?: "dark" | "accent" | "light"; className?: string }) {
+export function PaymentCard({ brand = "visa", last4, holder, expiry, variant = "dark", className }: { brand?: "visa" | "mastercard" | "amex" | "unionpay"; last4: string; holder: string; expiry: string; variant?: "dark" | "accent" | "light"; className?: string }) {
   const bg = {
     dark: "bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 text-white",
     accent: "bg-gradient-to-br from-accent-500 via-accent-600 to-accent-800 text-white",
@@ -300,7 +300,7 @@ export function PaymentCard({ brand = "visa", last4, holder, expiry, variant = "
         <div className="flex items-start justify-between">
           <span className="h-8 w-11 rounded-6 bg-gradient-to-br from-yellow-200 to-yellow-500 opacity-90" />
           <span className="text-label-md italic tracking-wide uppercase opacity-90">
-            {brand === "visa" ? "VISA" : brand === "mastercard" ? <span className="inline-flex -space-x-2.5 not-italic"><span className="h-6 w-6 rounded-full bg-red-base/90" /><span className="h-6 w-6 rounded-full bg-yellow-base/90" /></span> : "AMEX"}
+            {brand === "visa" ? "VISA" : brand === "mastercard" ? <span className="inline-flex -space-x-2.5 not-italic"><span className="h-6 w-6 rounded-full bg-red-base/90" /><span className="h-6 w-6 rounded-full bg-yellow-base/90" /></span> : brand === "unionpay" ? <span className="inline-flex items-center gap-0.5 not-italic"><span className="rounded-3 bg-red-base px-1 py-0.5 text-[9px] font-bold text-white">UNION</span><span className="rounded-3 bg-blue-base px-1 py-0.5 text-[9px] font-bold text-white">PAY</span></span> : "AMEX"}
           </span>
         </div>
         <p className="font-mono text-label-lg tracking-[0.18em] tabular-nums">•••• •••• •••• {last4}</p>

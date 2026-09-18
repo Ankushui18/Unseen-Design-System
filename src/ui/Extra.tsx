@@ -200,6 +200,8 @@ export function StatusBadge({
 export function Tag({
   children,
   variant = "stroke",
+  tone,
+  size = "md",
   onRemove,
   startContent,
   active,
@@ -207,18 +209,24 @@ export function Tag({
 }: {
   children: ReactNode;
   variant?: "stroke" | "gray";
+  tone?: Tone;
+  size?: "sm" | "md" | "lg";
   onRemove?: () => void;
   startContent?: ReactNode;
   active?: boolean;
   className?: string;
 }) {
+  const h = { sm: "h-5 rounded-4 px-1.5 text-[11px]", md: "h-6 rounded-6 px-2 text-label-xs", lg: "h-7 rounded-8 px-2.5 text-label-xs" }[size];
+  /* tone colours the hairline variant; the gray (filled neutral) variant stays neutral. */
+  const t = tone && variant === "stroke" ? { accent: "text-accent ring-accent/30 hover:ring-accent/50", default: "", success: "text-success ring-success/30 hover:ring-success/50", warning: "text-warning ring-warning/30 hover:ring-warning/50", danger: "text-danger ring-danger/30 hover:ring-danger/50" }[tone] : "";
   return (
     <span
       className={cn(
-        "inline-flex h-6 items-center gap-1.5 rounded-6 pl-2 text-label-xs transition-colors",
-        onRemove ? "pr-1" : "pr-2",
-        variant === "stroke" ? "bg-surface text-muted ring-1 ring-inset ring-border hover:bg-surface-hover" : "bg-default text-muted hover:bg-default-hover",
+        "inline-flex items-center gap-1.5 transition-colors",
+        h,
+        variant === "stroke" ? cn("bg-surface ring-1 ring-inset hover:bg-surface-hover", tone ? t : "text-muted ring-border") : "bg-default text-muted hover:bg-default-hover",
         active && "bg-neutral-950 text-white ring-0 hover:bg-neutral-900 dark:bg-neutral-200 dark:text-neutral-950",
+        onRemove && "pr-1",
         className,
       )}
     >

@@ -286,9 +286,33 @@ export function TagDoc() {
           <Tag startContent={<RiNotification3Line />} variant="gray">Subscribed</Tag>
         </Showcase>
       </Section>
+      <Section title="Tones" description="Tone colours the hairline variant; the gray filled variant stays neutral by design.">
+        <Showcase code={`<Tag>Default</Tag>
+<Tag tone="accent">Accent</Tag>
+<Tag tone="success">Success</Tag>
+<Tag tone="warning">Warning</Tag>
+<Tag tone="danger">Danger</Tag>`}>
+          <Tag>Default</Tag>
+          <Tag tone="accent">Accent</Tag>
+          <Tag tone="success">Success</Tag>
+          <Tag tone="warning">Warning</Tag>
+          <Tag tone="danger">Danger</Tag>
+        </Showcase>
+      </Section>
+      <Section title="Sizes" description="sm fits inline copy, lg suits filter bars and empty-state prompts.">
+        <Showcase code={`<Tag size="sm">Small</Tag>
+<Tag size="md">Medium</Tag>
+<Tag size="lg">Large</Tag>`}>
+          <Tag size="sm">Small</Tag>
+          <Tag size="md">Medium</Tag>
+          <Tag size="lg">Large</Tag>
+        </Showcase>
+      </Section>
       <Section title="API">
         <PropsTable rows={[
           { name: "variant", type: '"stroke" | "gray"', default: '"stroke"', description: "Hairline outline or filled neutral." },
+          { name: "tone", type: "Tone", description: "Colours the stroke variant's text and hairline; ignored by gray." },
+          { name: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Height, corner radius and label size." },
           { name: "onRemove", type: "() => void", description: "Adds the × remove action." },
           { name: "startContent", type: "ReactNode", description: "Leading 14px icon." },
           { name: "active", type: "boolean", default: "false", description: "Selected / pressed tag state." },

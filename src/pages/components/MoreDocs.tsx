@@ -360,6 +360,26 @@ export function WidgetBoxDoc() {
           </div>
         </Showcase>
       </Section>
+      <Section title="Density" description="Compact tightens header, body and footer padding for dense dashboards.">
+        <Showcase align="stretch" code={`<WidgetBox density="comfortable" icon={<RiDashboardLine />} title="Storage">
+  …
+</WidgetBox>
+<WidgetBox density="compact" icon={<RiDashboardLine />} title="Storage">
+  …
+</WidgetBox>`}>
+          <WidgetBox density="comfortable" icon={<RiDashboardLine />} title="Storage"><p className="text-paragraph-xs text-muted">Comfortable padding — header, body and footer at the standard scale.</p></WidgetBox>
+          <WidgetBox density="compact" icon={<RiDashboardLine />} title="Storage" footer={<p className="text-paragraph-xs text-subtle">Footer slot also tightens</p>}><p className="text-paragraph-xs text-muted">Compact padding — tighter rows for data-heavy dashboards.</p></WidgetBox>
+        </Showcase>
+      </Section>
+      <Section title="API">
+        <PropsTable rows={[
+          { name: "icon", type: "ReactNode", description: "20px leading icon in the header." },
+          { name: "title", type: "ReactNode", required: true, description: "Header title." },
+          { name: "action", type: "ReactNode", description: "Trailing header action." },
+          { name: "density", type: '"comfortable" | "compact"', default: '"comfortable"', description: "Padding scale for header, body and footer." },
+          { name: "footer", type: "ReactNode", description: "Optional divided footer." },
+        ]} />
+      </Section>
     </>
   );
 }
@@ -415,10 +435,20 @@ export function EmptyStateDoc() {
           <EmptyState icon={<RiInboxLine />} title="No projects yet" description="Create your first project to start deploying previews and tracking usage." actions={<><Button startContent={<RiAddLine />}>New project</Button><Button variant="outline" tone="default">Import from GitHub</Button></>} />
         </Showcase>
       </Section>
+      <Section title="Variants" description="Minimal strips the outer ring and shrinks the well for inline panels; cta enlarges the well and title for first-run screens.">
+        <Showcase align="stretch" code={`<EmptyState variant="minimal" icon={<RiInboxLine />} title="No results" description="Try a different search." />
+<EmptyState variant="cta" icon={<RiRocketLine />} title="Launch your first project" description="Unseen builds previews in seconds." actions={<Button startContent={<RiAddLine />}>New project</Button>} />`}>
+          <div className="grid gap-4 md:grid-cols-2">
+            <EmptyState variant="minimal" icon={<RiInboxLine />} title="No results" description="Try a different search or clear the filters." />
+            <EmptyState variant="cta" icon={<RiRocketLine />} title="Launch your first project" description="Unseen builds previews in seconds — start with the starter template." actions={<Button startContent={<RiAddLine />}>New project</Button>} />
+          </div>
+        </Showcase>
+      </Section>
       <Section title="API">
         <PropsTable rows={[
           { name: "icon", type: "ReactNode", required: true, description: "28px icon, centred in the soft ring." },
           { name: "title", type: "ReactNode", required: true, description: "Plain-language statement of what is missing." },
+          { name: "variant", type: '"default" | "minimal" | "cta"', default: '"default"', description: "default: standard well · minimal: smaller, no outer ring · cta: enlarged well and title for first-run screens." },
           { name: "description", type: "ReactNode", description: "One line of guidance — what the user should do next." },
           { name: "actions", type: "ReactNode", description: "At most two actions; primary first." },
         ]} />

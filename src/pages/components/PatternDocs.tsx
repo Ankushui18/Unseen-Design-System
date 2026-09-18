@@ -245,6 +245,14 @@ export function InfoLabelDoc() {
           </div>
         </Showcase>
       </Section>
+      <Section title="Boxed variant" description="boxed lifts the message onto its own surface — use it when the message must be separable from surrounding copy.">
+        <Showcase align="stretch" code={`<InlineMessage tone="warning" variant="boxed">Your trial ends in 3 days.</InlineMessage>`}>
+          <div className="space-y-2">
+            <InlineMessage tone="accent" variant="boxed">A new Unseen version is available.</InlineMessage>
+            <InlineMessage tone="warning" variant="boxed">Your trial ends in 3 days.</InlineMessage>
+          </div>
+        </Showcase>
+      </Section>
     </>
   );
 }
@@ -449,13 +457,14 @@ export function ComboboxDoc() {
 export function PaymentCardDoc() {
   return (
     <>
-      <PageHeader eyebrow="Components · Data Display" title="Payment Card" description="A stylised card visual for billing screens, in dark, accent and light finishes." tags={["3 finishes"]} />
+      <PageHeader eyebrow="Components · Data Display" title="Payment Card" description="A stylised card visual for billing screens: four card brands in dark, accent and light finishes." tags={["4 brands", "3 finishes"]} />
       <Import names="PaymentCard" />
       <Section title="Usage">
         <Showcase code={`<PaymentCard brand="visa" last4="4242" holder="Sophia Williams" expiry="09/28" />`}>
           <PaymentCard brand="visa" last4="4242" holder="Sophia Williams" expiry="09/28" />
           <PaymentCard brand="mastercard" last4="8210" holder="James Brown" expiry="02/27" variant="accent" />
           <PaymentCard brand="amex" last4="1007" holder="Lena Müller" expiry="11/29" variant="light" />
+          <PaymentCard brand="unionpay" last4="9345" holder="Wei Zhang" expiry="06/28" />
         </Showcase>
       </Section>
       <Section title="In a billing form">

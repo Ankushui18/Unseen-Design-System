@@ -137,37 +137,34 @@ Current axes are read from the actual source (`src/ui/*.tsx`); required axes com
 
 ### 4.3 Data display 〔required: R4 — tone 5 × variant 2–3 × size 3; R8 for containers — density 2 × variant/elevation 2–3〕
 
-| Component | Current axes | Target axes | Cells | Action | Priority |
-|---|---|---|---|---|---|
-| Badge (notification) | tone 5 × placement 4 (+dot) | tone 5 × placement 4 × size 3 | 60 | Size axis | P2b |
-| Tag | variant 2 (stroke/gray) + removable | intent 5 × size 3 + removable | 15 | Intent axis | P2a |
-| Chip | **already rich**: color 10 × variant 7 × size 3 (+selected/removable) | at target — document the full grid | 210 | Docs matrix (no new axes) | P2a |
-| StatusBadge | status 5 × variant 2 × size 2 | status 7 (add `neutral`, `accent`) × variant 2 × size 2 | 28 | Extend statuses | P2a |
-| Avatar | tone 5 × size 5 × status 3 (+square) | + shape 3 (circle/rounded/square) | 75→225 | Shape axis explicit | P2a |
-| AvatarGroup / Compact | tone 5 × size 4 × variant 2 | at target — document | 40 | Docs matrix | P2b |
-| Card | elevation 0–4 + interactive | elevation 4 × variant 3 (default/bordered/elevated) | 12 | Variant axis; sub-parts documented | P2a |
-| InfoLabel | single | tone 3 | 3 | Tone axis | P2c |
-| InlineMessage | tone | tone 5 × variant 2 | 10 | Full tones | P2b |
-| ListItem | single + icon | size 2 × variant 2 (default/divided) | 4 | Axes | P2c |
-| Progress | variant 3 (stroke/filled/light) + tone | tone 5 × size 3 | 15 | Full tones × size | P2b |
-| CircularProgress | tone | tone 5 × size 3 | 15 | Same | P2b |
-| Skeleton | shape (partial) | shape 3 (text/rect/circle) × animate 2 | 6 | Formalize | P2c |
-| FeaturedIcon | tone 5 × size 4 × variant 3 (soft/solid/gradient) | — | 60 | Already at target — document | — |
-| PaymentCard | variant 3 × brand 3 | variant 3 × brand 4 (+unionpay) | 12 | Add brand | P2c |
-| Well | variant 3 (default/inset/dashed) | — | 3 | Already fine | — |
-| DataCard | tone 3 + density | tone 5 × density 2 | 10 | Full tones | P2b |
-| Table | variant 3 (bordered/split/flush) | variant 3 × density 2 | 6 | Density axis | P2b |
-| DataTable | density 2 + sort/selection/bulk-actions (with tone)/loading/empty/pagination | at target — document; `size` if wanted | 2–6 | Docs; `aria-sort` done | P2a |
-| WidgetBox | single container | density 2 | 2 | Density axis | P2b |
-| StatGrid | single | size 3 (cols/scale) | 3 | Document | P2c |
-| CardGrid | single | cols 3 (2/3/4) × size 3 | 9 | Axes | P2c |
-| Timeline | single | variant 2 (line/dot) × density 2 | 4 | Axes | P2c |
-| EmptyState | single | variant 3 (minimal/illustration/cta) | 3 | Variant axis | P2a |
-| LoadingState / ErrorState | ErrorState: tone | state 3 × tone 3 | 9 | Unify | P2b |
-| ActivityItem / Feed | density | density 2 | 2 | Document | P2c |
-| FileFormatIcon / Snippet / Code / Kbd / Divider / ContentDivider (variant 4) / ScrollShadow / User | single or minor | — | ~10 | Document only | P2c |
+Measured 2026-09-18 after wave 3 (data display). ✅ = landed in wave 3.
 
-**Data display subtotal: ≈ 263 cells.**
+| Component | Measured axes | Cells | Note |
+|---|---|---|---|
+| Avatar | ✅ tone 5 × shape 3 (circle/rounded/square) × size 5 × status 3 | 225 | `square` boolean kept as alias for `shape="square"` |
+| Chip | color 10 × variant 7 × size 3 (+selected/removable) | 210 | Already rich — documented grid |
+| Badge | ✅ tone 5 × placement 4 × size 3 (+dot) | 60 | Dot scales with size |
+| FeaturedIcon | tone 5 × size 4 × variant 3 (soft/solid/gradient) | 60 | Already at target |
+| AvatarGroupCompact | tone 5 × size 4 × variant 2 | 40 | Already at target |
+| Tag | ✅ intent 5 × variant 2 (stroke/gray) × size 3 (+removable) | 30 | Tone colours the stroke variant only |
+| StatusBadge | status 5 × variant 2 × size 2 | 20 | `info` already renders the accent dot, `disabled` the neutral one — the roadmap's "add neutral/accent" is satisfied by existing names, so no alias statuses added |
+| Progress | tone 5 × size 3 | 15 | Already at target |
+| PaymentCard | ✅ brand 4 (visa/mastercard/amex/unionpay) × variant 3 | 12 | unionpay mark added |
+| InlineMessage | ✅ tone 5 × variant 2 (plain/boxed) | 10 | boxed lifts the message onto its own surface |
+| ActivityItem | tone 5 × density 2 | 10 | |
+| Table | ✅ variant 3 (bordered/split/flush) × density 2 | 6 | |
+| InfoLabel | tone 5 | 5 | (table once said "tone 3" — it already had all five) |
+| CircularProgress | tone 5 | 5 | `size` is a px number (continuous), documented — not a 3-step axis |
+| Timeline | tone 5 | 5 | |
+| AvatarGroup | size 4 | 4 | tone flows from the member avatars |
+| Card | ✅ variant 3 (default/bordered/elevated) | 3 | elevation 0–4 numeric stays uncounted; bordered ignores elevation |
+| EmptyState | ✅ variant 3 (default/minimal/cta) — More.tsx; size 3 (sm/md/lg) — ProductPatterns | 3 + 3 | two same-named components; the audit counts both |
+| Well | variant 3 (default/inset/dashed) | 3 | |
+| DataTable | density 2 | 2 | sort/selection/loading/pagination are behaviour, documented |
+| WidgetBox | ✅ density 2 (comfortable/compact) | 2 | |
+| Skeleton / ListItem / DataCard / StatGrid / CardGrid / LoadingState / ErrorState | no counted axes | 0 | CSS-class-driven or behaviour-only; tone/density axes deferred to P2c+ |
+
+**Data display subtotal: 733 cells (measured, both EmptyState rows included). Pre-wave-3 measured value was 493; the old ≈263 subtotal in this table was stale.**
 
 ### 4.4 Navigation 〔required: R6 — variant 2–4 × orientation × size 2–3〕
 
@@ -236,7 +233,7 @@ Current axes are read from the actual source (`src/ui/*.tsx`); required axes com
 | PRO / product patterns | 37 |
 | **Total** | **≈ 1,249 core cells** |
 
-Measured **baseline: 853** (2026-09-18, before Phase 2 — the system is further along than this plan initially assumed: Chip, Avatar, FeaturedIcon and the Badge/StatusBadge families already carry most of their cells). **✅ The 1,000+ milestone was crossed in Phase 2 wave 1 (1,051 cells, Actions + Feedback depth) and extended in wave 2: measured 1,114 cells** (Forms depth — Input label-placement, Textarea/NumberInput/DigitInput/Combobox size ladders, RadioGroup/Slider size + Slider vertical, Rating tone, SelectionCard variant, Datepicker size). Remaining gap: mostly **missing axes** (Banner `size`, Tag intent, Tabs orientation, Stepper size, Datepicker views + range, Combobox `multiple`) plus **documenting cells that already exist**. State matrix coverage is measured separately (target: 100% of interactive components on disabled/focus; ≥90% on loading/error where meaningful).
+Measured **baseline: 853** (2026-09-18, before Phase 2 — the system is further along than this plan initially assumed: Chip, Avatar, FeaturedIcon and the Badge/StatusBadge families already carry most of their cells). **✅ The 1,000+ milestone was crossed in Phase 2 wave 1 (1,051 cells, Actions + Feedback depth), extended in wave 2 (1,114, Forms depth) and again in wave 3: measured 1,354 cells** (Data display — Avatar shape 3, Badge size 3, Tag intent 5 + size 3, Card variant 3, Table variant 3 + density 2, InlineMessage variant 2, WidgetBox density 2, PaymentCard +unionpay, EmptyState variant 3). Remaining gap: mostly **missing axes** (Banner `size`, Tabs orientation, Stepper size, Datepicker views + range, Combobox `multiple`) plus **documenting cells that already exist**. State matrix coverage is measured separately (target: 100% of interactive components on disabled/focus; ≥90% on loading/error where meaningful).
 
 ### 4.8 Core-36 (Phase 2 first wave, in order)
 

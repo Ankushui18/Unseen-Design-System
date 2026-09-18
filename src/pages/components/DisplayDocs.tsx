@@ -14,7 +14,6 @@ import {
   Chip,
   CircularProgress,
   Code,
-  Divider,
   Kbd,
   Progress,
   ScrollShadow,
@@ -92,9 +91,20 @@ export function CardDoc() {
         </Showcase>
       </Section>
 
+      <Section title="Variants" description="Bordered leans on a stronger hairline with no shadow; elevated leans on shadow with no visible border.">
+        <Showcase code={`<Card variant="default"><CardBody>Default</CardBody></Card>
+<Card variant="bordered"><CardBody>Bordered</CardBody></Card>
+<Card variant="elevated"><CardBody>Elevated</CardBody></Card>`}>
+          <Card variant="default" className="w-36"><CardBody>Default</CardBody></Card>
+          <Card variant="bordered" className="w-36"><CardBody>Bordered</CardBody></Card>
+          <Card variant="elevated" className="w-36"><CardBody>Elevated</CardBody></Card>
+        </Showcase>
+      </Section>
+
       <Section title="API">
         <PropsTable rows={[
-          { name: "elevation", type: "0 | 1 | 2 | 3 | 4", default: "1", description: "Shadow step from the elevation ladder. Keep resting content quiet; increase elevation for floating surfaces." },
+          { name: "variant", type: '"default" | "bordered" | "elevated"', default: '"default"', description: "Surface treatment: hairline border + shadow, stronger border without shadow, or shadow without a visible border." },
+          { name: "elevation", type: "0 | 1 | 2 | 3 | 4", default: "1", description: "Shadow step from the elevation ladder. Ignored by the bordered variant. Keep resting content quiet; increase elevation for floating surfaces." },
           { name: "interactive", type: "boolean", default: "false", description: "Adds hover lift, accent border and pointer cursor." },
           { name: "children", type: "ReactNode", description: "Usually CardHeader / CardBody / CardFooter." },
         ]} />
@@ -151,10 +161,26 @@ export function TableDoc() {
           <Table columns={[{ key: "name", header: "Member" }, { key: "role", header: "Role" }]} rows={[]} />
         </Showcase>
       </Section>
+      <Section title="Variants" description="Bordered is the default shell; split adds column separators for comparison tables; flush strips the shell entirely for embedding inside other surfaces.">
+        <Showcase align="stretch" code={`<Table variant="bordered" columns={cols} rows={rows} />
+<Table variant="split" columns={cols} rows={rows} />
+<Table variant="flush" columns={cols} rows={rows} />`}>
+          <Table variant="bordered" columns={[{ key: "name", header: "Member" }, { key: "role", header: "Role" }, { key: "usage", header: "Usage", align: "right" }]} rows={ROWS} />
+          <Table variant="split" columns={[{ key: "name", header: "Member" }, { key: "role", header: "Role" }, { key: "usage", header: "Usage", align: "right" }]} rows={ROWS} />
+          <Table variant="flush" columns={[{ key: "name", header: "Member" }, { key: "role", header: "Role" }, { key: "usage", header: "Usage", align: "right" }]} rows={ROWS} />
+        </Showcase>
+      </Section>
+      <Section title="Density" description="Compact tightens row padding for data-heavy dashboards.">
+        <Showcase align="stretch" code={`<Table density="compact" columns={cols} rows={rows} />`}>
+          <Table density="compact" caption="Compact — same data, tighter rows" columns={[{ key: "name", header: "Member" }, { key: "role", header: "Role" }, { key: "status", header: "Status" }, { key: "usage", header: "Usage", align: "right" }]} rows={ROWS} />
+        </Showcase>
+      </Section>
       <Section title="API">
         <PropsTable rows={[
           { name: "columns", type: "Column<T>[]", required: true, description: "Column definitions with key, header, align, width and optional render." },
           { name: "rows", type: "T[]", required: true, description: "Row data. Renders the empty state when length is 0." },
+          { name: "variant", type: '"bordered" | "split" | "flush"', default: '"bordered"', description: "bordered: rounded shell with hairline border · split: adds column separators · flush: no shell, for embedding." },
+          { name: "density", type: '"comfortable" | "compact"', default: '"comfortable"', description: "Row padding scale." },
           { name: "striped", type: "boolean", default: "false", description: "Tints alternating rows with surface-secondary." },
           { name: "hoverable", type: "boolean", default: "true", description: "Highlights the row under the pointer." },
           { name: "caption", type: "ReactNode", description: "Descriptive caption above the header row." },
@@ -293,11 +319,18 @@ export function AvatarDoc() {
           {(["xs", "sm", "md", "lg", "xl"] as const).map((s) => <Avatar key={s} name="Ada Lovelace" size={s} tone="accent" />)}
         </Showcase>
       </Section>
-      <Section title="Tones & shape">
+      <Section title="Tones">
         <Showcase>
           {TONES.map((t) => <Avatar key={t} name={t.slice(0, 2)} tone={t} />)}
-          <Divider orientation="vertical" />
-          {TONES.slice(0, 3).map((t) => <Avatar key={t} name={t.slice(0, 2)} tone={t} square />)}
+        </Showcase>
+      </Section>
+      <Section title="Shape" description="Circle for people, rounded for brand tiles, square for team handles.">
+        <Showcase code={`<Avatar name="Ada L" shape="circle" tone="accent" />
+<Avatar name="Ada L" shape="rounded" tone="accent" />
+<Avatar name="Ada L" shape="square" tone="accent" />`}>
+          <Avatar name="Ada L" shape="circle" tone="accent" />
+          <Avatar name="Ada L" shape="rounded" tone="accent" />
+          <Avatar name="Ada L" shape="square" tone="accent" />
         </Showcase>
       </Section>
       <Section title="Status">
@@ -333,7 +366,8 @@ export function AvatarDoc() {
           { name: "name", type: "string", description: "Used for initials and the accessible name." },
           { name: "src", type: "string", description: "Image URL. Falls back to initials when absent." },
           { name: "size", type: '"xs" | "sm" | "md" | "lg" | "xl"', default: '"md"', description: "Avatar dimensions." },
-          { name: "square", type: "boolean", default: "false", description: "Uses a rounded square instead of a circle." },
+          { name: "shape", type: '"circle" | "rounded" | "square"', default: '"circle"', description: "Corner radius: full circle, 10px rounded, or 8px square." },
+          { name: "square", type: "boolean", default: "false", description: "Compatibility alias for shape=\"square\"." },
           { name: "status", type: '"online" | "offline" | "busy"', description: "Presence indicator in the lower-right corner." },
         ]} />
       </Section>
@@ -466,6 +500,15 @@ export function BadgeDoc() {
           <Badge dot tone="warning" placement="bottom-right"><Avatar name="Grace H" tone="default" square /></Badge>
         </Showcase>
       </Section>
+      <Section title="Sizes" description="The dot scales with the size so sm dots suit icons and lg counters suit larger surfaces.">
+        <Showcase code={`<Badge size="sm" content="3" tone="accent"><Button iconOnly variant="outline" tone="default" aria-label="Actions"><RiNotification3Line /></Button></Badge>
+<Badge size="md" content="12" tone="danger"><Button iconOnly variant="outline" tone="default" aria-label="Actions"><RiNotification3Line /></Button></Badge>
+<Badge size="lg" content="24" tone="success"><Button iconOnly variant="outline" tone="default" aria-label="Actions"><RiNotification3Line /></Button></Badge>`}>
+          <Badge size="sm" content="3" tone="accent"><Button iconOnly variant="outline" tone="default" aria-label="Actions"><RiNotification3Line /></Button></Badge>
+          <Badge size="md" content="12" tone="danger"><Button iconOnly variant="outline" tone="default" aria-label="Actions"><RiNotification3Line /></Button></Badge>
+          <Badge size="lg" content="24" tone="success"><Button iconOnly variant="outline" tone="default" aria-label="Actions"><RiNotification3Line /></Button></Badge>
+        </Showcase>
+      </Section>
       <Section title="Placement">
         <Showcase>
           {(["top-right", "top-left", "bottom-right", "bottom-left"] as const).map((p) => (
@@ -478,6 +521,7 @@ export function BadgeDoc() {
       <Section title="API">
         <PropsTable rows={[
           { name: "content", type: "ReactNode", description: "Value rendered inside the badge." },
+          { name: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Counter pill and dot dimensions." },
           { name: "dot", type: "boolean", default: "false", description: "Renders a small dot without content." },
           { name: "tone", type: "Tone", default: '"danger"', description: "Badge fill color." },
           { name: "placement", type: '"top-right" | "top-left" | "bottom-right" | "bottom-left"', default: '"top-right"', description: "Corner anchor." },
