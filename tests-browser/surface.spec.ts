@@ -1,4 +1,7 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { expect, test } from "@playwright/test";
+import { FIGMA_STATUS } from "../src/docs/figma-status";
 import { goto } from "./helpers";
 
 /**
@@ -317,5 +320,58 @@ test.describe("template pages", () => {
     expect(code).toContain("2.25");
     const h = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--accent-h").trim());
     expect(h).toBe("345");
+  });
+});
+
+/**
+ * The code ↔ Figma bridge has one job: show the contract without implying a
+ * library exists. Two failure modes are worth a browser: a parity table that
+ * silently loses rows (the artifact and the page are two files), and a homepage
+ * band that breaks the layout it was built to sit in.
+ */
+test.describe("the figma bridge", () => {
+  const audit = JSON.parse(readFileSync(join(process.cwd(), "audit/variant-audit.json"), "utf8")) as {
+    rows: { name: string }[];
+  };
+
+  /** Statuses that are not the default — what the page may render as live. */
+  const published = Object.values(FIGMA_STATUS).filter((status) => status !== "none").length;
+
+  test("the parity table covers every component the audit knows", async ({ page }) => {
+    await goto(page, "figma");
+    const rows = page.locator(".parity-table tbody tr");
+    await expect(rows).toHaveCount(audit.rows.length);
+    await expect(rows.first()).toContainText(audit.rows[0].name);
+    // With an empty status map nothing may render as published, and the page says why.
+    await expect(page.locator(".parity-status.is-live")).toHaveCount(published);
+    if (published === 0) {
+      await expect(page.locator(".figma-note.is-warning")).toContainText("No Figma library is published");
+    }
+    // The filter is real, not decorative: it must narrow the table.
+    await page.getByLabel("Filter components").fill("button");
+    await expect(rows).not.toHaveCount(audit.rows.length);
+    expect(await rows.count()).toBeLessThan(audit.rows.length);
+  });
+
+  test("the homepage band shows the bridge and spills nothing", async ({ page }) => {
+    await goto(page, "");
+    const band = page.locator(".figma-band");
+    await band.scrollIntoViewIfNeeded();
+    await expect(band.locator(".figma-band-pane")).toHaveCount(2);
+    await expect(band.locator(".figma-band-code")).toContainText("<Button");
+    await expect(band.locator(".figma-band-prop")).toHaveCount(3);
+    // The stats strip is the band's sibling, not its child — the honest status sits under the strip.
+    await expect(page.locator(".figma-band-stats")).toContainText("No Figma library is published");
+
+    const overflow = () =>
+      band.evaluate((el) => {
+        const right = el.getBoundingClientRect().right;
+        return [...el.querySelectorAll("*")].filter((c) => c.getBoundingClientRect().right > right + 1).length;
+      });
+    expect(await overflow()).toBe(0);
+    // Below the breakpoint the strip stacks: still two panes, still inside the card.
+    await page.setViewportSize({ width: 390, height: 900 });
+    await expect(band.locator(".figma-band-pane")).toHaveCount(2);
+    expect(await overflow()).toBe(0);
   });
 });

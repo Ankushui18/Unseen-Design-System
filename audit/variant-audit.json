@@ -1,0 +1,1322 @@
+{
+  "total": 1354,
+  "withAxes": 64,
+  "totalComponents": 64,
+  "rows": [
+    {
+      "file": "ui/Display.tsx",
+      "name": "Avatar",
+      "axes": {
+        "intent": 5,
+        "shape": 3,
+        "size": 5,
+        "status": 3
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "shape": [
+          "circle",
+          "rounded",
+          "square"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm",
+          "xl",
+          "xs"
+        ],
+        "status": [
+          "busy",
+          "offline",
+          "online"
+        ]
+      },
+      "cells": 225
+    },
+    {
+      "file": "ui/Display.tsx",
+      "name": "Chip",
+      "axes": {
+        "intent": 10,
+        "size": 3,
+        "variant": 7
+      },
+      "values": {
+        "intent": [
+          "blue",
+          "gray",
+          "green",
+          "orange",
+          "pink",
+          "purple",
+          "red",
+          "sky",
+          "teal",
+          "yellow"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "filled",
+          "light",
+          "lighter",
+          "outline",
+          "soft",
+          "solid",
+          "stroke"
+        ]
+      },
+      "cells": 210
+    },
+    {
+      "file": "ui/Button.tsx",
+      "name": "Button",
+      "axes": {
+        "intent": 5,
+        "size": 5,
+        "variant": 5
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm",
+          "xs",
+          "xxs"
+        ],
+        "variant": [
+          "ghost",
+          "link",
+          "outline",
+          "soft",
+          "solid"
+        ]
+      },
+      "aliases": {
+        "variant": [
+          "IntentAlias"
+        ]
+      },
+      "cells": 125
+    },
+    {
+      "file": "ui/Display.tsx",
+      "name": "Badge",
+      "axes": {
+        "intent": 5,
+        "placement": 4,
+        "size": 3
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "placement": [
+          "bottom-left",
+          "bottom-right",
+          "top-left",
+          "top-right"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 60
+    },
+    {
+      "file": "ui/Display.tsx",
+      "name": "FeaturedIcon",
+      "axes": {
+        "intent": 5,
+        "size": 4,
+        "variant": 3
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm",
+          "xs"
+        ],
+        "variant": [
+          "gradient",
+          "soft",
+          "solid"
+        ]
+      },
+      "cells": 60
+    },
+    {
+      "file": "ui/Extra.tsx",
+      "name": "LinkButton",
+      "axes": {
+        "intent": 5,
+        "size": 3,
+        "variant": 4
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "black",
+          "error",
+          "gray",
+          "primary"
+        ]
+      },
+      "cells": 60
+    },
+    {
+      "file": "ui/Extra.tsx",
+      "name": "SocialButton",
+      "axes": {
+        "brand": 9,
+        "size": 3,
+        "variant": 2
+      },
+      "values": {
+        "brand": [
+          "key0",
+          "key1",
+          "key2",
+          "key3",
+          "key4",
+          "key5",
+          "key6",
+          "key7",
+          "key8"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "brand",
+          "stroke"
+        ]
+      },
+      "cells": 54
+    },
+    {
+      "file": "ui/Extra.tsx",
+      "name": "CompactButton",
+      "axes": {
+        "intent": 5,
+        "size": 3,
+        "variant": 3
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "ghost",
+          "stroke",
+          "white"
+        ]
+      },
+      "cells": 45
+    },
+    {
+      "file": "ui/Display.tsx",
+      "name": "AvatarGroupCompact",
+      "axes": {
+        "intent": 5,
+        "size": 4,
+        "variant": 2
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm",
+          "xs"
+        ],
+        "variant": [
+          "default",
+          "stroke"
+        ]
+      },
+      "cells": 40
+    },
+    {
+      "file": "ui/Display.tsx",
+      "name": "Alert",
+      "axes": {
+        "intent": 5,
+        "size": 2,
+        "variant": 3
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "outline",
+          "soft",
+          "solid"
+        ]
+      },
+      "cells": 30
+    },
+    {
+      "file": "ui/Button.tsx",
+      "name": "FancyButton",
+      "axes": {
+        "intent": 6,
+        "size": 5
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "stroke",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm",
+          "xs",
+          "xxs"
+        ]
+      },
+      "cells": 30
+    },
+    {
+      "file": "ui/Extra.tsx",
+      "name": "Notification",
+      "axes": {
+        "intent": 5,
+        "size": 2,
+        "variant": 3
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "filled",
+          "light",
+          "stroke"
+        ]
+      },
+      "cells": 30
+    },
+    {
+      "file": "ui/Form.tsx",
+      "name": "RadioGroup",
+      "axes": {
+        "intent": 5,
+        "orientation": 2,
+        "size": 3
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "orientation": [
+          "horizontal",
+          "vertical"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 30
+    },
+    {
+      "file": "ui/Form.tsx",
+      "name": "Slider",
+      "axes": {
+        "intent": 5,
+        "orientation": 2,
+        "size": 3
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "orientation": [
+          "horizontal",
+          "vertical"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 30
+    },
+    {
+      "file": "ui/Extra.tsx",
+      "name": "Tag",
+      "axes": {
+        "intent": 5,
+        "size": 3,
+        "variant": 2
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "gray",
+          "stroke"
+        ]
+      },
+      "cells": 30
+    },
+    {
+      "file": "ui/Extra.tsx",
+      "name": "StatusBadge",
+      "axes": {
+        "size": 2,
+        "status": 5,
+        "variant": 2
+      },
+      "values": {
+        "size": [
+          "md",
+          "sm"
+        ],
+        "status": [
+          "completed",
+          "disabled",
+          "failed",
+          "info",
+          "pending"
+        ],
+        "variant": [
+          "light",
+          "stroke"
+        ]
+      },
+      "cells": 20
+    },
+    {
+      "file": "ui/Display.tsx",
+      "name": "User",
+      "axes": {
+        "intent": 5,
+        "size": 4
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm",
+          "xs"
+        ]
+      },
+      "cells": 20
+    },
+    {
+      "file": "ui/Extra.tsx",
+      "name": "Banner",
+      "axes": {
+        "intent": 5,
+        "variant": 3
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "variant": [
+          "filled",
+          "light",
+          "stroke"
+        ]
+      },
+      "cells": 15
+    },
+    {
+      "file": "ui/Form.tsx",
+      "name": "Checkbox",
+      "axes": {
+        "intent": 5,
+        "size": 3
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 15
+    },
+    {
+      "file": "ui/Display.tsx",
+      "name": "Progress",
+      "axes": {
+        "intent": 5,
+        "size": 3
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 15
+    },
+    {
+      "file": "ui/Form.tsx",
+      "name": "Switch",
+      "axes": {
+        "intent": 5,
+        "size": 3
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 15
+    },
+    {
+      "file": "ui/Patterns.tsx",
+      "name": "PaymentCard",
+      "axes": {
+        "brand": 4,
+        "variant": 3
+      },
+      "values": {
+        "brand": [
+          "amex",
+          "mastercard",
+          "unionpay",
+          "visa"
+        ],
+        "variant": [
+          "accent",
+          "dark",
+          "light"
+        ]
+      },
+      "cells": 12
+    },
+    {
+      "file": "ui/Navigation.tsx",
+      "name": "Tabs",
+      "axes": {
+        "size": 3,
+        "variant": 4
+      },
+      "values": {
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "pill",
+          "segment",
+          "solid",
+          "underline"
+        ]
+      },
+      "cells": 12
+    },
+    {
+      "file": "ui/ProductPatterns.tsx",
+      "name": "ActivityItem",
+      "axes": {
+        "density": 2,
+        "intent": 5
+      },
+      "values": {
+        "density": [
+          "compact",
+          "default"
+        ],
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ]
+      },
+      "cells": 10
+    },
+    {
+      "file": "ui/Patterns.tsx",
+      "name": "InlineMessage",
+      "axes": {
+        "intent": 5,
+        "variant": 2
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "variant": [
+          "boxed",
+          "plain"
+        ]
+      },
+      "cells": 10
+    },
+    {
+      "file": "ui/Overlay.tsx",
+      "name": "Modal",
+      "axes": {
+        "placement": 2,
+        "size": 5
+      },
+      "values": {
+        "placement": [
+          "center",
+          "top"
+        ],
+        "size": [
+          "full",
+          "lg",
+          "md",
+          "sm",
+          "xl"
+        ]
+      },
+      "cells": 10
+    },
+    {
+      "file": "ui/Overlay.tsx",
+      "name": "Drawer",
+      "axes": {
+        "placement": 3,
+        "size": 3
+      },
+      "values": {
+        "placement": [
+          "bottom",
+          "left",
+          "right"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 9
+    },
+    {
+      "file": "ui/More.tsx",
+      "name": "Rating",
+      "axes": {
+        "intent": 3,
+        "size": 3
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 9
+    },
+    {
+      "file": "ui/More.tsx",
+      "name": "Dropdown",
+      "axes": {
+        "placement": 4,
+        "size": 2
+      },
+      "values": {
+        "placement": [
+          "bottom",
+          "bottom-end",
+          "bottom-start",
+          "top"
+        ],
+        "size": [
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 8
+    },
+    {
+      "file": "ui/Navigation.tsx",
+      "name": "Table",
+      "axes": {
+        "density": 2,
+        "variant": 3
+      },
+      "values": {
+        "density": [
+          "comfortable",
+          "compact"
+        ],
+        "variant": [
+          "bordered",
+          "flush",
+          "split"
+        ]
+      },
+      "cells": 6
+    },
+    {
+      "file": "ui/Display.tsx",
+      "name": "CircularProgress",
+      "axes": {
+        "intent": 5
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ]
+      },
+      "cells": 5
+    },
+    {
+      "file": "ui/Display.tsx",
+      "name": "Code",
+      "axes": {
+        "intent": 5
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ]
+      },
+      "cells": 5
+    },
+    {
+      "file": "ui/Patterns.tsx",
+      "name": "InfoLabel",
+      "axes": {
+        "intent": 5
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ]
+      },
+      "cells": 5
+    },
+    {
+      "file": "ui/Overlay.tsx",
+      "name": "MenuLabel",
+      "axes": {
+        "intent": 5
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ]
+      },
+      "cells": 5
+    },
+    {
+      "file": "ui/More.tsx",
+      "name": "Timeline",
+      "axes": {
+        "intent": 5
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ]
+      },
+      "cells": 5
+    },
+    {
+      "file": "ui/Display.tsx",
+      "name": "AvatarGroup",
+      "axes": {
+        "size": 4
+      },
+      "values": {
+        "size": [
+          "lg",
+          "md",
+          "sm",
+          "xs"
+        ]
+      },
+      "cells": 4
+    },
+    {
+      "file": "ui/More.tsx",
+      "name": "ContentDivider",
+      "axes": {
+        "variant": 4
+      },
+      "values": {
+        "variant": [
+          "dashed",
+          "solid",
+          "solid-text",
+          "text"
+        ]
+      },
+      "cells": 4
+    },
+    {
+      "file": "ui/Overlay.tsx",
+      "name": "ToastProvider",
+      "axes": {
+        "placement": 4
+      },
+      "values": {
+        "placement": [
+          "bottom-center",
+          "bottom-right",
+          "top-center",
+          "top-right"
+        ]
+      },
+      "cells": 4
+    },
+    {
+      "file": "ui/More.tsx",
+      "name": "ToggleGroup",
+      "axes": {
+        "size": 2,
+        "variant": 2
+      },
+      "values": {
+        "size": [
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "filled",
+          "outline"
+        ]
+      },
+      "cells": 4
+    },
+    {
+      "file": "ui/Overlay.tsx",
+      "name": "Tooltip",
+      "axes": {
+        "placement": 4
+      },
+      "values": {
+        "placement": [
+          "bottom",
+          "left",
+          "right",
+          "top"
+        ]
+      },
+      "cells": 4
+    },
+    {
+      "file": "ui/Navigation.tsx",
+      "name": "Accordion",
+      "axes": {
+        "variant": 3
+      },
+      "values": {
+        "variant": [
+          "bordered",
+          "flush",
+          "split"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/Patterns.tsx",
+      "name": "AlertDialog",
+      "axes": {
+        "intent": 3
+      },
+      "values": {
+        "intent": [
+          "accent",
+          "danger",
+          "default"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/Patterns.tsx",
+      "name": "ButtonTile",
+      "axes": {
+        "variant": 3
+      },
+      "values": {
+        "variant": [
+          "outline",
+          "soft",
+          "solid"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/Display.tsx",
+      "name": "Card",
+      "axes": {
+        "variant": 3
+      },
+      "values": {
+        "variant": [
+          "bordered",
+          "default",
+          "elevated"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/Patterns.tsx",
+      "name": "Combobox",
+      "axes": {
+        "size": 3
+      },
+      "values": {
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/Extra.tsx",
+      "name": "DigitInput",
+      "axes": {
+        "size": 3
+      },
+      "values": {
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/More.tsx",
+      "name": "EmptyState",
+      "axes": {
+        "variant": 3
+      },
+      "values": {
+        "variant": [
+          "cta",
+          "default",
+          "minimal"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/ProductPatterns.tsx",
+      "name": "EmptyState",
+      "axes": {
+        "size": 3
+      },
+      "values": {
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/Extra.tsx",
+      "name": "Hint",
+      "axes": {
+        "intent": 3
+      },
+      "values": {
+        "intent": [
+          "default",
+          "error",
+          "success"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/Form.tsx",
+      "name": "Input",
+      "axes": {
+        "size": 3
+      },
+      "values": {
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/More.tsx",
+      "name": "NumberInput",
+      "axes": {
+        "size": 3
+      },
+      "values": {
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/More.tsx",
+      "name": "SearchInput",
+      "axes": {
+        "size": 3
+      },
+      "values": {
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/Form.tsx",
+      "name": "Select",
+      "axes": {
+        "size": 3
+      },
+      "values": {
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/More.tsx",
+      "name": "SelectTrigger",
+      "axes": {
+        "size": 3
+      },
+      "values": {
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/Form.tsx",
+      "name": "Textarea",
+      "axes": {
+        "size": 3
+      },
+      "values": {
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/Patterns.tsx",
+      "name": "Well",
+      "axes": {
+        "variant": 3
+      },
+      "values": {
+        "variant": [
+          "dashed",
+          "default",
+          "inset"
+        ]
+      },
+      "cells": 3
+    },
+    {
+      "file": "ui/ProductPatterns.tsx",
+      "name": "DataTable",
+      "axes": {
+        "density": 2
+      },
+      "values": {
+        "density": [
+          "comfortable",
+          "compact"
+        ]
+      },
+      "cells": 2
+    },
+    {
+      "file": "ui/Extra.tsx",
+      "name": "Datepicker",
+      "axes": {
+        "size": 2
+      },
+      "values": {
+        "size": [
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 2
+    },
+    {
+      "file": "ui/Display.tsx",
+      "name": "Divider",
+      "axes": {
+        "orientation": 2
+      },
+      "values": {
+        "orientation": [
+          "horizontal",
+          "vertical"
+        ]
+      },
+      "cells": 2
+    },
+    {
+      "file": "ui/Overlay.tsx",
+      "name": "MenuItem",
+      "axes": {
+        "intent": 2
+      },
+      "values": {
+        "intent": [
+          "danger",
+          "default"
+        ]
+      },
+      "cells": 2
+    },
+    {
+      "file": "ui/Extra.tsx",
+      "name": "SegmentedControl",
+      "axes": {
+        "size": 2
+      },
+      "values": {
+        "size": [
+          "md",
+          "sm"
+        ]
+      },
+      "cells": 2
+    },
+    {
+      "file": "ui/More.tsx",
+      "name": "SelectionCard",
+      "axes": {
+        "variant": 2
+      },
+      "values": {
+        "variant": [
+          "card",
+          "inline"
+        ]
+      },
+      "cells": 2
+    },
+    {
+      "file": "ui/Patterns.tsx",
+      "name": "Toolbar",
+      "axes": {
+        "variant": 2
+      },
+      "values": {
+        "variant": [
+          "floating",
+          "solid"
+        ]
+      },
+      "cells": 2
+    },
+    {
+      "file": "ui/More.tsx",
+      "name": "WidgetBox",
+      "axes": {
+        "density": 2
+      },
+      "values": {
+        "density": [
+          "comfortable",
+          "compact"
+        ]
+      },
+      "cells": 2
+    }
+  ]
+}

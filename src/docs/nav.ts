@@ -167,6 +167,12 @@ export const NAV: NavGroup[] = [
     ],
   },
   {
+    title: "Figma",
+    items: [
+      { title: "Code ↔ Figma", href: "figma", badge: "New", keywords: "figma variables tokens parity naming contract kit export" },
+    ],
+  },
+  {
     title: "Getting Started",
     items: [
       { title: "Introduction", href: "docs/introduction", keywords: "overview about" },

@@ -8,6 +8,16 @@ import { BLOCKS } from "../blocks";
 import { TEMPLATE_CARDS } from "./template-recipes";
 import { SiteFooter } from "../docs/Shell";
 import { COMPONENT_GROUPS } from "../docs/nav";
+import {
+  AUDIT,
+  EXAMPLE,
+  EXAMPLE_AXES,
+  EXAMPLE_CODE,
+  TOKEN_COUNT,
+  TOKEN_TYPES,
+  VARIABLE_ROWS,
+} from "../docs/figma-facts";
+import { highlight } from "../docs/CodeBlock";
 import { useCopy } from "../lib/hooks";
 import { ACCENT_PRESETS, RADIUS_PRESETS, useTheme } from "../lib/theme";
 import { cn } from "../utils/cn";
@@ -19,6 +29,7 @@ import {
   RiCodeSSlashLine,
   RiCommandLine,
   RiContrastLine,
+  RiErrorWarningLine,
   RiEyeLine,
   RiFileCopyLine,
   RiKeyboardLine,
@@ -641,6 +652,84 @@ function BlocksTemplatesSection({ navigate }: { navigate: (to: string) => void }
 }
 
 /* -------------------------------------------------------------------------- */
+/*            4b. CODE ↔ FIGMA — the bridge that can be true today            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The band the sprint deferred until `/figma` existed: not a promise of a kit,
+ * but the contract one would have to match. Left pane is the React export,
+ * right pane is the Figma component it would become, and the numbers under it
+ * come from the same derived facts the page prints (`figma-facts.ts`).
+ *
+ * It is deliberately a strip, not the page again — the page owns the table, the
+ * kit structure and the honest status column; the band only shows the bridge.
+ */
+function FigmaBand() {
+  return (
+    <section className="home-section home-container" aria-labelledby="figma-band-title">
+      <div className="home-section-heading">
+        <div>
+          <span className="section-number">Code ↔ Figma</span>
+          <h2 id="figma-band-title">Named once, mirrored everywhere.</h2>
+        </div>
+        <div>
+          <p>
+            The export is {TOKEN_COUNT} tokens in light and dark modes. The names a kit has to use are
+            generated from the components&rsquo; own prop types, so neither side can drift without the
+            other failing a check.
+          </p>
+          <a href="#/figma" className="text-action">
+            Code ↔ Figma <RiArrowRightLine size={16} />
+          </a>
+        </div>
+      </div>
+
+      <div className="figma-band">
+        <div className="figma-band-pane">
+          <span className="figma-band-side">React</span>
+          <pre className="figma-band-code">{highlight(EXAMPLE_CODE)}</pre>
+        </div>
+
+        <div className="figma-band-link" aria-hidden>
+          <span className="figma-band-link-line" />
+          <RiArrowRightLine size={15} />
+          <span className="figma-band-link-line" />
+        </div>
+
+        <div className="figma-band-pane is-kit">
+          <span className="figma-band-side">Figma</span>
+          <code className="figma-band-name">{EXAMPLE.name}</code>
+          <div className="figma-band-props">
+            {EXAMPLE_AXES.map(({ axis, prop, values }) => (
+              <span className="figma-band-prop" key={axis}>
+                {prop}
+                <em>{values.join(" · ")}</em>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="figma-band-stats">
+        <span>
+          <strong>{TOKEN_COUNT}</strong> tokens, {TOKEN_TYPES.length} types, two modes
+        </span>
+        <span>
+          <strong>{VARIABLE_ROWS}</strong> variable rows exported
+        </span>
+        <span>
+          <strong>{AUDIT.withAxes}</strong> components with axes
+        </span>
+        <span className="figma-band-status">
+          <RiErrorWarningLine size={13} aria-hidden /> No Figma library is published —{" "}
+          <a href="#/figma">status is a field in the repository</a>
+        </span>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /*            5. ACCESSIBILITY & QUALITY — the receipts                      */
 /* -------------------------------------------------------------------------- */
 
@@ -726,7 +815,7 @@ const FAQ_CODE = [
   },
   {
     key: "breadth",
-    title: "Why 80 components instead of 300?",
+    title: `Why ${COMPONENT_COUNT} components instead of 300?`,
     content: "Because a component is not finished when it renders. Each one carries a variant matrix, a state matrix, an accessibility contract, documentation and real-browser coverage. The published quality bar decides what is Done, and the audit trails what is not yet there.",
   },
   {
@@ -825,10 +914,13 @@ export default function Home({ navigate }: { navigate: (to: string) => void }) {
       {/* 6 — Blocks & templates, straight from the registries. */}
       <BlocksTemplatesSection navigate={navigate} />
 
-      {/* 7 — Accessibility & quality, stated as facts with a link to the gate. */}
+      {/* 7 — The code ↔ Figma bridge: the naming contract and the token export. */}
+      <FigmaBand />
+
+      {/* 8 — Accessibility & quality, stated as facts with a link to the gate. */}
       <QualityBand />
 
-      {/* 8 — Questions. */}
+      {/* 9 — Questions. */}
       <FaqSection />
 
       <SiteFooter navigate={navigate} />

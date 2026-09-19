@@ -8,7 +8,7 @@
 
 | Thing | Today | Source of truth |
 |---|---|---|
-| Routes | **138** — 106 documented + 32 block pages | `node scripts/routes.mjs` |
+| Routes | **139** — 106 documented + 32 block pages + `/figma` | `node scripts/routes.mjs` |
 | Nav items | 105, in 9 groups (6 component groups including a **PRO** group of 11) | `src/docs/nav.ts` |
 | Blocks | 32 registered (the 5 application screens are registered blocks too), `category` in 8 values | `src/blocks/index.tsx` |
 | Templates | 5 (`ai`, `analytics`, `settings`, `billing`, `team`) | `src/pages/Templates.tsx` |
@@ -344,6 +344,22 @@ AlignUI's credibility partly comes from code/Figma alignment. Unseen's version, 
 4. **Kit structure**: Foundations (tokens), Components (with variant properties mirroring the axes), Patterns (blocks), Templates.
 5. **No promises in prose**: no "100% parity" claims — the table is the claim.
 
+**Built (sprint 5).** The page is live at `/figma` and every number on it is derived:
+
+| Piece | Where | What it does |
+|---|---|---|
+| `/figma` | `src/pages/Figma.tsx` | Naming contract (worked example), kit structure, and the filterable parity table |
+| Status field | `src/docs/figma-status.ts` | `none` \| `base` \| `variants` \| `complete` per React export; the map is **empty**, so every row renders "Not published" and the page says exactly that |
+| Shared facts | `src/docs/figma-facts.ts` | Token/variable counts, the worked example and its JSX — imported by `/figma` *and* the homepage band, so the two cannot drift |
+| Naming artifact | `audit/variant-audit.json` | `audit:variants:write` writes it, `audit:variants:check` diffs it (64 components · 1354 cells · axes with their canonical values) |
+| Homepage band | `src/pages/Home.tsx` → `FigmaBand` | React snippet → Figma component, with the export counts underneath |
+
+The status rule is tested, not assumed (`tests/figma.test.ts`): a key that is not a real component fails, a `variants`/`complete` claim on a component with no axes to mirror fails, and the page has to read its statuses from the module rather than hold a copy.
+
+**What the gate caught.** Wiring `tokens:check` into `npm test` (it had never run in a defined pipeline — see the CI note below) proved the committed export was two motion tokens behind `src/index.css`. The export is regenerated and committed, so the page's token count is now 337.
+
+**Still true:** there is no Figma library. The page publishes the export and the contract a kit would have to match, and says so in as many words.
+
 ---
 
 ## 9. Home-page copy rules and honest numbers
@@ -367,7 +383,7 @@ AlignUI's credibility partly comes from code/Figma alignment. Unseen's version, 
 - [ ] Keyboard-only pass on any new interactive chrome (playground, palette, index filters)
 - [ ] Deep links work with params stripped and with params set
 - [ ] Counts on the page come from registries/scripts
-- [ ] `npm test` green; baseline refrozen if a Tier A surface changed
+- [ ] `npm test` green — it is the whole pipeline (types, unit, design-lint, quality ratchet, `tokens:check`, both variant audits, build, smoke, axe) and `.github/workflows/quality.yml` runs exactly it; baseline refrozen if a Tier A surface changed
 - [ ] If the page is a new core surface, add it to `tests-browser/visual.spec.ts`
 - [ ] One page component per route, with a **globally unique export name** — duplicate doc export names are reported by `npm run quality:report` (they would otherwise grade the wrong page)
 
@@ -395,7 +411,7 @@ AlignUI's credibility partly comes from code/Figma alignment. Unseen's version, 
 | **2 — Component website** | Nav taxonomy (§3), search (§6), component page anatomy with playground (§4.4, §5), copy buttons, API tables, responsive preview, light/dark | `src/docs/nav.ts`, `src/docs/Playground.tsx`, `src/pages/components/**`, `audit/ia-taxonomy.json` |
 | **3 — Blocks** | Per-block routes, categories, anatomy pages, component manifests | `src/blocks/index.tsx`, `/blocks/{key}` |
 | **4 — Templates** | Template pages, responsive frames, "make it yours" token recipes | `src/pages/Templates.tsx`, `src/pages/TemplateAnatomy.tsx`, `src/pages/template-recipes.ts`, `/templates/{key}` |
-| **5 — Figma + ecosystem** | Parity table, token export docs, kit structure, CLI/package, installation docs | `/figma`, `npm run tokens:export`, packaging roadmap |
+| **5 — Figma + ecosystem** | Parity table, token export docs, kit structure, the naming artifact, homepage band, CI gate | `src/pages/Figma.tsx`, `src/docs/figma-status.ts`, `src/docs/figma-facts.ts`, `src/pages/Home.tsx` (⁠`FigmaBand`), `audit/variant-audit.json`, `.github/workflows/quality.yml` — **built**; CLI/package remains on the packaging roadmap |
 
 ---
 

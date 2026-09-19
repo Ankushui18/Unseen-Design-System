@@ -122,6 +122,7 @@ import {
 import { ChangelogPage, IntroductionPage, PrinciplesPage } from "./GettingStarted";
 import { InstallationPage } from "./Installation";
 import { PricingPage } from "./Pricing";
+import { FigmaPage } from "./Figma";
 
 export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> = {
   "docs/introduction": (nav) => <IntroductionPage navigate={nav} />,
@@ -144,6 +145,7 @@ export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> 
   "foundations/themes": () => <ThemesPage />,
 
   patterns: () => <PatternsPage />,
+  figma: () => <FigmaPage />,
   pricing: (nav) => <PricingPage navigate={nav} />,
   blocks: () => <BlocksPage />,
   templates: (nav) => <TemplatesOverviewPage navigate={nav} />,
