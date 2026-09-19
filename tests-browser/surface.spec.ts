@@ -249,3 +249,73 @@ test.describe("block pages", () => {
     await expect(page.locator("main#main")).toHaveAttribute("data-block", /^[a-z0-9-]+$/);
   });
 });
+
+/**
+ * Template pages (WEBSITE-IA.md §12 sprint 4). All five are rendered by one
+ * `TemplateAnatomy`, so what can go wrong is a page drifting from that shape —
+ * or the recipes silently not applying. Both are checked here.
+ */
+test.describe("template pages", () => {
+  test.use({ viewport: { width: WIDE, height: 1000 } });
+
+  const TEMPLATES = ["analytics", "settings", "billing", "team", "ai"];
+
+  test("every template carries the same anatomy", async ({ page }) => {
+    for (const key of TEMPLATES) {
+      await goto(page, `templates/${key}`);
+      // One page-level heading, owned by the page (a nested <main> would show
+      // up here as a second landmark).
+      await expect(page.locator("h1")).toHaveCount(1);
+      await expect(page.locator("main#main")).toHaveCount(1);
+      expect(await page.locator(".block-uses .block-use").count(), `${key} has no component manifest`).toBeGreaterThan(0);
+      expect(await page.locator(".recipe").count(), `${key} has no recipes`).toBe(3);
+      await expect(page.locator(".recipe-code").first()).toBeVisible();
+      await expect(page.locator(".block-pager a")).toHaveCount(2);
+    }
+  });
+
+  test("applying a recipe changes the live theme, and reset undoes it", async ({ page }) => {
+    await goto(page, "templates/analytics");
+    const read = () =>
+      page.evaluate(() => {
+        const cs = getComputedStyle(document.documentElement);
+        return {
+          h: cs.getPropertyValue("--accent-h").trim(),
+          r: cs.getPropertyValue("--radius-scale").trim(),
+          dark: document.documentElement.classList.contains("dark"),
+        };
+      });
+
+    const before = await read();
+    await page.locator('.recipe[data-recipe="ops-room"] .recipe-apply').click();
+    const after = await read();
+    expect(after).not.toEqual(before);
+    // It must be the recipe's own values: Azure / Tight / dark.
+    expect(after.h).toBe("240");
+    expect(after.r).toBe("0.5");
+    expect(after.dark).toBe(true);
+    // And the page says so, rather than leaving the button looking untouched.
+    await expect(page.locator('.recipe[data-recipe="ops-room"] .recipe-state')).toContainText("Applied");
+
+    // A token change must reach the screen in the preview, not just the CSS vars.
+    const radius = await page.evaluate(() =>
+      parseFloat(getComputedStyle(document.querySelector("[data-template] [class*='rounded-8'], [data-template] [class*='rounded']")!).borderRadius)
+    );
+    expect(radius).toBeGreaterThan(0);
+
+    await page.locator(".recipe-reset").click();
+    expect(await read()).toEqual(before);
+    await expect(page.locator(".recipe-state")).toHaveCount(0);
+  });
+
+  test("a recipe's code block shows the values it applies", async ({ page }) => {
+    await goto(page, "templates/billing");
+    await page.locator('.recipe[data-recipe="fintech-pill"] .recipe-apply').click();
+    const code = await page.locator(".recipe-code").innerText();
+    // Magenta is h:345 c:0.19 and Round is 2.25 — the code must match the theme.
+    expect(code).toContain("345");
+    expect(code).toContain("2.25");
+    const h = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--accent-h").trim());
+    expect(h).toBe("345");
+  });
+});

@@ -7,7 +7,7 @@ import { useToast } from "../ui/Overlay";
 import { CompactButton, DigitInput, FileFormatIcon, Hint, HorizontalStepper, LinkButton, SegmentedControl, SocialButton, StatusBadge, Tag } from "../ui/Extra";
 import { Logo } from "../ui/Brand";
 import { CtaBlock, FaqBlock, FeaturesBentoBlock, FeaturesBlock, HeroBlock, HeroInverseBlock, HeroLitBlock, HeroSplitBlock, HowItWorksBlock, IntegrationsBlock, LogosBlock, NewsletterBlock, StatsBandBlock, TestimonialsBlock } from "./landing";
-import { AnalyticsDashboardTemplate, BillingPageTemplate, SettingsScreenTemplate, TeamPeopleTemplate } from "../pages/Templates";
+import { AiAssistantTemplate, AnalyticsDashboardTemplate, BillingPageTemplate, SettingsScreenTemplate, TeamPeopleTemplate } from "../pages/Templates";
 import { cn } from "../utils/cn";
 import { RiArrowRightDownLine, RiArrowRightLine, RiArrowRightUpLine, RiBankCardLine, RiCheckLine, RiCloseLine, RiEyeLine, RiEyeOffLine, RiFileTextLine, RiFilterLine, RiFlashlightLine, RiGitBranchLine, RiGlobalLine, RiMailLine, RiMoreLine, RiNotification3Line, RiSearchLine, RiStarLine, RiSubtractLine, RiTeamLine, RiUploadCloudLine } from "@remixicon/react";
 
@@ -688,6 +688,7 @@ export const BLOCKS: BlockDef[] = [
   { key: "how-it-works", title: "How It Works", category: "Marketing", description: "3-step interactive architecture flow with live code snippets and card activation.", render: () => <HowItWorksBlock />, span: 3, width: 980, pro: true },
   { key: "integrations", title: "Integrations & Connectors", category: "Marketing", description: "Interactive ecosystem grid with categories, status chips and switches.", render: () => <IntegrationsBlock />, span: 3, width: 980, pro: true },
   { key: "newsletter", title: "Newsletter Subscription", category: "Marketing", description: "High-conversion email signup card with social proof, privacy badge and instant toast.", render: () => <NewsletterBlock />, span: 2, width: 760, pro: true },
+  { key: "template-ai", title: "AI & Neural Assistant", category: "Templates", description: "Multi-turn chat stream, model parameter tuning, formatted code blocks and token telemetry.", render: () => <AiAssistantTemplate />, span: 3, width: 1100, pro: true },
   { key: "template-analytics", title: "Analytics Dashboard", category: "Templates", description: "MRR velocity, transaction tables, circular progress targets and SLA monitors.", render: () => <AnalyticsDashboardTemplate />, span: 3, width: 1100, pro: true },
   { key: "template-settings", title: "Settings Screen", category: "Templates", description: "Workspace profile, domain prefix inputs, slider timeouts, 2FA toggles, and notification digest.", render: () => <SettingsScreenTemplate />, span: 3, width: 1100, pro: true },
   { key: "template-billing", title: "Billing & Subscription", category: "Templates", description: "Subscription tier management, payment card, invoice receipts and promo snippet.", render: () => <BillingPageTemplate />, span: 3, width: 1100, pro: true },

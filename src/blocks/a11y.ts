@@ -141,6 +141,11 @@ export const BLOCK_A11Y: Record<string, string[]> = {
   ],
 
   /* --------------------------------------------------------- templates */
+  "template-ai": [
+    "The message stream is a live region, so a new completion is announced once rather than re-reading the transcript.",
+    "The prompt field is a labelled textarea with a visible send button; the model picker and the parameter sliders all keep their labels when the panel collapses.",
+    "Streaming state is announced in words (generating, done), not by the caret animation alone.",
+  ],
   "template-analytics": [
     "Landmarks are real: one main region, a navigation list, and a table with headers — the page can be jumped through rather than read.",
     "The table is horizontally scrollable inside a labelled region instead of clipping, so no column becomes unreachable at narrow widths.",

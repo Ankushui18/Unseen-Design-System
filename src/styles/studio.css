@@ -1159,3 +1159,84 @@ a.block-use:hover svg { color: var(--accent); }
   .block-pager { grid-template-columns: 1fr; }
   .block-pager-link.is-next { text-align: left; align-items: flex-start; }
 }
+
+/* --------------------------------------------------------------------------
+   Template pages — "Make it yours" (WEBSITE-IA.md §12 sprint 4).
+   The recipes are the site's real tokens, so the cards are quiet: the point is
+   the preview above changing, not the card.
+   -------------------------------------------------------------------------- */
+
+.recipe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 14px; }
+.recipe {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-12);
+  background: var(--surface);
+  transition: border-color var(--duration-fast) var(--ease-out-quint);
+}
+.recipe:hover { border-color: var(--border-strong); }
+.recipe-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.recipe-name { font-size: 14px; font-weight: 500; color: var(--foreground); }
+.recipe-apply {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--foreground);
+  background: var(--surface);
+  transition: border-color var(--duration-fast) var(--ease-out-quint), background var(--duration-fast) var(--ease-out-quint);
+}
+.recipe-apply:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-soft-foreground); }
+.recipe-state.is-active {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--success);
+}
+.recipe-blurb { margin-top: 8px; font-size: 12px; line-height: 20px; color: var(--muted); }
+.recipe-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: auto;
+  padding-top: 14px;
+}
+.recipe-tokens > div { display: flex; align-items: baseline; gap: 6px; }
+.recipe-tokens dt {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--subtle);
+}
+.recipe-tokens dd { font-size: 11px; font-weight: 500; color: var(--foreground); }
+.recipe-code { margin-top: 18px; border: 1px solid var(--border); border-radius: var(--radius-12); overflow: hidden; }
+.recipe-code-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--separator-secondary);
+  background: var(--surface-secondary);
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: var(--muted);
+}
+.recipe-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--foreground);
+}
+.recipe-reset:hover { color: var(--accent); }

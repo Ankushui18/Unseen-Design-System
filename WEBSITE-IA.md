@@ -8,9 +8,9 @@
 
 | Thing | Today | Source of truth |
 |---|---|---|
-| Routes | **137** — 106 documented + 31 block pages | `node scripts/routes.mjs` |
+| Routes | **138** — 106 documented + 32 block pages | `node scripts/routes.mjs` |
 | Nav items | 105, in 9 groups (6 component groups including a **PRO** group of 11) | `src/docs/nav.ts` |
-| Blocks | 31 registered, `category` in 8 values | `src/blocks/index.tsx` |
+| Blocks | 32 registered (the 5 application screens are registered blocks too), `category` in 8 values | `src/blocks/index.tsx` |
 | Templates | 5 (`ai`, `analytics`, `settings`, `billing`, `team`) | `src/pages/Templates.tsx` |
 | Search | Command palette (`Cmd/Ctrl-K`), nav-title + keyword matching | `src/docs/Shell.tsx` |
 | Preview chrome | Preview/Code tabs, viewport switcher (desktop/768/390), canvas light/dark, reset, copy | `src/docs/Blocks.tsx` → `Showcase` |
@@ -192,7 +192,15 @@ Unchanged rule: the homepage never becomes a second docs site. It proves quality
   3. **The accessibility notes say what is *not* handled.** Every claim is one the gates can back; where an example leaves a gap (sign-in failure has no error surface, the command palette exposes no `aria-activedescendant`), the note names it and the fix. A page that lists only strengths is a brochure.
 
   **Nav carve-out.** Block pages are deliberately *not* sidebar entries: 31 rows would bury the navigation. They are therefore derived from the block registry by `scripts/routes.mjs`, which `smoke.mjs` and `a11y-audit.mjs` both read — so the §10 rule "no orphan routes" holds in the direction that matters (every route is gated), while the router itself is the source of truth for the detail routes.
-- **Templates**: `/templates/{key}` with a full-page preview, a responsive frame (desktop/tablet/mobile), the component manifest, and the "make it yours" section (which tokens to change).
+- **Templates**: `/templates/{key}` with a full-page preview, the responsive frame (desktop/tablet/mobile), the component manifest, and **"Make it yours"** — three token recipes per screen.
+
+  **Built (this pass).** All five pages are rendered by one component, `src/pages/TemplateAnatomy.tsx`, so their anatomy cannot drift: heading → preview (with viewport switcher, canvas theme and copyable source) → **Built with** (derived from the registered screen's own source, exactly as on `/blocks/{key}`) → **Make it yours** → prev/next → the way back to `/templates`. `surface.spec` asserts all five carry the same sections.
+
+  **Recipes are prescriptions, not explanations.** Foundations → Themes documents the whole input space; a template recipe says what *this screen* looks like as a fintech product instead of a developer tool. Each names an accent, a radius preset and a mode, and those names are resolved against `ACCENT_PRESETS`/`RADIUS_PRESETS` — the same lists the header popover and the themes page render — so a recipe cannot invent a value, and `tests/template-recipes.test.ts` fails if a preset is renamed out from under one. Applying a recipe calls the real `useTheme()`: the page re-themes, **the preview above it re-themes**, the header popover's selection moves with it, and the code block beside it is what you would paste into your own project to get the same result. `surface.spec` asserts the applied values (Azure = `--accent-h: 240`, Tight = `0.5`, dark) and that reset restores.
+
+  **The AI screen was invisible to the registry.** `template-ai` was not registered in `src/blocks/index.tsx`, which is why its manifest resolved nothing — the "Built with" section is what found it. It is a block now (32 registered), and `tests/template-recipes.test.ts` asserts every template has a registered screen.
+
+  Both of these pages render inside `DocsLayout`, which owns `<main>`: the anatomy deliberately does **not** open a second landmark. (The first version did, and the test caught it in the same run as the missing pager links.)
 
 ### 4.4 The component page — the killer feature
 
@@ -371,7 +379,7 @@ AlignUI's credibility partly comes from code/Figma alignment. Unseen's version, 
 |---|---|---|
 | Time-to-copy on a component page | < 60s from landing | manual study (scripted: sections present, playground above the fold, copy affordance per code block) |
 | Pages with a real playground | 100% of Tier A, then Tier B | `quality:report` (playground check per component) |
-| Deep-linkable blocks | **31/31** (was 0) | block registry routes · `siteRoutes()` feeds smoke + axe |
+| Deep-linkable blocks | **32/32** (was 0) | block registry routes · `siteRoutes()` feeds smoke + axe |
 | Orphan routes | 0 | `design-lint` + `quality:report -- --ia` |
 | Category coverage | 8/8 non-empty, 80/80 mapped | `audit/ia-taxonomy.json` |
 | Site accessibility | 0 axe violations, all routes, both themes | `npm test` + `test:browser` |
@@ -386,7 +394,7 @@ AlignUI's credibility partly comes from code/Figma alignment. Unseen's version, 
 | **1 — Component quality** | Audit, normalise APIs/variants/sizes/states, dark mode, keyboard, missing states | `COMPONENT-QUALITY-SPEC.md`, `QUALITY-SCORECARD.md`, `audit/quality-baseline.json` (ratchet) |
 | **2 — Component website** | Nav taxonomy (§3), search (§6), component page anatomy with playground (§4.4, §5), copy buttons, API tables, responsive preview, light/dark | `src/docs/nav.ts`, `src/docs/Playground.tsx`, `src/pages/components/**`, `audit/ia-taxonomy.json` |
 | **3 — Blocks** | Per-block routes, categories, anatomy pages, component manifests | `src/blocks/index.tsx`, `/blocks/{key}` |
-| **4 — Templates** | Template pages, responsive frames, "make it yours" token recipes | `src/pages/Templates.tsx`, `/templates/{key}` |
+| **4 — Templates** | Template pages, responsive frames, "make it yours" token recipes | `src/pages/Templates.tsx`, `src/pages/TemplateAnatomy.tsx`, `src/pages/template-recipes.ts`, `/templates/{key}` |
 | **5 — Figma + ecosystem** | Parity table, token export docs, kit structure, CLI/package, installation docs | `/figma`, `npm run tokens:export`, packaging roadmap |
 
 ---

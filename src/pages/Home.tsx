@@ -5,7 +5,7 @@ import { Chip, Progress, Snippet } from "../ui/Display";
 import { Input, Switch } from "../ui/Form";
 import { Accordion } from "../ui/Navigation";
 import { BLOCKS } from "../blocks";
-import { TEMPLATE_CARDS } from "./Templates";
+import { TEMPLATE_CARDS } from "./template-recipes";
 import { SiteFooter } from "../docs/Shell";
 import { COMPONENT_GROUPS } from "../docs/nav";
 import { useCopy } from "../lib/hooks";

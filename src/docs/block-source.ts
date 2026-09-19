@@ -31,6 +31,7 @@ const NAMES: Record<string, { name: string; file: "index" | "landing" | "templat
   "how-it-works": { name: "HowItWorksBlock", file: "landing" },
   integrations: { name: "IntegrationsBlock", file: "landing" },
   newsletter: { name: "NewsletterBlock", file: "landing" },
+  "template-ai": { name: "AiAssistantTemplate", file: "templates" },
   "template-analytics": { name: "AnalyticsDashboardTemplate", file: "templates" },
   "template-settings": { name: "SettingsScreenTemplate", file: "templates" },
   "template-billing": { name: "BillingPageTemplate", file: "templates" },
