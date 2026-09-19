@@ -326,7 +326,7 @@ export function AnalyticsDashboardTemplate() {
                 <span>/</span>
                 <span className="text-accent">Executive Overview</span>
               </div>
-              <h1 className="text-title-h3 font-medium text-foreground">Welcome back, Olivia 👋</h1>
+              <h2 className="text-title-h3 font-medium text-foreground">Welcome back, Olivia 👋</h2>
               <p className="text-paragraph-xs text-muted mt-0.5">Track, manage and forecast your customer growth and order volume in real time.</p>
             </div>
 
@@ -608,7 +608,7 @@ export function SettingsScreenTemplate() {
       {/* Top Header with Breadcrumb */}
       <div>
         <span className="text-subheading-xs text-accent font-medium uppercase tracking-wider">// Account Preferences</span>
-        <h1 className="text-title-h3 font-medium text-foreground sm:text-title-h2">Settings</h1>
+        <h2 className="text-title-h3 font-medium text-foreground sm:text-title-h2">Settings</h2>
         <p className="mt-1 text-paragraph-sm text-muted">Manage your team profile and account preferences here.</p>
       </div>
 
@@ -840,7 +840,7 @@ export function BillingPageTemplate() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <span className="text-subheading-xs text-accent font-medium uppercase tracking-wider">// Subscription & Invoices</span>
-          <h1 className="text-title-h3 font-medium text-foreground sm:text-title-h2">Billing & Plans</h1>
+          <h2 className="text-title-h3 font-medium text-foreground sm:text-title-h2">Billing & Plans</h2>
           <p className="mt-1 text-paragraph-sm text-muted">Manage your billing details, seats, and subscription invoices.</p>
         </div>
 
@@ -1058,7 +1058,7 @@ export function TeamPeopleTemplate() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <span className="text-subheading-xs text-accent font-medium uppercase tracking-wider">// Team & Access</span>
-          <h1 className="text-title-h3 font-medium text-foreground sm:text-title-h2">Team Members</h1>
+          <h2 className="text-title-h3 font-medium text-foreground sm:text-title-h2">Team Members</h2>
           <p className="mt-1 text-paragraph-sm text-muted">Manage your team members and their account permissions here.</p>
         </div>
 
@@ -1272,7 +1272,7 @@ export function SettingsScreen() {
 
   return (
     <div className="space-y-6 text-left">
-      <h1>Settings</h1>
+      <h2>Settings</h2>
       <div className="flex gap-1 border-b border-separator pb-px">
         <button className="border-b-2 border-accent text-accent">Profile</button>
       </div>
@@ -1289,7 +1289,7 @@ const BILLING_CODE = `import { Card, Progress, Button, DataTable, PaymentCard, P
 export function BillingPage() {
   return (
     <div className="space-y-6 text-left">
-      <h1>Billing & Plans</h1>
+      <h2>Billing & Plans</h2>
       <div className="grid gap-6 md:grid-cols-2">
         <Card className="p-6">
           <Progress value={80} />
@@ -1309,7 +1309,7 @@ import { Card, DataTable, FilterBar, FilterChip, SearchBar, AvatarGroupCompact, 
 export function TeamScreen() {
   return (
     <div className="space-y-6 text-left">
-      <h1>Team Members</h1>
+      <h2>Team Members</h2>
       <FilterBar leading={<SearchBar placeholder="Filter teammates..." />}>
         <FilterChip active>All</FilterChip>
       </FilterBar>

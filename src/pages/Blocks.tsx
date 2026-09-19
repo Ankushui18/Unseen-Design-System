@@ -105,7 +105,7 @@ export function BlocksPage() {
               key={block.key}
               className={cn("block-collection-cell", block.span && block.span > 1 && "is-wide")}
             >
-              <BlockExample block={block} />
+              <BlockExample block={block} blockHref={`blocks/${block.key}`} />
             </div>
           ))}
         </div>

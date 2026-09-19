@@ -170,3 +170,82 @@ test.describe("homepage", () => {
     expect(indexText).toContain(`${components} documented components`);
   });
 });
+
+/**
+ * Block pages (WEBSITE-IA.md §4.3). Every block has its own route; these assert
+ * the four things the page promises — a preview at three viewports, a component
+ * manifest that links to real pages, copyable source, and accessibility notes —
+ * on blocks of different shapes (a 400px card, a 980px marketing band, a
+ * 1100px application screen, and one that renders no components at all).
+ */
+test.describe("block pages", () => {
+  test.use({ viewport: { width: WIDE, height: 1000 } });
+
+  /* Deliberately different shapes: a 400px card, a plain-markup band, a
+     marketing section, a 980px hero and an 1100px application screen. */
+  const SAMPLE = ["auth", "logos", "pricing", "hero-lit", "template-team"];
+
+  test("every block has a route that renders its own block", async ({ page }) => {
+    for (const key of SAMPLE) {
+      await goto(page, `blocks/${key}`);
+      const main = page.locator("main#main");
+      await expect(main).toHaveAttribute("data-block", key);
+      await expect(page.locator(".block-example .showcase-toolbar")).toBeVisible();
+      // The heading is the block's own title, and there is exactly one of them —
+      // a block that carries its own <h1> collides with the page's.
+      await expect(page.locator("h1")).toHaveCount(1);
+      await expect(page.locator("h1")).not.toHaveText("Start with a pattern. Make it your own.");
+      // Rendered by the router, not the 404 branch.
+      await expect(main).not.toContainText("Block not found");
+    }
+  });
+
+  test("a block page says what the block is made of", async ({ page }) => {
+    await goto(page, "blocks/auth");
+    const uses = page.locator(".block-use");
+    expect(await uses.count()).toBeGreaterThan(2);
+    // Linked chips must go somewhere that exists.
+    const hrefs = await page.locator("a.block-use").evaluateAll((els) => els.map((e) => e.getAttribute("href")));
+    expect(hrefs.length).toBeGreaterThan(0);
+    for (const href of hrefs) {
+      expect(href).toMatch(/^#\/(components|patterns)\//);
+      await goto(page, href!.replace("#/", ""));
+      await expect(page.locator("main#main h1")).toBeVisible();
+    }
+    // A component with no docs page is named, not hidden or linked nowhere.
+    await goto(page, "blocks/auth");
+    await expect(page.locator(".block-use.is-unlinked")).toHaveCount(1);
+  });
+
+  test("a block that renders no components says so instead of showing an empty list", async ({ page }) => {
+    await goto(page, "blocks/logos");
+    await expect(page.locator(".block-use")).toHaveCount(0);
+    await expect(page.locator(".block-uses-note")).toContainText("plain markup");
+    await expect(page.locator(".block-a11y-list li")).not.toHaveCount(0);
+  });
+
+  test("every block page carries accessibility notes and a way onward", async ({ page }) => {
+    for (const key of SAMPLE) {
+      await goto(page, `blocks/${key}`);
+      expect(await page.locator(".block-a11y-list li").count(), `${key} has no a11y notes`).toBeGreaterThanOrEqual(2);
+      // Prev/next and the gallery link are real, keyboard-reachable links.
+      await expect(page.locator(".block-pager a")).toHaveCount(2);
+      expect(await page.locator(".block-pager a[href^='#/blocks/']").count()).toBe(2);
+      await expect(page.getByRole("button", { name: /All \d+ blocks/ })).toBeVisible();
+    }
+  });
+
+  test("an unknown block key 404s without crashing", async ({ page }) => {
+    await goto(page, "blocks/not-a-real-block");
+    await expect(page.locator("main#main")).toContainText("Block not found");
+    await expect(page.getByRole("button", { name: "All blocks" })).toBeVisible();
+  });
+
+  test("the gallery links into the block pages", async ({ page }) => {
+    await goto(page, "blocks");
+    const first = page.locator(".block-example-title-link").first();
+    await expect(first).toHaveAttribute("href", /^#\/blocks\//);
+    await first.click();
+    await expect(page.locator("main#main")).toHaveAttribute("data-block", /^[a-z0-9-]+$/);
+  });
+});

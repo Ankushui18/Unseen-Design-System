@@ -3,9 +3,15 @@ import type { BlockDef } from "../blocks";
 import { useCopy } from "../lib/hooks";
 import { CodeBlock } from "./CodeBlock";
 import { blockFilename, getBlockSource } from "./block-source";
-import { RiCheckLine, RiCodeSSlashLine, RiComputerLine, RiEyeLine, RiFileCopyLine, RiRestartLine, RiSmartphoneLine, RiTabletLine } from "@remixicon/react";
+import { RiArrowRightLine, RiCheckLine, RiCodeSSlashLine, RiComputerLine, RiEyeLine, RiFileCopyLine, RiRestartLine, RiSmartphoneLine, RiTabletLine } from "@remixicon/react";
 
-export function BlockExample({ block }: { block: BlockDef }) {
+/**
+ * The preview + source frame used by the gallery and by `/blocks/{key}`.
+ *
+ * `blockHref` adds the link to the block's own page — the gallery passes it,
+ * the block page itself does not (you are already there).
+ */
+export function BlockExample({ block, blockHref }: { block: BlockDef; blockHref?: string }) {
   const [view, setView] = useState("preview");
   const [viewport, setViewport] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [revision, setRevision] = useState(0);
@@ -125,10 +131,19 @@ export function BlockExample({ block }: { block: BlockDef }) {
       </div>
       <footer className="block-example-footer">
         <span>
-          <h3>{block.title}</h3>
+          {blockHref ? (
+            <h3>
+              <a className="block-example-title-link" href={`#/${blockHref}`}>
+                {block.title}
+                <RiArrowRightLine size={14} aria-hidden />
+              </a>
+            </h3>
+          ) : (
+            <h3>{block.title}</h3>
+          )}
           <p>{block.description}</p>
         </span>
-        <span>{block.category}</span>
+        <span>{blockHref ? <a className="block-example-open" href={`#/${blockHref}`}>Open block page</a> : block.category}</span>
       </footer>
     </article>
   );

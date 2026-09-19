@@ -8,9 +8,9 @@
 
 | Thing | Today | Source of truth |
 |---|---|---|
-| Routes | **106** (82 component, 13 foundation, 5 template, 4 docs, 5 root) | `npm run lint:design` |
+| Routes | **137** — 106 documented + 31 block pages | `node scripts/routes.mjs` |
 | Nav items | 105, in 9 groups (6 component groups including a **PRO** group of 11) | `src/docs/nav.ts` |
-| Blocks | 33 registered, `category` in 8 values | `src/blocks/index.tsx` |
+| Blocks | 31 registered, `category` in 8 values | `src/blocks/index.tsx` |
 | Templates | 5 (`ai`, `analytics`, `settings`, `billing`, `team`) | `src/pages/Templates.tsx` |
 | Search | Command palette (`Cmd/Ctrl-K`), nav-title + keyword matching | `src/docs/Shell.tsx` |
 | Preview chrome | Preview/Code tabs, viewport switcher (desktop/768/390), canvas light/dark, reset, copy | `src/docs/Blocks.tsx` → `Showcase` |
@@ -181,7 +181,17 @@ Unchanged rule: the homepage never becomes a second docs site. It proves quality
 
 ### 4.3 Blocks & templates indexes
 
-- **Blocks**: 33 entries, category filters (`Authentication`, `Dashboard`, `Forms`, `Marketing`, `Feedback`, `Navigation`, `Social`, `Templates`), preview at real size, `Pro` badge, and — the fix — **each block gets its own route** `/blocks/{key}` with: preview (responsive), the exact components it uses (linked), the source (copyable), and accessibility notes.
+- **Blocks**: 31 entries, category filters, preview at real size, `Pro` badge, and — the fix — **each block has its own route** `/blocks/{key}`.
+
+  **Built (this pass).** The page is `/blocks/{key}`, rendered by `src/pages/BlockPage.tsx` and registered in `App.tsx` (`isBlockPage`). It carries: the breadcrumb, the block's own preview with the three-viewport switcher and copyable source (the same `BlockExample` the gallery uses), a **Built with** manifest, the accessibility notes, prev/next, and the way back to the gallery. The gallery's card titles link into it. Measured: **31/31 deep-linkable**, up from 0.
+
+  Three rules the implementation follows, each with a check:
+
+  1. **The component manifest is derived, never listed.** `getBlockComponents()` parses the block's own function body, keeps only names imported from `../ui/*`, and follows one level of composition (`HeroBlock` is a thin wrapper over `HeroLitBlock`). Aliases where the export name and the page genuinely differ (`Kbd` → Keyboard Key, `Divider` → Content Divider, the product patterns → `/patterns`) live in one table in `src/docs/block-source.ts`. `tests/block-manifest.test.ts` fails if an alias 404s, if a block resolves nothing while importing `src/ui`, or if a block has no notes.
+  2. **Blocks never open a second `<h1>`.** A block is a section of a page, and the page already has a heading — this was wrong in 7 places (three marketing heroes, four application screens) and only surfaced when a real-browser test counted the headings on `/blocks/template-team`. `design-lint` now blocks `<h1>` in `src/blocks/`, and because the template screens are registered as blocks the same test covers them.
+  3. **The accessibility notes say what is *not* handled.** Every claim is one the gates can back; where an example leaves a gap (sign-in failure has no error surface, the command palette exposes no `aria-activedescendant`), the note names it and the fix. A page that lists only strengths is a brochure.
+
+  **Nav carve-out.** Block pages are deliberately *not* sidebar entries: 31 rows would bury the navigation. They are therefore derived from the block registry by `scripts/routes.mjs`, which `smoke.mjs` and `a11y-audit.mjs` both read — so the §10 rule "no orphan routes" holds in the direction that matters (every route is gated), while the router itself is the source of truth for the detail routes.
 - **Templates**: `/templates/{key}` with a full-page preview, a responsive frame (desktop/tablet/mobile), the component manifest, and the "make it yours" section (which tokens to change).
 
 ### 4.4 The component page — the killer feature
@@ -341,7 +351,7 @@ AlignUI's credibility partly comes from code/Figma alignment. Unseen's version, 
 
 ## 10. Definition of done for a website change
 
-- [ ] Route registered in `src/pages/registry.tsx` **and** `src/docs/nav.ts` with keywords; no orphan routes either way (`design-lint` route rule)
+- [ ] Route registered in `src/pages/registry.tsx` **and** `src/docs/nav.ts` with keywords; no orphan routes either way (`design-lint` route rule). *Exception:* generated detail routes (`/blocks/{key}`) are registered in the router and derived by `scripts/routes.mjs` instead of the nav — see §4.3.
 - [ ] Every component on the page comes from `src/ui`; every colour/space/type value from a token
 - [ ] Preview is live and responsive (320 / 768 / 1440) — screenshots are not acceptable
 - [ ] Every code sample is copyable, runnable as written, and uses canonical vocabulary
@@ -361,7 +371,7 @@ AlignUI's credibility partly comes from code/Figma alignment. Unseen's version, 
 |---|---|---|
 | Time-to-copy on a component page | < 60s from landing | manual study (scripted: sections present, playground above the fold, copy affordance per code block) |
 | Pages with a real playground | 100% of Tier A, then Tier B | `quality:report` (playground check per component) |
-| Deep-linkable blocks | 33/33 | block registry routes |
+| Deep-linkable blocks | **31/31** (was 0) | block registry routes · `siteRoutes()` feeds smoke + axe |
 | Orphan routes | 0 | `design-lint` + `quality:report -- --ia` |
 | Category coverage | 8/8 non-empty, 80/80 mapped | `audit/ia-taxonomy.json` |
 | Site accessibility | 0 axe violations, all routes, both themes | `npm test` + `test:browser` |

@@ -32,9 +32,9 @@ export function HeroLitBlock() {
         <span className="h-3 w-px bg-separator" />
         <span className="text-paragraph-xs text-muted">What's new <RiArrowRightLine size={12} className="inline ml-0.5" /></span>
       </div>
-      <h1 className="mt-6 max-w-3xl text-title-h3 text-foreground sm:text-title-h1">
+      <h2 className="mt-6 max-w-3xl text-title-h3 text-foreground sm:text-title-h1">
         Build products people<br />describe as <span className="text-gradient font-medium">considered</span>.
-      </h1>
+      </h2>
       <p className="mt-5 max-w-xl text-paragraph-md text-muted sm:text-paragraph-lg">
         Thoughtful React primitives, design tokens, and composed patterns that agree with each other — so every surface ships with one voice.
       </p>
@@ -74,9 +74,9 @@ export function HeroSplitBlock() {
           <div className="inline-flex items-center gap-2 rounded-full bg-accent-soft px-3 py-1 text-paragraph-xs font-medium text-accent-soft-foreground">
             <RiSparkling2Line size={14} /> Production-grade design system
           </div>
-          <h1 className="mt-4 text-title-h3 text-foreground sm:text-title-h1">
+          <h2 className="mt-4 text-title-h3 text-foreground sm:text-title-h1">
             Design and code in <span className="text-gradient">lockstep</span>.
-          </h1>
+          </h2>
           <p className="mt-4 max-w-lg text-paragraph-md text-muted sm:text-paragraph-lg">
             A token-driven foundation and 60+ headless-grade primitives designed for modern SaaS applications.
           </p>
@@ -181,9 +181,9 @@ export function HeroInverseBlock() {
           <span className="h-3 w-px bg-white/20" />
           <span className="text-accent-300">v2.4 Released <RiArrowRightLine size={12} className="inline" /></span>
         </div>
-        <h1 className="mt-6 text-title-h3 text-white sm:text-title-h1">
+        <h2 className="mt-6 text-title-h3 text-white sm:text-title-h1">
           The design system engineered for <span className="bg-gradient-to-r from-accent-300 via-accent-200 to-white bg-clip-text text-transparent">speed and depth</span>.
-        </h1>
+        </h2>
         <p className="mx-auto mt-5 max-w-xl text-paragraph-md text-neutral-400 sm:text-paragraph-lg">
           High-contrast accessible surfaces, responsive mobile preview wrappers, and production-ready component blueprints.
         </p>

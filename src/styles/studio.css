@@ -1039,3 +1039,123 @@
   .matrix { min-width: 540px; }
   .specimen-row { padding: 18px 12px; gap: 16px 20px; }
 }
+
+/* --------------------------------------------------------------------------
+   Block pages — /blocks/{key} (WEBSITE-IA.md §4.3). Same canvas language as
+   the gallery, so a block page reads as the gallery entered one level deeper.
+   -------------------------------------------------------------------------- */
+
+.block-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.block-breadcrumb a { color: var(--muted); }
+.block-breadcrumb a:hover { color: var(--foreground); }
+.block-breadcrumb [aria-current="page"] { color: var(--foreground); font-weight: 500; }
+.block-breadcrumb > span[aria-hidden] { color: var(--subtle); }
+
+/* The gallery's card footer becomes a link into the block's own page. */
+.block-example-title-link { display: inline-flex; align-items: center; gap: 6px; color: inherit; }
+.block-example-title-link:hover { color: var(--accent); }
+.block-example-title-link svg { opacity: .55; transition: transform var(--duration-fast) var(--ease-out-quint); }
+.block-example-title-link:hover svg { opacity: 1; transform: translateX(2px); }
+.block-example-open { color: var(--accent); font-weight: 500; }
+.block-example-open:hover { text-decoration: underline; }
+
+/* Built with — the derived component manifest. */
+.block-uses { display: flex; flex-wrap: wrap; gap: 8px; }
+.block-use {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 12px;
+  color: var(--foreground);
+  transition: border-color var(--duration-fast) var(--ease-out-quint), background var(--duration-fast) var(--ease-out-quint);
+}
+a.block-use:hover { border-color: var(--accent); background: var(--accent-soft); }
+.block-use svg { color: var(--subtle); }
+a.block-use:hover svg { color: var(--accent); }
+.block-use.is-unlinked { color: var(--muted); border-style: dashed; background: transparent; }
+.block-uses-note { margin-top: 14px; font-size: 12px; color: var(--muted); max-width: 62ch; }
+.block-uses-note code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 5px;
+  border-radius: 5px;
+  background: var(--surface-secondary);
+  color: var(--foreground);
+}
+
+/* Accessibility notes. */
+.block-a11y-list { display: flex; flex-direction: column; gap: 12px; max-width: 78ch; }
+.block-a11y-list li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--muted);
+}
+.block-a11y-list li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+.block-a11y-foot {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-12);
+  background: var(--surface);
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--muted);
+  max-width: 78ch;
+}
+.block-a11y-foot svg { color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+
+/* Prev / next. */
+.block-pager { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 40px; }
+.block-pager-link {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-12);
+  background: var(--surface);
+  transition: border-color var(--duration-fast) var(--ease-out-quint), background var(--duration-fast) var(--ease-out-quint);
+}
+.block-pager-link:hover { border-color: var(--border-strong); background: var(--surface-secondary); }
+.block-pager-link.is-next { text-align: right; align-items: flex-end; }
+.block-pager-dir {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--subtle);
+}
+.block-pager-title { font-size: 14px; font-weight: 500; color: var(--foreground); }
+
+@media (max-width: 640px) {
+  .block-pager { grid-template-columns: 1fr; }
+  .block-pager-link.is-next { text-align: left; align-items: flex-start; }
+}

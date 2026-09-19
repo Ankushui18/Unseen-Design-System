@@ -32,6 +32,11 @@ const RULES = [
   { id: "raw-hex", re: /#[0-9a-fA-F]{6}\b/g, msg: "Hex literal in a component — move it to a token", onlyIn: /ui\//, allow: [/Extra\.tsx/, /Patterns\.tsx/, /More\.tsx/] },
   { id: "icon-size", re: /\[&_svg\]:h-3\b/g, msg: "12px icons are below the 16/20/24 scale", allow: [/Display\.tsx/, /Extra\.tsx/] /* small badge/tag glyphs are 12px per AlignUI */ },
   { id: "opacity-disabled", re: /disabled:opacity-\[var\(--disabled-opacity\)\]/g, msg: "AlignUI disables with weak fill + disabled text, not opacity", onlyIn: /ui\/(Button|Form)\.tsx/ },
+  /* A block is a section of a page, never the page. An <h1> inside a block
+     collides with the heading of whatever page renders it — the block gallery,
+     a template page, or /blocks/{key}. Found by a real-browser check that
+     counted two h1 elements on one block page. */
+  { id: "block-heading", re: /<h1[\s>]/g, msg: "Block renders an <h1> — it will collide with the page heading; use <h2>", onlyIn: /src\/blocks\// },
 ];
 
 for (const f of files) {
@@ -223,5 +228,8 @@ for (const r of printed) {
   if (list.length > 12) console.log(`  … +${list.length - 12} more`);
 }
 console.log(`\n${files.length} files scanned · nav ${navHrefs.length} · routes ${routeKeys.length} · previews ${previewKeys.length} · ${total} findings`);
-const blocking = problems.filter((p) => ["class-contract", "route", "preview", "bridge", "a11y", "font-cdn", "weight-css", "reduced-motion", "docs-api-core", "licence-claim"].includes(p.rule)).length;
+/* Rules that fail the build. `block-heading` is here because a duplicate <h1>
+ * is an accessibility defect, not a style preference. */
+const BLOCKING = ["class-contract", "route", "preview", "bridge", "a11y", "font-cdn", "weight-css", "reduced-motion", "docs-api-core", "licence-claim", "block-heading"];
+const blocking = problems.filter((p) => BLOCKING.includes(p.rule)).length;
 process.exit(blocking ? 1 : 0);

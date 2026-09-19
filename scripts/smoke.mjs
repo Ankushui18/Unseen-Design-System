@@ -18,6 +18,7 @@
 import { readFileSync } from "node:fs";
 import { transform } from "esbuild";
 import { JSDOM, VirtualConsole } from "jsdom";
+import { siteRoutes } from "./routes.mjs";
 
 const html = readFileSync(new URL("../dist/index.html", import.meta.url), "utf8");
 const match = html.match(/<script type="module"[^>]*>([\s\S]*?)<\/script>/);
@@ -37,8 +38,7 @@ const compiled = await transform(source, {
   legalComments: "none",
 });
 
-const routes = [...readFileSync(new URL("../src/docs/nav.ts", import.meta.url), "utf8").matchAll(/href:\s*"([^"]+)"/g)].map((m) => m[1]);
-routes.unshift("");
+const routes = siteRoutes();
 
 const errors = [];
 const vc = new VirtualConsole();

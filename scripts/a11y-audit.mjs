@@ -19,6 +19,7 @@
 import { readFileSync } from "node:fs";
 import { transform } from "esbuild";
 import { JSDOM, VirtualConsole } from "jsdom";
+import { siteRoutes } from "./routes.mjs";
 
 const strict = process.argv.includes("--strict");
 const GATE = strict ? ["critical", "serious", "moderate", "minor"] : ["critical", "serious"];
@@ -33,8 +34,7 @@ const source = match[1].replace(/import\.meta\.url/g, JSON.stringify("http://loc
 const compiled = await transform(source, { format: "iife", loader: "js", target: "es2020", legalComments: "none" });
 const axeSource = readFileSync(new URL("../node_modules/axe-core/axe.min.js", import.meta.url), "utf8");
 
-const routes = [...readFileSync(new URL("../src/docs/nav.ts", import.meta.url), "utf8").matchAll(/href:\s*"([^"]+)"/g)].map((m) => m[1]);
-routes.unshift("");
+const routes = siteRoutes();
 
 const errors = [];
 const vc = new VirtualConsole();
