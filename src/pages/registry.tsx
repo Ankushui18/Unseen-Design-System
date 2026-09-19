@@ -62,10 +62,10 @@ import {
   TeamTemplatePage,
   TemplatesOverviewPage,
 } from "./Templates";
+import { ButtonPage } from "./components/ButtonDoc";
 import {
   AlertDialogDoc,
   BadgeSpecDoc,
-  ButtonSpecDoc,
   ButtonTileDoc,
   ChatInputDoc,
   ComboboxDoc,
@@ -122,6 +122,7 @@ import {
 import { ChangelogPage, IntroductionPage, PrinciplesPage } from "./GettingStarted";
 import { InstallationPage } from "./Installation";
 import { PricingPage } from "./Pricing";
+import { FigmaPage } from "./Figma";
 
 export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> = {
   "docs/introduction": (nav) => <IntroductionPage navigate={nav} />,
@@ -144,6 +145,7 @@ export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> 
   "foundations/themes": () => <ThemesPage />,
 
   patterns: () => <PatternsPage />,
+  figma: () => <FigmaPage />,
   pricing: (nav) => <PricingPage navigate={nav} />,
   blocks: () => <BlocksPage />,
   templates: (nav) => <TemplatesOverviewPage navigate={nav} />,
@@ -204,7 +206,7 @@ export const ROUTES: Record<string, (nav: (t: string) => void) => ReactElement> 
   "components/notification": () => <NotificationDoc />,
   "components/banner": () => <BannerDoc />,
 
-  "components/button": () => <ButtonSpecDoc />,
+  "components/button": () => <ButtonPage />,
   "components/button-group": () => <ButtonGroupDoc />,
   "components/input": () => <InputDoc />,
   "components/textarea": () => <TextareaDoc />,

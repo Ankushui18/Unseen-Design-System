@@ -30,7 +30,8 @@ const CLS = [
   "text-[var(--syn-punct)]",
 ];
 
-function highlight(code: string): ReactNode[] {
+/** Tokenises a snippet into `--syn-*`-coloured spans. Exported for the homepage band. */
+export function highlight(code: string): ReactNode[] {
   const out: ReactNode[] = [];
   let last = 0;
   let m: RegExpExecArray | null;

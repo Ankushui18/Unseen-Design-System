@@ -486,7 +486,7 @@ export function MotionPage() {
 }`} filename="motion.css" />
       </Section>
 
-      <Section title="Reduced motion" description="Every animation in the library is wrapped so it degrades to an opacity change.">
+      <Section title="Reduced motion" description="One rule in the stylesheet neutralises every animation and transition in the library — including components written later. It is enforced by design-lint, so it cannot be quietly removed.">
         <CodeBlock
           filename="reduced-motion.css"
           code={`@media (prefers-reduced-motion: reduce) {
@@ -496,6 +496,7 @@ export function MotionPage() {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
 }`}
         />
       </Section>
@@ -898,7 +899,7 @@ export function OpacityPage() {
         tags={["--disabled-opacity: 0.5", "fixed stack order", "no z-fighting"]}
       />
 
-      <Section title="Disabled state" description="AlignUI-style disabling: a weak fill and disabled text, not a 50% ghost. <code>--disabled-opacity: 0.5</code> exists for the few elements that genuinely fade (icons inside disabled controls) — design-lint blocks opacity-only disabling on buttons and fields.">
+      <Section title="Disabled state" description="Unseen disabling: a weak fill and disabled text, not a 50% ghost. <code>--disabled-opacity: 0.5</code> exists for the few elements that genuinely fade (icons inside disabled controls) — design-lint blocks opacity-only disabling on buttons and fields.">
         <Showcase align="stretch">
           <div className="flex flex-wrap items-center gap-3">
             <Button>Enabled</Button>

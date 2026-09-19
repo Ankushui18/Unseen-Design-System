@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useState, type ReactNode, type Ref } from "react";
 import { cn } from "../utils/cn";
 import { Avatar, Skeleton } from "./Display";
 import { Switch, Checkbox } from "./Form";
@@ -23,9 +23,9 @@ export interface PageHeaderProps {
   className?: string;
 }
 
-export function PageHeader({ eyebrow, title, description, primary, secondary, meta, className }: PageHeaderProps) {
+export function PageHeader({ ref, eyebrow, title, description, primary, secondary, meta, className }: PageHeaderProps & { ref?: Ref<HTMLElement> }) {
   return (
-    <header className={cn("product-page-header", className)}>
+    <header ref={ref} className={cn("product-page-header", className)}>
       <div className="product-page-header-main">
         {eyebrow && <p className="product-page-eyebrow">{eyebrow}</p>}
         <h1 className="product-page-title">{title}</h1>
@@ -56,9 +56,9 @@ export interface SearchBarProps {
   autoFocus?: boolean;
 }
 
-export function SearchBar({ value, onChange, placeholder = "Search…", shortcut, onSubmit, className, autoFocus }: SearchBarProps) {
+export function SearchBar({ ref, value, onChange, placeholder = "Search…", shortcut, onSubmit, className, autoFocus }: SearchBarProps & { ref?: Ref<HTMLLabelElement> }) {
   return (
-    <label className={cn("search-bar", className)}>
+    <label ref={ref} className={cn("search-bar", className)}>
       <RiSearchLine size={15} aria-hidden />
       <input
         type="search"
@@ -100,9 +100,9 @@ export interface FilterBarProps {
   className?: string;
 }
 
-export function FilterBar({ children, leading, trailing, className }: FilterBarProps) {
+export function FilterBar({ ref, children, leading, trailing, className }: FilterBarProps & { ref?: Ref<HTMLDivElement> }) {
   return (
-    <div className={cn("filter-bar", className)} role="toolbar" aria-label="Filter">
+    <div ref={ref} className={cn("filter-bar", className)} role="toolbar" aria-label="Filter">
       {leading && <div className="filter-bar-leading">{leading}</div>}
       <div className="filter-bar-main">{children}</div>
       {trailing && <div className="filter-bar-trailing">{trailing}</div>}
@@ -110,9 +110,9 @@ export function FilterBar({ children, leading, trailing, className }: FilterBarP
   );
 }
 
-export function FilterChip({ active, onClick, children, count, className }: { active: boolean; onClick: () => void; children: ReactNode; count?: number; className?: string }) {
+export function FilterChip({ ref, active, onClick, children, count, className }: { active: boolean; onClick: () => void; children: ReactNode; count?: number; className?: string ; ref?: Ref<HTMLButtonElement> }) {
   return (
-    <button
+    <button ref={ref}
       type="button"
       onClick={onClick}
       aria-pressed={active}
@@ -196,7 +196,7 @@ export interface DataTableProps<T> {
 
 type SortState = { key: string; direction: "asc" | "desc" } | null;
 
-export function DataTable<T>({ columns, rows, rowKey, selectable, loading, emptyState, initialSort, bulkActions, pagination, density = "comfortable", className }: DataTableProps<T>) {
+export function DataTable<T>({ ref, columns, rows, rowKey, selectable, loading, emptyState, initialSort, bulkActions, pagination, density = "comfortable", className }: DataTableProps<T> & { ref?: Ref<HTMLDivElement> }) {
   const [sort, setSort] = useState<SortState>(initialSort ? { key: initialSort.key, direction: initialSort.direction } : null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const allKey = rows.map(rowKey);
@@ -235,7 +235,7 @@ export function DataTable<T>({ columns, rows, rowKey, selectable, loading, empty
   const selectedRows = rows.filter((row) => selected.has(rowKey(row)));
 
   return (
-    <div className={cn("data-table", className, loading && "is-loading", density === "compact" && "is-compact")}>
+    <div ref={ref} className={cn("data-table", className, loading && "is-loading", density === "compact" && "is-compact")}>
       {selectable && selected.size > 0 && (
         <div className="data-table-bulk-bar" role="region" aria-live="polite">
           <span>{selected.size} selected</span>
@@ -411,9 +411,9 @@ export interface ActivityItem {
   meta?: ReactNode;
 }
 
-export function ActivityItem({ item, density = "default" }: { item: ActivityItem; density?: "default" | "compact" }) {
+export function ActivityItem({ ref, item, density = "default" }: { item: ActivityItem; density?: "default" | "compact" ; ref?: Ref<HTMLElement> }) {
   return (
-    <article className={cn("activity-item", density === "compact" && "is-compact", item.tone && item.tone !== "default" && `is-${item.tone}`)}>
+    <article ref={ref} className={cn("activity-item", density === "compact" && "is-compact", item.tone && item.tone !== "default" && `is-${item.tone}`)}>
       <Avatar name={item.actor.name} size="sm" tone={item.actor.tone} />
       <div className="activity-item-body">
         <p className="activity-item-line">
@@ -429,9 +429,9 @@ export function ActivityItem({ item, density = "default" }: { item: ActivityItem
 /*                              Section (Forms)                              */
 /* -------------------------------------------------------------------------- */
 
-export function SettingsSection({ title, description, children, footer, className }: { title: ReactNode; description?: ReactNode; children: ReactNode; footer?: ReactNode; className?: string }) {
+export function SettingsSection({ ref, title, description, children, footer, className }: { title: ReactNode; description?: ReactNode; children: ReactNode; footer?: ReactNode; className?: string ; ref?: Ref<HTMLElement> }) {
   return (
-    <section className={cn("settings-section", className)}>
+    <section ref={ref} className={cn("settings-section", className)}>
       <header className="settings-section-header">
         <h2>{title}</h2>
         {description && <p>{description}</p>}
@@ -455,9 +455,9 @@ export interface EmptyStateProps {
   className?: string;
 }
 
-export function EmptyState({ icon, title, description, actions, size = "md", className }: EmptyStateProps) {
+export function EmptyState({ ref, icon, title, description, actions, size = "md", className }: EmptyStateProps & { ref?: Ref<HTMLDivElement> }) {
   return (
-    <div className={cn("empty-state", `is-${size}`, className)}>
+    <div ref={ref} className={cn("empty-state", `is-${size}`, className)}>
       <div className="empty-state-icon" aria-hidden>{icon}</div>
       <h2 className="empty-state-title">{title}</h2>
       {description && <p className="empty-state-description">{description}</p>}
@@ -470,9 +470,9 @@ export function EmptyState({ icon, title, description, actions, size = "md", cla
 /*                              EmptyState variants                            */
 /* -------------------------------------------------------------------------- */
 
-export function LoadingState({ rows = 3, className }: { rows?: number; className?: string }) {
+export function LoadingState({ ref, rows = 3, className }: { rows?: number; className?: string ; ref?: Ref<HTMLDivElement> }) {
   return (
-    <div className={cn("empty-state is-md", className)}>
+    <div ref={ref} className={cn("empty-state is-md", className)}>
       <div className="empty-state-icon" aria-hidden><Skeleton className="h-7 w-7 rounded-full" /></div>
       <h2 className="empty-state-title">Loading…</h2>
       <div className="empty-state-actions" style={{ flexDirection: "column", width: "100%", maxWidth: 320, gap: 8 }}>
@@ -482,9 +482,9 @@ export function LoadingState({ rows = 3, className }: { rows?: number; className
   );
 }
 
-export function ErrorState({ title, description, onRetry, className }: { title: ReactNode; description?: ReactNode; onRetry?: () => void; className?: string }) {
+export function ErrorState({ ref, title, description, onRetry, className }: { title: ReactNode; description?: ReactNode; onRetry?: () => void; className?: string ; ref?: Ref<HTMLDivElement> }) {
   return (
-    <div className={cn("empty-state is-md", className)}>
+    <div ref={ref} className={cn("empty-state is-md", className)}>
       <div className="empty-state-icon" aria-hidden style={{ color: "var(--danger)" }}>!</div>
       <h2 className="empty-state-title">{title}</h2>
       {description && <p className="empty-state-description">{description}</p>}
@@ -497,8 +497,8 @@ export function ErrorState({ title, description, onRetry, className }: { title: 
 /*                              StatGrid                                      */
 /* -------------------------------------------------------------------------- */
 
-export function StatGrid({ children, columns = 4, className }: { children: ReactNode; columns?: 2 | 3 | 4; className?: string }) {
-  return <div className={cn("stat-grid", `is-cols-${columns}`, className)}>{children}</div>;
+export function StatGrid({ ref, children, columns = 4, className }: { children: ReactNode; columns?: 2 | 3 | 4; className?: string ; ref?: Ref<HTMLDivElement> }) {
+  return <div ref={ref} className={cn("stat-grid", `is-cols-${columns}`, className)}>{children}</div>;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -511,17 +511,17 @@ export { Tabs as SegmentTabs } from "./Navigation";
 /*                              CardGrid                                      */
 /* -------------------------------------------------------------------------- */
 
-export function CardGrid({ children, columns = 3, className }: { children: ReactNode; columns?: 2 | 3 | 4; className?: string }) {
-  return <div className={cn("card-grid", `is-cols-${columns}`, className)}>{children}</div>;
+export function CardGrid({ ref, children, columns = 3, className }: { children: ReactNode; columns?: 2 | 3 | 4; className?: string ; ref?: Ref<HTMLDivElement> }) {
+  return <div ref={ref} className={cn("card-grid", `is-cols-${columns}`, className)}>{children}</div>;
 }
 
 /* -------------------------------------------------------------------------- */
 /*                              SettingsToggle                              */
 /* -------------------------------------------------------------------------- */
 
-export function SettingsToggle({ label, description, checked, onChange, disabled, className }: { label: ReactNode; description?: ReactNode; checked: boolean; onChange: (value: boolean) => void; disabled?: boolean; className?: string }) {
+export function SettingsToggle({ ref, label, description, checked, onChange, disabled, className }: { label: ReactNode; description?: ReactNode; checked: boolean; onChange: (value: boolean) => void; disabled?: boolean; className?: string ; ref?: Ref<HTMLDivElement> }) {
   return (
-    <div className={cn("settings-toggle", className)}>
+    <div ref={ref} className={cn("settings-toggle", className)}>
       <div className="settings-toggle-label">
         <strong>{label}</strong>
         {description && <span>{description}</span>}
@@ -535,10 +535,10 @@ export function SettingsToggle({ label, description, checked, onChange, disabled
 /*                              CopyField (Secret)                          */
 /* -------------------------------------------------------------------------- */
 
-export function CopyField({ value, className }: { value: string; className?: string }) {
+export function CopyField({ ref, value, className }: { value: string; className?: string ; ref?: Ref<HTMLButtonElement> }) {
   const { copy, copied } = useCopy();
   return (
-    <button
+    <button ref={ref}
       type="button"
       className={cn("copy-field", className)}
       onClick={() => copy(value)}

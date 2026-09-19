@@ -2,16 +2,18 @@
  * Aperture design-lint — enforces the design-system contract statically.
  * Run: node scripts/design-lint.mjs
  */
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import ts from "typescript";
 
 const ROOT = new URL("../src/", import.meta.url).pathname;
 const files = [];
+const cssFiles = [];
 (function walk(d) {
   for (const f of readdirSync(d)) {
     const p = join(d, f);
     if (statSync(p).isDirectory()) walk(p);
+    else if (/\.css$/.test(f)) cssFiles.push(p);
     else if (/\.(tsx|ts)$/.test(f)) files.push(p);
   }
 })(ROOT);
@@ -30,6 +32,11 @@ const RULES = [
   { id: "raw-hex", re: /#[0-9a-fA-F]{6}\b/g, msg: "Hex literal in a component — move it to a token", onlyIn: /ui\//, allow: [/Extra\.tsx/, /Patterns\.tsx/, /More\.tsx/] },
   { id: "icon-size", re: /\[&_svg\]:h-3\b/g, msg: "12px icons are below the 16/20/24 scale", allow: [/Display\.tsx/, /Extra\.tsx/] /* small badge/tag glyphs are 12px per AlignUI */ },
   { id: "opacity-disabled", re: /disabled:opacity-\[var\(--disabled-opacity\)\]/g, msg: "AlignUI disables with weak fill + disabled text, not opacity", onlyIn: /ui\/(Button|Form)\.tsx/ },
+  /* A block is a section of a page, never the page. An <h1> inside a block
+     collides with the heading of whatever page renders it — the block gallery,
+     a template page, or /blocks/{key}. Found by a real-browser check that
+     counted two h1 elements on one block page. */
+  { id: "block-heading", re: /<h1[\s>]/g, msg: "Block renders an <h1> — it will collide with the page heading; use <h2>", onlyIn: /src\/blocks\// },
 ];
 
 for (const f of files) {
@@ -62,6 +69,55 @@ for (const f of files) {
       warn(f, line, "a11y", `iconOnly <${m[1]}> without aria-label`);
     }
   }
+}
+
+/* ---------------------------------------------------------- css contracts */
+/* The design contract applies to our own chrome too: the docs site is the
+ * reference implementation, so it gets the same type rules as the components.
+ * (Before this rule the chrome used 19 off-scale weights the system bans.) */
+const CSS_RULES = [
+  { id: "weight-css", re: /font-weight:\s*(600|650|700|800|900)\b/g, msg: "Off-scale weight in CSS — the system is 400 (paragraph) and 500 (label/title)" },
+];
+for (const f of cssFiles) {
+  const src = readFileSync(f, "utf8");
+  const lines = src.split("\n");
+  for (const r of CSS_RULES) {
+    for (const m of src.matchAll(r.re)) {
+      const line = src.slice(0, m.index).split("\n").length;
+      warn(f, line, r.id, r.msg);
+    }
+  }
+}
+
+/* ------------------------------------------------- licence claim ↔ licence */
+/* The site claimed MIT for months while the repository had no LICENSE file, so
+ * the claim was simply untrue. This pairs the two: copy may only name a licence
+ * the repository actually grants, and the identifier must match package.json. */
+const LICENSE_NAMES = /\b(MIT|Apache-2\.0|BSD-3-Clause|BSD-2-Clause|GPL-3\.0|ISC)\b/g;
+const hasLicense = existsSync(join(ROOT, "../LICENSE"));
+const declared = JSON.parse(readFileSync(join(ROOT, "../package.json"), "utf8")).license ?? null;
+if (hasLicense && declared) {
+  const text = readFileSync(join(ROOT, "../LICENSE"), "utf8");
+  if (!text.includes(declared.includes("MIT") ? "MIT License" : declared)) {
+    warn("LICENSE", 0, "licence-claim", `LICENSE does not contain the identifier package.json declares ("${declared}")`);
+  }
+}
+for (const f of files) {
+  const src = readFileSync(f, "utf8");
+  for (const m of src.matchAll(LICENSE_NAMES)) {
+    if (!hasLicense) {
+      warn(f, src.slice(0, m.index).split("\n").length, "licence-claim", `names the ${m[1]} licence but the repository has no LICENSE file`);
+    } else if (declared && m[1] !== declared) {
+      warn(f, src.slice(0, m.index).split("\n").length, "licence-claim", `names ${m[1]} but package.json declares ${declared}`);
+    }
+  }
+}
+
+/* No runtime font lock-in: the system ships its own typeface (spec §6), so the
+ * entry document must never depend on a third-party font CDN. */
+const shell = readFileSync(new URL("../index.html", import.meta.url).pathname, "utf8");
+if (/fonts\.(googleapis|gstatic)\.com/.test(shell)) {
+  warn(new URL("../index.html", import.meta.url).pathname, 0, "font-cdn", "Third-party font CDN — self-host the typeface in src/fonts (spec §6)");
 }
 
 /* ---------------------------------------------- routes ↔ nav ↔ previews */
@@ -116,6 +172,14 @@ for (const f of files) {
 /* ------------------------------------------------------------ tokens bridge */
 const css = readFileSync(join(ROOT, "index.css"), "utf8");
 
+/* Reduced motion is a system guarantee, not a per-component chore: one rule in
+   index.css neutralises every animation and transition in the app. If that
+   block is removed, nothing else in the pipeline notices — every component
+   still passes its own checks. So it is a lint rule. */
+if (!/@media\s*\(prefers-reduced-motion:\s*reduce\)/.test(css)) {
+  warn(join(ROOT, "index.css"), 0, "reduced-motion", "No prefers-reduced-motion block — motion must degrade for users who ask it to");
+}
+
 // Exercise the real merger: a regex scan cannot detect classes removed at runtime.
 try {
   const mergerPath = join(ROOT, "utils/cn.ts");
@@ -143,15 +207,19 @@ try {
 
 const semantic = [...css.matchAll(/^\s+--([a-z0-9-]+):/gm)].map((m) => m[1]);
 const bridged = new Set([...css.matchAll(/--color-([a-z0-9-]+):\s*var\(--([a-z0-9-]+)\)/g)].map((m) => m[2]));
-const colorish = semantic.filter((t) => /^(background|surface|foreground|muted|subtle|disabled|link|overlay|segment|backdrop|border|separator|field|accent|default|success|warning|danger|gray|blue|orange|red|green|yellow|purple|sky|pink|teal)(-|$)/.test(t) && !/^accent-(h|c)$/.test(t) && !/^(disabled-opacity|border-width)$/.test(t));
+const colorish = semantic.filter((t) => /^(background|surface|foreground|muted|subtle|disabled|link|overlay|segment|backdrop|border|separator|field|accent|default|success|warning|danger|gray|blue|orange|red|green|yellow|purple|sky|pink|teal)(-|$)/.test(t) && !/^accent-(h|c)$/.test(t) && !/^(disabled-opacity|border-width)$/.test(t) && !/^default-transition-/.test(t)); /* Tailwind theme keys, not palette */
 for (const t of new Set(colorish)) if (!bridged.has(t)) warn(join(ROOT, "index.css"), 0, "bridge", `semantic token --${t} is not exposed to Tailwind via @theme inline`);
 
 /* ------------------------------------------------------------------ report */
 const byRule = {};
 for (const p of problems) (byRule[p.rule] ??= []).push(p);
-const order = ["class-contract", "route", "preview", "bridge", "a11y", "docs-api-core", "docs-api", "docs-examples", "docs-variants", "docs-states", "docs-a11y", "type-scale", "weight", "legacy-shadow", "card-border", "raw-color", "raw-hex", "icon-size", "opacity-disabled"];
+const order = ["class-contract", "route", "preview", "bridge", "a11y", "font-cdn", "licence-claim", "weight-css", "docs-api-core", "docs-api", "docs-examples", "docs-variants", "docs-states", "docs-a11y", "reduced-motion", "type-scale", "weight", "legacy-shadow", "card-border", "raw-color", "raw-hex", "icon-size", "opacity-disabled"];
+/* Every rule that fired prints. A rule missing from `order` used to be counted
+   by the exit code while printing nothing — a failing build with an empty
+   explanation. Unknown rules are appended, never dropped. */
+const printed = [...order, ...Object.keys(byRule).filter((r) => !order.includes(r))];
 let total = 0;
-for (const r of order) {
+for (const r of printed) {
   const list = byRule[r];
   if (!list) continue;
   total += list.length;
@@ -160,5 +228,8 @@ for (const r of order) {
   if (list.length > 12) console.log(`  … +${list.length - 12} more`);
 }
 console.log(`\n${files.length} files scanned · nav ${navHrefs.length} · routes ${routeKeys.length} · previews ${previewKeys.length} · ${total} findings`);
-const blocking = problems.filter((p) => ["class-contract", "route", "preview", "bridge", "a11y", "docs-api-core"].includes(p.rule)).length;
+/* Rules that fail the build. `block-heading` is here because a duplicate <h1>
+ * is an accessibility defect, not a style preference. */
+const BLOCKING = ["class-contract", "route", "preview", "bridge", "a11y", "font-cdn", "weight-css", "reduced-motion", "docs-api-core", "licence-claim", "block-heading"];
+const blocking = problems.filter((p) => BLOCKING.includes(p.rule)).length;
 process.exit(blocking ? 1 : 0);

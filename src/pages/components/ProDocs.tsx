@@ -36,7 +36,7 @@ import {
 export function ActivityFeedDoc() {
   return (
     <>
-      <PageHeader eyebrow="Components · PRO" title="Activity Feed" description="A live timeline of events on an entity: deployments, edits, invitations, comments. Each row pairs an actor with an action, timestamp and optional trailing metadata." tags={["Feed", "Tones", "Meta slot", "Compact"]} />
+      <PageHeader eyebrow="Components · Data Display" title="Activity Feed" description="A live timeline of events on an entity: deployments, edits, invitations, comments. Each row pairs an actor with an action, timestamp and optional trailing metadata." tags={["Feed", "Tones", "Meta slot", "Compact"]} />
       <Import names="ActivityFeed" />
       <Section title="Usage">
         <Showcase align="stretch" code={`<ActivityFeed items={[\n  { actor: "Sophia Williams", action: "deployed", target: "v3.4.0", time: "2m ago", tone: "success", icon: <RiRocketLine /> },\n  { actor: "James Brown", action: "edited", target: "Brand guidelines", time: "26m ago", icon: <RiEditLine /> },\n]} />`}>
@@ -84,7 +84,7 @@ export function CommandMenuDoc() {
   const { push } = useToast();
   return (
     <>
-      <PageHeader eyebrow="Components · PRO" title="Command Menu" description="A modal palette for quick actions and navigation. Fuzzy search across grouped commands, full keyboard support, and a focus-trapped dialog." tags={["Quick actions", "⌘K ready", "Fuzzy search", "Groups"]} />
+      <PageHeader eyebrow="Components · Overlay" title="Command Menu" description="A modal palette for quick actions and navigation. Fuzzy search across grouped commands, full keyboard support, and a focus-trapped dialog." tags={["Quick actions", "⌘K ready", "Fuzzy search", "Groups"]} />
       <Import names="CommandMenu" />
       <Section title="Usage">
         <Showcase code={`<CommandMenu open={open} onClose={close} groups={groups} />`}>
@@ -136,7 +136,7 @@ export function NotificationFeedDoc() {
   ]);
   return (
     <>
-      <PageHeader eyebrow="Components · PRO" title="Notification Feed" description="A scrollable list of events with unread emphasis, per-item dismissal via tap and a mark-all-read action. Unread rows carry a soft accent fill and a dot." tags={["Unread state", "Mark all read", "Scrollable"]} />
+      <PageHeader eyebrow="Components · Data Display" title="Notification Feed" description="A scrollable list of events with unread emphasis, per-item dismissal via tap and a mark-all-read action. Unread rows carry a soft accent fill and a dot." tags={["Unread state", "Mark all read", "Scrollable"]} />
       <Import names="NotificationFeed" />
       <Section title="Usage" description="Tap a row to mark it read. The badge count and dot update live.">
         <Showcase align="stretch" code={`<NotificationFeed items={items} onRead={(id) => markRead(id)} onReadAll={markAll} />`}>
@@ -182,7 +182,7 @@ export function FileUploadDoc() {
 
   return (
     <>
-      <PageHeader eyebrow="Components · PRO" title="File Uploader" description="A drag-and-drop zone with browse, per-file progress and removal. Accepts any file type, caps the list, and reports state with tone-coloured rows." tags={["Drag & drop", "Progress", "Multiple"]} />
+      <PageHeader eyebrow="Components · Forms" title="File Uploader" description="A drag-and-drop zone with browse, per-file progress and removal. Accepts any file type, caps the list, and reports state with tone-coloured rows." tags={["Drag & drop", "Progress", "Multiple"]} />
       <Import names="FileUploader" />
       <Section title="Usage">
         <Showcase align="stretch" code={`<FileUploader files={files} onAdd={add} onRemove={remove} max={8} />`}>
@@ -218,7 +218,7 @@ export function FiltersDoc() {
   const count = Object.values(selected).reduce((n, v) => n + v.length, 0);
   return (
     <>
-      <PageHeader eyebrow="Components · PRO" title="Filters" description="A popover of grouped, multi-select facets with result counts and a live badge on the trigger. Selections are controlled and grouped by section id." tags={["Faceted", "Multi-select", "Result counts"]} />
+      <PageHeader eyebrow="Components · Utilities" title="Filters" description="A popover of grouped, multi-select facets with result counts and a live badge on the trigger. Selections are controlled and grouped by section id." tags={["Faceted", "Multi-select", "Result counts"]} />
       <Import names="Filters" />
       <Section title="Usage">
         <Showcase align="stretch" code={`<Filters\n  sections={sections}\n  selected={selected}\n  onChange={update}\n/>`}>
@@ -273,7 +273,7 @@ export function TimePickerDoc() {
   const [format, setFormat] = useState<"12h" | "24h">("12h");
   return (
     <>
-      <PageHeader eyebrow="Components · PRO" title="Time Picker" description="Picker for times with scrolling hour, minute and meridian columns. Keyboard navigable per column, so pasting and typing remain optional." tags={["Hours & minutes", "12h / 24h", "Keyboard"]} />
+      <PageHeader eyebrow="Components · Forms" title="Time Picker" description="Picker for times with scrolling hour, minute and meridian columns. Keyboard navigable per column, so pasting and typing remain optional." tags={["Hours & minutes", "12h / 24h", "Keyboard"]} />
       <Import names="TimePicker" />
       <Section title="Usage">
         <Showcase
@@ -312,7 +312,7 @@ export function CalendarDoc() {
   const [date, setDate] = useState<Date | null>(new Date());
   return (
     <>
-      <PageHeader eyebrow="Components · PRO" title="Calendar" description="An in-page month grid with Monday-first weeks, today emphasis, a selected day, and month navigation. Lightweight enough to embed in dashboards." tags={["Month grid", "Today", "Monday-first"]} />
+      <PageHeader eyebrow="Components · Forms" title="Calendar" description="An in-page month grid with Monday-first weeks, today emphasis, a selected day, and month navigation. Lightweight enough to embed in dashboards." tags={["Month grid", "Today", "Monday-first"]} />
       <Import names="Calendar" />
       <Section title="Usage">
         <Showcase align="stretch" code={`<Calendar value={date} onChange={setDate} />`}>
@@ -382,7 +382,7 @@ export function AiPromptInputDoc() {
 
   return (
     <>
-      <PageHeader eyebrow="Components · PRO & AI" title="AI Prompt Input" description="Multi-modal AI prompt composer with model switcher, dynamic textarea growth, file attachment trigger, voice dictation, and streaming stop/submit states." tags={["AI Chat", "Model Switcher", "Voice dictation", "Multi-modal"]} />
+      <PageHeader eyebrow="Components · Forms" title="AI Prompt Input" description="Multi-modal AI prompt composer with model switcher, dynamic textarea growth, file attachment trigger, voice dictation, and streaming stop/submit states." tags={["AI Chat", "Model Switcher", "Voice dictation", "Multi-modal"]} />
       <Import names="AiPromptInput" />
       <Section title="Usage">
         <Showcase align="stretch" code={`<AiPromptInput\n  value={prompt}\n  onChange={setPrompt}\n  onSubmit={handleSend}\n  onStop={() => setLoading(false)}\n  loading={loading}\n  model={model}\n  onModelChange={setModel}\n/>`}>
@@ -421,7 +421,7 @@ export function AiPromptInputDoc() {
 export function CryptoAddressChipDoc() {
   return (
     <>
-      <PageHeader eyebrow="Components · Web3 & Fintech" title="Crypto Address Chip" description="Compact truncated wallet address chip with network indicator, one-click copy feedback, and block explorer triggers." tags={["Fintech", "Web3", "Wallet", "Copy Action"]} />
+      <PageHeader eyebrow="Components · Data Display" title="Crypto Address Chip" description="Compact truncated wallet address chip with network indicator, one-click copy feedback, and block explorer triggers." tags={["Fintech", "Web3", "Wallet", "Copy Action"]} />
       <Import names="CryptoAddressChip" />
       <Section title="Usage">
         <Showcase code={`<CryptoAddressChip address="0x71C67930742131bf4eFDCf8dD7B92aB7bB2f8C41" network="Ethereum" />\n<CryptoAddressChip address="0x34a1bC67930742131bf4eFDCf8dD7B92aB7bB2e9" network="Base" />`}>
@@ -449,7 +449,7 @@ export function VoiceVisualizerDoc() {
   const [recording, setRecording] = useState(true);
   return (
     <>
-      <PageHeader eyebrow="Components · Audio & Media" title="Voice Visualizer" description="Animated audio frequency waveform visualizer for real-time speech input, voice search, and AI assistant recording states." tags={["Audio Waveform", "Voice Recording", "Pulsing Bars"]} />
+      <PageHeader eyebrow="Components · Utilities" title="Voice Visualizer" description="Animated audio frequency waveform visualizer for real-time speech input, voice search, and AI assistant recording states." tags={["Audio Waveform", "Voice Recording", "Pulsing Bars"]} />
       <Import names="VoiceVisualizer" />
       <Section title="Usage">
         <Showcase code={`<VoiceVisualizer recording={recording} duration="00:24" onStop={() => setRecording(false)} />`}>
@@ -486,7 +486,7 @@ export function CurrencyAmountInputDoc() {
 
   return (
     <>
-      <PageHeader eyebrow="Components · Fintech & Crypto" title="Currency Amount Input" description="High-precision currency input with currency dropdown selector, available balance indicator, quick percentage buttons (25%, 50%, MAX), and approximate exchange rate." tags={["Fintech", "Crypto", "Currency Picker", "Quick %"]} />
+      <PageHeader eyebrow="Components · Forms" title="Currency Amount Input" description="High-precision currency input with currency dropdown selector, available balance indicator, quick percentage buttons (25%, 50%, MAX), and approximate exchange rate." tags={["Fintech", "Crypto", "Currency Picker", "Quick %"]} />
       <Import names="CurrencyAmountInput" />
       <Section title="Usage">
         <Showcase code={`<CurrencyAmountInput\n  amount={amount}\n  onAmountChange={setAmount}\n  currency={currency}\n  onCurrencyChange={setCurrency}\n  balance="$14,820.00"\n  onQuickPercent={handleQuickPercent}\n/>`}>

@@ -5,6 +5,7 @@ import {
   type ReactNode,
   type SelectHTMLAttributes,
   type TextareaHTMLAttributes,
+  type Ref,
 } from "react";
 import { cn } from "../utils/cn";
 import type { Tone } from "./Button";
@@ -18,9 +19,9 @@ const fieldSizes: Record<"sm" | "md" | "lg", string> = {
   lg: "h-12 gap-2 px-3.5 rounded-12 text-paragraph-md",
 };
 
-/* AlignUI input shell: hairline ring, xs shadow at rest, weak fill on hover, strong ring + double halo on focus */
+/* Input shell: hairline ring, xs shadow at rest, weak fill on hover, strong ring + double halo on focus */
 const fieldShell =
-  "relative bg-field text-field-foreground shadow-xs transition duration-200 ease-out " +
+  "relative bg-field text-field-foreground shadow-xs transition duration-[var(--duration-base)] ease-out-quint " +
   "ring-1 ring-inset ring-border " +
   "hover:bg-field-hover hover:shadow-none hover:ring-transparent " +
   "focus-within:bg-field-focus focus-within:shadow-ring-neutral focus-within:ring-foreground focus-within:hover:ring-foreground " +
@@ -60,10 +61,10 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   labelPlacement?: "top" | "left";
   startContent?: ReactNode;
   endContent?: ReactNode;
-  /** HeroUI feature: clear button */
+  /** Clear button. */
   isClearable?: boolean;
   onClear?: () => void;
-  /** HeroUI alias for required */
+  /** Display alias for required */
   isRequired?: boolean;
   /** Divided prefix section, e.g. "https://" */
   prefixAffix?: ReactNode;
@@ -203,7 +204,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
           "ds-scroll w-full resize-y text-field-foreground outline-none",
           ta,
           "placeholder:text-field-placeholder",
-          "ring-1 ring-inset ring-border bg-field shadow-xs transition duration-200 ease-out",
+          "ring-1 ring-inset ring-border bg-field shadow-xs transition duration-[var(--duration-base)] ease-out-quint",
           "hover:bg-field-hover hover:shadow-none hover:ring-transparent focus:bg-field-focus focus:ring-foreground focus:shadow-ring-neutral focus:hover:ring-foreground",
           error && "ring-red-base hover:ring-red-base focus:ring-red-base focus:shadow-ring-danger",
           "disabled:pointer-events-none disabled:bg-surface-secondary disabled:text-disabled disabled:shadow-none disabled:ring-transparent",
@@ -283,6 +284,7 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
 }
 
 export function Checkbox({
+  ref,
   label,
   description,
   tone = "accent",
@@ -291,11 +293,11 @@ export function Checkbox({
   className,
   checked,
   ...props
-}: CheckboxProps) {
+}: CheckboxProps & { ref?: Ref<HTMLLabelElement> }) {
   const box = { sm: "h-4 w-4 rounded-4", md: "h-[18px] w-[18px] rounded-6", lg: "h-5 w-5 rounded-6" }[size];
   const on = checked || indeterminate;
   return (
-    <label
+    <label ref={ref}
       className={cn(
         "group inline-flex cursor-pointer items-start gap-2.5 select-none",
         props.disabled && "cursor-not-allowed opacity-[var(--disabled-opacity)]",
@@ -306,7 +308,7 @@ export function Checkbox({
         <input type="checkbox" className="peer sr-only" checked={checked} {...props} />
         <span
           className={cn(
-            "mt-px flex shrink-0 items-center justify-center transition-all duration-150 ease-spring",
+            "mt-px flex shrink-0 items-center justify-center transition-all duration-[var(--duration-fast)] ease-spring",
             "peer-focus-visible:shadow-ring-accent",
             box,
             on
@@ -318,7 +320,7 @@ export function Checkbox({
             <RiSubtractLine className="h-3 w-3" strokeWidth={3.5} />
           ) : (
             <RiCheckLine
-              className={cn("h-3 w-3 transition-transform duration-150", checked ? "scale-100" : "scale-0")}
+              className={cn("h-3 w-3 transition-transform duration-[var(--duration-fast)]", checked ? "scale-100" : "scale-0")}
               strokeWidth={3.5}
             />
           )}
@@ -337,6 +339,7 @@ export function Checkbox({
 /* --------------------------------- Radio ---------------------------------- */
 
 export function RadioGroup<T extends string>({
+  ref,
   value,
   onChange,
   options,
@@ -354,11 +357,12 @@ export function RadioGroup<T extends string>({
   orientation?: "vertical" | "horizontal";
   size?: "sm" | "md" | "lg";
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }) {
   const gid = useId();
   const r = { sm: { box: "h-3.5 w-3.5", dot: "h-1 w-1" }, md: { box: "h-[18px] w-[18px]", dot: "h-[7px] w-[7px]" }, lg: { box: "h-5 w-5", dot: "h-2 w-2" } }[size];
   return (
-    <div
+    <div ref={ref}
       role="radiogroup"
       className={cn("flex gap-3", orientation === "vertical" ? "flex-col" : "flex-row flex-wrap items-center", className)}
     >
@@ -382,7 +386,7 @@ export function RadioGroup<T extends string>({
             />
             <span
               className={cn(
-                "mt-px flex shrink-0 items-center justify-center rounded-full border transition-all duration-150 shadow-xs",
+                "mt-px flex shrink-0 items-center justify-center rounded-full border transition-all duration-[var(--duration-fast)] shadow-xs",
                 "peer-focus-visible:shadow-ring-accent",
                 r.box,
                 active
@@ -392,7 +396,7 @@ export function RadioGroup<T extends string>({
             >
               <span
                 className={cn(
-                  "rounded-full bg-white transition-transform duration-150 ease-spring",
+                  "rounded-full bg-white transition-transform duration-[var(--duration-fast)] ease-spring",
                   r.dot,
                   active ? "scale-100" : "scale-0",
                   tone === "warning" && "bg-neutral-950",
@@ -413,6 +417,7 @@ export function RadioGroup<T extends string>({
 /* --------------------------------- Switch --------------------------------- */
 
 export function Switch({
+  ref,
   checked,
   onChange,
   label,
@@ -437,6 +442,7 @@ export function Switch({
   endIcon?: ReactNode;
   /** Accessible name when no visible `label` is rendered. Required by WCAG 4.1.2. */
   "aria-label"?: string;
+  ref?: Ref<HTMLLabelElement>;
 }) {
   const dims = {
     sm: { track: "h-4 w-7 p-[2px]", thumb: "h-3 w-3", shift: "translate-x-3" },
@@ -445,12 +451,12 @@ export function Switch({
   }[size];
   const onColor = { accent: "bg-accent", default: "bg-foreground", success: "bg-success", warning: "bg-warning", danger: "bg-danger" }[tone];
   return (
-    <label className={cn("group inline-flex cursor-pointer items-center gap-3 select-none", disabled && "cursor-not-allowed opacity-[var(--disabled-opacity)]", className)}>
+    <label ref={ref} className={cn("group inline-flex cursor-pointer items-center gap-3 select-none", disabled && "cursor-not-allowed opacity-[var(--disabled-opacity)]", className)}>
       <span className="relative inline-flex">
         <input type="checkbox" role="switch" aria-checked={checked} className="peer sr-only" checked={checked} disabled={disabled} aria-label={ariaLabel} onChange={(e) => onChange(e.target.checked)} />
         <span
           className={cn(
-            "relative flex shrink-0 items-center rounded-full transition-colors duration-200 ease-out-quint",
+            "relative flex shrink-0 items-center rounded-full transition-colors duration-[var(--duration-base)] ease-out-quint",
             "peer-focus-visible:shadow-ring-accent",
             dims.track,
             checked ? cn("bevel", onColor) : "bg-neutral-200 group-hover:bg-neutral-300 dark:bg-neutral-700 dark:group-hover:bg-neutral-600",
@@ -458,7 +464,7 @@ export function Switch({
         >
           <span
             className={cn(
-              "flex items-center justify-center rounded-full bg-white shadow-switch-thumb transition-transform duration-200 ease-spring",
+              "flex items-center justify-center rounded-full bg-white shadow-switch-thumb transition-transform duration-[var(--duration-base)] ease-spring",
               "text-[9px] text-neutral-950",
               dims.thumb,
               checked && dims.shift,
@@ -481,6 +487,7 @@ export function Switch({
 /* --------------------------------- Slider --------------------------------- */
 
 export function Slider({
+  ref,
   value,
   onChange,
   min = 0,
@@ -509,6 +516,7 @@ export function Slider({
   className?: string;
   /** Accessible name when no visible `label` is rendered. Required by WCAG 4.1.2. */
   "aria-label"?: string;
+  ref?: Ref<HTMLDivElement>;
 }) {
   const id = useId();
   const pct = ((value - min) / (max - min)) * 100;
@@ -516,7 +524,7 @@ export function Slider({
   const thickness = { sm: 4, md: 6, lg: 8 }[size];
   const vertical = orientation === "vertical";
   return (
-    <div className={cn(vertical ? "flex flex-row-reverse items-center gap-3" : "flex w-full flex-col gap-2", disabled && "opacity-[var(--disabled-opacity)]", className)}>
+    <div ref={ref} className={cn(vertical ? "flex flex-row-reverse items-center gap-3" : "flex w-full flex-col gap-2", disabled && "opacity-[var(--disabled-opacity)]", className)}>
       {(label || formatValue) && (
         <div className={cn("flex items-center gap-3", vertical ? "flex-col" : "justify-between")}>
           {label && <label htmlFor={id} className="text-label-sm text-foreground">{label}</label>}

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { PageHeader, Showcase } from "../docs/Blocks";
+import { TEMPLATE_CARDS } from "./template-recipes";
+import { TemplateAnatomy } from "./TemplateAnatomy";
 import { useCopy } from "../lib/hooks";
 import { Button } from "../ui/Button";
 import { Avatar, AvatarGroupCompact, Card, Chip, FeaturedIcon, Progress } from "../ui/Display";
@@ -317,7 +318,7 @@ export function AnalyticsDashboardTemplate() {
         </aside>
 
         {/* Right Main Dashboard Workspace */}
-        <main className="flex-1 p-5 sm:p-8 space-y-6 min-w-0 bg-surface">
+        <div className="flex-1 p-5 sm:p-8 space-y-6 min-w-0 bg-surface">
           {/* Top Welcome Header & Actions */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-separator pb-6">
             <div>
@@ -326,7 +327,7 @@ export function AnalyticsDashboardTemplate() {
                 <span>/</span>
                 <span className="text-accent">Executive Overview</span>
               </div>
-              <h1 className="text-title-h3 font-medium text-foreground">Welcome back, Olivia 👋</h1>
+              <h2 className="text-title-h3 font-medium text-foreground">Welcome back, Olivia 👋</h2>
               <p className="text-paragraph-xs text-muted mt-0.5">Track, manage and forecast your customer growth and order volume in real time.</p>
             </div>
 
@@ -563,7 +564,7 @@ export function AnalyticsDashboardTemplate() {
               />
             </div>
           </Card>
-        </main>
+        </div>
       </div>
     </div>
   );
@@ -608,11 +609,11 @@ export function SettingsScreenTemplate() {
       {/* Top Header with Breadcrumb */}
       <div>
         <span className="text-subheading-xs text-accent font-medium uppercase tracking-wider">// Account Preferences</span>
-        <h1 className="text-title-h3 font-medium text-foreground sm:text-title-h2">Settings</h1>
+        <h2 className="text-title-h3 font-medium text-foreground sm:text-title-h2">Settings</h2>
         <p className="mt-1 text-paragraph-sm text-muted">Manage your team profile and account preferences here.</p>
       </div>
 
-      {/* Horizontal Sub-Navigation Tabs (Untitled UI Style) */}
+      {/* Horizontal sub-navigation tabs (settings anatomy) */}
       <div className="flex gap-1 overflow-x-auto border-b border-separator pb-px no-scrollbar">
         {navTabs.map((t) => (
           <button
@@ -840,7 +841,7 @@ export function BillingPageTemplate() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <span className="text-subheading-xs text-accent font-medium uppercase tracking-wider">// Subscription & Invoices</span>
-          <h1 className="text-title-h3 font-medium text-foreground sm:text-title-h2">Billing & Plans</h1>
+          <h2 className="text-title-h3 font-medium text-foreground sm:text-title-h2">Billing & Plans</h2>
           <p className="mt-1 text-paragraph-sm text-muted">Manage your billing details, seats, and subscription invoices.</p>
         </div>
 
@@ -1058,7 +1059,7 @@ export function TeamPeopleTemplate() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <span className="text-subheading-xs text-accent font-medium uppercase tracking-wider">// Team & Access</span>
-          <h1 className="text-title-h3 font-medium text-foreground sm:text-title-h2">Team Members</h1>
+          <h2 className="text-title-h3 font-medium text-foreground sm:text-title-h2">Team Members</h2>
           <p className="mt-1 text-paragraph-sm text-muted">Manage your team members and their account permissions here.</p>
         </div>
 
@@ -1248,7 +1249,7 @@ export function AnalyticsDashboard() {
         </aside>
 
         {/* Main Dashboard Canvas */}
-        <main className="flex-1 p-6 space-y-6">
+        <div className="flex-1 p-6 space-y-6">
           {/* KPI Metrics */}
           <div className="grid gap-4 sm:grid-cols-3">
             <Card className="p-5">
@@ -1272,7 +1273,7 @@ export function SettingsScreen() {
 
   return (
     <div className="space-y-6 text-left">
-      <h1>Settings</h1>
+      <h2>Settings</h2>
       <div className="flex gap-1 border-b border-separator pb-px">
         <button className="border-b-2 border-accent text-accent">Profile</button>
       </div>
@@ -1289,7 +1290,7 @@ const BILLING_CODE = `import { Card, Progress, Button, DataTable, PaymentCard, P
 export function BillingPage() {
   return (
     <div className="space-y-6 text-left">
-      <h1>Billing & Plans</h1>
+      <h2>Billing & Plans</h2>
       <div className="grid gap-6 md:grid-cols-2">
         <Card className="p-6">
           <Progress value={80} />
@@ -1309,7 +1310,7 @@ import { Card, DataTable, FilterBar, FilterChip, SearchBar, AvatarGroupCompact, 
 export function TeamScreen() {
   return (
     <div className="space-y-6 text-left">
-      <h1>Team Members</h1>
+      <h2>Team Members</h2>
       <FilterBar leading={<SearchBar placeholder="Filter teammates..." />}>
         <FilterChip active>All</FilterChip>
       </FilterBar>
@@ -1324,65 +1325,65 @@ export function TeamScreen() {
 
 export function AnalyticsTemplatePage() {
   return (
-    <div className="docs-page-container">
-      <PageHeader
-        eyebrow="Template"
-        title="Analytics Dashboard"
-        description="A full-featured Untitled UI-grade dashboard blueprint featuring a vertical sidebar, metric cards with SVG sparklines, multi-series performance charts, and customer transaction tables."
-        tags={["Dashboard 01", "SidebarNav", "DataTable", "Sparklines", "AreaChart"]}
-      />
-      <Showcase code={ANALYTICS_CODE} allowViewport align="stretch">
-        <AnalyticsDashboardTemplate />
-      </Showcase>
-    </div>
+    <TemplateAnatomy
+      templateKey="analytics"
+      blockKey="template-analytics"
+      eyebrow="Template"
+      title="Analytics Dashboard"
+      description="A full application screen: vertical sidebar navigation, metric cards with SVG sparklines, multi-series performance charts, and a customer transaction ledger — composed only from Unseen primitives."
+      tags={["Dashboard 01", "SidebarNav", "DataTable", "Sparklines", "AreaChart"]}
+      code={ANALYTICS_CODE}
+    >
+      <AnalyticsDashboardTemplate />
+    </TemplateAnatomy>
   );
 }
 
 export function SettingsTemplatePage() {
   return (
-    <div className="docs-page-container">
-      <PageHeader
-        eyebrow="Template"
-        title="Settings Screen"
-        description="A complete settings blueprint with horizontal navigation sub-tabs, avatar drop-zone uploaders, form inputs, timezone selectors, and pinned save bars."
-        tags={["Settings 01", "HorizontalTabs", "AvatarUpload", "Select", "Inputs"]}
-      />
-      <Showcase code={SETTINGS_CODE} allowViewport align="stretch">
-        <SettingsScreenTemplate />
-      </Showcase>
-    </div>
+    <TemplateAnatomy
+      templateKey="settings"
+      blockKey="template-settings"
+      eyebrow="Template"
+      title="Settings Screen"
+      description="A complete settings blueprint with horizontal navigation sub-tabs, avatar drop-zone uploaders, form inputs, timezone selectors, and pinned save bars."
+      tags={["Settings 01", "HorizontalTabs", "AvatarUpload", "Select", "Inputs"]}
+      code={SETTINGS_CODE}
+    >
+      <SettingsScreenTemplate />
+    </TemplateAnatomy>
   );
 }
 
 export function BillingTemplatePage() {
   return (
-    <div className="docs-page-container">
-      <PageHeader
-        eyebrow="Template"
-        title="Billing & Subscription"
-        description="A comprehensive SaaS billing screen featuring active tier metrics, live PaymentCard renders, annual/monthly pricing comparison, and invoice receipt tables."
-        tags={["Billing 01", "PaymentCard", "PricingBlock", "Progress", "DataTable"]}
-      />
-      <Showcase code={BILLING_CODE} allowViewport align="stretch">
-        <BillingPageTemplate />
-      </Showcase>
-    </div>
+    <TemplateAnatomy
+      templateKey="billing"
+      blockKey="template-billing"
+      eyebrow="Template"
+      title={"Billing & Subscription"}
+      description="A comprehensive SaaS billing screen featuring active tier metrics, live PaymentCard renders, annual/monthly pricing comparison, and invoice receipt tables."
+      tags={["Billing 01", "PaymentCard", "PricingBlock", "Progress", "DataTable"]}
+      code={BILLING_CODE}
+    >
+      <BillingPageTemplate />
+    </TemplateAnatomy>
   );
 }
 
 export function TeamTemplatePage() {
   return (
-    <div className="docs-page-container">
-      <PageHeader
-        eyebrow="Template"
-        title="Team & Collaborators"
-        description="An enterprise team management screen featuring member count chips, faceted role filters, bulk selection actions, 2FA badges, and live teammate invite modals."
-        tags={["Team 01", "DataTable", "AvatarGroupCompact", "FilterBar", "Modal"]}
-      />
-      <Showcase code={TEAM_CODE} allowViewport align="stretch">
-        <TeamPeopleTemplate />
-      </Showcase>
-    </div>
+    <TemplateAnatomy
+      templateKey="team"
+      blockKey="template-team"
+      eyebrow="Template"
+      title={"Team & Collaborators"}
+      description="An enterprise team management screen featuring member count chips, faceted role filters, bulk selection actions, 2FA badges, and live teammate invite modals."
+      tags={["Team 01", "DataTable", "AvatarGroupCompact", "FilterBar", "Modal"]}
+      code={TEAM_CODE}
+    >
+      <TeamPeopleTemplate />
+    </TemplateAnatomy>
   );
 }
 
@@ -1488,7 +1489,7 @@ export function AiAssistantTemplate() {
       {/* Studio Top Control Strip */}
       <div className="border-b border-separator bg-surface-secondary/70 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-subtle">
         <div className="flex items-center gap-2">
-          <span className="flex h-2 w-2 rounded-full bg-success animate-pulse" />
+          <span className="flex h-2 w-2 rounded-full bg-success animate-pulse-soft" />
           <span className="text-foreground font-medium">Neural Enclave Active</span>
           <span className="text-subtle">•</span>
           <span className="rounded bg-surface px-1.5 py-0.5 text-[10px] text-accent ring-1 ring-border">{selectedModel}</span>
@@ -1576,7 +1577,7 @@ export function AiAssistantTemplate() {
         </aside>
 
         {/* Right Chat Stream Canvas */}
-        <main className="lg:col-span-8 flex flex-col justify-between p-5 sm:p-6 bg-surface">
+        <div className="lg:col-span-8 flex flex-col justify-between p-5 sm:p-6 bg-surface">
           {/* Message Thread */}
           <div className="space-y-4 max-h-[480px] overflow-y-auto pr-1" role="log" aria-label="Conversation" tabIndex={0}>
             {messages.map((msg) => (
@@ -1624,8 +1625,8 @@ export function AiAssistantTemplate() {
               </div>
             ))}
             {streaming && (
-              <div className="p-4 rounded-14 bg-surface-secondary border border-border text-foreground max-w-[80%] rounded-bl-none animate-pulse flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-accent animate-ping" />
+              <div className="p-4 rounded-14 bg-surface-secondary border border-border text-foreground max-w-[80%] rounded-bl-none animate-pulse-soft flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-accent animate-ping-soft" />
                 <span className="text-[11px] font-mono text-muted">Streaming tokens from {selectedModel}...</span>
               </div>
             )}
@@ -1672,7 +1673,7 @@ export function AiAssistantTemplate() {
               </div>
             </div>
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );
@@ -1693,17 +1694,17 @@ export function AiStudio() {
 
 export function AiTemplatePage() {
   return (
-    <div className="docs-page-container">
-      <PageHeader
-        eyebrow="Template"
-        title="AI & Neural Assistant"
-        description="A full-featured generative AI studio template with parameter tuning (Temperature, Top-P), multi-turn chat stream history, formatted code blocks, and real-time token telemetry."
-        tags={["AI Studio 01", "ChatStream", "ModelParams", "CodeBlock", "Telemetry"]}
-      />
-      <Showcase code={AI_CODE} allowViewport align="stretch">
-        <AiAssistantTemplate />
-      </Showcase>
-    </div>
+    <TemplateAnatomy
+      templateKey="ai"
+      blockKey="template-ai"
+      eyebrow="Template"
+      title={"AI & Neural Assistant"}
+      description="A full-featured generative AI studio template with parameter tuning (Temperature, Top-P), multi-turn chat stream history, formatted code blocks, and real-time token telemetry."
+      tags={["AI Studio 01", "ChatStream", "ModelParams", "CodeBlock", "Telemetry"]}
+      code={AI_CODE}
+    >
+      <AiAssistantTemplate />
+    </TemplateAnatomy>
   );
 }
 
@@ -1711,48 +1712,6 @@ export function AiTemplatePage() {
 /*                         TEMPLATES OVERVIEW PAGE                            */
 /* ========================================================================== */
 
-const TEMPLATE_CARDS = [
-  {
-    key: "ai",
-    title: "AI & Neural Assistant",
-    href: "templates/ai",
-    description: "Multi-turn generative AI messaging, model parameter tuning, token telemetry, and formatted code blocks.",
-    tags: ["AI Studio 01", "ChatStream", "ModelParams", "CodeBlock"],
-    badge: "New",
-  },
-  {
-    key: "analytics",
-    title: "Analytics Dashboard",
-    href: "templates/analytics",
-    description: "Vertical sidebar layout, MRR metrics, sparkline waves, interactive area charts, and transaction ledger.",
-    tags: ["Dashboard 01", "SidebarNav", "Sparkline", "DataTable"],
-    badge: "Flagship",
-  },
-  {
-    key: "settings",
-    title: "Settings Screen",
-    href: "templates/settings",
-    description: "Horizontal sub-tabs, photo uploader, profile inputs, prefix slugs, and timezone select.",
-    tags: ["Settings 01", "SubTabs", "Profile", "Form"],
-    badge: "Updated",
-  },
-  {
-    key: "billing",
-    title: "Billing & Plans",
-    href: "templates/billing",
-    description: "Monthly/annual toggle, active tier progress, visual payment card, and downloadable PDF invoices.",
-    tags: ["Billing 01", "PaymentCard", "PricingBlock"],
-    badge: "Updated",
-  },
-  {
-    key: "team",
-    title: "Team & People",
-    href: "templates/team",
-    description: "Faceted member directory, 2FA compliance badges, bulk operations, and invite teammate modal.",
-    tags: ["Team 01", "DataTable", "AvatarStack", "Modal"],
-    badge: "Updated",
-  },
-];
 
 export function TemplatesOverviewPage({ navigate }: { navigate: (t: string) => void }) {
   return (
@@ -1760,7 +1719,7 @@ export function TemplatesOverviewPage({ navigate }: { navigate: (t: string) => v
       <div className="home-container">
         <header className="collection-heading page-enter">
           <div>
-            <p>Untitled UI-grade templates.</p>
+            <p>Five application screens, end to end.</p>
             <h1>Production Screens.<br />Built with Unseen.</h1>
           </div>
           <div>
@@ -1777,7 +1736,7 @@ export function TemplatesOverviewPage({ navigate }: { navigate: (t: string) => v
           {TEMPLATE_CARDS.map((t) => (
             <Card
               key={t.key}
-              className="border-glow p-6 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+              className="border-glow p-6 flex flex-col justify-between transition-all duration-[var(--duration-base)] hover:-translate-y-1 hover:shadow-lg"
             >
               <div>
                 <div className="flex items-center justify-between">

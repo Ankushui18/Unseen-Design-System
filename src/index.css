@@ -1,5 +1,52 @@
-@import "tailwindcss";
+@import "tailwindcss" source(none);
+
+/* --------------------------------------------------------------------------
+ * Typefaces — self-hosted, subset, licensed (SIL OFL 1.1, see src/fonts).
+ * The system ships its own face: no runtime font CDN, no FOUT from a third
+ * party, and the metrics every letter-spacing/line-height token is tuned to
+ * are guaranteed to be the metrics on screen (COMPONENT-QUALITY-SPEC.md §6).
+ * -------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("./fonts/inter-latin-wght.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("./fonts/inter-latin-ext-wght.woff2") format("woff2");
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("./fonts/jetbrains-mono-latin-wght.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("./fonts/jetbrains-mono-latin-ext-wght.woff2") format("woff2");
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+
 @import "./styles/studio.css";
+
+/* Only src/ renders classes. Everything else in the repo — scripts that
+   document old utilities, markdown that quotes them, audit JSON — is prose and
+   tooling, and autodetection happily compiles it into the shipped bundle
+   (a codemod that writes "duration-150 → …" was generating .duration-150). */
+@source "../src";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -27,9 +74,12 @@
   /* Easing curves (emitted because component CSS references them at runtime) */
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-instant: 0.075s;
   --duration-fast: 0.15s;
   --duration-base: 0.22s;
   --duration-slow: 0.3s;
+  --duration-slower: 0.4s;
 
   /* --- Primitives --- */
   --white: #ffffff;
@@ -47,7 +97,7 @@
   --accent-900: oklch(0.33 calc(var(--accent-c) * 0.6) var(--accent-h));
   --accent-950: oklch(0.24 calc(var(--accent-c) * 0.44) var(--accent-h));
 
-  /* AlignUI-grade bluish neutrals */
+  /* Bluish neutrals — cool enough to sit under an accent, warm enough to read as ink. */
   --neutral-0: #ffffff;
   --neutral-50: #f5f7fa;
   --neutral-100: #f2f5f8;
@@ -121,7 +171,7 @@
   --danger-soft: #ffebec;
   --danger-soft-foreground: #b3101f;
 
-  /* --- 10-colour state palette (AlignUI): dark / base / light / lighter --- */
+  /* --- 10-colour state palette: dark / base / light / lighter --- */
   --gray-dark: #2b303b;    --gray-base: #717784;    --gray-light: #e1e4ea;   --gray-lighter: #f5f7fa;
   --blue-dark: #2547d0;    --blue-base: #335cff;    --blue-light: #c0d5ff;   --blue-lighter: #ebf1ff;
   --orange-dark: #d05e25;  --orange-base: #ff8447;  --orange-light: #ffd5c0; --orange-lighter: #fff3eb;
@@ -141,7 +191,7 @@
   --syn-attr: #2547d0;
   --syn-punct: #717784;
 
-  /* Elevation (AlignUI regular scale + system) */
+  /* Elevation — regular scale plus the system's floating overlays. */
   --shadow-xs: 0 1px 2px 0 rgb(10 13 20 / 0.03);
   --shadow-sm: 0 2px 4px 0 rgb(27 28 29 / 0.04);
   --shadow-md: 0 16px 32px -12px rgb(14 18 27 / 0.1);
@@ -380,7 +430,7 @@
   --color-danger-soft: var(--danger-soft);
   --color-danger-soft-foreground: var(--danger-soft-foreground);
 
-  /* Radii Scale (Strict AlignUI Hierarchy) */
+  /* Radii scale */
   --radius-xs: calc(0.125rem * var(--radius-scale));
   --radius-sm: calc(0.25rem * var(--radius-scale));
   --radius-md: calc(0.375rem * var(--radius-scale));
@@ -425,6 +475,15 @@
 
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* A bare `transition-colors` must animate on Unseen's scale, not on
+     Tailwind's stock 150ms / ease-in-out defaults. */
+  --default-transition-duration: var(--duration-fast);
+  --default-transition-timing-function: var(--ease-out-quint);
+
+  --animate-pulse-soft: pulse-soft 2.4s var(--ease-out-quint) infinite;
+  --animate-ping-soft: ping-soft 2.2s var(--ease-out-quint) infinite;
 
   --animate-fade-in: fade-in 0.2s var(--ease-out-quint) both;
   --animate-pop-in: pop-in 0.22s var(--ease-spring) both;
@@ -447,6 +506,8 @@
 @keyframes travel { from { left: 0.25rem; } to { left: calc(100% - 1.5rem); } }
 @keyframes slide-in-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
 @keyframes slide-in-left { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+@keyframes ping-soft { 75%, 100% { transform: scale(2.1); opacity: 0; } }
 @keyframes indeterminate { 0% { transform: translateX(-120%); } 100% { transform: translateX(320%); } }
 
 @media (prefers-reduced-motion: reduce) {
@@ -501,7 +562,7 @@
     border-radius: inherit;
     pointer-events: none;
     background: linear-gradient(180deg, rgb(255 255 255 / 0.2) 0%, rgb(255 255 255 / 0) 100%);
-    transition: opacity 0.15s ease;
+    transition: opacity var(--duration-fast) ease;
   }
   .bevel:hover::before { background: linear-gradient(180deg, rgb(255 255 255 / 0.28) 0%, rgb(255 255 255 / 0) 100%); }
   .bevel:active::before { opacity: 0; }
@@ -533,7 +594,7 @@
       inset 0 1px 0 0 rgb(255 255 255 / 0.22),
       inset 0 -1px 0 0 rgb(0 0 0 / 0.14),
       0 1px 2px 0 color-mix(in oklab, var(--accent) 40%, transparent);
-    transition: filter 0.18s var(--ease-out-quint), box-shadow 0.18s var(--ease-out-quint);
+    transition: filter var(--duration-fast) var(--ease-out-quint), box-shadow var(--duration-fast) var(--ease-out-quint);
   }
   .btn-accent-fill:hover {
     filter: brightness(1.04) saturate(1.02);
@@ -547,7 +608,7 @@
     box-shadow:
       inset 0 1px 0 0 rgb(255 255 255 / 0.12),
       0 10px 24px -10px rgb(14 18 27 / 0.5);
-    transition: filter 0.18s var(--ease-out-quint), box-shadow 0.18s var(--ease-out-quint);
+    transition: filter var(--duration-fast) var(--ease-out-quint), box-shadow var(--duration-fast) var(--ease-out-quint);
   }
   .btn-neutral-fill:hover {
     filter: brightness(1.06);
@@ -569,7 +630,7 @@
   }
 
   /* Ambient brand-lit surface — a soft accent halo bleeding into a panel's
-     edge, the "premium light" cue from Untitled UI / AlignUI hero panels. */
+     edge — a lit top edge on raised panels. */
   .surface-lit { position: relative; isolation: isolate; }
   .surface-lit::before {
     content: "";
@@ -600,9 +661,8 @@
   [data-reveal] {
     opacity: 0;
     transform: translateY(18px);
-    transition:
-      opacity 0.65s var(--ease-out-quint),
-      transform 0.65s var(--ease-out-quint);
+    transition: opacity var(--duration-slower) var(--ease-out-quint),
+      transform var(--duration-slower) var(--ease-out-quint);
     transition-delay: var(--reveal-delay, 0ms);
   }
   [data-reveal].in { opacity: 1; transform: none; }
@@ -612,7 +672,7 @@
     height: 20px; width: 20px; border-radius: 99px;
     background: var(--white);
     box-shadow: var(--shadow-switch-thumb), 0 0 0 1px var(--border);
-    cursor: grab; transition: transform 0.15s var(--ease-spring);
+    cursor: grab; transition: transform var(--duration-fast) var(--ease-spring);
   }
   .ds-range::-webkit-slider-thumb:active { transform: scale(1.12); cursor: grabbing; }
   .ds-range::-moz-range-thumb {

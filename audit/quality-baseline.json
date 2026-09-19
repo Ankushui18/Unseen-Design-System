@@ -1,0 +1,943 @@
+{
+  "at": "2026-09-18",
+  "total": 117,
+  "mean": 69.7,
+  "components": {
+    "ui/Button.tsx::Spinner": {
+      "score": 71.4,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "Spinner",
+      "file": "ui/Button.tsx"
+    },
+    "ui/Button.tsx::Button": {
+      "score": 100,
+      "grade": "A",
+      "tier": "A",
+      "cells": 125,
+      "name": "Button",
+      "file": "ui/Button.tsx"
+    },
+    "ui/Button.tsx::FancyButton": {
+      "score": 76.9,
+      "grade": "C",
+      "tier": "A",
+      "cells": 30,
+      "name": "FancyButton",
+      "file": "ui/Button.tsx"
+    },
+    "ui/Button.tsx::ButtonGroup": {
+      "score": 72.7,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "ButtonGroup",
+      "file": "ui/Button.tsx"
+    },
+    "ui/Display.tsx::FeaturedIcon": {
+      "score": 62.5,
+      "grade": "D",
+      "tier": "A",
+      "cells": 60,
+      "name": "FeaturedIcon",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::Card": {
+      "score": 77.8,
+      "grade": "C",
+      "tier": "A",
+      "cells": 3,
+      "name": "Card",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::CardHeader": {
+      "score": 69.2,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "CardHeader",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::CardBody": {
+      "score": 69.2,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "CardBody",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::CardFooter": {
+      "score": 78.6,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "CardFooter",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::Chip": {
+      "score": 84.2,
+      "grade": "B",
+      "tier": "A",
+      "cells": 210,
+      "name": "Chip",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::Badge": {
+      "score": 66.7,
+      "grade": "C",
+      "tier": "A",
+      "cells": 60,
+      "name": "Badge",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::Badge#2": {
+      "score": 72.2,
+      "grade": "C",
+      "tier": "A",
+      "cells": 60,
+      "name": "Badge",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::Avatar": {
+      "score": 72.2,
+      "grade": "C",
+      "tier": "A",
+      "cells": 225,
+      "name": "Avatar",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::AvatarGroup": {
+      "score": 75,
+      "grade": "C",
+      "tier": "B",
+      "cells": 4,
+      "name": "AvatarGroup",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::AvatarGroupCompact": {
+      "score": 87.5,
+      "grade": "B",
+      "tier": "B",
+      "cells": 40,
+      "name": "AvatarGroupCompact",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::User": {
+      "score": 71.4,
+      "grade": "C",
+      "tier": "B",
+      "cells": 20,
+      "name": "User",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::Kbd": {
+      "score": 64.3,
+      "grade": "D",
+      "tier": "A",
+      "cells": 0,
+      "name": "Kbd",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::Snippet": {
+      "score": 85.7,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "Snippet",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::Divider": {
+      "score": 71.4,
+      "grade": "C",
+      "tier": "B",
+      "cells": 2,
+      "name": "Divider",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::Skeleton": {
+      "score": 66.7,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "Skeleton",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::Progress": {
+      "score": 73.7,
+      "grade": "C",
+      "tier": "A",
+      "cells": 15,
+      "name": "Progress",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::CircularProgress": {
+      "score": 70.6,
+      "grade": "C",
+      "tier": "B",
+      "cells": 5,
+      "name": "CircularProgress",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::Alert": {
+      "score": 72.2,
+      "grade": "C",
+      "tier": "A",
+      "cells": 30,
+      "name": "Alert",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::Code": {
+      "score": 71.4,
+      "grade": "C",
+      "tier": "B",
+      "cells": 5,
+      "name": "Code",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Display.tsx::ScrollShadow": {
+      "score": 78.6,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "ScrollShadow",
+      "file": "ui/Display.tsx"
+    },
+    "ui/Extra.tsx::CompactButton": {
+      "score": 72,
+      "grade": "C",
+      "tier": "A",
+      "cells": 45,
+      "name": "CompactButton",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::LinkButton": {
+      "score": 65.4,
+      "grade": "C",
+      "tier": "A",
+      "cells": 60,
+      "name": "LinkButton",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::SocialButton": {
+      "score": 79.2,
+      "grade": "C",
+      "tier": "B",
+      "cells": 54,
+      "name": "SocialButton",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::StatusBadge": {
+      "score": 82.4,
+      "grade": "C",
+      "tier": "B",
+      "cells": 20,
+      "name": "StatusBadge",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::Tag": {
+      "score": 83.3,
+      "grade": "C",
+      "tier": "B",
+      "cells": 30,
+      "name": "Tag",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::SegmentedControl": {
+      "score": 66.7,
+      "grade": "C",
+      "tier": "B",
+      "cells": 2,
+      "name": "SegmentedControl",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::HorizontalStepper": {
+      "score": 85.7,
+      "grade": "B",
+      "tier": "C",
+      "cells": 0,
+      "name": "HorizontalStepper",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::VerticalStepper": {
+      "score": 85.7,
+      "grade": "B",
+      "tier": "C",
+      "cells": 0,
+      "name": "VerticalStepper",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::DotStepper": {
+      "score": 80,
+      "grade": "B",
+      "tier": "C",
+      "cells": 0,
+      "name": "DotStepper",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::DigitInput": {
+      "score": 79.2,
+      "grade": "C",
+      "tier": "B",
+      "cells": 3,
+      "name": "DigitInput",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::Datepicker": {
+      "score": 75,
+      "grade": "C",
+      "tier": "B",
+      "cells": 2,
+      "name": "Datepicker",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::FileFormatIcon": {
+      "score": 66.7,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "FileFormatIcon",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::Notification": {
+      "score": 70.6,
+      "grade": "C",
+      "tier": "B",
+      "cells": 30,
+      "name": "Notification",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::Banner": {
+      "score": 73.3,
+      "grade": "C",
+      "tier": "B",
+      "cells": 15,
+      "name": "Banner",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::Label": {
+      "score": 56.3,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "Label",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Extra.tsx::Hint": {
+      "score": 88.9,
+      "grade": "C",
+      "tier": "C",
+      "cells": 3,
+      "name": "Hint",
+      "file": "ui/Extra.tsx"
+    },
+    "ui/Form.tsx::Input": {
+      "score": 73.1,
+      "grade": "C",
+      "tier": "A",
+      "cells": 3,
+      "name": "Input",
+      "file": "ui/Form.tsx"
+    },
+    "ui/Form.tsx::Textarea": {
+      "score": 69.2,
+      "grade": "C",
+      "tier": "A",
+      "cells": 3,
+      "name": "Textarea",
+      "file": "ui/Form.tsx"
+    },
+    "ui/Form.tsx::Select": {
+      "score": 76,
+      "grade": "C",
+      "tier": "A",
+      "cells": 3,
+      "name": "Select",
+      "file": "ui/Form.tsx"
+    },
+    "ui/Form.tsx::Checkbox": {
+      "score": 73.1,
+      "grade": "C",
+      "tier": "A",
+      "cells": 15,
+      "name": "Checkbox",
+      "file": "ui/Form.tsx"
+    },
+    "ui/Form.tsx::RadioGroup": {
+      "score": 76,
+      "grade": "C",
+      "tier": "B",
+      "cells": 30,
+      "name": "RadioGroup",
+      "file": "ui/Form.tsx"
+    },
+    "ui/Form.tsx::Switch": {
+      "score": 66.7,
+      "grade": "C",
+      "tier": "A",
+      "cells": 15,
+      "name": "Switch",
+      "file": "ui/Form.tsx"
+    },
+    "ui/Form.tsx::Slider": {
+      "score": 75,
+      "grade": "C",
+      "tier": "B",
+      "cells": 30,
+      "name": "Slider",
+      "file": "ui/Form.tsx"
+    },
+    "ui/More.tsx::Dropdown": {
+      "score": 54.2,
+      "grade": "D",
+      "tier": "A",
+      "cells": 8,
+      "name": "Dropdown",
+      "file": "ui/More.tsx"
+    },
+    "ui/More.tsx::VerticalTabMenu": {
+      "score": 46.7,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "VerticalTabMenu",
+      "file": "ui/More.tsx"
+    },
+    "ui/More.tsx::ContentDivider": {
+      "score": 69.2,
+      "grade": "C",
+      "tier": "B",
+      "cells": 4,
+      "name": "ContentDivider",
+      "file": "ui/More.tsx"
+    },
+    "ui/More.tsx::SelectionCard": {
+      "score": 62.5,
+      "grade": "D",
+      "tier": "B",
+      "cells": 2,
+      "name": "SelectionCard",
+      "file": "ui/More.tsx"
+    },
+    "ui/More.tsx::Rating": {
+      "score": 68,
+      "grade": "C",
+      "tier": "B",
+      "cells": 9,
+      "name": "Rating",
+      "file": "ui/More.tsx"
+    },
+    "ui/More.tsx::NumberInput": {
+      "score": 73.7,
+      "grade": "C",
+      "tier": "C",
+      "cells": 3,
+      "name": "NumberInput",
+      "file": "ui/More.tsx"
+    },
+    "ui/More.tsx::SearchInput": {
+      "score": 78.9,
+      "grade": "C",
+      "tier": "C",
+      "cells": 3,
+      "name": "SearchInput",
+      "file": "ui/More.tsx"
+    },
+    "ui/More.tsx::TextareaCounter": {
+      "score": 61.1,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "TextareaCounter",
+      "file": "ui/More.tsx"
+    },
+    "ui/More.tsx::ToggleGroup": {
+      "score": 61.5,
+      "grade": "D",
+      "tier": "B",
+      "cells": 4,
+      "name": "ToggleGroup",
+      "file": "ui/More.tsx"
+    },
+    "ui/More.tsx::WidgetBox": {
+      "score": 82.4,
+      "grade": "B",
+      "tier": "B",
+      "cells": 2,
+      "name": "WidgetBox",
+      "file": "ui/More.tsx"
+    },
+    "ui/More.tsx::ColorPicker": {
+      "score": 54.5,
+      "grade": "D",
+      "tier": "B",
+      "cells": 0,
+      "name": "ColorPicker",
+      "file": "ui/More.tsx"
+    },
+    "ui/More.tsx::Timeline": {
+      "score": 66.7,
+      "grade": "C",
+      "tier": "B",
+      "cells": 5,
+      "name": "Timeline",
+      "file": "ui/More.tsx"
+    },
+    "ui/More.tsx::EmptyState": {
+      "score": 71.4,
+      "grade": "C",
+      "tier": "B",
+      "cells": 3,
+      "name": "EmptyState",
+      "file": "ui/More.tsx"
+    },
+    "ui/More.tsx::SelectTrigger": {
+      "score": 76.5,
+      "grade": "C",
+      "tier": "C",
+      "cells": 3,
+      "name": "SelectTrigger",
+      "file": "ui/More.tsx"
+    },
+    "ui/Navigation.tsx::Tabs": {
+      "score": 80,
+      "grade": "B",
+      "tier": "A",
+      "cells": 12,
+      "name": "Tabs",
+      "file": "ui/Navigation.tsx"
+    },
+    "ui/Navigation.tsx::Accordion": {
+      "score": 87.5,
+      "grade": "B",
+      "tier": "B",
+      "cells": 3,
+      "name": "Accordion",
+      "file": "ui/Navigation.tsx"
+    },
+    "ui/Navigation.tsx::Breadcrumbs": {
+      "score": 71.4,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "Breadcrumbs",
+      "file": "ui/Navigation.tsx"
+    },
+    "ui/Navigation.tsx::Pagination": {
+      "score": 80,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "Pagination",
+      "file": "ui/Navigation.tsx"
+    },
+    "ui/Navigation.tsx::Table": {
+      "score": 70.8,
+      "grade": "C",
+      "tier": "A",
+      "cells": 6,
+      "name": "Table",
+      "file": "ui/Navigation.tsx"
+    },
+    "ui/Overlay.tsx::Modal": {
+      "score": 60,
+      "grade": "D",
+      "tier": "A",
+      "cells": 10,
+      "name": "Modal",
+      "file": "ui/Overlay.tsx"
+    },
+    "ui/Overlay.tsx::Drawer": {
+      "score": 73.9,
+      "grade": "C",
+      "tier": "B",
+      "cells": 9,
+      "name": "Drawer",
+      "file": "ui/Overlay.tsx"
+    },
+    "ui/Overlay.tsx::Tooltip": {
+      "score": 69.6,
+      "grade": "C",
+      "tier": "B",
+      "cells": 4,
+      "name": "Tooltip",
+      "file": "ui/Overlay.tsx"
+    },
+    "ui/Overlay.tsx::Popover": {
+      "score": 71.4,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "Popover",
+      "file": "ui/Overlay.tsx"
+    },
+    "ui/Overlay.tsx::MenuItem": {
+      "score": 86.7,
+      "grade": "B",
+      "tier": "C",
+      "cells": 2,
+      "name": "MenuItem",
+      "file": "ui/Overlay.tsx"
+    },
+    "ui/Overlay.tsx::MenuSeparator": {
+      "score": 30.8,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "MenuSeparator",
+      "file": "ui/Overlay.tsx"
+    },
+    "ui/Overlay.tsx::MenuLabel": {
+      "score": 43.8,
+      "grade": "D",
+      "tier": "C",
+      "cells": 5,
+      "name": "MenuLabel",
+      "file": "ui/Overlay.tsx"
+    },
+    "ui/Overlay.tsx::ToastProvider": {
+      "score": 66.7,
+      "grade": "C",
+      "tier": "B",
+      "cells": 4,
+      "name": "ToastProvider",
+      "file": "ui/Overlay.tsx"
+    },
+    "ui/Patterns.tsx::ButtonTile": {
+      "score": 73.9,
+      "grade": "C",
+      "tier": "B",
+      "cells": 3,
+      "name": "ButtonTile",
+      "file": "ui/Patterns.tsx"
+    },
+    "ui/Patterns.tsx::InfoLabel": {
+      "score": 59.1,
+      "grade": "D",
+      "tier": "B",
+      "cells": 5,
+      "name": "InfoLabel",
+      "file": "ui/Patterns.tsx"
+    },
+    "ui/Patterns.tsx::InlineMessage": {
+      "score": 100,
+      "grade": "A",
+      "tier": "C",
+      "cells": 10,
+      "name": "InlineMessage",
+      "file": "ui/Patterns.tsx"
+    },
+    "ui/Patterns.tsx::ListItem": {
+      "score": 65,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "ListItem",
+      "file": "ui/Patterns.tsx"
+    },
+    "ui/Patterns.tsx::Toolbar": {
+      "score": 69.6,
+      "grade": "C",
+      "tier": "B",
+      "cells": 2,
+      "name": "Toolbar",
+      "file": "ui/Patterns.tsx"
+    },
+    "ui/Patterns.tsx::ToolbarButton": {
+      "score": 62.5,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "ToolbarButton",
+      "file": "ui/Patterns.tsx"
+    },
+    "ui/Patterns.tsx::ToolbarSeparator": {
+      "score": 40,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "ToolbarSeparator",
+      "file": "ui/Patterns.tsx"
+    },
+    "ui/Patterns.tsx::HoverCard": {
+      "score": 57.9,
+      "grade": "D",
+      "tier": "B",
+      "cells": 0,
+      "name": "HoverCard",
+      "file": "ui/Patterns.tsx"
+    },
+    "ui/Patterns.tsx::ProfileHoverCard": {
+      "score": 46.2,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "ProfileHoverCard",
+      "file": "ui/Patterns.tsx"
+    },
+    "ui/Patterns.tsx::ChatInput": {
+      "score": 63.6,
+      "grade": "D",
+      "tier": "B",
+      "cells": 0,
+      "name": "ChatInput",
+      "file": "ui/Patterns.tsx"
+    },
+    "ui/Patterns.tsx::AlertDialog": {
+      "score": 55,
+      "grade": "D",
+      "tier": "B",
+      "cells": 3,
+      "name": "AlertDialog",
+      "file": "ui/Patterns.tsx"
+    },
+    "ui/Patterns.tsx::Combobox": {
+      "score": 75,
+      "grade": "C",
+      "tier": "B",
+      "cells": 3,
+      "name": "Combobox",
+      "file": "ui/Patterns.tsx"
+    },
+    "ui/Patterns.tsx::PaymentCard": {
+      "score": 75,
+      "grade": "C",
+      "tier": "B",
+      "cells": 12,
+      "name": "PaymentCard",
+      "file": "ui/Patterns.tsx"
+    },
+    "ui/Patterns.tsx::Well": {
+      "score": 68.8,
+      "grade": "C",
+      "tier": "B",
+      "cells": 3,
+      "name": "Well",
+      "file": "ui/Patterns.tsx"
+    },
+    "ui/Pro.tsx::ActivityFeed": {
+      "score": 63.2,
+      "grade": "D",
+      "tier": "B",
+      "cells": 0,
+      "name": "ActivityFeed",
+      "file": "ui/Pro.tsx"
+    },
+    "ui/Pro.tsx::CommandMenu": {
+      "score": 61.9,
+      "grade": "D",
+      "tier": "B",
+      "cells": 0,
+      "name": "CommandMenu",
+      "file": "ui/Pro.tsx"
+    },
+    "ui/Pro.tsx::NotificationFeed": {
+      "score": 65,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "NotificationFeed",
+      "file": "ui/Pro.tsx"
+    },
+    "ui/Pro.tsx::FileUploader": {
+      "score": 68.2,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "FileUploader",
+      "file": "ui/Pro.tsx"
+    },
+    "ui/Pro.tsx::Filters": {
+      "score": 81.3,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "Filters",
+      "file": "ui/Pro.tsx"
+    },
+    "ui/Pro.tsx::TimePicker": {
+      "score": 52.2,
+      "grade": "D",
+      "tier": "B",
+      "cells": 0,
+      "name": "TimePicker",
+      "file": "ui/Pro.tsx"
+    },
+    "ui/Pro.tsx::Calendar": {
+      "score": 59.1,
+      "grade": "D",
+      "tier": "B",
+      "cells": 0,
+      "name": "Calendar",
+      "file": "ui/Pro.tsx"
+    },
+    "ui/Pro.tsx::AiPromptInput": {
+      "score": 63.6,
+      "grade": "D",
+      "tier": "B",
+      "cells": 0,
+      "name": "AiPromptInput",
+      "file": "ui/Pro.tsx"
+    },
+    "ui/Pro.tsx::CryptoAddressChip": {
+      "score": 80,
+      "grade": "B",
+      "tier": "B",
+      "cells": 0,
+      "name": "CryptoAddressChip",
+      "file": "ui/Pro.tsx"
+    },
+    "ui/Pro.tsx::VoiceVisualizer": {
+      "score": 92.3,
+      "grade": "A",
+      "tier": "B",
+      "cells": 0,
+      "name": "VoiceVisualizer",
+      "file": "ui/Pro.tsx"
+    },
+    "ui/Pro.tsx::CurrencyAmountInput": {
+      "score": 63.6,
+      "grade": "D",
+      "tier": "B",
+      "cells": 0,
+      "name": "CurrencyAmountInput",
+      "file": "ui/Pro.tsx"
+    },
+    "ui/ProductPatterns.tsx::PageHeader": {
+      "score": 62.5,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "PageHeader",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::SearchBar": {
+      "score": 62.5,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "SearchBar",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::FilterBar": {
+      "score": 75,
+      "grade": "C",
+      "tier": "C",
+      "cells": 0,
+      "name": "FilterBar",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::FilterChip": {
+      "score": 55.6,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "FilterChip",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::SortMenu": {
+      "score": 42.9,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "SortMenu",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::DataTable": {
+      "score": 64,
+      "grade": "D",
+      "tier": "A",
+      "cells": 2,
+      "name": "DataTable",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::DataCard": {
+      "score": 55.6,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "DataCard",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::ActivityItem": {
+      "score": 75,
+      "grade": "C",
+      "tier": "C",
+      "cells": 10,
+      "name": "ActivityItem",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::SettingsSection": {
+      "score": 71.4,
+      "grade": "C",
+      "tier": "C",
+      "cells": 0,
+      "name": "SettingsSection",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::EmptyState": {
+      "score": 57.1,
+      "grade": "D",
+      "tier": "B",
+      "cells": 3,
+      "name": "EmptyState",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::LoadingState": {
+      "score": 71.4,
+      "grade": "C",
+      "tier": "C",
+      "cells": 0,
+      "name": "LoadingState",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::ErrorState": {
+      "score": 75,
+      "grade": "C",
+      "tier": "B",
+      "cells": 0,
+      "name": "ErrorState",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::StatGrid": {
+      "score": 42.9,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "StatGrid",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::CardGrid": {
+      "score": 42.9,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "CardGrid",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::SettingsToggle": {
+      "score": 62.5,
+      "grade": "D",
+      "tier": "C",
+      "cells": 0,
+      "name": "SettingsToggle",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::CopyField": {
+      "score": 100,
+      "grade": "A",
+      "tier": "C",
+      "cells": 0,
+      "name": "CopyField",
+      "file": "ui/ProductPatterns.tsx"
+    },
+    "ui/ProductPatterns.tsx::SideNavItem": {
+      "score": 71.4,
+      "grade": "C",
+      "tier": "C",
+      "cells": 0,
+      "name": "SideNavItem",
+      "file": "ui/ProductPatterns.tsx"
+    }
+  }
+}

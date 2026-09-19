@@ -9,6 +9,11 @@
  * status/brand/orientation); states (loading/disabled/error) are measured
  * separately by component-audit and are NOT variants.
  *
+ * Alias law (COMPONENT-QUALITY-SPEC.md §3.3): a union member whose type name
+ * ends in `Alias` (e.g. `variant?: Variant | IntentAlias`) is ergonomics, not a
+ * cell. Alias members are recorded per component in `aliases` and excluded from
+ * the cell product, so shorthand can never inflate the count.
+ *
  * For each `export function X` / `export const X` in src/ui it:
  *   - resolves string-literal unions in the component's prop sections,
  *     including: file-level `export type Axis = "a" | "b"` referenced from a
@@ -24,6 +29,14 @@
  *   node scripts/variant-audit.mjs --md                  markdown table
  *   node scripts/variant-audit.mjs --baseline F          fail if total < F's total
  *   node scripts/variant-audit.mjs --write-baseline F    record current total
+ *   node scripts/variant-audit.mjs --out F               write the full payload
+ *                                                        (axes AND their values)
+ *   node scripts/variant-audit.mjs --out F --check       fail if F would change
+ *
+ * The `--out` payload is what `/figma` publishes as the naming contract: one
+ * component per row, its axes and the canonical value of every axis. It is
+ * deterministic and diff-checked, so the page cannot describe a component the
+ * source no longer has.
  */
 import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -33,6 +46,8 @@ const argv = process.argv.slice(2);
 const MODE = argv.includes("--json") ? "json" : argv.includes("--md") ? "md" : "table";
 const BASELINE = argv.includes("--baseline") ? argv[argv.indexOf("--baseline") + 1] : null;
 const WRITE_BASELINE = argv.includes("--write-baseline") ? argv[argv.indexOf("--write-baseline") + 1] : null;
+const OUT = argv.includes("--out") ? argv[argv.indexOf("--out") + 1] : null;
+const CHECK = argv.includes("--check");
 
 /* Canonical axis prop names (CONVENTIONS.md §1.1). Aliases map to the
  * canonical name: color→intent, mode/look→variant, side→placement (edge overlays). */
@@ -115,9 +130,13 @@ const rows = [];
 for (const file of files) {
   const src = sources[file];
 
-  /* section boundaries at every export */
+  /* section boundaries at every export. Only *capitalised* function/const
+   * exports are components (CONVENTIONS.md §3); lower-case exports are helpers
+   * and must never create a row or contribute cells. */
   const bounds = [];
   for (const m of src.matchAll(/\nexport\s+(function|const|interface|type)\s+([A-Za-z0-9_]+)/g)) {
+    const isHelperFn = (m[1] === "function" || m[1] === "const") && !/^[A-Z]/.test(m[2]);
+    if (isHelperFn) continue;
     bounds.push({ at: m.index, kind: m[1], name: m[2] });
   }
 
@@ -128,6 +147,8 @@ for (const file of files) {
     const end = bounds[i + 1]?.at ?? src.length;
     const section = src.slice(b.at, end);
     const found = {};
+    const foundValues = {};
+    const foundAliases = {};
     /* prop-name then a union of string literals and/or identifiers,
      * or the special form `keyof typeof Record` */
     const re = /(^|[\s,{(])\b([a-z][A-Za-z0-9]*)\??:\s*((?:keyof\s+typeof\s+[A-Za-z_$][\w$]*)|(?:"[^"]+"|[A-Za-z_$][\w$]*)(?:\s*\|\s*(?:"[^"]+"|[A-Za-z_$][\w$]*))*)/g;
@@ -146,6 +167,7 @@ for (const file of files) {
         let ok = true;
         for (const t of tokens) {
           if (t.startsWith('"')) vals.add(t.slice(1, -1));
+          else if (/Alias$/.test(t)) (foundAliases[propName] ??= []).push(t);
           else {
             const a = resolveAlias(file, t);
             if (!a) { ok = false; break; }
@@ -156,9 +178,15 @@ for (const file of files) {
       }
       if (!values || values.length < 2) continue;
       if (axis === "status" && values.filter((v) => STATUS_VALUES.has(v)).length < 2) continue;
-      if (!found[axis] || values.length > found[axis]) found[axis] = values.length;
+      /* Longest union wins, and its values are kept: the count is what the
+         scorecard grades, the values are what `/figma` publishes as the
+         naming contract. One parse, two consumers. */
+      if (!found[axis] || values.length > found[axis].length) {
+        found[axis] = values;
+        foundValues[axis] = [...values].sort((a, b) => a.localeCompare(b));
+      }
     }
-    return found;
+    return { axes: found, values: foundValues, aliases: foundAliases };
   });
 
   /* attribute sections to components */
@@ -168,14 +196,27 @@ for (const file of files) {
     if (!acc.has(name)) acc.set(name, { file: `ui/${file}`, name, axes: {} });
     return acc.get(name);
   };
-  const merge = (row, props) => {
-    for (const [axis, n] of Object.entries(props)) row.axes[axis] = Math.max(row.axes[axis] ?? 0, n);
+  const merge = (row, props, values) => {
+    for (const [axis, list] of Object.entries(props)) {
+      if (!row.axes[axis] || list.length > row.axes[axis]) {
+        row.axes[axis] = list.length;
+        row.values = row.values ?? {};
+        row.values[axis] = values[axis] ?? [];
+      }
+    }
+  };
+  const mergeAliases = (row, aliases) => {
+    for (const [prop, types] of Object.entries(aliases)) {
+      row.aliases = row.aliases ?? {};
+      row.aliases[prop] = [...new Set([...(row.aliases[prop] ?? []), ...types])];
+    }
   };
   bounds.forEach((b, i) => {
-    const props = propsForSection[i];
+    const { axes: props, values: propValues, aliases: propAliases } = propsForSection[i];
     if (Object.keys(props).length === 0) return;
     if (isCompKind(b.kind)) {
-      merge(get(b.name), props);
+      merge(get(b.name), props, propValues);
+      mergeAliases(get(b.name), propAliases);
       return;
     }
     /* interface/type sections: attribute only when clearly the component's
@@ -186,12 +227,13 @@ for (const file of files) {
     const next = bounds.slice(i + 1).find((x) => isCompKind(x.kind));
     if (!next) return;
     const base = b.name.endsWith("Props") ? b.name.slice(0, -5) : b.name;
-    if (b.name.endsWith("Props") && compNames.has(base)) merge(get(base), props);
-    else if (b.name === "Props" || base === next.name) merge(get(next.name), props);
+    if (b.name.endsWith("Props") && compNames.has(base)) { merge(get(base), props, propValues); mergeAliases(get(base), propAliases); }
+    else if (b.name === "Props" || base === next.name) { merge(get(next.name), props, propValues); mergeAliases(get(next.name), propAliases); }
   });
 
   for (const row of acc.values()) {
     row.axes = Object.fromEntries(Object.entries(row.axes).sort((a, b) => a[0].localeCompare(b[0])));
+    if (row.values) row.values = Object.fromEntries(Object.entries(row.values).sort((a, b) => a[0].localeCompare(b[0])));
     const entries = Object.entries(row.axes);
     row.cells = entries.length ? entries.reduce((p, [, n]) => p * n, 1) : 0;
     rows.push(row);
@@ -220,6 +262,24 @@ if (WRITE_BASELINE) {
   console.error(`variant-audit: baseline written to ${WRITE_BASELINE} (total=${total}).`);
 }
 
+/* The committed artifact. Deliberately no timestamp: CI diffs it, and the page
+ * imports it, so a change must mean the components changed. */
+if (OUT) {
+  const payload = JSON.stringify({ total, withAxes, totalComponents: rows.length, rows }, null, 2) + "\n";
+  if (CHECK) {
+    const prev = existsSync(OUT) ? readFileSync(OUT, "utf8") : "";
+    if (prev !== payload) {
+      console.error(`variant-audit: ${OUT} is stale — run \`npm run audit:variants:write\`.`);
+      process.exit(1);
+    }
+    console.error(`variant-audit: ${OUT} up to date (${rows.length} components).`);
+    process.exit(0);
+  }
+  mkdirSync(dirname(OUT), { recursive: true });
+  writeFileSync(OUT, payload);
+  console.error(`variant-audit: wrote ${OUT} (${rows.length} components, ${total} cells).`);
+}
+
 if (MODE === "json") {
   console.log(JSON.stringify({ total, withAxes, totalComponents: rows.length, rows }, null, 2));
   process.exit(0);
@@ -238,4 +298,9 @@ const col = (s, w) => String(s).padEnd(w);
 console.log(col("Component", 24) + col("File", 22) + col("Axes", 34) + "Cells");
 console.log("-".repeat(84));
 for (const r of rows) console.log(col(r.name, 24) + col(r.file, 22) + col(axesOf(r), 34) + r.cells);
+const aliased = rows.filter((r) => r.aliases && Object.keys(r.aliases).length);
+if (aliased.length) {
+  console.log("\nAlias layer (ergonomics, not counted as cells — QUALITY-SPEC §3.3):");
+  for (const r of aliased) console.log("  " + col(r.name, 24) + Object.entries(r.aliases).map(([p, t]) => `${p}: ${t.join("|")}`).join(", "));
+}
 console.log(`\n${rows.length} components · ${withAxes} with axes · **${total} meaningful variant cells**`);

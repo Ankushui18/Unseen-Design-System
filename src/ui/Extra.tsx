@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ButtonHTMLAttributes, type ReactNode, type Ref } from "react";
 import { cn } from "../utils/cn";
 import type { Tone } from "./Button";
 import { RiArrowLeftSLine, RiArrowRightSLine, RiCheckLine, RiCheckboxCircleLine, RiCloseCircleLine, RiCloseLine, RiErrorWarningLine, RiInformationLine } from "@remixicon/react";
@@ -6,6 +6,7 @@ import { RiArrowLeftSLine, RiArrowRightSLine, RiCheckLine, RiCheckboxCircleLine,
 /* ------------------------------ Compact Button ----------------------------- */
 
 export function CompactButton({
+  ref,
   variant = "stroke",
   tone,
   size = "md",
@@ -13,7 +14,7 @@ export function CompactButton({
   className,
   children,
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "stroke" | "ghost" | "white"; tone?: Tone; size?: "sm" | "md" | "lg"; fullRadius?: boolean }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "stroke" | "ghost" | "white"; tone?: Tone; size?: "sm" | "md" | "lg"; fullRadius?: boolean } & { ref?: Ref<HTMLButtonElement> }) {
   const s = { sm: "h-5 w-5 [&_svg]:h-3.5 [&_svg]:w-3.5", md: "h-6 w-6 [&_svg]:h-4 [&_svg]:w-4", lg: "h-7 w-7 [&_svg]:h-[18px] [&_svg]:w-[18px]" }[size];
   const v = {
     stroke: "bg-surface text-muted ring-1 ring-inset ring-border shadow-xs hover:bg-surface-hover hover:text-foreground",
@@ -22,7 +23,7 @@ export function CompactButton({
   }[variant];
   const t = tone ? { accent: "text-accent hover:text-accent hover:ring-accent", default: "", success: "text-success hover:text-success hover:ring-accent", warning: "text-warning hover:text-warning hover:ring-neutral-900", danger: "text-danger hover:text-danger hover:ring-danger" }[tone] : "";
   return (
-    <button
+    <button ref={ref}
       className={cn("inline-flex shrink-0 items-center justify-center transition-all outline-none focus-visible:shadow-ring-neutral disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)]", fullRadius ? "rounded-full" : "rounded-6", s, v, t, className)}
       {...props}
     >
@@ -34,6 +35,7 @@ export function CompactButton({
 /* -------------------------------- Link Button ------------------------------ */
 
 export function LinkButton({
+  ref,
   variant = "gray",
   tone,
   size = "md",
@@ -43,7 +45,7 @@ export function LinkButton({
   startContent,
   endContent,
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "gray" | "black" | "primary" | "error"; tone?: Tone; size?: "sm" | "md" | "lg"; underline?: boolean; startContent?: ReactNode; endContent?: ReactNode }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "gray" | "black" | "primary" | "error"; tone?: Tone; size?: "sm" | "md" | "lg"; underline?: boolean; startContent?: ReactNode; endContent?: ReactNode } & { ref?: Ref<HTMLButtonElement> }) {
   const v = {
     gray: "text-muted hover:text-foreground",
     black: "text-foreground hover:text-muted",
@@ -54,7 +56,7 @@ export function LinkButton({
   const t = tone ? { accent: "text-accent hover:text-accent-hover", default: "text-muted hover:text-foreground", success: "text-success hover:text-success", warning: "text-warning hover:text-warning", danger: "text-danger hover:text-danger-hover" }[tone] : "";
   const s = { sm: "text-label-xs [&_svg]:h-4 [&_svg]:w-4", md: "text-label-sm [&_svg]:h-5 [&_svg]:w-5", lg: "text-label-md [&_svg]:h-5 [&_svg]:w-5" }[size];
   return (
-    <button
+    <button ref={ref}
       className={cn(
         "inline-flex items-center gap-1 transition-colors outline-none focus-visible:rounded-6 focus-visible:shadow-ring-neutral disabled:pointer-events-none disabled:text-disabled",
         s,
@@ -151,6 +153,7 @@ const brandStyles = {
 };
 
 export function SocialButton({
+  ref,
   brand,
   mode = "brand",
   size = "md",
@@ -158,12 +161,12 @@ export function SocialButton({
   className,
   children,
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { brand: keyof typeof Brand; mode?: "brand" | "stroke"; size?: "sm" | "md" | "lg"; iconOnly?: boolean }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & { brand: keyof typeof Brand; mode?: "brand" | "stroke"; size?: "sm" | "md" | "lg"; iconOnly?: boolean } & { ref?: Ref<HTMLButtonElement> }) {
   const s = { sm: "h-8 px-2.5 text-label-sm gap-2 rounded-8", md: "h-10 px-3.5 text-label-sm gap-2.5 rounded-10", lg: "h-12 px-4 text-label-md gap-3 rounded-12" }[size];
   const w = { sm: "w-8", md: "w-10", lg: "w-12" }[size];
   const v = mode === "brand" ? brandStyles[brand].brand : "bg-surface text-foreground ring-1 ring-inset ring-border shadow-xs hover:bg-surface-hover";
   return (
-    <button aria-label={iconOnly ? `Continue with ${brand === "x" ? "X" : brand[0].toUpperCase() + brand.slice(1)}` : undefined} className={cn("inline-flex shrink-0 items-center justify-center transition-all outline-none focus-visible:shadow-ring-neutral", s, iconOnly && cn(w, "px-0"), v, className)} {...props}>
+    <button ref={ref} aria-label={iconOnly ? `Continue with ${brand === "x" ? "X" : brand[0].toUpperCase() + brand.slice(1)}` : undefined} className={cn("inline-flex shrink-0 items-center justify-center transition-all outline-none focus-visible:shadow-ring-neutral", s, iconOnly && cn(w, "px-0"), v, className)} {...props}>
       {Brand[brand]}
       {!iconOnly && children}
     </button>
@@ -173,6 +176,7 @@ export function SocialButton({
 /* ------------------------------ Status Badge ------------------------------- */
 
 export function StatusBadge({
+  ref,
   children,
   status = "completed",
   variant = "stroke",
@@ -184,11 +188,12 @@ export function StatusBadge({
   variant?: "stroke" | "light";
   size?: "sm" | "md";
   className?: string;
+  ref?: Ref<HTMLSpanElement>;
 }) {
   const dot = { completed: "bg-success", pending: "bg-warning", failed: "bg-danger", disabled: "bg-subtle", info: "bg-accent" }[status];
   const light = { completed: "bg-success-soft text-success-soft-foreground", pending: "bg-warning-soft text-warning-soft-foreground", failed: "bg-danger-soft text-danger-soft-foreground", disabled: "bg-default text-muted", info: "bg-accent-soft text-accent-soft-foreground" }[status];
   return (
-    <span className={cn("inline-flex items-center gap-1.5 rounded-6 whitespace-nowrap", size === "sm" ? "h-5 px-1.5 text-label-xs" : "h-6 px-2 text-label-xs", variant === "stroke" ? "bg-surface text-muted ring-1 ring-inset ring-border" : light, className)}>
+    <span ref={ref} className={cn("inline-flex items-center gap-1.5 rounded-6 whitespace-nowrap", size === "sm" ? "h-5 px-1.5 text-label-xs" : "h-6 px-2 text-label-xs", variant === "stroke" ? "bg-surface text-muted ring-1 ring-inset ring-border" : light, className)}>
       <span className={cn("h-1.5 w-1.5 rounded-full", dot)} />
       {children}
     </span>
@@ -198,6 +203,7 @@ export function StatusBadge({
 /* ----------------------------------- Tag ----------------------------------- */
 
 export function Tag({
+  ref,
   children,
   variant = "stroke",
   tone,
@@ -215,12 +221,13 @@ export function Tag({
   startContent?: ReactNode;
   active?: boolean;
   className?: string;
+  ref?: Ref<HTMLSpanElement>;
 }) {
   const h = { sm: "h-5 rounded-4 px-1.5 text-[11px]", md: "h-6 rounded-6 px-2 text-label-xs", lg: "h-7 rounded-8 px-2.5 text-label-xs" }[size];
   /* tone colours the hairline variant; the gray (filled neutral) variant stays neutral. */
   const t = tone && variant === "stroke" ? { accent: "text-accent ring-accent/30 hover:ring-accent/50", default: "", success: "text-success ring-success/30 hover:ring-success/50", warning: "text-warning ring-warning/30 hover:ring-warning/50", danger: "text-danger ring-danger/30 hover:ring-danger/50" }[tone] : "";
   return (
-    <span
+    <span ref={ref}
       className={cn(
         "inline-flex items-center gap-1.5 transition-colors",
         h,
@@ -268,7 +275,7 @@ export function SegmentedControl<T extends string>({
     <div ref={ref} role="tablist" className={cn("relative inline-flex items-center rounded-10 bg-surface-secondary p-1 ring-1 ring-inset ring-border", fullWidth && "flex w-full", className)}>
       {ind && (
         <span
-          className="absolute top-1 bottom-1 rounded-8 bg-surface shadow-toggle ring-1 ring-border/60 transition-all duration-300 ease-out-quint"
+          className="absolute top-1 bottom-1 rounded-8 bg-surface shadow-toggle ring-1 ring-border/60 transition-all duration-[var(--duration-slow)] ease-out-quint"
           style={{ left: ind.left, width: ind.width }}
         />
       )}
@@ -318,9 +325,9 @@ function StepIcon({ i, state }: { i: number; state: "done" | "active" | "todo" }
   );
 }
 
-export function HorizontalStepper({ steps, current, className }: { steps: Step[]; current: number; className?: string }) {
+export function HorizontalStepper({ ref, steps, current, className }: { steps: Step[]; current: number; className?: string ; ref?: Ref<HTMLOListElement> }) {
   return (
-    <ol className={cn("horizontal-stepper", className)}>
+    <ol ref={ref} className={cn("horizontal-stepper", className)}>
       {steps.map((s, i) => {
         const state = i < current ? "done" : i === current ? "active" : "todo";
         return (
@@ -340,9 +347,9 @@ export function HorizontalStepper({ steps, current, className }: { steps: Step[]
   );
 }
 
-export function VerticalStepper({ steps, current, className }: { steps: Step[]; current: number; className?: string }) {
+export function VerticalStepper({ ref, steps, current, className }: { steps: Step[]; current: number; className?: string ; ref?: Ref<HTMLOListElement> }) {
   return (
-    <ol className={cn("flex flex-col", className)}>
+    <ol ref={ref} className={cn("flex flex-col", className)}>
       {steps.map((s, i) => {
         const state = i < current ? "done" : i === current ? "active" : "todo";
         return (
@@ -362,16 +369,16 @@ export function VerticalStepper({ steps, current, className }: { steps: Step[]; 
   );
 }
 
-export function DotStepper({ count, current, onChange, className }: { count: number; current: number; onChange?: (i: number) => void; className?: string }) {
+export function DotStepper({ ref, count, current, onChange, className }: { count: number; current: number; onChange?: (i: number) => void; className?: string ; ref?: Ref<HTMLDivElement> }) {
   return (
-    <div className={cn("inline-flex items-center gap-1.5", className)} role="tablist">
+    <div ref={ref} className={cn("inline-flex items-center gap-1.5", className)} role="tablist">
       {Array.from({ length: count }).map((_, i) => (
         <button
           key={i}
           role="tab"
           aria-selected={i === current}
           onClick={() => onChange?.(i)}
-          className={cn("h-1.5 rounded-full transition-all duration-300 ease-out-quint", i === current ? "w-6 bg-foreground" : "w-1.5 bg-neutral-300 hover:bg-neutral-400 dark:bg-neutral-700")}
+          className={cn("h-1.5 rounded-full transition-all duration-[var(--duration-slow)] ease-out-quint", i === current ? "w-6 bg-foreground" : "w-1.5 bg-neutral-300 hover:bg-neutral-400 dark:bg-neutral-700")}
           aria-label={`Step ${i + 1}`}
         />
       ))}
@@ -381,7 +388,7 @@ export function DotStepper({ count, current, onChange, className }: { count: num
 
 /* -------------------------------- Digit Input ------------------------------ */
 
-export function DigitInput({ length = 4, value, onChange, error, size = "md", className }: { length?: number; value: string; onChange: (v: string) => void; error?: boolean; size?: "sm" | "md" | "lg"; className?: string }) {
+export function DigitInput({ ref, length = 4, value, onChange, error, size = "md", className }: { length?: number; value: string; onChange: (v: string) => void; error?: boolean; size?: "sm" | "md" | "lg"; className?: string ; ref?: Ref<HTMLDivElement> }) {
   const refs = useRef<(HTMLInputElement | null)[]>([]);
   const digits = useMemo(() => Array.from({ length }, (_, i) => value[i] ?? ""), [value, length]);
   const cell = {
@@ -395,7 +402,7 @@ export function DigitInput({ length = 4, value, onChange, error, size = "md", cl
     onChange(next.join(""));
   };
   return (
-    <div className={cn("digit-input-group", className)}>
+    <div ref={ref} className={cn("digit-input-group", className)}>
       {digits.map((d, i) => (
         <input
           key={i}
@@ -436,7 +443,7 @@ export function DigitInput({ length = 4, value, onChange, error, size = "md", cl
 const DAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-export function Datepicker({ value, onChange, size = "md", className }: { value: Date | null; onChange: (d: Date) => void; size?: "sm" | "md"; className?: string }) {
+export function Datepicker({ ref, value, onChange, size = "md", className }: { value: Date | null; onChange: (d: Date) => void; size?: "sm" | "md"; className?: string ; ref?: Ref<HTMLDivElement> }) {
   const [view, setView] = useState(() => new Date((value ?? new Date()).getFullYear(), (value ?? new Date()).getMonth(), 1));
   const dp = size === "sm" ? { box: "max-w-[280px] rounded-12 p-3", day: "h-8 max-w-8 text-paragraph-xs" } : { box: "max-w-[320px] rounded-14 p-4", day: "h-9 max-w-9 text-paragraph-sm" };
   const today = new Date();
@@ -451,7 +458,7 @@ export function Datepicker({ value, onChange, size = "md", className }: { value:
   const same = (a: Date | null, y: number, m: number, d: number) => !!a && a.getFullYear() === y && a.getMonth() === m && a.getDate() === d;
 
   return (
-    <div className={cn("w-full bg-surface ring-1 ring-border shadow-sm", dp.box, className)}>
+    <div ref={ref} className={cn("w-full bg-surface ring-1 ring-border shadow-sm", dp.box, className)}>
       <div className="flex items-center justify-between">
         <CompactButton variant="stroke" size={size === "sm" ? "sm" : "md"} onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))} aria-label="Previous month"><RiArrowLeftSLine /></CompactButton>
         <p className={cn("text-foreground", size === "sm" ? "text-label-xs" : "text-label-sm")}>{MONTHS[view.getMonth()]} {view.getFullYear()}</p>
@@ -496,11 +503,11 @@ const FORMAT_COLORS: Record<string, string> = {
   png: "#7d52f4", jpg: "#7d52f4", jpeg: "#7d52f4", svg: "#f6b51e", gif: "#f6b51e", mp4: "#e255f2", mp3: "#47c2ff", zip: "#717784", txt: "#99a0ae", fig: "#a259ff", json: "#f6b51e", ts: "#3178c6", tsx: "#3178c6",
 };
 
-export function FileFormatIcon({ format, size = 40, className }: { format: string; size?: number; className?: string }) {
+export function FileFormatIcon({ ref, format, size = 40, className }: { format: string; size?: number; className?: string ; ref?: Ref<HTMLSpanElement> }) {
   const color = FORMAT_COLORS[format.toLowerCase()] ?? "#99a0ae";
   const h = size * 1.25;
   return (
-    <span className={cn("relative inline-flex shrink-0", className)} style={{ width: size, height: h }}>
+    <span ref={ref} className={cn("relative inline-flex shrink-0", className)} style={{ width: size, height: h }}>
       <svg width={size} height={h} viewBox="0 0 32 40" aria-hidden>
         <path d="M4 0h16l12 12v24a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4Z" fill="var(--surface)" stroke="var(--border)" strokeWidth="1" />
         <path d="M20 0v8a4 4 0 0 0 4 4h8L20 0Z" fill="var(--surface-tertiary)" />
@@ -521,6 +528,7 @@ export function FileFormatIcon({ format, size = 40, className }: { format: strin
 const notifIcon = { accent: RiInformationLine, default: RiInformationLine, success: RiCheckboxCircleLine, warning: RiErrorWarningLine, danger: RiCloseCircleLine };
 
 export function Notification({
+  ref,
   title,
   description,
   tone = "default",
@@ -538,13 +546,14 @@ export function Notification({
   actions?: ReactNode;
   onClose?: () => void;
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }) {
   const Icon = notifIcon[tone];
   const color = { accent: "text-accent", default: "text-muted", success: "text-success", warning: "text-warning", danger: "text-danger" }[tone];
   const light = { accent: "bg-accent-soft text-accent-soft-foreground", default: "bg-default text-foreground", success: "bg-success-soft text-success-soft-foreground", warning: "bg-warning-soft text-warning-soft-foreground", danger: "bg-danger-soft text-danger-soft-foreground" }[tone];
   const filled = { accent: "bg-accent text-accent-foreground", default: "bg-neutral-950 text-white dark:bg-neutral-200 dark:text-neutral-950", success: "bg-success text-white", warning: "bg-warning text-neutral-950", danger: "bg-danger text-white" }[tone];
   return (
-    <div className={cn("flex w-full items-start", size === "sm" ? "max-w-[320px] gap-2.5 rounded-12 p-3" : "max-w-[400px] gap-3 rounded-14 p-4", variant === "stroke" && "bg-surface ring-1 ring-border shadow-lg", variant === "light" && light, variant === "filled" && filled, className)} role="status">
+    <div ref={ref} className={cn("flex w-full items-start", size === "sm" ? "max-w-[320px] gap-2.5 rounded-12 p-3" : "max-w-[400px] gap-3 rounded-14 p-4", variant === "stroke" && "bg-surface ring-1 ring-border shadow-lg", variant === "light" && light, variant === "filled" && filled, className)} role="status">
       <Icon className={cn(size === "sm" ? "mt-px h-4 w-4" : "mt-px h-5 w-5", "shrink-0", variant === "stroke" && color)} />
       <div className="min-w-0 flex-1">
         <p className="text-label-sm">{title}</p>
@@ -562,12 +571,12 @@ export function Notification({
 
 /* ---------------------------------- Banner --------------------------------- */
 
-export function Banner({ children, tone = "accent", variant = "filled", action, onClose, className }: { children: ReactNode; tone?: Tone; variant?: "filled" | "light" | "stroke"; action?: ReactNode; onClose?: () => void; className?: string }) {
+export function Banner({ ref, children, tone = "accent", variant = "filled", action, onClose, className }: { children: ReactNode; tone?: Tone; variant?: "filled" | "light" | "stroke"; action?: ReactNode; onClose?: () => void; className?: string ; ref?: Ref<HTMLDivElement> }) {
   const Icon = notifIcon[tone];
   const filled = { accent: "bg-accent text-accent-foreground", default: "bg-neutral-950 text-white", success: "bg-success text-white", warning: "bg-warning text-neutral-950", danger: "bg-danger text-white" }[tone];
   const light = { accent: "bg-accent-soft text-accent-soft-foreground", default: "bg-default text-foreground", success: "bg-success-soft text-success-soft-foreground", warning: "bg-warning-soft text-warning-soft-foreground", danger: "bg-danger-soft text-danger-soft-foreground" }[tone];
   return (
-    <div className={cn("flex w-full items-center gap-3 px-4 py-2.5 text-paragraph-sm", variant === "filled" && filled, variant === "light" && light, variant === "stroke" && "bg-surface text-foreground ring-1 ring-border", className)}>
+    <div ref={ref} className={cn("flex w-full items-center gap-3 px-4 py-2.5 text-paragraph-sm", variant === "filled" && filled, variant === "light" && light, variant === "stroke" && "bg-surface text-foreground ring-1 ring-border", className)}>
       <Icon className="h-5 w-5 shrink-0" />
       <div className="flex-1">{children}</div>
       {action}
@@ -578,9 +587,9 @@ export function Banner({ children, tone = "accent", variant = "filled", action, 
 
 /* ------------------------------- Label + Hint ------------------------------ */
 
-export function Label({ children, required, optional, sub, htmlFor, className }: { children: ReactNode; required?: boolean; optional?: boolean; sub?: ReactNode; htmlFor?: string; className?: string }) {
+export function Label({ ref, children, required, optional, sub, htmlFor, className }: { children: ReactNode; required?: boolean; optional?: boolean; sub?: ReactNode; htmlFor?: string; className?: string ; ref?: Ref<HTMLLabelElement> }) {
   return (
-    <label htmlFor={htmlFor} className={cn("inline-flex items-center gap-1 text-label-sm text-foreground", className)}>
+    <label ref={ref} htmlFor={htmlFor} className={cn("inline-flex items-center gap-1 text-label-sm text-foreground", className)}>
       {children}
       {required && <span className="text-accent">*</span>}
       {optional && <span className="text-paragraph-sm text-subtle">(Optional)</span>}
@@ -589,10 +598,10 @@ export function Label({ children, required, optional, sub, htmlFor, className }:
   );
 }
 
-export function Hint({ children, tone = "default", className }: { children: ReactNode; tone?: "default" | "error" | "success"; className?: string }) {
+export function Hint({ ref, children, tone = "default", className }: { children: ReactNode; tone?: "default" | "error" | "success"; className?: string ; ref?: Ref<HTMLParagraphElement> }) {
   const Icon = tone === "error" ? RiCloseCircleLine : tone === "success" ? RiCheckboxCircleLine : RiInformationLine;
   return (
-    <p className={cn("flex items-center gap-1 text-paragraph-xs", tone === "error" ? "text-danger" : tone === "success" ? "text-success-soft-foreground" : "text-subtle", className)}>
+    <p ref={ref} className={cn("flex items-center gap-1 text-paragraph-xs", tone === "error" ? "text-danger" : tone === "success" ? "text-success-soft-foreground" : "text-subtle", className)}>
       <Icon className="h-4 w-4" />
       {children}
     </p>

@@ -530,7 +530,7 @@ export function PopoverDoc() {
         eyebrow="Components · Overlays"
         title="Popover"
         description="Popover is used to bring attention to specific user interface elements. Anchored to a trigger with customizable alignment, arrows, dismiss actions, and full keyboard navigation."
-        tags={["Anchored", "Arrow", "Outside click", "AlignUI Parity"]}
+        tags={["Anchored", "Arrow", "Outside click", "Focus managed"]}
       />
       <Import names="Popover" />
 
@@ -623,7 +623,7 @@ export function PopoverDoc() {
           { name: "className", type: "string", description: "Custom classes applied to the floating card layer." },
         ]} />
         <Callout>
-          Based on AlignUI v1.2 specifications and Radix UI Popover primitive ergonomics with OKLCH semantic token alignment.
+          Anchored overlay built on the same focus, dismissal and OKLCH token rules as the rest of the system.
         </Callout>
       </Section>
     </>

@@ -25,23 +25,11 @@ export function BlocksPage() {
   return (
     <main id="main" className="blocks-page" tabIndex={-1}>
       <div className="home-container">
-        {/* AlignUI Blueprint Top Ruler */}
-        <div className="blueprint-ruler-top mb-6 rounded-8 border border-border">
-          <span>000</span>
-          <span>100</span>
-          <span>200</span>
-          <span>300</span>
-          <span>400</span>
-          <span>500</span>
-          <span>600</span>
-          <span>700</span>
-        </div>
-
         <PageHeader
           eyebrow="Composed Blocks · React 19 & Tailwind CSS v4"
           title="Start with a pattern. Make it your own."
           description={`${BLOCKS.length} production-grade composed patterns built exclusively from Unseen primitives. Inspect the code, interact with the preview, and copy straight into your app.`}
-          tags={[`${BLOCKS.length} Composed Blocks`, "Zero runtime lock-in", "100% Free & Unlocked"]}
+          tags={[`${BLOCKS.length} Composed Blocks`, "Zero runtime lock-in", "MIT licensed"]}
         />
 
         {/* Category Filters & Search Bar */}
@@ -117,7 +105,7 @@ export function BlocksPage() {
               key={block.key}
               className={cn("block-collection-cell", block.span && block.span > 1 && "is-wide")}
             >
-              <BlockExample block={block} />
+              <BlockExample block={block} blockHref={`blocks/${block.key}`} />
             </div>
           ))}
         </div>

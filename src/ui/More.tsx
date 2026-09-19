@@ -1,4 +1,4 @@
-import { useId, useState, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from "react";
+import { useId, useState, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes, type Ref } from "react";
 import {
   RiAddLine,
   RiArrowDownSLine,
@@ -92,6 +92,7 @@ export function Dropdown({
 /* ----------------------------- Vertical Tab Menu --------------------------- */
 
 export function VerticalTabMenu<T extends string>({
+  ref,
   items,
   value,
   onChange,
@@ -101,9 +102,10 @@ export function VerticalTabMenu<T extends string>({
   value: T;
   onChange: (v: T) => void;
   className?: string;
+  ref?: Ref<HTMLElement>;
 }) {
   return (
-    <nav className={cn("flex w-full max-w-[240px] flex-col gap-0.5", className)}>
+    <nav ref={ref} className={cn("flex w-full max-w-[240px] flex-col gap-0.5", className)}>
       {items.map((it) => {
         const active = it.value === value;
         return (
@@ -150,6 +152,7 @@ export function ContentDivider({ children, variant = "text", count, className }:
 /* ------------------------------ Selection Card ----------------------------- */
 
 export function SelectionCard({
+  ref,
   type = "checkbox",
   checked,
   onChange,
@@ -171,10 +174,11 @@ export function SelectionCard({
   variant?: "card" | "inline";
   disabled?: boolean;
   className?: string;
+  ref?: Ref<HTMLLabelElement>;
 }) {
   const card = variant === "card";
   return (
-    <label
+    <label ref={ref}
       className={cn(
         "group flex cursor-pointer items-start transition-all",
         card ? "gap-3.5 rounded-14 bg-surface p-4" : "gap-3 rounded-8 bg-transparent p-2.5",
@@ -211,13 +215,13 @@ export function SelectionCard({
 
 /* ---------------------------------- Rating --------------------------------- */
 
-export function Rating({ value, onChange, max = 5, size = "md", tone = "default", readOnly, className }: { value: number; onChange?: (v: number) => void; max?: number; size?: "sm" | "md" | "lg"; tone?: "default" | "accent" | "danger"; readOnly?: boolean; className?: string }) {
+export function Rating({ ref, value, onChange, max = 5, size = "md", tone = "default", readOnly, className }: { value: number; onChange?: (v: number) => void; max?: number; size?: "sm" | "md" | "lg"; tone?: "default" | "accent" | "danger"; readOnly?: boolean; className?: string ; ref?: Ref<HTMLDivElement> }) {
   const [hover, setHover] = useState(0);
   const px = { sm: 16, md: 20, lg: 28 }[size];
   const filled = { default: "text-warning", accent: "text-accent", danger: "text-danger" }[tone];
   const shown = hover || value;
   return (
-    <div className={cn("inline-flex items-center gap-0.5", className)} onMouseLeave={() => setHover(0)} role={readOnly ? "img" : "radiogroup"} aria-label={`${value} of ${max} stars`}>
+    <div ref={ref} className={cn("inline-flex items-center gap-0.5", className)} onMouseLeave={() => setHover(0)} role={readOnly ? "img" : "radiogroup"} aria-label={`${value} of ${max} stars`}>
       {Array.from({ length: max }).map((_, i) => (
         <button
           key={i}
@@ -237,12 +241,12 @@ export function Rating({ value, onChange, max = 5, size = "md", tone = "default"
 
 /* ------------------------------- Number Input ------------------------------ */
 
-export function NumberInput({ value, onChange, min = -Infinity, max = Infinity, step = 1, label, suffix, size = "md", className }: { value: number; onChange: (v: number) => void; min?: number; max?: number; step?: number; label?: string; suffix?: string; size?: "sm" | "md" | "lg"; className?: string }) {
+export function NumberInput({ ref, value, onChange, min = -Infinity, max = Infinity, step = 1, label, suffix, size = "md", className }: { value: number; onChange: (v: number) => void; min?: number; max?: number; step?: number; label?: string; suffix?: string; size?: "sm" | "md" | "lg"; className?: string ; ref?: Ref<HTMLDivElement> }) {
   const id = useId();
   const clamp = (n: number) => Math.min(max, Math.max(min, n));
   const h = { sm: "h-8 rounded-8", md: "h-10 rounded-10", lg: "h-12 rounded-12" }[size];
   return (
-    <div className={cn("flex flex-col gap-1.5", className)}>
+    <div ref={ref} className={cn("flex flex-col gap-1.5", className)}>
       {label && <label htmlFor={id} className="text-label-sm text-foreground">{label}</label>}
       <div className={cn("inline-flex items-stretch overflow-hidden rounded-10 bg-field shadow-xs ring-1 ring-inset ring-border transition-all focus-within:ring-foreground focus-within:shadow-ring-neutral", h)}>
         <button type="button" onClick={() => onChange(clamp(value - step))} disabled={value <= min} className="flex w-10 items-center justify-center border-r border-border text-muted transition-colors hover:bg-surface-hover hover:text-foreground disabled:pointer-events-none disabled:text-disabled" aria-label="Decrease"><RiSubtractLine size={18} /></button>
@@ -258,10 +262,10 @@ export function NumberInput({ value, onChange, min = -Infinity, max = Infinity, 
 
 /* ------------------------------- Search Input ------------------------------ */
 
-export function SearchInput({ value, onChange, placeholder = "Search…", shortcut, size = "md", className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "onChange" | "value"> & { value: string; onChange: (v: string) => void; shortcut?: string; size?: "sm" | "md" | "lg" }) {
+export function SearchInput({ ref, value, onChange, placeholder = "Search…", shortcut, size = "md", className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "onChange" | "value"> & { value: string; onChange: (v: string) => void; shortcut?: string; size?: "sm" | "md" | "lg" } & { ref?: Ref<HTMLDivElement> }) {
   const h = { sm: "h-8 px-2.5", md: "h-10 px-3", lg: "h-12 px-3.5" }[size];
   return (
-    <div className={cn("group flex items-center gap-2 rounded-10 bg-field shadow-xs ring-1 ring-inset ring-border transition-all hover:bg-field-hover hover:ring-border-strong focus-within:bg-field-focus focus-within:ring-foreground focus-within:shadow-ring-neutral", h, className)}>
+    <div ref={ref} className={cn("group flex items-center gap-2 rounded-10 bg-field shadow-xs ring-1 ring-inset ring-border transition-all hover:bg-field-hover hover:ring-border-strong focus-within:bg-field-focus focus-within:ring-foreground focus-within:shadow-ring-neutral", h, className)}>
       <RiSearchLine size={20} className="shrink-0 text-subtle group-focus-within:text-muted" />
       <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="min-w-0 flex-1 bg-transparent text-paragraph-sm text-foreground outline-none placeholder:text-field-placeholder" {...props} />
       {value ? (
@@ -275,11 +279,11 @@ export function SearchInput({ value, onChange, placeholder = "Search…", shortc
 
 /* --------------------------- Textarea with counter ------------------------- */
 
-export function TextareaCounter({ label, maxLength = 200, value, onChange, hint, className, ...props }: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "onChange" | "value"> & { label?: string; value: string; onChange: (v: string) => void; hint?: ReactNode }) {
+export function TextareaCounter({ ref, label, maxLength = 200, value, onChange, hint, className, ...props }: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "onChange" | "value"> & { label?: string; value: string; onChange: (v: string) => void; hint?: ReactNode } & { ref?: Ref<HTMLDivElement> }) {
   const id = useId();
   const over = value.length > maxLength;
   return (
-    <div className={cn("flex w-full flex-col gap-1.5", className)}>
+    <div ref={ref} className={cn("flex w-full flex-col gap-1.5", className)}>
       {label && <label htmlFor={id} className="text-label-sm text-foreground">{label}</label>}
       <div className={cn("rounded-10 bg-field shadow-xs ring-1 ring-inset ring-border transition-all hover:bg-field-hover hover:ring-border-strong focus-within:bg-field-focus focus-within:ring-foreground focus-within:shadow-ring-neutral", over && "ring-danger focus-within:ring-danger focus-within:shadow-ring-danger")}>
         <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} rows={3} className="ds-scroll w-full resize-none bg-transparent px-3 pt-2.5 text-paragraph-sm text-foreground outline-none placeholder:text-field-placeholder" {...props} />
@@ -294,14 +298,14 @@ export function TextareaCounter({ label, maxLength = 200, value, onChange, hint,
 
 /* -------------------------------- Toggle Group ----------------------------- */
 
-export function ToggleGroup<T extends string>({ items, value, onChange, multiple, variant = "filled", size = "md", className }: { items: { value: T; icon: ReactNode; label?: string }[]; value: T[]; onChange: (v: T[]) => void; multiple?: boolean; variant?: "filled" | "outline"; size?: "sm" | "md"; className?: string }) {
+export function ToggleGroup<T extends string>({ ref, items, value, onChange, multiple, variant = "filled", size = "md", className }: { items: { value: T; icon: ReactNode; label?: string }[]; value: T[]; onChange: (v: T[]) => void; multiple?: boolean; variant?: "filled" | "outline"; size?: "sm" | "md"; className?: string ; ref?: Ref<HTMLDivElement> }) {
   const toggle = (v: T) => {
     if (multiple) onChange(value.includes(v) ? value.filter((x) => x !== v) : [...value, v]);
     else onChange(value.includes(v) ? [] : [v]);
   };
   const groupCls = variant === "outline" ? "rounded-10 ring-1 ring-inset ring-border" : "rounded-10 bg-surface shadow-fancy-stroke";
   return (
-    <div className={cn("inline-flex items-center", groupCls, className)} role="group">
+    <div ref={ref} className={cn("inline-flex items-center", groupCls, className)} role="group">
       {items.map((it, i) => {
         const on = value.includes(it.value);
         return (
@@ -328,11 +332,11 @@ export function ToggleGroup<T extends string>({ items, value, onChange, multiple
 
 /* -------------------------------- Widget Box ------------------------------- */
 
-export function WidgetBox({ icon, title, action, children, footer, density = "comfortable", className }: { icon?: ReactNode; title: ReactNode; action?: ReactNode; children: ReactNode; footer?: ReactNode; density?: "comfortable" | "compact"; className?: string }) {
+export function WidgetBox({ ref, icon, title, action, children, footer, density = "comfortable", className }: { icon?: ReactNode; title: ReactNode; action?: ReactNode; children: ReactNode; footer?: ReactNode; density?: "comfortable" | "compact"; className?: string ; ref?: Ref<HTMLElement> }) {
   const pad = { comfortable: "px-5", compact: "px-4" }[density];
   const head = { comfortable: "py-4", compact: "py-2.5" }[density];
   return (
-    <section className={cn("flex flex-col bg-surface ring-1 ring-border shadow-xs", density === "comfortable" ? "rounded-20" : "rounded-14", className)}>
+    <section ref={ref} className={cn("flex flex-col bg-surface ring-1 ring-border shadow-xs", density === "comfortable" ? "rounded-20" : "rounded-14", className)}>
       <header className={cn("flex items-center gap-2.5", pad, head)}>
         {icon && <span className="text-muted [&_svg]:h-5 [&_svg]:w-5">{icon}</span>}
         <h3 className="flex-1 text-label-sm text-foreground">{title}</h3>
@@ -349,14 +353,14 @@ export function WidgetBox({ icon, title, action, children, footer, density = "co
 
 const SWATCHES = ["#335CFF", "#7D52F4", "#E255F2", "#FB3748", "#FF8447", "#F6B51E", "#1FC16B", "#22D3BB", "#47C2FF", "#525866", "#0E121B", "#FFFFFF"];
 
-export function ColorPicker({ value, onChange, className }: { value: string; onChange: (hex: string) => void; className?: string }) {
+export function ColorPicker({ ref, value, onChange, className }: { value: string; onChange: (hex: string) => void; className?: string ; ref?: Ref<HTMLDivElement> }) {
   const [hex, setHex] = useState(value);
   const commit = (v: string) => {
     setHex(v);
     if (/^#[0-9a-f]{6}$/i.test(v)) onChange(v.toUpperCase());
   };
   return (
-    <div className={cn("w-64 rounded-20 bg-surface p-4 ring-1 ring-border shadow-lg", className)}>
+    <div ref={ref} className={cn("w-64 rounded-20 bg-surface p-4 ring-1 ring-border shadow-lg", className)}>
       <div className="grid grid-cols-6 gap-2">
         {SWATCHES.map((c) => (
           <button
@@ -383,10 +387,10 @@ export function ColorPicker({ value, onChange, className }: { value: string; onC
 
 /* --------------------------------- Timeline -------------------------------- */
 
-export function Timeline({ items, className }: { items: { time: string; title: ReactNode; description?: ReactNode; tone?: Tone; icon?: ReactNode }[]; className?: string }) {
+export function Timeline({ ref, items, className }: { items: { time: string; title: ReactNode; description?: ReactNode; tone?: Tone; icon?: ReactNode }[]; className?: string ; ref?: Ref<HTMLOListElement> }) {
   const dot = { accent: "bg-accent", default: "bg-neutral-400", success: "bg-success", warning: "bg-warning", danger: "bg-danger" };
   return (
-    <ol className={cn("flex flex-col", className)}>
+    <ol ref={ref} className={cn("flex flex-col", className)}>
       {items.map((it, i) => (
         <li key={i} className="flex gap-4">
           <div className="flex flex-col items-center">
@@ -406,7 +410,7 @@ export function Timeline({ items, className }: { items: { time: string; title: R
 
 /* -------------------------------- Empty State ------------------------------ */
 
-export function EmptyState({ icon, title, description, actions, variant = "default", className }: { icon: ReactNode; title: ReactNode; description?: ReactNode; actions?: ReactNode; variant?: "default" | "minimal" | "cta"; className?: string }) {
+export function EmptyState({ ref, icon, title, description, actions, variant = "default", className }: { icon: ReactNode; title: ReactNode; description?: ReactNode; actions?: ReactNode; variant?: "default" | "minimal" | "cta"; className?: string ; ref?: Ref<HTMLDivElement> }) {
   const wrap = { default: "py-12", minimal: "py-8", cta: "py-14" }[variant];
   const well = {
     default: "h-16 w-16 [&_svg]:h-7 [&_svg]:w-7",
@@ -415,7 +419,7 @@ export function EmptyState({ icon, title, description, actions, variant = "defau
   }[variant];
   const titleCls = variant === "cta" ? "text-label-lg" : "text-label-md";
   return (
-    <div className={cn("flex flex-col items-center justify-center px-6 text-center", wrap, className)}>
+    <div ref={ref} className={cn("flex flex-col items-center justify-center px-6 text-center", wrap, className)}>
       <span className={cn("relative flex items-center justify-center rounded-full bg-surface-secondary text-muted ring-1 ring-border", well)}>
         {variant !== "minimal" && <span className="absolute -inset-2 rounded-full ring-1 ring-border/50" />}
         {icon}
@@ -429,10 +433,10 @@ export function EmptyState({ icon, title, description, actions, variant = "defau
 
 /* -------------------------------- Select Trigger --------------------------- */
 
-export function SelectTrigger({ label, value, placeholder = "Select…", icon, open, onClick, size = "md", className }: { label?: string; value?: ReactNode; placeholder?: string; icon?: ReactNode; open?: boolean; onClick?: () => void; size?: "sm" | "md" | "lg"; className?: string }) {
+export function SelectTrigger({ ref, label, value, placeholder = "Select…", icon, open, onClick, size = "md", className }: { label?: string; value?: ReactNode; placeholder?: string; icon?: ReactNode; open?: boolean; onClick?: () => void; size?: "sm" | "md" | "lg"; className?: string ; ref?: Ref<HTMLDivElement> }) {
   const h = { sm: "h-8 px-2.5", md: "h-10 px-3", lg: "h-12 px-3.5" }[size];
   return (
-    <div className={cn("flex flex-col gap-1.5", className)}>
+    <div ref={ref} className={cn("flex flex-col gap-1.5", className)}>
       {label && <span className="text-label-sm text-foreground">{label}</span>}
       <button
         type="button"

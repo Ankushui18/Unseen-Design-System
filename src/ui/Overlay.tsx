@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
   type ReactNode,
+  type Ref,
 } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "../utils/cn";
@@ -146,10 +147,10 @@ export function Drawer({
           width: side === "bottom" ? undefined : Math.min(width ?? drawerSizes[size], typeof window !== "undefined" ? window.innerWidth - 32 : width ?? drawerSizes[size]),
           animation:
             side === "bottom"
-              ? "slide-up .3s var(--ease-out-quint) both"
+              ? "slide-up var(--duration-slow) var(--ease-out-quint) both"
               : side === "left"
-                ? "slide-in-left .3s var(--ease-out-quint) both"
-                : "slide-in-right .3s var(--ease-out-quint) both",
+                ? "slide-in-left var(--duration-slow) var(--ease-out-quint) both"
+                : "slide-in-right var(--duration-slow) var(--ease-out-quint) both",
         }}
       >
         <div className="flex items-center justify-between gap-4 border-b border-separator p-4">
@@ -169,6 +170,7 @@ export function Drawer({
 /* -------------------------------- Tooltip --------------------------------- */
 
 export function Tooltip({
+  ref,
   content,
   children,
   placement = "top",
@@ -178,6 +180,7 @@ export function Tooltip({
   children: ReactNode;
   placement?: "top" | "bottom" | "left" | "right";
   delay?: number;
+  ref?: Ref<HTMLSpanElement>;
 }) {
   const [open, setOpen] = useState(false);
   const timer = useRef<number | null>(null);
@@ -196,7 +199,7 @@ export function Tooltip({
     right: "left-full top-1/2 -translate-y-1/2 ml-2",
   }[placement];
   return (
-    <span className="relative inline-flex" onMouseEnter={show} onMouseLeave={hide} onFocus={show} onBlur={hide}>
+    <span ref={ref} className="relative inline-flex" onMouseEnter={show} onMouseLeave={hide} onFocus={show} onBlur={hide}>
       {children}
       {open && (
         <span
@@ -325,6 +328,7 @@ export function Popover({
 }
 
 export function MenuItem({
+  ref,
   children,
   onClick,
   icon,
@@ -338,9 +342,10 @@ export function MenuItem({
   shortcut?: string;
   tone?: "default" | "danger";
   active?: boolean;
+  ref?: Ref<HTMLButtonElement>;
 }) {
   return (
-    <button
+    <button ref={ref}
       onClick={onClick}
       className={cn(
         "flex w-full items-center gap-2.5 rounded-8 px-2.5 py-2 text-left text-paragraph-sm transition-colors",

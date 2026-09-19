@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { ThemeProvider } from "./lib/theme";
 import { ToastProvider } from "./ui/Overlay";
 import { useHashRoute, useScrollSpy } from "./lib/hooks";
@@ -6,7 +6,9 @@ import { CommandPalette, DocsLayout, MobileNavigation, Navbar } from "./docs/She
 import { findItem } from "./docs/nav";
 import { ROUTES } from "./pages/registry";
 import Home from "./pages/Home";
+import { BlockPage } from "./pages/BlockPage";
 import { BlocksPage } from "./pages/Blocks";
+import { BLOCKS } from "./blocks";
 import { PatternsPage } from "./pages/Patterns";
 import { PricingPage } from "./pages/Pricing";
 import { TemplatesOverviewPage } from "./pages/Templates";
@@ -21,7 +23,10 @@ function Shell() {
   const activeHeading = useScrollSpy(headings.map((h) => h.id));
 
   const isHome = route === "" || route === "/";
-  const isPublicPage = isHome || route === "blocks" || route === "pricing" || route === "patterns" || route === "templates";
+  /* `/blocks/{key}` is public for the same reason `/blocks` is: a block page is
+     an inspect-and-copy surface, not API documentation. */
+  const isBlockPage = route.startsWith("blocks/");
+  const isPublicPage = isHome || route === "blocks" || isBlockPage || route === "pricing" || route === "patterns" || route === "templates";
 
   useEffect(() => {
     if (!isPublicPage) return;
@@ -42,27 +47,41 @@ function Shell() {
   useEffect(() => {
     const base = "Unseen Design System";
     if (isHome) {
-      document.title = `${base} | Design & Development perfectly aligned`;
+      document.title = `${base} | A design system that shows its work`;
       return;
     }
     const staticTitles: Record<string, string> = { blocks: "Blocks", pricing: "Pricing", patterns: "Patterns", templates: "Templates" };
+    if (isBlockPage) {
+      const block = BLOCKS.find((b) => b.key === route.slice("blocks/".length));
+      document.title = block ? `${block.title} · ${base}` : base;
+      return;
+    }
     const title = staticTitles[route] ?? findItem(route)?.title;
     document.title = title ? `${title} · ${base}` : base;
   }, [route, isHome]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isPublicPage) {
       setHeadings([]);
       return;
     }
-    const id = window.setTimeout(() => {
-      const found = Array.from(document.querySelectorAll<HTMLElement>("main section[id]")).map((el) => ({
-        id: el.id,
-        title: el.querySelector("h2")?.textContent?.trim() ?? el.id,
-      }));
-      setHeadings(found);
-    }, 60);
-    return () => window.clearTimeout(id);
+    /* Discovered before paint: `Section` renders synchronously, so the page
+       knows whether it can fill the right rail without a layout jump. Pages
+       that gain sections later (lazy widgets) are caught on the next frame. */
+    const collect = () =>
+      /* Only real page sections (Section renders an h2) belong in the TOC —
+       * an inline widget with an id must not leak its id in as a heading. */
+      Array.from(document.querySelectorAll<HTMLElement>("main section[id]"))
+        .map((el) => ({ id: el.id, title: el.querySelector("h2")?.textContent?.trim() ?? "" }))
+        .filter((x) => x.title);
+    setHeadings(collect());
+    const raf = requestAnimationFrame(() => {
+      setHeadings((prev) => {
+        const next = collect();
+        return prev.length === next.length && prev.every((h, i) => h.id === next[i].id && h.title === next[i].title) ? prev : next;
+      });
+    });
+    return () => cancelAnimationFrame(raf);
   }, [route, isPublicPage]);
 
   if (isPublicPage) {
@@ -74,6 +93,8 @@ function Shell() {
         <MobileNavigation open={mobile} onClose={() => setMobile(false)} route={route} navigate={navigate} />
         {isHome ? (
           <Home navigate={navigate} />
+        ) : isBlockPage ? (
+          <BlockPage blockKey={route.slice("blocks/".length)} />
         ) : route === "blocks" ? (
           <BlocksPage />
         ) : route === "pricing" ? (

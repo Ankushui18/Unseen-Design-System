@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
 import {
   RiArrowDownSLine,
   RiAttachment2,
@@ -19,19 +19,19 @@ import { useOnClickOutside } from "../lib/hooks";
 
 /* -------------------------------- Button Tile ------------------------------ */
 
-export function ButtonTile({ icon, label, description, variant = "soft", selected, onClick, disabled, badge, className }: { icon: ReactNode; label: ReactNode; description?: ReactNode; variant?: "soft" | "solid" | "outline"; selected?: boolean; onClick?: () => void; disabled?: boolean; badge?: ReactNode; className?: string }) {
+export function ButtonTile({ ref, icon, label, description, variant = "soft", selected, onClick, disabled, badge, className }: { icon: ReactNode; label: ReactNode; description?: ReactNode; variant?: "soft" | "solid" | "outline"; selected?: boolean; onClick?: () => void; disabled?: boolean; badge?: ReactNode; className?: string ; ref?: Ref<HTMLButtonElement> }) {
   const base = {
     soft: "bg-surface ring-1 ring-border hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong",
     solid: "bg-default text-white ring-1 ring-default hover:-translate-y-0.5 hover:shadow-md dark:text-neutral-950",
     outline: "bg-transparent ring-1 ring-border hover:-translate-y-0.5 hover:bg-surface",
   }[variant];
   return (
-    <button
+    <button ref={ref}
       onClick={onClick}
       disabled={disabled}
       aria-pressed={selected}
       className={cn(
-        "group relative flex flex-col items-start gap-3 rounded-14 p-4 text-left transition duration-200 ease-out outline-none",
+        "group relative flex flex-col items-start gap-3 rounded-14 p-4 text-left transition duration-[var(--duration-base)] ease-out-quint outline-none",
         selected ? "bg-accent text-white shadow-sm ring-2 ring-accent" : base,
         "focus-visible:shadow-ring-neutral disabled:pointer-events-none disabled:bg-surface-secondary disabled:text-disabled",
         className,
@@ -50,10 +50,10 @@ export function ButtonTile({ icon, label, description, variant = "soft", selecte
 
 /* -------------------------------- Info Label ------------------------------- */
 
-export function InfoLabel({ label, value, hint, tone = "default", className }: { label: ReactNode; value: ReactNode; hint?: ReactNode; tone?: Tone; className?: string }) {
+export function InfoLabel({ ref, label, value, hint, tone = "default", className }: { label: ReactNode; value: ReactNode; hint?: ReactNode; tone?: Tone; className?: string ; ref?: Ref<HTMLDivElement> }) {
   const v = { accent: "text-accent", default: "text-foreground", success: "text-green-base", warning: "text-orange-base", danger: "text-red-base" }[tone];
   return (
-    <div className={cn("flex flex-col gap-0.5", className)}>
+    <div ref={ref} className={cn("flex flex-col gap-0.5", className)}>
       <span className="flex items-center gap-1 text-subheading-2xs uppercase text-subtle">{label}{hint && <RiInformationFill size={12} className="text-subtle/70" />}</span>
       <span className={cn("text-label-md tabular-nums", v)}>{value}</span>
       {hint && <span className="text-paragraph-xs text-subtle">{hint}</span>}
@@ -63,11 +63,11 @@ export function InfoLabel({ label, value, hint, tone = "default", className }: {
 
 /* ------------------------------ Inline Message ----------------------------- */
 
-export function InlineMessage({ children, tone = "accent", variant = "plain", className }: { children: ReactNode; tone?: Tone; variant?: "plain" | "boxed"; className?: string }) {
+export function InlineMessage({ ref, children, tone = "accent", variant = "plain", className }: { children: ReactNode; tone?: Tone; variant?: "plain" | "boxed"; className?: string ; ref?: Ref<HTMLParagraphElement> }) {
   const c = { accent: "text-accent", default: "text-muted", success: "text-green-base", warning: "text-orange-base", danger: "text-red-base" }[tone];
   const Icon = tone === "danger" || tone === "warning" ? RiErrorWarningFill : RiInformationFill;
   return (
-    <p className={cn("inline-flex items-start gap-1.5 text-paragraph-xs", c, variant === "boxed" && "rounded-10 bg-surface px-2.5 py-2 ring-1 ring-inset ring-border", className)}>
+    <p ref={ref} className={cn("inline-flex items-start gap-1.5 text-paragraph-xs", c, variant === "boxed" && "rounded-10 bg-surface px-2.5 py-2 ring-1 ring-inset ring-border", className)}>
       <Icon size={16} className="mt-px shrink-0" />
       <span className="text-foreground/80">{children}</span>
     </p>
@@ -100,13 +100,13 @@ export function ListItem({ leading, title, description, trailing, onClick, selec
 
 /* ---------------------------------- Toolbar -------------------------------- */
 
-export function Toolbar({ children, variant = "solid", className }: { children: ReactNode; variant?: "solid" | "floating"; className?: string }) {
+export function Toolbar({ ref, children, variant = "solid", className }: { children: ReactNode; variant?: "solid" | "floating"; className?: string ; ref?: Ref<HTMLDivElement> }) {
   const v = variant === "floating" ? "rounded-full bg-overlay shadow-lg ring-1 ring-border-strong" : "rounded-12 bg-surface shadow-md ring-1 ring-border";
-  return <div className={cn("inline-flex items-center gap-1 p-1", v, className)} role="toolbar">{children}</div>;
+  return <div ref={ref} className={cn("inline-flex items-center gap-1 p-1", v, className)} role="toolbar">{children}</div>;
 }
-export function ToolbarButton({ icon, label, active, onClick, disabled }: { icon: ReactNode; label: string; active?: boolean; onClick?: () => void; disabled?: boolean }) {
+export function ToolbarButton({ ref, icon, label, active, onClick, disabled }: { icon: ReactNode; label: string; active?: boolean; onClick?: () => void; disabled?: boolean ; ref?: Ref<HTMLButtonElement> }) {
   return (
-    <button
+    <button ref={ref}
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
@@ -122,13 +122,13 @@ export const ToolbarSeparator = () => <span className="mx-0.5 h-5 w-px bg-separa
 
 /* -------------------------------- Hover Card ------------------------------- */
 
-export function HoverCard({ trigger, children, className }: { trigger: ReactNode; children: ReactNode; className?: string }) {
+export function HoverCard({ ref, trigger, children, className }: { trigger: ReactNode; children: ReactNode; className?: string ; ref?: Ref<HTMLSpanElement> }) {
   const [open, setOpen] = useState(false);
   const t = useRef<number | null>(null);
   const show = () => { if (t.current) window.clearTimeout(t.current); t.current = window.setTimeout(() => setOpen(true), 250); };
   const hide = () => { if (t.current) window.clearTimeout(t.current); t.current = window.setTimeout(() => setOpen(false), 150); };
   return (
-    <span className="relative inline-flex" onMouseEnter={show} onMouseLeave={hide} onFocus={show} onBlur={hide}>
+    <span ref={ref} className="relative inline-flex" onMouseEnter={show} onMouseLeave={hide} onFocus={show} onBlur={hide}>
       {trigger}
       {open && (
         <div className={cn("animate-pop-in absolute top-full left-0 z-50 mt-2 w-72 rounded-14 bg-overlay p-4 shadow-lg ring-1 ring-border", className)} onMouseEnter={show} onMouseLeave={hide}>
@@ -232,7 +232,7 @@ export function Combobox<T extends { value: string; label: string; description?:
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-haspopup="listbox"
-        className={cn("flex w-full items-center gap-2 bg-field text-left shadow-xs ring-1 ring-inset ring-border transition duration-200 hover:bg-field-hover hover:shadow-none outline-none focus-visible:ring-foreground focus-visible:shadow-ring-neutral", open && "ring-foreground shadow-ring-neutral", h)}
+        className={cn("flex w-full items-center gap-2 bg-field text-left shadow-xs ring-1 ring-inset ring-border transition duration-[var(--duration-base)] hover:bg-field-hover hover:shadow-none outline-none focus-visible:ring-foreground focus-visible:shadow-ring-neutral", open && "ring-foreground shadow-ring-neutral", h)}
       >
         {selected?.icon && <span className="text-muted [&_svg]:h-5 [&_svg]:w-5">{selected.icon}</span>}
         <span className={cn("flex-1 truncate text-paragraph-sm", selected ? "text-foreground" : "text-field-placeholder")}>{selected?.label ?? placeholder}</span>
@@ -286,14 +286,14 @@ export function Combobox<T extends { value: string; label: string; description?:
 
 /* -------------------------------- Payment Card ----------------------------- */
 
-export function PaymentCard({ brand = "visa", last4, holder, expiry, variant = "dark", className }: { brand?: "visa" | "mastercard" | "amex" | "unionpay"; last4: string; holder: string; expiry: string; variant?: "dark" | "accent" | "light"; className?: string }) {
+export function PaymentCard({ ref, brand = "visa", last4, holder, expiry, variant = "dark", className }: { brand?: "visa" | "mastercard" | "amex" | "unionpay"; last4: string; holder: string; expiry: string; variant?: "dark" | "accent" | "light"; className?: string ; ref?: Ref<HTMLDivElement> }) {
   const bg = {
     dark: "bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 text-white",
     accent: "bg-gradient-to-br from-accent-500 via-accent-600 to-accent-800 text-white",
     light: "bg-gradient-to-br from-white to-neutral-100 text-neutral-950 ring-1 ring-border",
   }[variant];
   return (
-    <div className={cn("relative aspect-[1.586] w-full max-w-[340px] overflow-hidden rounded-16 p-5 shadow-lg", bg, className)}>
+    <div ref={ref} className={cn("relative aspect-[1.586] w-full max-w-[340px] overflow-hidden rounded-16 p-5 shadow-lg", bg, className)}>
       <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-white/10 blur-2xl" />
       <div className="pointer-events-none absolute -bottom-20 -left-10 h-48 w-48 rounded-full bg-black/10 blur-2xl" />
       <div className="relative flex h-full flex-col justify-between">
@@ -315,9 +315,9 @@ export function PaymentCard({ brand = "visa", last4, holder, expiry, variant = "
 
 /* ---------------------------------- Wells ---------------------------------- */
 
-export function Well({ children, variant = "default", className }: { children: ReactNode; variant?: "default" | "inset" | "dashed"; className?: string }) {
+export function Well({ ref, children, variant = "default", className }: { children: ReactNode; variant?: "default" | "inset" | "dashed"; className?: string ; ref?: Ref<HTMLDivElement> }) {
   return (
-    <div className={cn("rounded-12 p-4", variant === "default" && "bg-surface-secondary ring-1 ring-inset ring-border/60", variant === "inset" && "bg-background-secondary shadow-[inset_0_1px_2px_rgb(14_18_27_/_0.06)]", variant === "dashed" && "border border-dashed border-border-strong bg-surface", className)}>
+    <div ref={ref} className={cn("rounded-12 p-4", variant === "default" && "bg-surface-secondary ring-1 ring-inset ring-border/60", variant === "inset" && "bg-background-secondary shadow-[inset_0_1px_2px_rgb(14_18_27_/_0.06)]", variant === "dashed" && "border border-dashed border-border-strong bg-surface", className)}>
       {children}
     </div>
   );

@@ -1,0 +1,24 @@
+# The gate the site points at. `npm test` is the whole pipeline — types, unit
+# tests, design lint, the quality ratchet, the token export diff, the variant
+# cell counts and their committed artifact, the production build, the jsdom
+# smoke pass and axe over every route — so CI runs exactly what a contributor
+# runs locally. No browsers are installed here: `npm test` is jsdom-only, which
+# is why the whole gate fits in one job.
+name: Quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
